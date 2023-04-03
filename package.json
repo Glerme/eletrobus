@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build-apk": "eas build -p android --profile preview"
   },
   "dependencies": {
     "expo": "~48.0.9",
