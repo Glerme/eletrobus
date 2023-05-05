@@ -4,12 +4,15 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
+    "wsl": "expo start --tunnel",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build-apk": "eas build -p android --profile preview"
   },
   "dependencies": {
+    "@react-navigation/native": "^6.1.6",
+    "@react-navigation/native-stack": "^6.9.12",
     "expo": "~48.0.9",
     "expo-status-bar": "~1.4.4",
     "native-base": "^3.4.28",
@@ -17,6 +20,7 @@
     "react-native": "0.71.4",
     "react-native-maps": "1.3.2",
     "react-native-safe-area-context": "4.5.0",
+    "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "styled-components": "^5.3.9"
   },
@@ -24,7 +28,9 @@
     "@babel/core": "^7.20.0",
     "@types/react": "~18.0.14",
     "@types/styled-components": "^5.1.26",
+    "babel-plugin-root-import": "^6.6.0",
     "react-native-dotenv": "^3.4.8",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^4.9.4"
   },
   "private": true,
