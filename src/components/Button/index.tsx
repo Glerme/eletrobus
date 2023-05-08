@@ -1,15 +1,17 @@
-import React from "react";
-import { IButtonProps, Button as RNButton } from "native-base";
+import { Heading, IButtonProps, Button as RNButton } from "native-base";
 
 interface ButtonProps extends IButtonProps {
   onPress: () => void;
-  children: React.ReactNode;
+  title: string;
+  fontColor?: string;
 }
 
-export const Button = ({ children, onPress, ...rest }: ButtonProps) => {
+export const Button = ({ title, onPress, fontColor, ...rest }: ButtonProps) => {
   return (
-    <RNButton onPress={onPress} {...rest}>
-      {children}
+    <RNButton onPress={onPress} fontSize="sm" rounded="sm" {...rest}>
+      <Heading color={fontColor} fontSize="sm">
+        {title}
+      </Heading>
     </RNButton>
   );
 };

@@ -1,22 +1,22 @@
-import { Input as RNInput, IInputProps } from "native-base";
+import React from "react";
 
-interface InputProps extends IInputProps {
-  placeholder: string;
-  value: string;
-  onChangeText: (text: string) => void;
-}
+import { Input as NativeBaseInput, IInputProps } from "native-base";
 
-export const Input = ({
-  onChangeText,
-  placeholder,
-  value,
-  ...rest
-}: InputProps) => {
+interface InputProps extends IInputProps {}
+
+export const Input: React.FC<InputProps> = ({ ...rest }) => {
   return (
-    <RNInput
-      placeholder={placeholder}
-      onChangeText={onChangeText}
-      value={value}
+    <NativeBaseInput
+      size="md"
+      borderWidth={2}
+      fontSize="md"
+      fontFamily="body"
+      color="gray.900"
+      placeholderTextColor="gray.700"
+      _focus={{
+        borderWidth: 2,
+        borderColor: "primary.400",
+      }}
       {...rest}
     />
   );

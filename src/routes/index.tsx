@@ -1,24 +1,28 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { Login } from "../pages/Login";
+import { AppRoutes } from "./app.routes";
+import { LoginRoutes } from "./login.routes";
 
-const Stack = createNativeStackNavigator();
+export const Routes = () => {
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [user, setUser] = useState<FirebaseAuthTypes.User>();
 
-export default function Routes() {
+  // useEffect(() => {
+  //   const subscriber = auth().onAuthStateChanged((response) => {
+  //     setUser(response);
+  //     setIsLoading(false);
+  //   });
+
+  //   return subscriber;
+  // }, []);
+
+  // if (isLoading) {
+  //   return <Loading />;
+  // }
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{
-            headerShown: false,
-          }}
-        />
-
-        {/* <Stack.Screen name="PDashboard" component={PDashboard} /> */}
-      </Stack.Navigator>
+      {false ? <AppRoutes /> : <LoginRoutes />}
     </NavigationContainer>
   );
-}
+};

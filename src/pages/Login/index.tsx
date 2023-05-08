@@ -1,48 +1,78 @@
-import { Box, Center, HStack, Heading, Text, VStack } from "native-base";
+import { useState } from "react";
 import { ImageBackground } from "react-native";
 
+import { Box, Icon, VStack } from "native-base";
+import { Envelope, Key } from "phosphor-react-native";
+
+import { Input } from "~/components/Input";
 import { Button } from "~/components/Button";
 
-export const Login: React.FC = () => {
+interface LoginProps {
+  route: any;
+}
+
+export const Login = ({ route }: LoginProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [fields, setFields] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleSignIn = async () => {};
+
   return (
-    <>
-      <ImageBackground
-        source={{
-          uri: "https://i.pinimg.com/736x/83/2f/4e/832f4e154589539b1f9a994bba57fc19.jpg",
-        }}
-        alt="teste"
-        style={{ flex: 1 }}
-      >
-        <VStack p={4} mt={4} mb={4} flex={1} space={4}>
-          <HStack>
-            <Center>
-              <Text>Icone</Text>
-            </Center>
+    <ImageBackground
+      source={{
+        uri: "https://i.pinimg.com/736x/83/2f/4e/832f4e154589539b1f9a994bba57fc19.jpg",
+      }}
+      alt="teste"
+      style={{ flex: 1 }}
+    >
+      <VStack p={4} mt={4} mb={4} flex={1} space={4}>
+        <VStack space={4} bg="white" p="5" borderRadius={"md"} flex={1}>
+          <Box>ICONE</Box>
 
-            <Center>
-              <Heading fontSize={16}>EletroBus</Heading>
-            </Center>
-          </HStack>
+          <VStack space={2}>
+            <Input
+              placeholder="E-mail"
+              mb={4}
+              InputLeftElement={<Icon as={<Envelope />} ml={4} />}
+              onChangeText={(text) => setFields({ ...fields, email: text })}
+              keyboardType="email-address"
+            />
 
-          <Box mb={5}>
-            <Heading width={"250px"} fontWeight={"bold"}>
-              Mantenha-se informado sobre as rotas e horários dos ônibus na
-              palma da sua mão.
-            </Heading>
-          </Box>
+            <Input
+              placeholder="Senha"
+              mb={4}
+              InputLeftElement={<Icon as={<Key />} ml={4} />}
+              secureTextEntry
+              onChangeText={(text) => setFields({ ...fields, password: text })}
+            />
 
-          <VStack space={4} bg="white" p="5" borderRadius={"md"} flex={1}>
-            <Box>
-              <Heading fontSize={"md"}>Escolha uma opção: </Heading>
-            </Box>
+            <Button
+              title="Entrar"
+              onPress={handleSignIn}
+              isLoading={isLoading}
+              background={"primary.400"}
+              fontColor="white"
+              _pressed={{
+                backgroundColor: "primary.700",
+              }}
+            />
 
-            <VStack space={2}>
-              <Button onPress={() => console.log("oi")}>teste</Button>
-              <Button onPress={() => console.log("oi")}>teste</Button>
-            </VStack>
+            <Button
+              title="Registre-se"
+              onPress={handleSignIn}
+              isLoading={isLoading}
+              background={"transparent"}
+              borderWidth={1}
+              borderColor={"primary.400"}
+              fontColor={"primary.400"}
+            />
           </VStack>
         </VStack>
-      </ImageBackground>
-    </>
+      </VStack>
+    </ImageBackground>
   );
 };
