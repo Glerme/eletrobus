@@ -13,7 +13,7 @@ export const ChooseUser: React.FC = () => {
       source={{
         uri: "https://i.pinimg.com/736x/83/2f/4e/832f4e154589539b1f9a994bba57fc19.jpg",
       }}
-      alt="teste"
+      alt="background"
       style={{ flex: 1 }}
     >
       <VStack p={4} mt={4} mb={4} flex={1} space={4}>

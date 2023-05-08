@@ -1,15 +1,25 @@
 import { useState } from "react";
-import { ImageBackground } from "react-native";
+import { Alert, ImageBackground } from "react-native";
 
-import { Box, Icon, VStack } from "native-base";
+import { Box, Center, Icon, VStack } from "native-base";
 import { Envelope, Key } from "phosphor-react-native";
+
+import * as AuthSession from "expo-auth-session";
 
 import { Input } from "~/components/Input";
 import { Button } from "~/components/Button";
+import { SocialButton } from "~/components/SocialButton";
 
 interface LoginProps {
   route: any;
 }
+
+type AuthResponse = {
+  params: {
+    access_token: string;
+  };
+  type: string;
+};
 
 export const Login = ({ route }: LoginProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +29,46 @@ export const Login = ({ route }: LoginProps) => {
     password: "",
   });
 
-  const handleSignIn = async () => {};
+  const handleSignIn = async () => {
+    if (!fields.email || !fields.password) {
+      return Alert.alert("Entrar", "Informe seu email e senha");
+    }
+
+    setIsLoading(true);
+
+    switch (route.screen) {
+      case "driver":
+        break;
+
+      case "passenger":
+        break;
+    }
+  };
+
+  const googleSignIn = async () => {
+    try {
+      const CLIENT_ID =
+        "1086227511811-inq0ac5m2n4695e58mnb1681f01m3d1t.apps.googleusercontent.com";
+      const REDIRECT_URI = "https://auth.expo.io/@glerme/eletrobus";
+      const SCOPE = encodeURI("profile email");
+      const RESPONSE_TYPE = "token";
+
+      const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
+
+      const { type, params } = (await AuthSession.startAsync({
+        authUrl,
+      })) as AuthResponse;
+
+      if (type === "success") {
+        const response = await fetch(
+          `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`
+        );
+        const user = await response.json();
+
+        console.log(user);
+      }
+    } catch (error) {}
+  };
 
   return (
     <ImageBackground
@@ -31,7 +80,7 @@ export const Login = ({ route }: LoginProps) => {
     >
       <VStack p={4} mt={4} mb={4} flex={1} space={4}>
         <VStack space={4} bg="white" p="5" borderRadius={"md"} flex={1}>
-          <Box>ICONE</Box>
+          <Center>ICONE</Center>
 
           <VStack space={2}>
             <Input
@@ -71,6 +120,18 @@ export const Login = ({ route }: LoginProps) => {
               fontColor={"primary.400"}
             />
           </VStack>
+          <Box>
+            <Button
+              title="Esqueci minha senha"
+              onPress={handleSignIn}
+              isLoading={isLoading}
+              variant={"link"}
+            />
+          </Box>
+
+          <Box>
+            <SocialButton title="Entrar com o Google" onPress={googleSignIn} />
+          </Box>
         </VStack>
       </VStack>
     </ImageBackground>
