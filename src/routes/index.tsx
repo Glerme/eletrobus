@@ -22,7 +22,7 @@ export const Routes = () => {
 
   return (
     <NavigationContainer>
-      {false ? <AppRoutes /> : <LoginRoutes />}
+      {true ? <AppRoutes /> : <LoginRoutes />}
     </NavigationContainer>
   );
 };

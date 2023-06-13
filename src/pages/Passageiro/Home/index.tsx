@@ -1,18 +1,19 @@
-import { Box, ScrollView, Text } from "native-base";
+import { Box, Heading, ScrollView, Text } from "native-base";
 import { StyleSheet } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 import { Card } from "~/components/Card";
 import { Background } from "~/components/Background";
+
 import { ContentForm } from "./styles";
 
-export const PHome: React.FC = () => {
+export const Home: React.FC = () => {
   return (
     <>
       <Background>
         <Card>
           <Box>
-            <Text>Pederneiras - SP</Text>
+            <Heading size="sm">Pederneiras - SP</Heading>
           </Box>
 
           <Box style={styles.container}>
@@ -34,11 +35,12 @@ export const PHome: React.FC = () => {
             />
           </Box>
         </Card>
+
         <ScrollView flex={1} position={"relative"}>
           <ContentForm>
             <Box>
               <Box>
-                <Text>Favoritos</Text>
+                <Heading size="xs">Favoritos</Heading>
                 <Text>saiba mais</Text>
               </Box>
               <ScrollView horizontal showsVerticalScrollIndicator>
@@ -57,7 +59,8 @@ export const PHome: React.FC = () => {
           <ContentForm>
             <Box>
               <Box>
-                <Text>Ônibus em tráfego</Text>
+                <Heading size="xs">Ônibus em tráfego</Heading>
+
                 <Text>saiba mais</Text>
               </Box>
               <ScrollView horizontal showsVerticalScrollIndicator>
@@ -76,7 +79,7 @@ export const PHome: React.FC = () => {
           <ContentForm>
             <Box>
               <Box>
-                <Text>Corridas cadastradas</Text>
+                <Heading size="xs">Corridas cadastradas</Heading>
                 <Text>saiba mais</Text>
               </Box>
               <ScrollView horizontal showsVerticalScrollIndicator>
