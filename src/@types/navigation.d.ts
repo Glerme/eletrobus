@@ -1,9 +1,8 @@
 export declare global {
   namespace ReactNavigation {
     interface RootParamList {
-      login: {
-        screen: "driver" | "passenger";
-      };
+      login: undefined;
+      PHome: undefined;
       motorista: undefined;
       passageiro: { orderId: string };
     }

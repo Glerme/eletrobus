@@ -5,14 +5,11 @@ import { Box, Center, Icon, VStack } from "native-base";
 import { Envelope, Key } from "phosphor-react-native";
 
 import * as AuthSession from "expo-auth-session";
+import { useNavigation } from "@react-navigation/native";
+
 
 import { Input } from "~/components/Input";
 import { Button } from "~/components/Button";
-import { SocialButton } from "~/components/SocialButton";
-
-interface LoginProps {
-  route: any;
-}
 
 type AuthResponse = {
   params: {
@@ -21,7 +18,9 @@ type AuthResponse = {
   type: string;
 };
 
-export const Login = ({ route }: LoginProps) => {
+export const Login = () => {
+  const navigation = useNavigation();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [fields, setFields] = useState({
@@ -30,19 +29,13 @@ export const Login = ({ route }: LoginProps) => {
   });
 
   const handleSignIn = async () => {
-    if (!fields.email || !fields.password) {
-      return Alert.alert("Entrar", "Informe seu email e senha");
-    }
+    // if (!fields.email || !fields.password) {
+    //   return Alert.alert("Entrar", "Informe seu email e senha");
+    // }
 
-    setIsLoading(true);
+    // setIsLoading(true);
 
-    switch (route.screen) {
-      case "driver":
-        break;
-
-      case "passenger":
-        break;
-    }
+    navigation.navigate("PHome")
   };
 
   const googleSignIn = async () => {
@@ -129,9 +122,9 @@ export const Login = ({ route }: LoginProps) => {
             />
           </Box>
 
-          <Box>
+          {/* <Box>
             <SocialButton title="Entrar com o Google" onPress={googleSignIn} />
-          </Box>
+          </Box> */}
         </VStack>
       </VStack>
     </ImageBackground>

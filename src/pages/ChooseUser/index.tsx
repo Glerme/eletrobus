@@ -42,20 +42,12 @@ export const ChooseUser: React.FC = () => {
           <VStack space={2}>
             <CardButton
               name="Sou Motorista"
-              onPress={() =>
-                navigation.navigate("login", {
-                  screen: "driver",
-                })
-              }
+              onPress={() => navigation.navigate("login")}
               icon="bus-alt"
             />
             <CardButton
               name="Sou Passageiro"
-              onPress={() =>
-                navigation.navigate("login", {
-                  screen: "passenger",
-                })
-              }
+              onPress={() => navigation.navigate("login")}
               icon="seat-passenger"
             />
           </VStack>

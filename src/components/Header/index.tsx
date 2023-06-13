@@ -27,14 +27,11 @@ export const Header: React.FC<HeaderProps> = ({ title, ...rest }) => {
       w="full"
       justifyContent="space-between"
       alignItems="center"
-      bg="gray.600"
-      pb={6}
-      pt={12}
       {...rest}
     >
       <IconButton
         icon={
-          <Icon as={FontAwesome5} name="arrow-left" size={10} color={"black"} />
+          <Icon as={FontAwesome5} name="arrow-left" size={4} color={"black"} />
         }
         onPress={handleGoBack}
       />
