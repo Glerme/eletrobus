@@ -16,6 +16,7 @@
     "@react-navigation/drawer": "^6.6.2",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "date-fns": "^2.30.0",
     "expo": "~48.0.9",
     "expo-auth-session": "~4.0.3",
     "expo-crypto": "~12.2.1",

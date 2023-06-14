@@ -36,9 +36,9 @@ const SettingsStackScreen = () => {
 export const AppRoutes = () => {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
-      <Tab.Screen name="Home" component={HomeStackScreen} />
-      <Tab.Screen name="Mapa" component={MapStackScreen} />
-      <Tab.Screen name="Configurações" component={SettingsStackScreen} />
+      <Tab.Screen name="HomeStack" component={HomeStackScreen} />
+      <Tab.Screen name="MapaStack" component={MapStackScreen} />
+      <Tab.Screen name="ConfiguraçõesStack" component={SettingsStackScreen} />
     </Tab.Navigator>
   );
 };

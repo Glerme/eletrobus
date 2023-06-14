@@ -2,16 +2,60 @@ import { Box, Heading, ScrollView, Text } from "native-base";
 import { StyleSheet } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
-import { Card } from "~/components/Card";
+import { ScreenContent } from "~/components/ScreenContent";
 import { Background } from "~/components/Background";
 
 import { ContentForm } from "./styles";
+import { ListRouteCards } from "~/components/ListRouteCards";
+
+const mockedData = [
+  {
+    id: 1,
+    name: "Unip/Unesp",
+    favorite: true,
+    saida: new Date(),
+    chegada: new Date(),
+    status: true,
+  },
+  {
+    id: 2,
+    name: "UFSC",
+    favorite: false,
+    saida: new Date(),
+    chegada: new Date(),
+    status: true,
+  },
+  {
+    id: 3,
+    name: "USP",
+    favorite: true,
+    saida: new Date(),
+    chegada: new Date(),
+    status: false,
+  },
+  {
+    id: 4,
+    name: "UFRJ",
+    favorite: false,
+    saida: new Date(),
+    chegada: new Date(),
+    status: true,
+  },
+  {
+    id: 5,
+    name: "PUC-RS",
+    favorite: true,
+    saida: new Date(),
+    chegada: new Date(),
+    status: true,
+  },
+];
 
 export const Home: React.FC = () => {
   return (
     <>
       <Background>
-        <Card>
+        <ScreenContent>
           <Box>
             <Heading size="sm">Pederneiras - SP</Heading>
           </Box>
@@ -34,66 +78,15 @@ export const Home: React.FC = () => {
               toolbarEnabled
             />
           </Box>
-        </Card>
+        </ScreenContent>
 
-        <ScrollView flex={1} position={"relative"}>
-          <ContentForm>
-            <Box>
-              <Box>
-                <Heading size="xs">Favoritos</Heading>
-                <Text>saiba mais</Text>
-              </Box>
-              <ScrollView horizontal showsVerticalScrollIndicator>
-                <Box flexDirection={"row"}>
-                  <Text>Favoritos</Text>
-                  <Text>Favoritos</Text>
-                  <Text>Favoritos</Text>
-                  <Text>Favoritos</Text>
-                  <Text>Favoritos</Text>
-                  <Text>Favoritos</Text>
-                </Box>
-              </ScrollView>
-            </Box>
-          </ContentForm>
-
-          <ContentForm>
-            <Box>
-              <Box>
-                <Heading size="xs">Ônibus em tráfego</Heading>
-
-                <Text>saiba mais</Text>
-              </Box>
-              <ScrollView horizontal showsVerticalScrollIndicator>
-                <Box flexDirection={"row"}>
-                  <Text>trafego</Text>
-                  <Text>trafego</Text>
-                  <Text>trafego</Text>
-                  <Text>trafego</Text>
-                  <Text>trafego</Text>
-                  <Text>trafego</Text>
-                </Box>
-              </ScrollView>
-            </Box>
-          </ContentForm>
-
-          <ContentForm>
-            <Box>
-              <Box>
-                <Heading size="xs">Corridas cadastradas</Heading>
-                <Text>saiba mais</Text>
-              </Box>
-              <ScrollView horizontal showsVerticalScrollIndicator>
-                <Box flexDirection={"row"}>
-                  <Text>cadastradas</Text>
-                  <Text>cadastradas</Text>
-                  <Text>cadastradas</Text>
-                  <Text>cadastradas</Text>
-                  <Text>cadastradas</Text>
-                  <Text>cadastradas</Text>
-                </Box>
-              </ScrollView>
-            </Box>
-          </ContentForm>
+        <ScrollView flex={1}>
+          <ListRouteCards description="Favoritos" data={mockedData} />
+          <ListRouteCards description="Ônibus em tráfego" data={mockedData} />
+          <ListRouteCards
+            description="Corridas cadastradas"
+            data={mockedData}
+          />
         </ScrollView>
       </Background>
     </>

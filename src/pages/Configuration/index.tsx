@@ -1,13 +1,13 @@
 import { Heading, Text } from "native-base";
 import { Background } from "~/components/Background";
-import { Card } from "~/components/Card";
+import { ScreenContent } from "~/components/ScreenContent";
 
 export const Configuration = () => {
   return (
     <Background>
-      <Card>
+      <ScreenContent>
         <Heading size="sm">Configurações</Heading>
-      </Card>
+      </ScreenContent>
     </Background>
   );
 };

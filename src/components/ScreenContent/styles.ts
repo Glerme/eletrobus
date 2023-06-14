@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const ContainerCard = styled.View`
+export const ScreenContentContainer = styled.View`
   flex: 1;
   background-color: #ffff;
   margin: 16px;
