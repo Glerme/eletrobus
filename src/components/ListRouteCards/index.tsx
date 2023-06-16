@@ -1,7 +1,5 @@
 import {
-  Badge,
   Box,
-  Flex,
   HStack,
   Heading,
   Pressable,
@@ -11,7 +9,6 @@ import {
   VStack,
 } from "native-base";
 
-import { CardContainer, ContainerRow } from "./styles";
 import { formatDate } from "~/utils/format";
 
 interface ListRouteCardsProps {
