@@ -7,7 +7,9 @@ import {
   Spacer,
   Text,
   VStack,
+  View,
 } from "native-base";
+import { CaretRight, Star } from "phosphor-react-native";
 
 import { formatDate } from "~/utils/format";
 
@@ -27,7 +29,10 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
           alignItems="center"
         >
           <Heading size="md">{description}</Heading>
-          <Text>saiba mais</Text>
+          <HStack alignItems="center">
+            <Text color="primary.400">saiba mais</Text>
+            <CaretRight color="#5a42e7" size={16} />
+          </HStack>
         </HStack>
 
         <ScrollView horizontal>
@@ -41,8 +46,8 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
                 return (
                   <Box
                     minW="72"
-                    bg={isPressed ? "coolGray.200" : "white"}
-                    p="5"
+                    bg={isPressed ? "coolGray.100" : "white"}
+                    p="3"
                     rounded="8"
                     style={{
                       transform: [
@@ -52,19 +57,21 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
                       ],
                     }}
                   >
-                    <HStack alignItems="center">
-                      <Heading size="md" color="gray.800">
+                    <HStack alignItems="center" mb="3">
+                      <Text fontFamily="medium" fontSize="md" color="gray.900">
                         {item?.name}
-                      </Heading>
+                      </Text>
 
                       <Spacer />
 
-                      <Text fontSize={10} color="coolGray.800">
-                        {item?.favorite ? "Favorito" : "Não favorito"}
-                      </Text>
+                      <Star
+                        size={14}
+                        weight="fill"
+                        color={item.favorite ? "#E9C25F" : "#9C9C9C"}
+                      />
                     </HStack>
 
-                    <VStack>
+                    <VStack space="0">
                       <Text fontSize="sm" color="coolGray.700">
                         Saída: {formatDate(item?.saida)}
                       </Text>
@@ -74,15 +81,20 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
                       </Text>
                     </VStack>
 
-                    <HStack>
+                    <HStack alignItems="center" mt="2" space="1">
                       <Spacer />
+                      <View
+                        width={11}
+                        height={11}
+                        borderRadius={50}
+                        backgroundColor={item?.status ? "#A7E179" : "#E17979"}
+                      ></View>
                       <Text
-                        mt="2"
-                        fontSize={12}
+                        fontSize={11}
                         fontWeight="medium"
-                        color="darkBlue.600"
+                        color="coolGray.500"
                       >
-                        {item?.status ? "Ativo" : "Inativo"}
+                        {item?.status ? "Disponível" : "Indisponivel"}
                       </Text>
                     </HStack>
                   </Box>
