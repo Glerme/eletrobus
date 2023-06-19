@@ -1,7 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 
 import { AppRoutes } from "./app.routes";
-import { LoginRoutes } from "./login.routes";
 
 export const Routes = () => {
   // const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +21,7 @@ export const Routes = () => {
 
   return (
     <NavigationContainer>
-      {true ? <AppRoutes /> : <LoginRoutes />}
+      <AppRoutes />
     </NavigationContainer>
   );
 };
