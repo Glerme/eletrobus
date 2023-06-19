@@ -40,6 +40,7 @@ export const THEME = extendTheme({
   },
   fonts: {
     heading: "Montserrat_700Bold",
+    medium: "Montserrat_500Medium",
     body: "Montserrat_400Regular",
   },
   fontSizes: {
