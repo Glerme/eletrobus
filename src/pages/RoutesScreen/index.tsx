@@ -7,17 +7,25 @@ import {
   Icon,
   Pressable,
   ScrollView,
+  Spacer,
   Text,
   VStack,
 } from "native-base";
-import { TouchableHighlight } from "react-native";
+import { TouchableHighlight, View } from "react-native";
 
-import { Users, GraduationCap, MagnifyingGlass } from "phosphor-react-native";
+import {
+  Users,
+  GraduationCap,
+  MagnifyingGlass,
+  Student,
+  UsersThree,
+} from "phosphor-react-native";
 
 import { Title } from "~/components/Title";
 import { Input } from "~/components/Input";
 import { Background } from "~/components/Background";
 import { ScreenContent } from "~/components/ScreenContent";
+import { CirculedIcon } from "./styles";
 
 const mockedData = [
   {
@@ -70,15 +78,24 @@ export const RoutesScreen = ({}) => {
         <HStack space={4} paddingY={2}>
           <TouchableHighlight onPress={() => console.log("clicado")}>
             <Flex flexDirection={"row"} alignItems={"center"} p={1}>
-              <Icon as={<Users />} mr={1} />
-              <Heading size="sm">Todos</Heading>
+              <CirculedIcon>
+                <UsersThree size={22} color="#595959" />
+              </CirculedIcon>
+
+              <Text fontSize="md" fontFamily="medium" color="gray.800">
+                Todos
+              </Text>
             </Flex>
           </TouchableHighlight>
 
           <TouchableHighlight onPress={() => console.log("clicado")}>
             <Flex flexDirection={"row"} alignItems={"center"} p={1}>
-              <Icon as={<GraduationCap />} mr={1} />
-              <Heading size="sm">Estudantes</Heading>
+              <CirculedIcon>
+                <Student size={22} color="#595959" />
+              </CirculedIcon>
+              <Text fontSize="md" fontFamily="medium" color="gray.800">
+                Estudantes
+              </Text>
             </Flex>
           </TouchableHighlight>
         </HStack>

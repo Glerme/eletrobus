@@ -1,6 +1,6 @@
 import { IterfaceHeadingProps } from "native-base/lib/typescript/components/primitives/Heading/types";
 
-import { ContainerHeading } from "./styles";
+import { ContainerHeading, TextDetail } from "./styles";
 
 interface TitleProps extends IterfaceHeadingProps {
   children: React.ReactNode;
@@ -9,8 +9,9 @@ interface TitleProps extends IterfaceHeadingProps {
 
 export const Title = ({ children, bottomColor, ...rest }: TitleProps) => {
   return (
-    <ContainerHeading {...rest} bottomColor={bottomColor}>
-      {children}
-    </ContainerHeading>
+    <>
+      <ContainerHeading {...rest}>{children}</ContainerHeading>
+      <TextDetail bottomColor={bottomColor}></TextDetail>
+    </>
   );
 };
