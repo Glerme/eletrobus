@@ -26,6 +26,7 @@ import { Input } from "~/components/Input";
 import { Background } from "~/components/Background";
 import { ScreenContent } from "~/components/ScreenContent";
 import { CirculedIcon } from "./styles";
+import { THEME } from "~/styles/theme";
 
 const mockedData = [
   {
@@ -79,7 +80,7 @@ export const RoutesScreen = ({}) => {
           <TouchableHighlight onPress={() => console.log("clicado")}>
             <Flex flexDirection={"row"} alignItems={"center"} p={1}>
               <CirculedIcon>
-                <UsersThree size={22} color="#595959" />
+                <UsersThree size={22} color={THEME.colors.gray["800"]} />
               </CirculedIcon>
 
               <Text fontSize="md" fontFamily="medium" color="gray.800">
@@ -91,7 +92,7 @@ export const RoutesScreen = ({}) => {
           <TouchableHighlight onPress={() => console.log("clicado")}>
             <Flex flexDirection={"row"} alignItems={"center"} p={1}>
               <CirculedIcon>
-                <Student size={22} color="#595959" />
+                <Student size={22} color={THEME.colors.gray["800"]} />
               </CirculedIcon>
               <Text fontSize="md" fontFamily="medium" color="gray.800">
                 Estudantes

@@ -10,6 +10,7 @@ import {
   View,
 } from "native-base";
 import { CaretRight, Star } from "phosphor-react-native";
+import { THEME } from "~/styles/theme";
 
 import { formatDate } from "~/utils/format";
 
@@ -31,7 +32,7 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
           <Heading size="md">{description}</Heading>
           <HStack alignItems="center">
             <Text color="primary.400">saiba mais</Text>
-            <CaretRight color="#5a42e7" size={16} />
+            <CaretRight color={THEME.colors.primary[400]} size={16} />
           </HStack>
         </HStack>
 

@@ -5,13 +5,19 @@ import { ContainerHeading, TextDetail } from "./styles";
 interface TitleProps extends IterfaceHeadingProps {
   children: React.ReactNode;
   bottomColor?: string;
+  bottomWidth?: string;
 }
 
-export const Title = ({ children, bottomColor, ...rest }: TitleProps) => {
+export const Title = ({
+  children,
+  bottomColor,
+  bottomWidth,
+  ...rest
+}: TitleProps) => {
   return (
     <>
       <ContainerHeading {...rest}>{children}</ContainerHeading>
-      <TextDetail bottomColor={bottomColor}></TextDetail>
+      <TextDetail bottomColor={bottomColor} bottomWidth={bottomWidth} />
     </>
   );
 };
