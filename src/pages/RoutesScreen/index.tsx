@@ -14,11 +14,10 @@ import {
 import { TouchableHighlight, View } from "react-native";
 
 import {
-  Users,
-  GraduationCap,
   MagnifyingGlass,
   Student,
   UsersThree,
+  Star,
 } from "phosphor-react-native";
 
 import { Title } from "~/components/Title";
@@ -27,43 +26,57 @@ import { Background } from "~/components/Background";
 import { ScreenContent } from "~/components/ScreenContent";
 import { CirculedIcon } from "./styles";
 import { THEME } from "~/styles/theme";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "~/routes/app.routes";
 
 const mockedData = [
   {
     id: 1,
     name: "Bauru",
+    favorite: true,
   },
   {
     id: 2,
     name: "São Paulo",
+    favorite: false,
   },
   {
     id: 3,
     name: "Rio de Janeiro",
+    favorite: true,
   },
   {
     id: 4,
     name: "Belo Horizonte",
+    favorite: false,
   },
   {
     id: 5,
     name: "Porto Alegre",
+    favorite: true,
   },
   {
     id: 6,
     name: "Porto Alegre",
+    favorite: false,
   },
   {
     id: 7,
     name: "Porto Alegre",
+    favorite: true,
   },
   {
     id: 8,
     name: "Porto Alegre",
+    favorite: false,
   },
 ];
 
 export const RoutesScreen = ({}) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <Background>
       <ScreenContent>
@@ -158,7 +171,14 @@ export const RoutesScreen = ({}) => {
           data={mockedData}
           keyExtractor={(item) => `${item.id}`}
           renderItem={({ item }) => (
-            <Pressable onPress={() => console.log("aqui")} key={item?.id}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate("RouteDetails", {
+                  id: item?.id,
+                })
+              }
+              key={item?.id}
+            >
               {({ isPressed }) => (
                 <Box
                   bg={isPressed ? "coolGray.200" : "white"}
@@ -167,28 +187,24 @@ export const RoutesScreen = ({}) => {
                     borderColor: "muted.50",
                   }}
                   borderColor="muted.800"
-                  pl={["0", "4"]}
-                  pr={["0", "5"]}
                   py="2"
                 >
-                  <HStack space={2}>
-                    <Text
-                      _dark={{
-                        color: "warmGray.50",
-                      }}
-                      color="coolGray.800"
-                      bold
-                    >
-                      {item.name}
-                    </Text>
-                    <Text
+                  <HStack space={2} alignItems={"center"} py="2">
+                    <Star
+                      size={14}
+                      weight="fill"
+                      color={item.favorite ? "#E9C25F" : "#9C9C9C"}
+                    />
+
+                    <Heading
                       color="coolGray.600"
                       _dark={{
                         color: "warmGray.200",
                       }}
+                      size="sm"
                     >
                       {item.name}
-                    </Text>
+                    </Heading>
                   </HStack>
                 </Box>
               )}

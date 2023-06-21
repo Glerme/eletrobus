@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   Box,
   HStack,
@@ -20,6 +21,8 @@ interface ListRouteCardsProps {
 }
 
 export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
+  const navigation = useNavigation();
+
   return (
     <>
       <VStack mt="2" mb="3">
@@ -41,7 +44,9 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
             <Pressable
               px="4"
               key={item?.id}
-              onPress={() => console.log("aqui")}
+              onPress={() =>
+                navigation.navigate("RouteDetails", { routeId: item?.id })
+              }
             >
               {({ isPressed }) => {
                 return (

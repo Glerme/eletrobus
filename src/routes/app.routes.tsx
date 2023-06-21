@@ -5,6 +5,11 @@ import { MapScreen } from "~/pages/MapScreen";
 import { HomeScreen } from "~/pages/HomeScreen";
 import { RoutesScreen } from "~/pages/RoutesScreen";
 import { ConfigurationScreen } from "~/pages/ConfigurationScreen";
+import { RouteDetailsScreen } from "~/pages/RouteDetailsScreen";
+
+export type RootStackParamList = {
+  RouteDetails: { id: number } | undefined;
+};
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -32,6 +37,7 @@ const RoutesStackScreen = () => {
   return (
     <RoutesStack.Navigator screenOptions={{ headerShown: false }}>
       <RoutesStack.Screen name="Rotas" component={RoutesScreen} />
+      <RoutesStack.Screen name="RouteDetails" component={RouteDetailsScreen} />
     </RoutesStack.Navigator>
   );
 };

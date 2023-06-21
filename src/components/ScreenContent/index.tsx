@@ -5,5 +5,13 @@ interface ScreenContentProps {
 }
 
 export const ScreenContent = ({ children }: ScreenContentProps) => {
-  return <ScreenContentContainer>{children}</ScreenContentContainer>;
+  return (
+    <ScreenContentContainer
+      nestedScrollEnabled
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+    >
+      {children}
+    </ScreenContentContainer>
+  );
 };

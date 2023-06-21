@@ -1,12 +1,13 @@
+import { ScrollView } from "native-base";
+
 import styled from "styled-components/native";
 
-export const ScreenContentContainer = styled.View`
+export const ScreenContentContainer = styled(ScrollView)`
   flex: 1;
   background-color: #ffff;
-  margin: 16px;
+  margin: 14px;
   margin-top: -80px;
   flex-direction: column;
-  justify-content: flex-start;
   border-radius: 12px;
   padding: 16px;
 `;

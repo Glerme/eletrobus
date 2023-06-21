@@ -57,29 +57,6 @@ export const HomeScreen = () => {
         <Box>
           <Heading size="sm">Pederneiras - SP</Heading>
         </Box>
-
-        <Box flex={1}>
-          <MapView
-            provider={PROVIDER_GOOGLE}
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              width: "100%",
-              height: "100%",
-            }}
-            region={{
-              longitudeDelta: 0.01,
-              latitudeDelta: 0.0922,
-              latitude: -22.355457,
-              longitude: -48.776611,
-            }}
-            showsUserLocation
-            showsMyLocationButton
-            showsScale
-            showsBuildings
-            scrollEnabled
-            toolbarEnabled
-          />
-        </Box>
       </ScreenContent>
 
       <ScrollView flex={1}>
