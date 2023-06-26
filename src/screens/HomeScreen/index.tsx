@@ -1,10 +1,6 @@
-import { Box, Heading, ScrollView } from "native-base";
-import { StyleSheet } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import { ScrollView } from "native-base";
 
-import { ScreenContent } from "~/components/ScreenContent";
 import { Background } from "~/components/Background";
-
 import { ListRouteCards } from "~/components/ListRouteCards";
 
 const mockedData = [
@@ -52,18 +48,10 @@ const mockedData = [
 
 export const HomeScreen = () => {
   return (
-    <Background>
-      <ScreenContent>
-        <Box>
-          <Heading size="sm">Pederneiras - SP</Heading>
-        </Box>
-      </ScreenContent>
-
-      <ScrollView flex={1}>
-        <ListRouteCards description="Favoritos" data={mockedData} />
-        <ListRouteCards description="Ônibus em tráfego" data={mockedData} />
-        <ListRouteCards description="Corridas cadastradas" data={mockedData} />
-      </ScrollView>
-    </Background>
+    <ScrollView flex={1}>
+      <ListRouteCards description="Favoritos" data={mockedData} />
+      <ListRouteCards description="Ônibus em tráfego" data={mockedData} />
+      <ListRouteCards description="Corridas cadastradas" data={mockedData} />
+    </ScrollView>
   );
 };

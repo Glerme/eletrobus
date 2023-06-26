@@ -55,8 +55,8 @@ const mockedData = [
   },
 ];
 
-export const RouteDetailsScreen = ({}) => {
-  const route = useRoute();
+export const RouteDetailsScreen = ({ route, navigation }: any) => {
+  console.log(route.params);
 
   return (
     <Background>

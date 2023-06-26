@@ -1,19 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
 import {
-  Box,
+  Flex,
   HStack,
   Heading,
   Pressable,
   ScrollView,
-  Spacer,
   Text,
   VStack,
-  View,
 } from "native-base";
-import { CaretRight, Star } from "phosphor-react-native";
-import { THEME } from "~/styles/theme";
+import { CaretRight } from "phosphor-react-native";
 
-import { formatDate } from "~/utils/format";
+import { RouteCard } from "../RouteCard";
+
+import { THEME } from "~/styles/theme";
 
 interface ListRouteCardsProps {
   description: string;
@@ -21,7 +20,7 @@ interface ListRouteCardsProps {
 }
 
 export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return (
     <>
@@ -33,80 +32,33 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
           alignItems="center"
         >
           <Heading size="md">{description}</Heading>
-          <HStack alignItems="center">
-            <Text color="primary.400">saiba mais</Text>
-            <CaretRight color={THEME.colors.primary[400]} size={16} />
-          </HStack>
+          <Pressable
+            alignItems="center"
+            onPress={() => navigation.navigate("favoritesScreen")}
+            display={"flex"}
+            justifyContent={"center"}
+            alignContent={"center"}
+          >
+            <Flex direction="row" alignItems={"center"}>
+              <Text color="primary.400">saiba mais</Text>
+              <CaretRight color={THEME.colors.primary[400]} size={16} />
+            </Flex>
+          </Pressable>
         </HStack>
 
         <ScrollView horizontal>
           {data?.map((item) => (
-            <Pressable
-              px="4"
+            <RouteCard
               key={item?.id}
-              onPress={() =>
-                navigation.navigate("RouteDetails", { routeId: item?.id })
+              route={item}
+              onPressCard={() =>
+                navigation.navigate("routeDetailScreen", {
+                  params: {
+                    id: item?.id,
+                  },
+                })
               }
-            >
-              {({ isPressed }) => {
-                return (
-                  <Box
-                    minW="72"
-                    bg={isPressed ? "coolGray.100" : "white"}
-                    p="3"
-                    rounded="8"
-                    style={{
-                      transform: [
-                        {
-                          scale: isPressed ? 0.96 : 1,
-                        },
-                      ],
-                    }}
-                  >
-                    <HStack alignItems="center" mb="3">
-                      <Text fontFamily="medium" fontSize="md" color="gray.900">
-                        {item?.name}
-                      </Text>
-
-                      <Spacer />
-
-                      <Star
-                        size={14}
-                        weight="fill"
-                        color={item.favorite ? "#E9C25F" : "#9C9C9C"}
-                      />
-                    </HStack>
-
-                    <VStack space="0">
-                      <Text fontSize="sm" color="coolGray.700">
-                        Saída: {formatDate(item?.saida)}
-                      </Text>
-
-                      <Text fontSize="sm" color="coolGray.700">
-                        Chegada: {formatDate(item?.chegada)}
-                      </Text>
-                    </VStack>
-
-                    <HStack alignItems="center" mt="2" space="1">
-                      <Spacer />
-                      <View
-                        width={11}
-                        height={11}
-                        borderRadius={50}
-                        backgroundColor={item?.status ? "#A7E179" : "#E17979"}
-                      ></View>
-                      <Text
-                        fontSize={11}
-                        fontWeight="medium"
-                        color="coolGray.500"
-                      >
-                        {item?.status ? "Disponível" : "Indisponivel"}
-                      </Text>
-                    </HStack>
-                  </Box>
-                );
-              }}
-            </Pressable>
+            />
           ))}
         </ScrollView>
       </VStack>

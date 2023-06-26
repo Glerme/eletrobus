@@ -27,8 +27,6 @@ import { ScreenContent } from "~/components/ScreenContent";
 import { CirculedIcon } from "./styles";
 import { THEME } from "~/styles/theme";
 import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "~/routes/app.routes";
 
 const mockedData = [
   {
@@ -74,8 +72,7 @@ const mockedData = [
 ];
 
 export const RoutesScreen = ({}) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<any>();
 
   return (
     <Background>
@@ -173,7 +170,7 @@ export const RoutesScreen = ({}) => {
           renderItem={({ item }) => (
             <Pressable
               onPress={() =>
-                navigation.navigate("RouteDetails", {
+                navigation.navigate("routeDetailScreen", {
                   id: item?.id,
                 })
               }

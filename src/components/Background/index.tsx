@@ -10,7 +10,7 @@ interface BackgroundProps {
 export const Background = ({ children }: BackgroundProps) => {
   return (
     <>
-      <HStack
+      {/* <HStack
         bg="#0DAC86"
         px="2"
         py="2"
@@ -37,7 +37,7 @@ export const Background = ({ children }: BackgroundProps) => {
             }
           />
         </HStack>
-      </HStack>
+      </HStack> */}
 
       <Container>
         <BackgroundHeader colors={["#0DAC86", "#0DAC87"]} />

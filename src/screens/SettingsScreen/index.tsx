@@ -2,7 +2,7 @@ import { Heading, Text } from "native-base";
 import { Background } from "~/components/Background";
 import { ScreenContent } from "~/components/ScreenContent";
 
-export const ConfigurationScreen = () => {
+export const SettingsScreen = () => {
   return (
     <Background>
       <ScreenContent>

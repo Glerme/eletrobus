@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 
-import { AppRoutes } from "./app.routes";
+import DrawerRoutes from "./drawer.routes";
 
 export const Routes = () => {
   // const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +21,7 @@ export const Routes = () => {
 
   return (
     <NavigationContainer>
-      <AppRoutes />
+      <DrawerRoutes />
     </NavigationContainer>
   );
 };
