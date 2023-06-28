@@ -1,5 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { Header } from "~/components/Header";
+
 import { FavoritesScreen } from "~/screens/FavoritesScreen";
 import { HomeScreen } from "~/screens/HomeScreen";
 import { MapScreen } from "~/screens/MapScreen";
@@ -7,75 +9,89 @@ import { RouteDetailsScreen } from "~/screens/RouteDetailsScreen";
 import { RoutesScreen } from "~/screens/RoutesScreen";
 import { SettingsScreen } from "~/screens/SettingsScreen";
 
-const HomeStack = createNativeStackNavigator();
-const RoutesStack = createNativeStackNavigator();
-const MapStack = createNativeStackNavigator();
-const SettingsStack = createNativeStackNavigator();
+export type HomeStackParamList = {
+  home: undefined;
+  favoritesScreen: undefined;
+  routeDetailScreen: undefined;
+  routesScreen: undefined;
+  mapScreen: undefined;
+  settingsScreen: undefined;
+};
 
-export const HomeStackScreen = () => {
+const Stack = createNativeStackNavigator<HomeStackParamList>();
+
+export const HomeStackScreen = ({ navigation }: { navigation: any }) => {
   return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen
+    <Stack.Navigator
+      screenOptions={{
+        header: (props) => (
+          <Header {...props} openDrawer={() => navigation?.openDrawer()} />
+        ),
+      }}
+    >
+      <Stack.Screen
         name="home"
         component={HomeScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: true,
+          title: "",
+        }}
       />
-      <HomeStack.Screen
-        name="favoritesScreen"
-        component={FavoritesScreen}
-        options={{ headerShown: false }}
-      />
-      <HomeStack.Screen
-        name="routeDetailScreen"
-        component={RouteDetailsScreen}
-        options={{ headerShown: false }}
-      />
-    </HomeStack.Navigator>
+      <Stack.Screen name="favoritesScreen" component={FavoritesScreen} />
+      <Stack.Screen name="routeDetailScreen" component={RouteDetailsScreen} />
+    </Stack.Navigator>
   );
 };
 
-export const RoutesStackScreen = () => {
+export const RoutesStackScreen = ({ navigation }: { navigation: any }) => {
   return (
-    <RoutesStack.Navigator>
-      <RoutesStack.Screen
+    <Stack.Navigator
+      screenOptions={{
+        header: (props) => (
+          <Header {...props} openDrawer={() => navigation?.openDrawer()} />
+        ),
+      }}
+    >
+      <Stack.Screen
         name="routesScreen"
         component={RoutesScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: true,
+          title: "",
+        }}
       />
-      <RoutesStack.Screen name="favoritesScreen" component={FavoritesScreen} />
-      <RoutesStack.Screen
-        name="routeDetailScreen"
-        component={RouteDetailsScreen}
-        options={{ headerShown: false }}
-      />
-    </RoutesStack.Navigator>
+      <Stack.Screen name="favoritesScreen" component={FavoritesScreen} />
+      <Stack.Screen name="routeDetailScreen" component={RouteDetailsScreen} />
+    </Stack.Navigator>
   );
 };
 
 export const MapStackScreen = () => {
   return (
-    <MapStack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <MapStack.Screen
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
         name="mapScreen"
         component={MapScreen}
         options={{ headerShown: false }}
       />
-    </MapStack.Navigator>
+    </Stack.Navigator>
   );
 };
 
-export const SettingsStackScreen = () => {
+export const SettingsStackScreen = ({ navigation }: { navigation: any }) => {
   return (
-    <SettingsStack.Navigator>
-      <SettingsStack.Screen
+    <Stack.Navigator>
+      <Stack.Screen
         name="settingsScreen"
         component={SettingsScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: true,
+          title: "",
+          header: (props) => (
+            <Header {...props} openDrawer={() => navigation?.openDrawer()} />
+          ),
+        }}
       />
-    </SettingsStack.Navigator>
+    </Stack.Navigator>
   );
 };

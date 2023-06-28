@@ -2,21 +2,19 @@ import styled from "styled-components/native";
 import { LinearGradient } from "expo-linear-gradient";
 
 export const Container = styled.View`
-  height: 100%;
-  width: 100%;
+  flex: 1;
   background-color: #ececec;
   display: flex;
-  flex: 1;
+  position: relative;
 `;
 
 export const BackgroundHeader = styled(LinearGradient)`
-  height: 0px;
-  flex: 0.5;
+  height: 10%;
+  margin-bottom: -18%;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 `;
 
 export const Content = styled.KeyboardAvoidingView`
-  flex: 3;
-  background-color: #e6e6e6;
+  flex: 1;
 `;

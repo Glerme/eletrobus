@@ -1,50 +1,63 @@
-import {
-  Heading,
-  HStack,
-  Icon,
-  IconButton,
-  StyledProps,
-  useTheme,
-} from "native-base";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { Avatar, Box, IconButton, Spacer, useTheme } from "native-base";
+import { ArrowLeft, List } from "phosphor-react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import { THEME } from "~/styles/theme";
+import { DrawerHeaderProps } from "@react-navigation/drawer";
+import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 
-interface HeaderProps extends StyledProps {
-  title: string;
+interface HeaderProps extends NativeStackHeaderProps {
+  openDrawer: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, ...rest }) => {
-  const { colors } = useTheme();
-  const navigation = useNavigation();
+export const Header = ({
+  openDrawer,
+  route,
+  navigation,
+  options,
+  back,
+}: HeaderProps) => {
+  console.log(
+    "AQUI",
+    JSON.stringify({ route, navigation, options, back }, null, 2)
+  );
 
-  function handleGoBack() {
-    navigation.goBack();
-  }
+  const routesToHideDrawer = ["routeDetailScreen", "favoritesScreen"];
+
+  const hideDrawer = routesToHideDrawer.includes(route.name);
 
   return (
-    <HStack
-      w="full"
-      justifyContent="space-between"
-      alignItems="center"
-      {...rest}
+    <Box
+      display="flex"
+      alignItems={"center"}
+      p={2}
+      flexDir={"row"}
+      background={"#0DAC86"}
     >
-      <IconButton
-        icon={
-          <Icon as={FontAwesome5} name="arrow-left" size={4} color={"black"} />
-        }
-        onPress={handleGoBack}
-      />
+      {hideDrawer ? (
+        <>
+          <IconButton
+            icon={<ArrowLeft size={24} color={THEME.colors.white} />}
+            onPress={() => navigation.goBack()}
+          />
+        </>
+      ) : (
+        <>
+          <IconButton
+            icon={<List size={24} color={THEME.colors.white} />}
+            onPress={openDrawer}
+          />
 
-      <Heading
-        color="gray.100"
-        textAlign="center"
-        fontSize="lg"
-        flex={1}
-        ml={-6}
-      >
-        {title}
-      </Heading>
-    </HStack>
+          <Spacer />
+
+          <Avatar
+            w={"45px"}
+            h={"45px"}
+            source={{
+              uri: "https://avatars.githubusercontent.com/u/60005589?v=4",
+            }}
+          />
+        </>
+      )}
+    </Box>
   );
 };

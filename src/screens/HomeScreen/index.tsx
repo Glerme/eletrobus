@@ -2,11 +2,12 @@ import { ScrollView } from "native-base";
 
 import { Background } from "~/components/Background";
 import { ListRouteCards } from "~/components/ListRouteCards";
+import { ScreenContent } from "~/components/ScreenContent";
 
 const mockedData = [
   {
     id: 1,
-    name: "Unip/Unesp",
+    name: "Unesp",
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
@@ -48,10 +49,12 @@ const mockedData = [
 
 export const HomeScreen = () => {
   return (
-    <ScrollView flex={1}>
-      <ListRouteCards description="Favoritos" data={mockedData} />
-      <ListRouteCards description="Ônibus em tráfego" data={mockedData} />
-      <ListRouteCards description="Corridas cadastradas" data={mockedData} />
-    </ScrollView>
+    <Background>
+      <ScreenContent>
+        <ListRouteCards description="Favoritos" data={mockedData} />
+        <ListRouteCards description="Ônibus em tráfego" data={mockedData} />
+        <ListRouteCards description="Corridas cadastradas" data={mockedData} />
+      </ScreenContent>
+    </Background>
   );
 };

@@ -1,48 +1,40 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
-import { HouseSimple, Gear } from "phosphor-react-native";
+import { HouseSimple } from "phosphor-react-native";
 
 import TabsRoutes from "./tab.routes";
 
-import { SettingsStackScreen } from "./stack.routes";
+import { Header } from "~/components/Header";
+import { CustomDrawer } from "~/components/CustomDrawer";
+
+import { THEME } from "~/styles/theme";
 
 const Drawer = createDrawerNavigator();
-
-const isTopBarVisible = (route: any) => {
-  const routeName = route.state
-    ? route.state.routes[route.state.index].name
-    : route.params
-    ? route.params.screen
-    : "homeTab";
-
-  return !["mapTab"].includes(routeName);
-};
 
 export default function DrawerRoutes() {
   return (
     <Drawer.Navigator
-      screenOptions={({ navigation, route }) => ({
-        headerShown: isTopBarVisible(route),
+      screenOptions={{
         title: "",
-      })}
+        headerShown: false,
+      }}
+      drawerContent={(props) => <CustomDrawer {...props} />}
     >
       <Drawer.Screen
-        name="home"
+        name="TabsRoutes"
         component={TabsRoutes}
-        options={{
-          drawerLabel: "Início",
-          drawerIcon: ({ color, size }) => (
-            <HouseSimple color={color} size={size} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="settings"
-        component={SettingsStackScreen}
-        options={{
-          drawerLabel: "Configurações",
-          drawerIcon: ({ color, size }) => <Gear color={color} size={size} />,
-        }}
+
+        // options={{
+        //   drawerLabel: "Início",
+        //   drawerIcon: ({ color, size }) => (
+        //     <HouseSimple color={color} size={size} />
+        //   ),
+        //   drawerLabelStyle: {
+        //     marginLeft: -16,
+        //   },
+        //   drawerActiveTintColor: THEME.colors.primary["500"],
+        //   drawerInactiveTintColor: THEME.colors.gray["700"],
+        // }}
       />
     </Drawer.Navigator>
   );

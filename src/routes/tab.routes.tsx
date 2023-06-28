@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { HouseSimple, Gear, MapTrifold, Path } from "phosphor-react-native";
+import { House, Gear, MapPinLine, Path } from "phosphor-react-native";
 
 import {
   HomeStackScreen,
@@ -9,19 +9,47 @@ import {
   SettingsStackScreen,
 } from "./stack.routes";
 
+import { THEME } from "~/styles/theme";
+
 const Tab = createBottomTabNavigator();
 
 export default function TabsRoutes() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false, unmountOnBlur: true }}>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        unmountOnBlur: true,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          position: "absolute",
+          backgroundColor: "#171626",
+          borderTopWidth: 0,
+
+          bottom: 14,
+          left: 14,
+          right: 14,
+          elevation: 0,
+          borderRadius: 8,
+        },
+        tabBarActiveBackgroundColor: THEME.colors.primary["500"],
+        tabBarActiveTintColor: THEME.colors.white,
+        tabBarInactiveTintColor: THEME.colors.gray["700"],
+        tabBarItemStyle: {
+          borderRadius: 8,
+        },
+      }}
+    >
       <Tab.Screen
         name="homeTab"
         component={HomeStackScreen}
         options={{
-          tabBarLabel: "Início",
-          tabBarIcon: ({ color, size }) => (
-            <HouseSimple color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size, focused }) => {
+            if (focused) {
+              return <House color={color} size={size} weight="fill" />;
+            }
+
+            return <House color={color} size={size} weight="regular" />;
+          },
         }}
       />
 
@@ -29,10 +57,13 @@ export default function TabsRoutes() {
         name="mapTab"
         component={MapStackScreen}
         options={{
-          tabBarLabel: "Mapa",
-          tabBarIcon: ({ color, size }) => (
-            <MapTrifold color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size, focused }) => {
+            if (focused) {
+              return <MapPinLine color={color} size={size} weight="fill" />;
+            }
+
+            return <MapPinLine color={color} size={size} />;
+          },
         }}
       />
 
@@ -40,8 +71,13 @@ export default function TabsRoutes() {
         name="routesTab"
         component={RoutesStackScreen}
         options={{
-          tabBarLabel: "Rotas",
-          tabBarIcon: ({ color, size }) => <Path color={color} size={size} />,
+          tabBarIcon: ({ color, size, focused }) => {
+            if (focused) {
+              return <Path color={color} size={size} weight="fill" />;
+            }
+
+            return <Path color={color} size={size} />;
+          },
         }}
       />
 
@@ -49,8 +85,13 @@ export default function TabsRoutes() {
         name="settingsTab"
         component={SettingsStackScreen}
         options={{
-          tabBarLabel: "Configurações",
-          tabBarIcon: ({ color, size }) => <Gear color={color} size={size} />,
+          tabBarIcon: ({ color, size, focused }) => {
+            if (focused) {
+              return <Gear color={color} size={size} weight="fill" />;
+            }
+
+            return <Gear color={color} size={size} />;
+          },
         }}
       />
     </Tab.Navigator>
