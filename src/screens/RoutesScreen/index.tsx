@@ -27,6 +27,7 @@ import { ScreenContent } from "~/components/ScreenContent";
 import { CirculedIcon } from "./styles";
 import { THEME } from "~/styles/theme";
 import { useNavigation } from "@react-navigation/native";
+import { ROUTES_SCREENS } from "~/constants/routes";
 
 const mockedData = [
   {
@@ -170,7 +171,7 @@ export const RoutesScreen = ({}) => {
           renderItem={({ item }) => (
             <Pressable
               onPress={() =>
-                navigation.navigate("routeDetailScreen", {
+                navigation.navigate(ROUTES_SCREENS.ROUTE_DETAILS_SCREEN, {
                   id: item?.id,
                 })
               }

@@ -11,6 +11,7 @@ import { ScreenContent } from "~/components/ScreenContent";
 import { THEME } from "~/styles/theme";
 
 import CorridasSalvasSvg from "~/assets/corridas-salvas.svg";
+import { ROUTES_SCREENS } from "~/constants/routes";
 
 const mockedData = {
   id: 1,
@@ -42,52 +43,7 @@ export const FavoritesScreen = ({}) => {
           <RouteCard
             route={mockedData}
             onPressCard={() =>
-              navigation.navigate("RouteDetailsScreen", {
-                id: mockedData?.id,
-              })
-            }
-          />
-
-          <RouteCard
-            route={mockedData}
-            onPressCard={() =>
-              navigation.navigate("RouteDetailsScreen", {
-                id: mockedData?.id,
-              })
-            }
-          />
-
-          <RouteCard
-            route={mockedData}
-            onPressCard={() =>
-              navigation.navigate("RouteDetailsScreen", {
-                id: mockedData?.id,
-              })
-            }
-          />
-
-          <RouteCard
-            route={mockedData}
-            onPressCard={() =>
-              navigation.navigate("RouteDetailsScreen", {
-                id: mockedData?.id,
-              })
-            }
-          />
-
-          <RouteCard
-            route={mockedData}
-            onPressCard={() =>
-              navigation.navigate("RouteDetailsScreen", {
-                id: mockedData?.id,
-              })
-            }
-          />
-
-          <RouteCard
-            route={mockedData}
-            onPressCard={() =>
-              navigation.navigate("RouteDetailsScreen", {
+              navigation.navigate(ROUTES_SCREENS.ROUTE_DETAILS_SCREEN, {
                 id: mockedData?.id,
               })
             }

@@ -9,16 +9,9 @@ import { RouteDetailsScreen } from "~/screens/RouteDetailsScreen";
 import { RoutesScreen } from "~/screens/RoutesScreen";
 import { SettingsScreen } from "~/screens/SettingsScreen";
 
-export type HomeStackParamList = {
-  home: undefined;
-  favoritesScreen: undefined;
-  routeDetailScreen: undefined;
-  routesScreen: undefined;
-  mapScreen: undefined;
-  settingsScreen: undefined;
-};
+import { ROUTES_SCREENS } from "~/constants/routes";
 
-const Stack = createNativeStackNavigator<HomeStackParamList>();
+const Stack = createNativeStackNavigator();
 
 export const HomeStackScreen = ({ navigation }: { navigation: any }) => {
   return (
@@ -30,15 +23,21 @@ export const HomeStackScreen = ({ navigation }: { navigation: any }) => {
       }}
     >
       <Stack.Screen
-        name="home"
+        name={ROUTES_SCREENS.HOME_SCREEN}
         component={HomeScreen}
         options={{
           headerShown: true,
           title: "",
         }}
       />
-      <Stack.Screen name="favoritesScreen" component={FavoritesScreen} />
-      <Stack.Screen name="routeDetailScreen" component={RouteDetailsScreen} />
+      <Stack.Screen
+        name={ROUTES_SCREENS.FAVORITES_SCREEN}
+        component={FavoritesScreen}
+      />
+      <Stack.Screen
+        name={ROUTES_SCREENS.ROUTE_DETAILS_SCREEN}
+        component={RouteDetailsScreen}
+      />
     </Stack.Navigator>
   );
 };
@@ -53,15 +52,21 @@ export const RoutesStackScreen = ({ navigation }: { navigation: any }) => {
       }}
     >
       <Stack.Screen
-        name="routesScreen"
+        name={ROUTES_SCREENS.ROUTES_SCREEN}
         component={RoutesScreen}
         options={{
           headerShown: true,
           title: "",
         }}
       />
-      <Stack.Screen name="favoritesScreen" component={FavoritesScreen} />
-      <Stack.Screen name="routeDetailScreen" component={RouteDetailsScreen} />
+      <Stack.Screen
+        name={ROUTES_SCREENS.FAVORITES_SCREEN}
+        component={FavoritesScreen}
+      />
+      <Stack.Screen
+        name={ROUTES_SCREENS.ROUTE_DETAILS_SCREEN}
+        component={RouteDetailsScreen}
+      />
     </Stack.Navigator>
   );
 };
@@ -70,7 +75,7 @@ export const MapStackScreen = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="mapScreen"
+        name={ROUTES_SCREENS.MAP_SCREEN}
         component={MapScreen}
         options={{ headerShown: false }}
       />
@@ -82,7 +87,7 @@ export const SettingsStackScreen = ({ navigation }: { navigation: any }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="settingsScreen"
+        name={ROUTES_SCREENS.SETTINGS_SCREEN}
         component={SettingsScreen}
         options={{
           headerShown: true,

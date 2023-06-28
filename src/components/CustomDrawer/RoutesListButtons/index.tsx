@@ -4,7 +4,7 @@ import {
 } from "@react-navigation/drawer";
 import { Box, Flex, Text } from "native-base";
 
-import { Gear, HouseSimple, MapTrifold, Path } from "phosphor-react-native";
+import { Gear, HouseSimple, MapPinLine, Path } from "phosphor-react-native";
 
 import { THEME } from "~/styles/theme";
 
@@ -18,7 +18,7 @@ export const RoutesListButtons = (props: RoutesListButtonsProps) => {
       case "homeTab":
         return <HouseSimple />;
       case "mapTab":
-        return <MapTrifold size={24} />;
+        return <MapPinLine size={24} />;
       case "routesTab":
         return <Path size={24} />;
       case "settingsTab":

@@ -10,6 +10,9 @@ import {
 } from "./stack.routes";
 
 import { THEME } from "~/styles/theme";
+import { ROUTES_TAB } from "~/constants/routes";
+import { Platform } from "react-native";
+import { CustomTabBar } from "~/components/CustomTabBar";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,13 +25,19 @@ export default function TabsRoutes() {
         tabBarShowLabel: false,
         tabBarStyle: {
           position: "absolute",
+          marginBottom: Platform.OS === "ios" ? 38 : 24,
+          marginHorizontal: 24,
           backgroundColor: "#171626",
           borderTopWidth: 0,
 
-          bottom: 14,
-          left: 14,
-          right: 14,
-          elevation: 0,
+          elevation: 10,
+          shadowColor: "#000",
+          shadowOpacity: 0.2,
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowRadius: 8,
           borderRadius: 8,
         },
         tabBarActiveBackgroundColor: THEME.colors.primary["500"],
@@ -38,9 +47,10 @@ export default function TabsRoutes() {
           borderRadius: 8,
         },
       }}
+      tabBar={(props) => <CustomTabBar {...props} />}
     >
       <Tab.Screen
-        name="homeTab"
+        name={ROUTES_TAB.HOME_TAB}
         component={HomeStackScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => {
@@ -54,7 +64,7 @@ export default function TabsRoutes() {
       />
 
       <Tab.Screen
-        name="mapTab"
+        name={ROUTES_TAB.MAP_TAB}
         component={MapStackScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => {
@@ -68,7 +78,7 @@ export default function TabsRoutes() {
       />
 
       <Tab.Screen
-        name="routesTab"
+        name={ROUTES_TAB.ROUTES_TAB}
         component={RoutesStackScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => {
@@ -82,7 +92,7 @@ export default function TabsRoutes() {
       />
 
       <Tab.Screen
-        name="settingsTab"
+        name={ROUTES_TAB.SETTINGS_TAB}
         component={SettingsStackScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => {

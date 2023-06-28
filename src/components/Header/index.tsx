@@ -1,29 +1,24 @@
-import { Avatar, Box, IconButton, Spacer, useTheme } from "native-base";
+import { TouchableWithoutFeedback } from "react-native";
+
+import { NativeStackHeaderProps } from "@react-navigation/native-stack";
+import { Avatar, Box, IconButton, Spacer } from "native-base";
 import { ArrowLeft, List } from "phosphor-react-native";
 
+import { ROUTES_SCREENS } from "~/constants/routes";
+
 import { THEME } from "~/styles/theme";
-import { DrawerHeaderProps } from "@react-navigation/drawer";
-import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 
 interface HeaderProps extends NativeStackHeaderProps {
   openDrawer: () => void;
 }
 
-export const Header = ({
-  openDrawer,
-  route,
-  navigation,
-  options,
-  back,
-}: HeaderProps) => {
-  console.log(
-    "AQUI",
-    JSON.stringify({ route, navigation, options, back }, null, 2)
-  );
+export const Header = ({ openDrawer, route, navigation }: HeaderProps) => {
+  const routesToShowGoBack = [
+    ROUTES_SCREENS.ROUTE_DETAILS_SCREEN,
+    ROUTES_SCREENS.FAVORITES_SCREEN,
+  ];
 
-  const routesToHideDrawer = ["routeDetailScreen", "favoritesScreen"];
-
-  const hideDrawer = routesToHideDrawer.includes(route.name);
+  const showGoBack = routesToShowGoBack.includes(route.name);
 
   return (
     <Box
@@ -33,7 +28,7 @@ export const Header = ({
       flexDir={"row"}
       background={"#0DAC86"}
     >
-      {hideDrawer ? (
+      {showGoBack ? (
         <>
           <IconButton
             icon={<ArrowLeft size={24} color={THEME.colors.white} />}
@@ -49,13 +44,15 @@ export const Header = ({
 
           <Spacer />
 
-          <Avatar
-            w={"45px"}
-            h={"45px"}
-            source={{
-              uri: "https://avatars.githubusercontent.com/u/60005589?v=4",
-            }}
-          />
+          <TouchableWithoutFeedback onPress={() => console.log("AQUI")}>
+            <Avatar
+              w={"45px"}
+              h={"45px"}
+              source={{
+                uri: "https://avatars.githubusercontent.com/u/60005589?v=4",
+              }}
+            />
+          </TouchableWithoutFeedback>
         </>
       )}
     </Box>
