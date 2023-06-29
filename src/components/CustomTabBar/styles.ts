@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 export const Container = styled(Box)`
   justify-content: center;
   align-items: center;
-  background: red;
 `;
 
 export const Content = styled(Box)`
@@ -13,7 +12,7 @@ export const Content = styled(Box)`
   border-top-width: 0;
 
   z-index: 10;
-  border-radius: 8;
+  border-radius: 8px;
   flex-direction: row;
   justify-content: center;
   align-items: center;

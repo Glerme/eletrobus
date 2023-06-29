@@ -1,5 +1,3 @@
-import { ScrollView } from "native-base";
-
 import { Background } from "~/components/Background";
 import { ListRouteCards } from "~/components/ListRouteCards";
 import { ScreenContent } from "~/components/ScreenContent";

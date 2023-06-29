@@ -52,22 +52,47 @@ const mockedData = [
   },
   {
     id: 5,
-    name: "Porto Alegre",
+    name: "Porto Alegre1",
     favorite: true,
   },
   {
     id: 6,
-    name: "Porto Alegre",
+    name: "Porto Alegre2",
     favorite: false,
   },
   {
     id: 7,
-    name: "Porto Alegre",
+    name: "Porto Alegre3",
     favorite: true,
   },
   {
     id: 8,
-    name: "Porto Alegre",
+    name: "Porto Alegre4",
+    favorite: false,
+  },
+  {
+    id: 9,
+    name: "Porto Alegre5",
+    favorite: false,
+  },
+  {
+    id: 10,
+    name: "Porto Alegre6",
+    favorite: false,
+  },
+  {
+    id: 11,
+    name: "Porto Alegre7",
+    favorite: false,
+  },
+  {
+    id: 12,
+    name: "Porto Alegre8",
+    favorite: false,
+  },
+  {
+    id: 13,
+    name: "Porto Alegre9",
     favorite: false,
   },
 ];
@@ -117,48 +142,38 @@ export const RoutesScreen = ({}) => {
             <Title size="sm">Intermunicipais</Title>
           </Box>
 
-          <ScrollView
+          <FlatList
             horizontal
-            showsHorizontalScrollIndicator={false}
-            directionalLockEnabled={true}
-            alwaysBounceVertical={false}
-          >
-            <FlatList
-              contentContainerStyle={{ alignSelf: "flex-start" }}
-              numColumns={Math.ceil(mockedData?.length / 2)}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              data={mockedData}
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={({ item }) => (
-                <>
-                  <Pressable onPress={() => console.log("aqui")} key={item?.id}>
-                    {({ isPressed }) => (
-                      <Box
-                        bg={isPressed ? "coolGray.200" : "white"}
-                        maxW={150}
-                        minW={50}
-                        p="2"
-                        rounded="8"
-                        borderColor={"coolGray.200"}
-                        borderWidth={1}
-                        style={{
-                          margin: 2,
-                          transform: [
-                            {
-                              scale: isPressed ? 0.96 : 1,
-                            },
-                          ],
-                        }}
-                      >
-                        <Text fontSize="sm">{item?.name}</Text>
-                      </Box>
-                    )}
-                  </Pressable>
-                </>
-              )}
-            />
-          </ScrollView>
+            contentContainerStyle={{ alignSelf: "flex-start" }}
+            showsVerticalScrollIndicator={false}
+            data={mockedData}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => console.log("aqui")} key={item?.id}>
+                {({ isPressed }) => (
+                  <Box
+                    bg={isPressed ? "coolGray.200" : "white"}
+                    maxW={150}
+                    minW={50}
+                    p="2"
+                    rounded="8"
+                    borderColor={"coolGray.200"}
+                    borderWidth={1}
+                    style={{
+                      margin: 2,
+                      transform: [
+                        {
+                          scale: isPressed ? 0.96 : 1,
+                        },
+                      ],
+                    }}
+                  >
+                    <Text fontSize="sm">{item?.name}</Text>
+                  </Box>
+                )}
+              </Pressable>
+            )}
+          />
         </VStack>
 
         <Box w={"140"} mt={4}>
@@ -166,8 +181,8 @@ export const RoutesScreen = ({}) => {
         </Box>
 
         <FlatList
-          data={mockedData}
           keyExtractor={(item) => `${item.id}`}
+          data={mockedData}
           renderItem={({ item }) => (
             <Pressable
               onPress={() =>

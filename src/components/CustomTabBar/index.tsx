@@ -1,10 +1,10 @@
-import { View, TouchableOpacity, StyleSheet, Platform } from "react-native";
+import { Platform } from "react-native";
 
-import { MaterialIcons } from "@expo/vector-icons";
-
+import { Box } from "native-base";
 import { House, Gear, MapPinLine, Path } from "phosphor-react-native";
-import { ButtonTab, Container, Content } from "./styles";
+
 import { THEME } from "~/styles/theme";
+import { ButtonTab, Container, Content } from "./styles";
 
 export function CustomTabBar({ state, descriptors, navigation }: any) {
   const Icon = (route: string) => {
@@ -57,19 +57,17 @@ export function CustomTabBar({ state, descriptors, navigation }: any) {
               onPress={onPress}
               onLongPress={onLongPress}
             >
-              <View style={{ alignItems: "center", padding: 4 }}>
-                <View
-                  style={{
-                    padding: 8,
-                    borderRadius: 99,
-                    backgroundColor: isFocused
-                      ? THEME.colors.primary[700]
-                      : "transparent",
-                  }}
+              <Box alignItems={"center"} p={3}>
+                <Box
+                  p={2}
+                  borderRadius={99}
+                  backgroundColor={
+                    isFocused ? THEME.colors.primary[700] : "transparent"
+                  }
                 >
                   {Icon(route.name)}
-                </View>
-              </View>
+                </Box>
+              </Box>
             </ButtonTab>
           );
         })}

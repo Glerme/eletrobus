@@ -8,11 +8,11 @@ import { ROUTES_SCREENS } from "~/constants/routes";
 
 import { THEME } from "~/styles/theme";
 
-interface HeaderProps extends NativeStackHeaderProps {
+interface HeaderProps {
   openDrawer: () => void;
 }
 
-export const Header = ({ openDrawer, route, navigation }: HeaderProps) => {
+export const Header = ({ openDrawer }: HeaderProps) => {
   const routesToShowGoBack = [
     ROUTES_SCREENS.ROUTE_DETAILS_SCREEN,
     ROUTES_SCREENS.FAVORITES_SCREEN,

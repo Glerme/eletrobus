@@ -16,5 +16,6 @@ export const BackgroundHeader = styled(LinearGradient)`
 `;
 
 export const Content = styled.KeyboardAvoidingView`
-  flex: 1;
+  /* flex: 1; */
+  margin-bottom: 100px;
 `;

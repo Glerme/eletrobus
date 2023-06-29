@@ -1,7 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import { House, Gear, MapPinLine, Path } from "phosphor-react-native";
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   HomeStackScreen,
   MapStackScreen,
@@ -9,101 +7,142 @@ import {
   SettingsStackScreen,
 } from "./stack.routes";
 
-import { THEME } from "~/styles/theme";
-import { ROUTES_TAB } from "~/constants/routes";
-import { Platform } from "react-native";
-import { CustomTabBar } from "~/components/CustomTabBar";
+import { Header } from "~/components/Header";
 
-const Tab = createBottomTabNavigator();
+const App = createNativeStackNavigator();
+const Tabs = createBottomTabNavigator();
 
-export default function TabsRoutes() {
+export const TabNavigator = ({ navigation }: { navigation: any }) => (
+  <Tabs.Navigator
+    screenOptions={({ route }) => ({
+      headerShown: false,
+      header: (props) => (
+        <Header {...props} openDrawer={() => navigation?.openDrawer()} />
+      ),
+    })}
+    initialRouteName="Home"
+  >
+    <Tabs.Screen name="Home" component={HomeStackScreen} />
+    <Tabs.Screen name="Mapa" component={MapStackScreen} />
+    <Tabs.Screen name="Routes" component={RoutesStackScreen} />
+    <Tabs.Screen name="Settings" component={SettingsStackScreen} />
+  </Tabs.Navigator>
+);
+
+export const TabRoutes = () => {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        unmountOnBlur: true,
-        tabBarShowLabel: false,
-        tabBarStyle: {
-          position: "absolute",
-          marginBottom: Platform.OS === "ios" ? 38 : 24,
-          marginHorizontal: 24,
-          backgroundColor: "#171626",
-          borderTopWidth: 0,
-
-          elevation: 10,
-          shadowColor: "#000",
-          shadowOpacity: 0.2,
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowRadius: 8,
-          borderRadius: 8,
-        },
-        tabBarActiveBackgroundColor: THEME.colors.primary["500"],
-        tabBarActiveTintColor: THEME.colors.white,
-        tabBarInactiveTintColor: THEME.colors.gray["700"],
-        tabBarItemStyle: {
-          borderRadius: 8,
-        },
+    <App.Navigator
+      screenOptions={() => {
+        return {
+          headerShown: false,
+          gestureEnabled: true,
+        };
       }}
-      tabBar={(props) => <CustomTabBar {...props} />}
+      initialRouteName="TabBar"
     >
-      <Tab.Screen
-        name={ROUTES_TAB.HOME_TAB}
-        component={HomeStackScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => {
-            if (focused) {
-              return <House color={color} size={size} weight="fill" />;
-            }
-
-            return <House color={color} size={size} weight="regular" />;
-          },
-        }}
-      />
-
-      <Tab.Screen
-        name={ROUTES_TAB.MAP_TAB}
-        component={MapStackScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => {
-            if (focused) {
-              return <MapPinLine color={color} size={size} weight="fill" />;
-            }
-
-            return <MapPinLine color={color} size={size} />;
-          },
-        }}
-      />
-
-      <Tab.Screen
-        name={ROUTES_TAB.ROUTES_TAB}
-        component={RoutesStackScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => {
-            if (focused) {
-              return <Path color={color} size={size} weight="fill" />;
-            }
-
-            return <Path color={color} size={size} />;
-          },
-        }}
-      />
-
-      <Tab.Screen
-        name={ROUTES_TAB.SETTINGS_TAB}
-        component={SettingsStackScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => {
-            if (focused) {
-              return <Gear color={color} size={size} weight="fill" />;
-            }
-
-            return <Gear color={color} size={size} />;
-          },
-        }}
-      />
-    </Tab.Navigator>
+      <App.Screen name="TabBar" component={TabNavigator} />
+    </App.Navigator>
   );
-}
+};
+
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+// import { House, Gear, MapPinLine, Path } from "phosphor-react-native";
+
+// import {
+//   HomeStackScreen,
+//   MapStackScreen,
+//   RoutesStackScreen,
+//   SettingsStackScreen,
+// } from "./stack.routes";
+
+// import { ROUTES_TAB } from "~/constants/routes";
+// import { CustomTabBar } from "~/components/CustomTabBar";
+
+// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// import { HomeScreen } from "~/screens/HomeScreen";
+
+// const Tab = createBottomTabNavigator();
+// const RootStack = createNativeStackNavigator();
+
+// export const RootStackScreen = () => {
+//   return (
+//     <RootStack.Navigator
+//       initialRouteName="TabsRoutes"
+//       screenOptions={{
+//         headerShown: false,
+//       }}
+//     >
+//       <RootStack.Screen name="TabsRoutes" component={TabsRoutes} />
+//       <RootStack.Screen name="Home" component={HomeStackScreen} />
+//     </RootStack.Navigator>
+//   );
+// };
+
+// export const TabsRoutes = () => {
+//   return (
+//     <Tab.Navigator
+//       screenOptions={{
+//         headerShown: false,
+//         unmountOnBlur: true,
+//       }}
+//       // tabBar={(props) => <CustomTabBar {...props} />}
+//     >
+//       <Tab.Screen
+//         name={ROUTES_TAB.HOME_TAB}
+//         component={HomeStackScreen}
+//         options={{
+//           tabBarIcon: ({ color, size, focused }) => (
+//             <House
+//               color={color}
+//               size={size}
+//               weight={focused ? "fill" : "regular"}
+//             />
+//           ),
+//         }}
+//       />
+
+//       <Tab.Screen
+//         name={ROUTES_TAB.MAP_TAB}
+//         component={MapStackScreen}
+//         options={{
+//           tabBarIcon: ({ color, size, focused }) => (
+//             <MapPinLine
+//               color={color}
+//               size={size}
+//               weight={focused ? "fill" : "regular"}
+//             />
+//           ),
+//         }}
+//       />
+
+//       <Tab.Screen
+//         name={ROUTES_TAB.ROUTES_TAB}
+//         component={RoutesStackScreen}
+//         options={{
+//           tabBarIcon: ({ color, size, focused }) => (
+//             <Path
+//               color={color}
+//               size={size}
+//               weight={focused ? "fill" : "regular"}
+//             />
+//           ),
+//         }}
+//       />
+
+//       <Tab.Screen
+//         name={ROUTES_TAB.SETTINGS_TAB}
+//         component={SettingsStackScreen}
+//         options={{
+//           tabBarIcon: ({ color, size, focused }) => (
+//             <Gear
+//               color={color}
+//               size={size}
+//               weight={focused ? "fill" : "regular"}
+//             />
+//           ),
+//         }}
+//       />
+//     </Tab.Navigator>
+//   );
+// };

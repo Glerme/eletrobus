@@ -13,31 +13,14 @@ import { ROUTES_SCREENS } from "~/constants/routes";
 
 const Stack = createNativeStackNavigator();
 
-export const HomeStackScreen = ({ navigation }: { navigation: any }) => {
+export const HomeStackScreen = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        header: (props) => (
-          <Header {...props} openDrawer={() => navigation?.openDrawer()} />
-        ),
+        title: "",
       }}
     >
-      <Stack.Screen
-        name={ROUTES_SCREENS.HOME_SCREEN}
-        component={HomeScreen}
-        options={{
-          headerShown: true,
-          title: "",
-        }}
-      />
-      <Stack.Screen
-        name={ROUTES_SCREENS.FAVORITES_SCREEN}
-        component={FavoritesScreen}
-      />
-      <Stack.Screen
-        name={ROUTES_SCREENS.ROUTE_DETAILS_SCREEN}
-        component={RouteDetailsScreen}
-      />
+      <Stack.Screen name={ROUTES_SCREENS.HOME_SCREEN} component={HomeScreen} />
     </Stack.Navigator>
   );
 };
@@ -45,11 +28,13 @@ export const HomeStackScreen = ({ navigation }: { navigation: any }) => {
 export const RoutesStackScreen = ({ navigation }: { navigation: any }) => {
   return (
     <Stack.Navigator
-      screenOptions={{
-        header: (props) => (
-          <Header {...props} openDrawer={() => navigation?.openDrawer()} />
-        ),
-      }}
+      screenOptions={
+        {
+          // header: (props) => (
+          //   <Header {...props} openDrawer={() => navigation?.openDrawer()} />
+          // ),
+        }
+      }
     >
       <Stack.Screen
         name={ROUTES_SCREENS.ROUTES_SCREEN}
@@ -59,14 +44,14 @@ export const RoutesStackScreen = ({ navigation }: { navigation: any }) => {
           title: "",
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name={ROUTES_SCREENS.FAVORITES_SCREEN}
         component={FavoritesScreen}
       />
       <Stack.Screen
         name={ROUTES_SCREENS.ROUTE_DETAILS_SCREEN}
         component={RouteDetailsScreen}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };
@@ -92,9 +77,9 @@ export const SettingsStackScreen = ({ navigation }: { navigation: any }) => {
         options={{
           headerShown: true,
           title: "",
-          header: (props) => (
-            <Header {...props} openDrawer={() => navigation?.openDrawer()} />
-          ),
+          // header: (props) => (
+          //   <Header {...props} openDrawer={() => navigation?.openDrawer()} />
+          // ),
         }}
       />
     </Stack.Navigator>
