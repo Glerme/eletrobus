@@ -1,4 +1,6 @@
+import { ScrollView } from "react-native-gesture-handler";
 import { Background } from "~/components/Background";
+import { Input } from "~/components/Input";
 import { ListRouteCards } from "~/components/ListRouteCards";
 import { ScreenContent } from "~/components/ScreenContent";
 
@@ -48,11 +50,17 @@ const mockedData = [
 export const HomeScreen = () => {
   return (
     <Background>
-      <ScreenContent>
-        <ListRouteCards description="Favoritos" data={mockedData} />
-        <ListRouteCards description="Ônibus em tráfego" data={mockedData} />
-        <ListRouteCards description="Corridas cadastradas" data={mockedData} />
-      </ScreenContent>
+      <ScrollView>
+        <ScreenContent>
+          <Input />
+          <ListRouteCards description="Favoritos" data={mockedData} />
+          <ListRouteCards description="Ônibus em tráfego" data={mockedData} />
+          <ListRouteCards
+            description="Corridas cadastradas"
+            data={mockedData}
+          />
+        </ScreenContent>
+      </ScrollView>
     </Background>
   );
 };
