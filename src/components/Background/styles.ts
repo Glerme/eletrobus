@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export const Container = styled.View`
   flex: 1;
-  background-color: #ececec;
+  background-color: #dedede;
   display: flex;
   position: relative;
 `;

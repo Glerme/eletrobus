@@ -19,13 +19,14 @@ interface RouteCardProps {
 
 export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
   return (
-    <Pressable px="4" onPress={onPressCard}>
+    <Pressable px="4" marginY={1} onPress={onPressCard}>
       {({ isPressed }) => {
         return (
           <Box
             minW="72"
-            bg={"coolGray.100"}
+            bg={"white"}
             p="3"
+            shadow={"0"}
             rounded="8"
             style={{
               transform: [
@@ -42,11 +43,33 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
 
               <Spacer />
 
-              <Star
-                size={14}
-                weight="fill"
-                color={route.favorite ? "#E9C25F" : "#9C9C9C"}
-              />
+              <Pressable
+                zIndex={1}
+                onPress={() => {
+                  // logica para add aos fav
+                }}
+              >
+                {({ isPressed }) => {
+                  return (
+                    <Box
+                      p={2}
+                      style={{
+                        transform: [
+                          {
+                            scale: isPressed ? 0.8 : 1,
+                          },
+                        ],
+                      }}
+                    >
+                      <Star
+                        size={18}
+                        weight="fill"
+                        color={route.favorite ? "#E9C25F" : "#9C9C9C"}
+                      />
+                    </Box>
+                  );
+                }}
+              </Pressable>
             </HStack>
 
             <VStack space="0">

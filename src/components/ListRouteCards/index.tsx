@@ -32,7 +32,14 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Heading size="md">{description}</Heading>
+          <Text
+            fontFamily="heading"
+            fontSize={"md"}
+            color="gray.900"
+            lineHeight={"md"}
+          >
+            {description}
+          </Text>
           <Pressable
             alignItems="center"
             onPress={() => navigation.navigate(ROUTES_SCREENS.FAVORITES_SCREEN)}
