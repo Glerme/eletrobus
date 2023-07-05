@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
 import { Box, IconButton, Text, VStack } from "native-base";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { CaretLeft } from "phosphor-react-native";
@@ -16,6 +16,7 @@ import { THEME } from "~/styles/theme";
 import { ROUTES_SCREENS } from "~/constants/routes";
 
 import CorridasSalvasSvg from "~/assets/corridas-salvas.svg";
+import { useAlternativeHeader } from "~/hooks/useAlternativeHeader";
 
 const mockedData = {
   id: 1,
@@ -29,36 +30,10 @@ const mockedData = {
 export const FavoritesScreen = ({}) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: "Título da Tela",
-      headerBackTitleVisible: false, // Ocultar o título de retorno
-      headerStyle: {
-        backgroundColor: "#0DAC86",
-      },
-      statusBarStyle: "light",
-      statusBarColor: "#0DAC86",
-      contentStyle: {
-        elevation: 0, // Remover a borda do cabeçalho no Android
-        shadowOpacity: 0, // Remover a borda do cabeçalho no iOS
-        borderBottomWidth: 0, // Remover a borda do cabeçalho
-      },
-      headerShadowVisible: false, // applied here
-      headerTintColor: "#fff",
-      headerTitleStyle: {
-        fontWeight: "bold",
-      },
-      headerLeft: () => (
-        <IconButton
-          onPress={() => navigation.goBack()}
-          marginRight={"2"}
-          marginLeft={"-14px"}
-        >
-          <CaretLeft color="white" />
-        </IconButton>
-      ),
-    });
-  }, [navigation]);
+  useAlternativeHeader({
+    title: "Corridas salvas",
+    navigation,
+  });
 
   return (
     <Background>
