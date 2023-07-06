@@ -1,24 +1,31 @@
-export const ROUTES_LABELS = {
+export default {
+  LOGIN: "Login",
+  REGISTER: "Register",
+  FORGOT_PASSWORD: "Forgot Password",
+
   HOME: "Home",
-  FAVORITES: "Favoritos",
-  ROUTE_DETAILS: "Detalhes da rota",
-  ROUTES: "Rotas",
-  MAP: "Mapa",
-  SETTINGS: "Configurações",
-};
+  HOME_TAB: "Home Tab",
+  HOME_DRAWER: "Home Drawer",
 
-export const ROUTES_TAB = {
-  HOME_TAB: "homeTab",
-  MAP_TAB: "mapTab",
-  ROUTES_TAB: "routesTab",
-  SETTINGS_TAB: "settingsTab",
-};
+  MAP: "Map",
+  MAP_TAB: "Map Tab",
 
-export const ROUTES_SCREENS = {
-  HOME_SCREEN: "HomeScreen",
-  FAVORITES_SCREEN: "FavoritesScreen",
-  ROUTE_DETAILS_SCREEN: "RouteDetailsScreen",
-  ROUTES_SCREEN: "RoutesScreen",
-  MAP_SCREEN: "MapScreen",
-  SETTINGS_SCREEN: "SettingScreen",
+  ROUTES: "Routes",
+  ROUTES_TAB: "Routes Tab",
+  ROUTES_DRAWER: "Routes Drawer",
+
+  ROUTE_DETAILS: "Route Details",
+  ROUTE_DETAILS_TAB: "Route Details Tab",
+  ROUTE_DETAILS_DRAWER: "Route Details Drawer",
+
+  FAVORITES: "Favorites",
+  FAVORITES_TAB: "Favorites Tab",
+  FAVORITES_DRAWER: "Favorites Drawer",
+
+  SETTINGS: "Settings",
+  ACCOUNT_SETTINGS: "Account Settings",
+  SETTINGS_NAVIGATOR: "Settings Navigator",
+
+  SETTINGS_DETAIL: "Settings Detail",
+  PROFILE: "My Profile",
 };

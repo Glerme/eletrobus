@@ -4,6 +4,7 @@ import {
   FlatList,
   HStack,
   Image,
+  ScrollView,
   Spacer,
   Text,
   VStack,
@@ -60,76 +61,78 @@ export const RouteDetailsScreen = ({ route, navigation }: any) => {
 
   return (
     <Background>
-      <ScreenContent>
-        <VStack space={4}>
-          <HStack alignItems={"center"}>
-            <Box>
-              <Title>Unip/Unesp</Title>
-            </Box>
-
-            <Spacer />
-
-            <Box>
-              <Star size={22} weight="fill" color={"#E9C25F"} />
-            </Box>
-          </HStack>
-
-          <Box w={"full"}>
-            <Image
-              source={{
-                uri: "https://wallpaperaccess.com/full/317501.jpg",
-              }}
-              w={"full"}
-              h="56"
-              borderRadius={"md"}
-              alt="Alternate Text"
-            />
-          </Box>
-
-          <Box>
-            <Title size="sm">Horários</Title>
+      <ScrollView>
+        <ScreenContent>
+          <VStack space={4}>
             <HStack alignItems={"center"}>
               <Box>
-                <Text fontSize="sm">Saída</Text>
-                <Text fontSize="sm">Entrada</Text>
+                <Title>Unip/Unesp</Title>
               </Box>
 
               <Spacer />
 
               <Box>
-                <Text fontSize="sm">Disponivel</Text>
+                <Star size={22} weight="fill" color={"#E9C25F"} />
               </Box>
             </HStack>
 
-            <FlatList
-              data={mockedData}
-              horizontal
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={({ item }) => <HourCard isToday={item.isToday} />}
-            />
-          </Box>
-
-          <Box>
-            <Title size="sm">Observação</Title>
-            <Box>
-              <Text fontSize="sm">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
-                officia, ex, dignissimos assumenda libero reiciendis possimus
-                ipsam repudiandae eligendi repellendus blanditiis rerum saepe
-                numquam!
-              </Text>
+            <Box w={"full"}>
+              <Image
+                source={{
+                  uri: "https://wallpaperaccess.com/full/317501.jpg",
+                }}
+                w={"full"}
+                h="56"
+                borderRadius={"md"}
+                alt="Alternate Text"
+              />
             </Box>
-          </Box>
 
-          <Box mb={10}>
-            <Button
-              onPress={() => console.log("click")}
-              title="Acompanhar Viagem"
-              fontColor={"white"}
-            />
-          </Box>
-        </VStack>
-      </ScreenContent>
+            <Box>
+              <Title size="sm">Horários</Title>
+              <HStack alignItems={"center"}>
+                <Box>
+                  <Text fontSize="sm">Saída</Text>
+                  <Text fontSize="sm">Entrada</Text>
+                </Box>
+
+                <Spacer />
+
+                <Box>
+                  <Text fontSize="sm">Disponivel</Text>
+                </Box>
+              </HStack>
+
+              <FlatList
+                data={mockedData}
+                horizontal
+                keyExtractor={(item) => `${item.id}`}
+                renderItem={({ item }) => <HourCard isToday={item.isToday} />}
+              />
+            </Box>
+
+            <Box>
+              <Title size="sm">Observação</Title>
+              <Box>
+                <Text fontSize="sm">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
+                  officia, ex, dignissimos assumenda libero reiciendis possimus
+                  ipsam repudiandae eligendi repellendus blanditiis rerum saepe
+                  numquam!
+                </Text>
+              </Box>
+            </Box>
+
+            <Box mb={10}>
+              <Button
+                onPress={() => console.log("click")}
+                title="Acompanhar Viagem"
+                fontColor={"white"}
+              />
+            </Box>
+          </VStack>
+        </ScreenContent>
+      </ScrollView>
     </Background>
   );
 };

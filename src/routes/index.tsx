@@ -1,21 +1,22 @@
 import { NavigationContainer } from "@react-navigation/native";
-
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { TabNavigator } from "./tab.routes";
+import { DrawerNavigator } from "./drawer.routes";
 
-import { RouteDetailsScreen } from "~/screens/RouteDetailsScreen";
+import ROUTES from "~/constants/routes";
+
 import { FavoritesScreen } from "~/screens/FavoritesScreen";
+import { RouteDetailsScreen } from "~/screens/RouteDetailsScreen";
 
 const Stack = createNativeStackNavigator();
 
 const stacks = [
   {
-    name: "RouteDetailsScreen",
+    name: ROUTES.ROUTE_DETAILS,
     component: RouteDetailsScreen,
   },
   {
-    name: "FavoritesScreen",
+    name: ROUTES.FAVORITES,
     component: FavoritesScreen,
   },
 ];
@@ -24,17 +25,56 @@ export const Routes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="TabNavigator"
         screenOptions={{
-          title: "",
+          headerShown: false,
+          statusBarStyle: "light",
         }}
+        initialRouteName="DrawerNavigator"
       >
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen
+          name="DrawerNavigator"
+          component={DrawerNavigator}
+          options={{
+            headerStyle: {
+              backgroundColor: "#0DAC86",
+            },
+            statusBarStyle: "light",
+            statusBarColor: "#0DAC86",
+            contentStyle: {
+              elevation: 0,
+              shadowOpacity: 0,
+              borderBottomWidth: 0,
+            },
+            headerShadowVisible: false,
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
         {stacks.map((stack, index) => (
           <Stack.Screen
             name={stack.name}
             component={stack.component}
             key={index}
+            options={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: "#0DAC86",
+              },
+              statusBarStyle: "light",
+              statusBarColor: "#0DAC86",
+              contentStyle: {
+                elevation: 0,
+                shadowOpacity: 0,
+                borderBottomWidth: 0,
+              },
+              headerShadowVisible: false,
+              headerTintColor: "#fff",
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+            }}
           />
         ))}
       </Stack.Navigator>

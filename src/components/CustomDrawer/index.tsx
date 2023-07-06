@@ -8,8 +8,9 @@ import {
 
 import { SignOut } from "phosphor-react-native";
 
-import { THEME } from "~/styles/theme";
 import { RoutesListButtons } from "./RoutesListButtons";
+
+import { THEME } from "~/styles/theme";
 
 export const CustomDrawer = (props: DrawerContentComponentProps) => {
   return (
