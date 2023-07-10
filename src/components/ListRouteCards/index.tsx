@@ -1,13 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import {
-  Flex,
-  HStack,
-  Heading,
-  Pressable,
-  ScrollView,
-  Text,
-  VStack,
-} from "native-base";
+import { Flex, HStack, Pressable, ScrollView, Text, VStack } from "native-base";
 import { CaretRight } from "phosphor-react-native";
 
 import { RouteCard } from "../RouteCard";

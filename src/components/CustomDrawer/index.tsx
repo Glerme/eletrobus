@@ -28,7 +28,7 @@ export const CustomDrawer = (props: DrawerContentComponentProps) => {
             borderRadius={40}
             mb={2}
             source={{
-              uri: "https://avatars.githubusercontent.com/u/55901431?v=4",
+              uri: "https://github.com/glerme.png",
             }}
           />
 

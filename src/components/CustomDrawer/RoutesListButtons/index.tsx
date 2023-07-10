@@ -4,52 +4,29 @@ import {
 } from "@react-navigation/drawer";
 import { Box, Flex, Text } from "native-base";
 
-import { Gear, HouseSimple, MapPinLine, Path } from "phosphor-react-native";
+import { HouseSimple } from "phosphor-react-native";
+import ROUTES from "~/constants/routes";
 
 import { THEME } from "~/styles/theme";
 
 interface RoutesListButtonsProps extends DrawerContentComponentProps {}
 
 export const RoutesListButtons = (props: RoutesListButtonsProps) => {
-  const routes = ["homeTab", "mapTab", "routesTab", "settingsTab"];
+  const routes = [ROUTES.HOME];
 
   const Icon = (route: string) => {
     switch (route) {
-      case "homeTab":
+      case ROUTES.HOME:
         return <HouseSimple />;
-      case "mapTab":
-        return <MapPinLine size={24} />;
-      case "routesTab":
-        return <Path size={24} />;
-      case "settingsTab":
-        return <Gear size={24} />;
     }
   };
 
   const parsedLabelRoutes = (route: string) => {
     switch (route) {
-      case "homeTab":
+      case ROUTES.HOME:
         return (
           <Text ml={-5} fontWeight={"bold"}>
             Início
-          </Text>
-        );
-      case "mapTab":
-        return (
-          <Text ml={-5} fontWeight={"bold"}>
-            Mapa
-          </Text>
-        );
-      case "routesTab":
-        return (
-          <Text ml={-5} fontWeight={"bold"}>
-            Rotas
-          </Text>
-        );
-      case "settingsTab":
-        return (
-          <Text ml={-5} fontWeight={"bold"}>
-            Configurações
           </Text>
         );
     }

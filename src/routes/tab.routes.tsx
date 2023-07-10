@@ -22,6 +22,11 @@ export const TabNavigator = ({}) => {
     <Tabs.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: THEME.colors.primary["500"],
+        tabBarInactiveTintColor: THEME.colors.gray["700"],
+        tabBarStyle: {
+          backgroundColor: THEME.colors.white,
+        },
       }}
       initialRouteName={ROUTES.HOME}
     >
@@ -30,7 +35,6 @@ export const TabNavigator = ({}) => {
         component={HomeScreen}
         options={{
           headerShown: true,
-
           headerStyle: {
             backgroundColor: "#0DAC86",
           },
