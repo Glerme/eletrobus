@@ -3,10 +3,10 @@ import { Box, ScrollView, Text, VStack } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Title } from "~/components/Title";
+import { Title } from "~/components/Layouts/Title";
 import { RouteCard } from "~/components/RouteCard";
-import { Background } from "~/components/Background";
-import { ScreenContent } from "~/components/ScreenContent";
+import { Background } from "~/components/Layouts/Background";
+import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 

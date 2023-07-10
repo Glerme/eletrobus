@@ -7,8 +7,7 @@ import { Envelope, Key } from "phosphor-react-native";
 import * as AuthSession from "expo-auth-session";
 import { useNavigation } from "@react-navigation/native";
 
-
-import { Input } from "~/components/Input";
+import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Button";
 
 type AuthResponse = {
@@ -35,7 +34,7 @@ export const Login = () => {
 
     // setIsLoading(true);
 
-    navigation.navigate("PHome")
+    navigation.navigate("PHome");
   };
 
   const googleSignIn = async () => {

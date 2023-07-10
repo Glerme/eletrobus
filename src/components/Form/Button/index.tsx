@@ -8,7 +8,7 @@ interface ButtonProps extends IButtonProps {
 
 export const Button = ({ title, onPress, fontColor, ...rest }: ButtonProps) => {
   return (
-    <RNButton onPress={onPress} fontSize="sm" rounded="sm" {...rest}>
+    <RNButton onPress={onPress} fontSize="sm" rounded="lg" {...rest}>
       <Heading color={fontColor} fontSize="sm">
         {title}
       </Heading>

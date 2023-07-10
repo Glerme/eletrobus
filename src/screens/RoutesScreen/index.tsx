@@ -20,10 +20,10 @@ import {
   Star,
 } from "phosphor-react-native";
 
-import { Title } from "~/components/Title";
-import { Input } from "~/components/Input";
-import { Background } from "~/components/Background";
-import { ScreenContent } from "~/components/ScreenContent";
+import { Title } from "~/components/Layouts/Title";
+import { Input } from "~/components/Form/Input";
+import { Background } from "~/components/Layouts/Background";
+import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { CirculedIcon } from "./styles";
 import { THEME } from "~/styles/theme";
 import { useNavigation } from "@react-navigation/native";

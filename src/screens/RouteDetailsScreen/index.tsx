@@ -12,9 +12,9 @@ import {
 import { useRoute } from "@react-navigation/native";
 import { Star } from "phosphor-react-native";
 
-import { Background } from "~/components/Background";
-import { ScreenContent } from "~/components/ScreenContent";
-import { Title } from "~/components/Title";
+import { Background } from "~/components/Layouts/Background";
+import { ScreenContent } from "~/components/Layouts/ScreenContent";
+import { Title } from "~/components/Layouts/Title";
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Button";
 

@@ -3,7 +3,7 @@ import { TabNavigator } from "./tab.routes";
 
 import ROUTES from "~/constants/routes";
 
-import { CustomDrawer } from "~/components/CustomDrawer";
+import { CustomDrawer } from "~/components/Layouts/CustomDrawer";
 
 import { THEME } from "~/styles/theme";
 

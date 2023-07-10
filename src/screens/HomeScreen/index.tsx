@@ -1,8 +1,8 @@
 import { ScrollView } from "react-native-gesture-handler";
-import { Background } from "~/components/Background";
-import { Input } from "~/components/Input";
+import { Background } from "~/components/Layouts/Background";
+import { Input } from "~/components/Form/Input";
 import { ListRouteCards } from "~/components/ListRouteCards";
-import { ScreenContent } from "~/components/ScreenContent";
+import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 const mockedData = [
   {

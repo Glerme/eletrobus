@@ -34,6 +34,7 @@ export const THEME = extendTheme({
       50: "#FAFAFA",
     },
     white: "#FFFFFF",
+    overlay: "rgba(0,0,0,0.7)",
   },
   fonts: {
     heading: "Montserrat_700Bold",
