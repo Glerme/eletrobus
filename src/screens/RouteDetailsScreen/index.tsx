@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   FlatList,
   HStack,
   Image,
@@ -9,14 +8,13 @@ import {
   Text,
   VStack,
 } from "native-base";
-import { useRoute } from "@react-navigation/native";
 import { Star } from "phosphor-react-native";
 
+import { HourCard } from "~/components/HourCard";
+import { Title } from "~/components/Layouts/Title";
+import { Button } from "~/components/Form/Button";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { Title } from "~/components/Layouts/Title";
-import { HourCard } from "~/components/HourCard";
-import { Button } from "~/components/Button";
 
 const mockedData = [
   {
