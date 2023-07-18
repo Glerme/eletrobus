@@ -1,7 +1,9 @@
 import "react-native-gesture-handler";
-import { NativeBaseProvider, StatusBar } from "native-base";
+import { NativeBaseProvider } from "native-base";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
+
+import { StatusBar } from "expo-status-bar";
 
 import {
   Montserrat_300Light,
@@ -32,7 +34,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="default" />
+      <StatusBar translucent style="light" />
 
       <NativeBaseProvider theme={THEME}>
         {fontsLoaded ? <Routes /> : <Loading />}
