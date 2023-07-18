@@ -37,78 +37,9 @@ import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { BoxButton } from "~/components/BoxButton";
-
-const mockedData = [
-  {
-    id: 1,
-    name: "Bauru",
-    favorite: true,
-  },
-  {
-    id: 2,
-    name: "São Paulo",
-    favorite: false,
-  },
-  {
-    id: 3,
-    name: "Rio de Janeiro",
-    favorite: true,
-  },
-  {
-    id: 4,
-    name: "Belo Horizonte",
-    favorite: false,
-  },
-  {
-    id: 5,
-    name: "Porto Alegre1",
-    favorite: true,
-  },
-  {
-    id: 6,
-    name: "Porto Alegre2",
-    favorite: false,
-  },
-  {
-    id: 7,
-    name: "Porto Alegre3",
-    favorite: true,
-  },
-  {
-    id: 8,
-    name: "Porto Alegre4",
-    favorite: false,
-  },
-  {
-    id: 9,
-    name: "Porto Alegre5",
-    favorite: false,
-  },
-  {
-    id: 10,
-    name: "Porto Alegre6",
-    favorite: false,
-  },
-  {
-    id: 11,
-    name: "Porto Alegre7",
-    favorite: false,
-  },
-  {
-    id: 12,
-    name: "Porto Alegre8",
-    favorite: false,
-  },
-  {
-    id: 13,
-    name: "Porto Alegre9",
-    favorite: false,
-  },
-];
-
-// export const RoutesScreen = ({
-//
-// }: NavigationProps<"Routes">) => {
+import { ListItem } from "~/components/ListItem";
+import CidadesMock from "~/mock/CidadesMock";
+import RotasMock from "~/mock/RotasMock";
 
 interface ICity {
   id: number;
@@ -225,7 +156,7 @@ export const RoutesScreen = ({
             horizontal
             contentContainerStyle={{ alignSelf: "flex-start" }}
             showsVerticalScrollIndicator={false}
-            data={mockedData}
+            data={CidadesMock}
             keyExtractor={(item) => `${item.id}`}
             renderItem={({ item }) => (
               <BoxButton
@@ -240,52 +171,15 @@ export const RoutesScreen = ({
           />
         </VStack>
 
-        <Box w={"140"} mt={4}>
+        <Box w={"140"} mt={4} mb={2}>
           <Title size="sm">Listagem</Title>
         </Box>
 
         <FlatList
           keyExtractor={(item) => `${item.id}`}
-          data={mockedData}
+          data={RotasMock}
           renderItem={({ item }) => (
-            <Pressable
-              onPress={() =>
-                navigation.navigate("RouteDetails", {
-                  id: `${item?.id}`,
-                })
-              }
-              key={item?.id}
-            >
-              {({ isPressed }) => (
-                <Box
-                  bg={isPressed ? "coolGray.200" : "white"}
-                  borderBottomWidth="1"
-                  _dark={{
-                    borderColor: "muted.50",
-                  }}
-                  borderColor="muted.800"
-                  py="2"
-                >
-                  <HStack space={2} alignItems={"center"} py="2">
-                    <Star
-                      size={14}
-                      weight="fill"
-                      color={item.favorite ? "#E9C25F" : "#9C9C9C"}
-                    />
-
-                    <Heading
-                      color="coolGray.600"
-                      _dark={{
-                        color: "warmGray.200",
-                      }}
-                      size="sm"
-                    >
-                      {item.name}
-                    </Heading>
-                  </HStack>
-                </Box>
-              )}
-            </Pressable>
+            <ListItem item={item} navigation={navigation} key={item.id} />
           )}
         />
       </ScreenContent>
