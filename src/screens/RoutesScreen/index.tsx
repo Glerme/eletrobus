@@ -11,7 +11,11 @@ import {
   Text,
   VStack,
 } from "native-base";
-import { TouchableHighlight, View } from "react-native";
+import {
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  View,
+} from "react-native";
 
 import {
   MagnifyingGlass,
@@ -29,6 +33,10 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 import { CirculedIcon } from "./styles";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+
+import { BoxButton } from "~/components/BoxButton";
 
 const mockedData = [
   {
@@ -98,10 +106,31 @@ const mockedData = [
   },
 ];
 
+// export const RoutesScreen = ({
+//
+// }: NavigationProps<"Routes">) => {
+
+interface ICity {
+  id: number;
+  name: string;
+  favorite: boolean;
+}
+
 export const RoutesScreen = ({
   navigation,
   route,
 }: NavigationProps<"Routes">) => {
+  const [kindPeople, setKindPeople] = useState("todos");
+  const [cities, setCities] = useState<ICity[]>([]);
+
+  const selectCities = (city: ICity) => {
+    if (cities.filter((item) => item.id === city.id).length > 0) {
+      setCities(cities.filter((item) => item.id !== city.id));
+    } else {
+      setCities((prevCities) => [...prevCities, city]);
+    }
+  };
+
   return (
     <Background>
       <ScreenContent>
@@ -115,28 +144,76 @@ export const RoutesScreen = ({
         />
 
         <HStack space={4} paddingY={2}>
-          <TouchableHighlight onPress={() => console.log("clicado")}>
+          <TouchableNativeFeedback
+            onPress={() => setKindPeople("todos")}
+            background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
+          >
             <Flex flexDirection={"row"} alignItems={"center"} p={1}>
-              <CirculedIcon>
-                <UsersThree size={22} color={THEME.colors.gray["800"]} />
+              <CirculedIcon
+                borderColor={
+                  kindPeople == "todos"
+                    ? THEME.colors.primary["500"]
+                    : undefined
+                }
+              >
+                <UsersThree
+                  size={22}
+                  color={
+                    kindPeople == "todos"
+                      ? THEME.colors.primary["500"]
+                      : THEME.colors.gray["800"]
+                  }
+                />
               </CirculedIcon>
 
-              <Text fontSize="md" fontFamily="medium" color="gray.800">
+              <Text
+                fontSize="md"
+                fontFamily="medium"
+                color={
+                  kindPeople == "todos"
+                    ? THEME.colors.primary["500"]
+                    : THEME.colors.gray["800"]
+                }
+              >
                 Todos
               </Text>
             </Flex>
-          </TouchableHighlight>
+          </TouchableNativeFeedback>
 
-          <TouchableHighlight onPress={() => console.log("clicado")}>
+          <TouchableNativeFeedback
+            onPress={() => setKindPeople("estudantes")}
+            background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
+          >
             <Flex flexDirection={"row"} alignItems={"center"} p={1}>
-              <CirculedIcon>
-                <Student size={22} color={THEME.colors.gray["800"]} />
+              <CirculedIcon
+                borderColor={
+                  kindPeople == "estudantes"
+                    ? THEME.colors.primary["500"]
+                    : undefined
+                }
+              >
+                <Student
+                  size={22}
+                  color={
+                    kindPeople == "estudantes"
+                      ? THEME.colors.primary["500"]
+                      : THEME.colors.gray["800"]
+                  }
+                />
               </CirculedIcon>
-              <Text fontSize="md" fontFamily="medium" color="gray.800">
+              <Text
+                fontSize="md"
+                fontFamily="medium"
+                color={
+                  kindPeople == "estudantes"
+                    ? THEME.colors.primary["500"]
+                    : THEME.colors.gray["800"]
+                }
+              >
                 Estudantes
               </Text>
             </Flex>
-          </TouchableHighlight>
+          </TouchableNativeFeedback>
         </HStack>
 
         <VStack mt={1}>
@@ -151,29 +228,14 @@ export const RoutesScreen = ({
             data={mockedData}
             keyExtractor={(item) => `${item.id}`}
             renderItem={({ item }) => (
-              <Pressable onPress={() => console.log("aqui")} key={item?.id}>
-                {({ isPressed }) => (
-                  <Box
-                    bg={isPressed ? "coolGray.200" : "white"}
-                    maxW={150}
-                    minW={50}
-                    p="2"
-                    rounded="8"
-                    borderColor={"coolGray.200"}
-                    borderWidth={1}
-                    style={{
-                      margin: 2,
-                      transform: [
-                        {
-                          scale: isPressed ? 0.96 : 1,
-                        },
-                      ],
-                    }}
-                  >
-                    <Text fontSize="sm">{item?.name}</Text>
-                  </Box>
-                )}
-              </Pressable>
+              <BoxButton
+                item={item}
+                isActive={
+                  cities.filter((city) => city.id === item.id).length > 0
+                }
+                onPress={() => selectCities(item)}
+                key={item.id}
+              />
             )}
           />
         </VStack>
