@@ -10,7 +10,6 @@ import { MapScreen } from "~/screens/MapScreen";
 import { RoutesScreen } from "~/screens/RoutesScreen";
 import { SettingsScreen } from "~/screens/SettingsScreen";
 
-import ROUTES from "~/constants/routes";
 import { THEME } from "~/styles/theme";
 
 const Tabs = createBottomTabNavigator();
@@ -28,10 +27,10 @@ export const TabNavigator = ({}) => {
           backgroundColor: THEME.colors.white,
         },
       }}
-      initialRouteName={ROUTES.HOME}
+      initialRouteName={"Home"}
     >
       <Tabs.Screen
-        name={ROUTES.HOME}
+        name={"Home"}
         component={HomeScreen}
         options={{
           headerShown: true,
@@ -61,7 +60,7 @@ export const TabNavigator = ({}) => {
       />
 
       <Tabs.Screen
-        name={ROUTES.MAP_TAB}
+        name={"Map"}
         component={MapScreen}
         options={{
           headerShown: false,
@@ -77,7 +76,7 @@ export const TabNavigator = ({}) => {
       />
 
       <Tabs.Screen
-        name={ROUTES.ROUTES}
+        name={"Routes"}
         component={RoutesScreen}
         options={{
           headerShown: true,
@@ -107,7 +106,7 @@ export const TabNavigator = ({}) => {
       />
 
       <Tabs.Screen
-        name={ROUTES.SETTINGS}
+        name={"Settings"}
         component={SettingsScreen}
         options={{
           headerShown: true,

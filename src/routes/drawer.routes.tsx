@@ -1,8 +1,6 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { TabNavigator } from "./tab.routes";
 
-import ROUTES from "~/constants/routes";
-
 import { CustomDrawer } from "~/components/Layouts/CustomDrawer";
 
 import { THEME } from "~/styles/theme";
@@ -23,7 +21,7 @@ export const DrawerNavigator = () => {
       }}
       drawerContent={(props) => <CustomDrawer {...props} />}
     >
-      <Drawer.Screen name={ROUTES.HOME_DRAWER} component={TabNavigator} />
+      <Drawer.Screen name={"homeDrawer"} component={TabNavigator} />
     </Drawer.Navigator>
   );
 };

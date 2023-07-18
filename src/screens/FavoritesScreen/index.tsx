@@ -1,8 +1,5 @@
 import { Box, ScrollView, Text, VStack } from "native-base";
 
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import { Title } from "~/components/Layouts/Title";
 import { RouteCard } from "~/components/RouteCard";
 import { Background } from "~/components/Layouts/Background";
@@ -10,10 +7,9 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 
-import ROUTES from "~/constants/routes";
+import { NavigationProps } from "~/routes";
 
 import CorridasSalvasSvg from "~/assets/corridas-salvas.svg";
-import { useAlternativeHeader } from "~/hooks/useAlternativeHeader";
 
 const mockedData = {
   id: 1,
@@ -24,9 +20,10 @@ const mockedData = {
   status: true,
 };
 
-export const FavoritesScreen = ({}) => {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
+export const FavoritesScreen = ({
+  navigation,
+  route,
+}: NavigationProps<"Favorites">) => {
   return (
     <Background>
       <ScrollView>
@@ -46,36 +43,28 @@ export const FavoritesScreen = ({}) => {
             <RouteCard
               route={mockedData}
               onPressCard={() =>
-                navigation.navigate(ROUTES.ROUTE_DETAILS, {
-                  id: mockedData?.id,
-                })
+                navigation.navigate("RouteDetails", { id: "123" })
               }
             />
 
             <RouteCard
               route={mockedData}
               onPressCard={() =>
-                navigation.navigate(ROUTES.ROUTE_DETAILS, {
-                  id: mockedData?.id,
-                })
+                navigation.navigate("RouteDetails", { id: "123" })
               }
             />
 
             <RouteCard
               route={mockedData}
               onPressCard={() =>
-                navigation.navigate(ROUTES.ROUTE_DETAILS, {
-                  id: mockedData?.id,
-                })
+                navigation.navigate("RouteDetails", { id: "123" })
               }
             />
 
             <RouteCard
               route={mockedData}
               onPressCard={() =>
-                navigation.navigate(ROUTES.ROUTE_DETAILS, {
-                  id: mockedData?.id,
-                })
+                navigation.navigate("RouteDetails", { id: "123" })
               }
             />
           </VStack>

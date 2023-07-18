@@ -5,25 +5,24 @@ import {
 import { Box, Flex, Text } from "native-base";
 
 import { HouseSimple } from "phosphor-react-native";
-import ROUTES from "~/constants/routes";
 
 import { THEME } from "~/styles/theme";
 
 interface RoutesListButtonsProps extends DrawerContentComponentProps {}
 
 export const RoutesListButtons = (props: RoutesListButtonsProps) => {
-  const routes = [ROUTES.HOME];
+  const routes = ["Home"];
 
   const Icon = (route: string) => {
     switch (route) {
-      case ROUTES.HOME:
+      case "Home":
         return <HouseSimple />;
     }
   };
 
   const parsedLabelRoutes = (route: string) => {
     switch (route) {
-      case ROUTES.HOME:
+      case "Home":
         return (
           <Text ml={-5} fontWeight={"bold"}>
             Início

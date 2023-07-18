@@ -5,7 +5,6 @@ import { CaretRight } from "phosphor-react-native";
 import { RouteCard } from "../RouteCard";
 
 import { THEME } from "~/styles/theme";
-import ROUTES from "~/constants/routes";
 
 interface ListRouteCardsProps {
   description: string;
@@ -34,7 +33,7 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
           </Text>
           <Pressable
             alignItems="center"
-            onPress={() => navigation.navigate(ROUTES.FAVORITES)}
+            onPress={() => navigation.navigate("Favorites")}
             display={"flex"}
             justifyContent={"center"}
             alignContent={"center"}
@@ -52,7 +51,7 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
               key={item?.id}
               route={item}
               onPressCard={() =>
-                navigation.navigate(ROUTES.ROUTE_DETAILS, {
+                navigation.navigate("RouteDetails", {
                   params: {
                     id: item?.id,
                   },

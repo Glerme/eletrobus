@@ -9,6 +9,7 @@ import {
   VStack,
 } from "native-base";
 import { Star } from "phosphor-react-native";
+import { NavigationProps } from "~/routes";
 
 import { HourCard } from "~/components/HourCard";
 import { Title } from "~/components/Layouts/Title";
@@ -54,9 +55,10 @@ const mockedData = [
   },
 ];
 
-export const RouteDetailsScreen = ({ route, navigation }: any) => {
-  console.log(route.params);
-
+export const RouteDetailsScreen = ({
+  navigation,
+  route,
+}: NavigationProps<"RouteDetails">) => {
   return (
     <Background>
       <ScrollView>

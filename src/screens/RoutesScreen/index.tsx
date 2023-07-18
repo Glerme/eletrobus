@@ -20,14 +20,15 @@ import {
   Star,
 } from "phosphor-react-native";
 
+import { NavigationProps } from "~/routes";
+
 import { Title } from "~/components/Layouts/Title";
 import { Input } from "~/components/Form/Input";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { CirculedIcon } from "./styles";
+
 import { THEME } from "~/styles/theme";
-import { useNavigation } from "@react-navigation/native";
-import ROUTES from "~/constants/routes";
+import { CirculedIcon } from "./styles";
 
 const mockedData = [
   {
@@ -97,9 +98,10 @@ const mockedData = [
   },
 ];
 
-export const RoutesScreen = ({}) => {
-  const navigation = useNavigation<any>();
-
+export const RoutesScreen = ({
+  navigation,
+  route,
+}: NavigationProps<"Routes">) => {
   return (
     <Background>
       <ScreenContent>
@@ -186,8 +188,8 @@ export const RoutesScreen = ({}) => {
           renderItem={({ item }) => (
             <Pressable
               onPress={() =>
-                navigation.navigate(ROUTES.ROUTE_DETAILS, {
-                  id: item?.id,
+                navigation.navigate("RouteDetails", {
+                  id: `${item?.id}`,
                 })
               }
               key={item?.id}

@@ -1,4 +1,7 @@
 import { ScrollView } from "react-native-gesture-handler";
+
+import { NavigationProps } from "~/routes";
+
 import { Background } from "~/components/Layouts/Background";
 import { Input } from "~/components/Form/Input";
 import { ListRouteCards } from "~/components/ListRouteCards";
@@ -47,7 +50,7 @@ const mockedData = [
   },
 ];
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   return (
     <Background>
       <ScrollView>

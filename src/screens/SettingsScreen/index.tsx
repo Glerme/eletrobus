@@ -8,6 +8,8 @@ import {
 
 import { SignOut } from "phosphor-react-native";
 
+import { NavigationProps } from "~/routes";
+
 import { Title } from "~/components/Layouts/Title";
 import { Button } from "~/components/Form/Button";
 import { Switch } from "~/components/Form/Switch";
@@ -17,7 +19,10 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 
-export const SettingsScreen = () => {
+export const SettingsScreen = ({
+  navigation,
+  route,
+}: NavigationProps<"Settings">) => {
   const [openModal, setOpenModal] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -49,7 +54,7 @@ export const SettingsScreen = () => {
           <VStack alignItems={"baseline"} mt={4}>
             <Button
               title="Editar Perfil"
-              onPress={() => {}}
+              onPress={() => navigation.navigate("Profile", { userId: "123" })}
               variant="link"
               fontColor={THEME.colors.gray["900"]}
             />
