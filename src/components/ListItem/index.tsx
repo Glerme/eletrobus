@@ -5,7 +5,9 @@ import {
   Heading,
   IPressableProps,
   Pressable,
+  Spacer,
   Text,
+  View,
 } from "native-base";
 import { Star } from "phosphor-react-native";
 import {
@@ -14,6 +16,7 @@ import {
 } from "react-native";
 
 import { THEME } from "~/styles/theme";
+import { formatDate } from "~/utils/format";
 
 interface IProps extends TouchableNativeFeedbackProps {
   navigation: NativeStackNavigationProp<any>;
@@ -21,6 +24,9 @@ interface IProps extends TouchableNativeFeedbackProps {
     id: number;
     name: string;
     favorite: boolean;
+    saida: Date;
+    chegada: Date;
+    status: boolean;
   };
 }
 
@@ -45,22 +51,33 @@ export const ListItem = (props: IProps) => {
         py="2"
         px="2"
       >
-        <HStack space={2} alignItems={"center"} py="2">
-          <Star
-            size={14}
-            weight="fill"
-            color={props.item.favorite ? "#E9C25F" : "#9C9C9C"}
-          />
+        <HStack py="2" justifyContent={"space-between"}>
+          <View>
+            <HStack space={2} alignItems={"center"}>
+              <Star
+                size={14}
+                weight="fill"
+                color={props.item.favorite ? "#E9C25F" : "#9C9C9C"}
+              />
 
-          <Heading
-            color="coolGray.600"
-            _dark={{
-              color: "warmGray.200",
-            }}
-            size="sm"
-          >
-            {props.item.name}
-          </Heading>
+              <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
+                {props.item.name}
+              </Text>
+            </HStack>
+          </View>
+
+          <HStack alignItems="center" space="1">
+            <Spacer />
+            <View
+              width={11}
+              height={11}
+              borderRadius={50}
+              backgroundColor={props.item?.status ? "#A7E179" : "#E17979"}
+            />
+            <Text fontSize={10} fontWeight="medium" color="coolGray.500">
+              {props.item?.status ? "Disponível" : "Indisponivel"}
+            </Text>
+          </HStack>
         </HStack>
       </Box>
     </TouchableNativeFeedback>

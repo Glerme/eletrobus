@@ -1,5 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
-import { Flex, HStack, Pressable, ScrollView, Text, VStack } from "native-base";
+import {
+  Flex,
+  HStack,
+  Pressable,
+  ScrollView,
+  Spacer,
+  Text,
+  VStack,
+} from "native-base";
 import { CaretRight } from "phosphor-react-native";
 
 import { RouteCard } from "../RouteCard";
@@ -18,14 +26,14 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
     <>
       <VStack mt="2" mb="3">
         <HStack
-          px="4"
+          // px="4"
           py="2"
           justifyContent="space-between"
           alignItems="center"
         >
           <Text
-            fontFamily="heading"
             fontSize={"md"}
+            fontWeight={"600"}
             color="gray.900"
             lineHeight={"md"}
           >
@@ -39,26 +47,32 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
             alignContent={"center"}
           >
             <Flex direction="row" alignItems={"center"}>
-              <Text color="primary.400">saiba mais</Text>
+              <Text fontWeight={500} color="primary.400">
+                exibir mais
+              </Text>
               <CaretRight color={THEME.colors.primary[400]} size={16} />
             </Flex>
           </Pressable>
         </HStack>
 
         <ScrollView horizontal>
-          {data?.map((item) => (
-            <RouteCard
-              key={item?.id}
-              route={item}
-              onPressCard={() =>
-                navigation.navigate("RouteDetails", {
-                  params: {
-                    id: item?.id,
-                  },
-                })
-              }
-            />
-          ))}
+          <HStack space={4}>
+            {data?.map((item) => (
+              <>
+                <RouteCard
+                  key={item?.id}
+                  route={item}
+                  onPressCard={() =>
+                    navigation.navigate("RouteDetails", {
+                      params: {
+                        id: item?.id,
+                      },
+                    })
+                  }
+                />
+              </>
+            ))}
+          </HStack>
         </ScrollView>
       </VStack>
     </>

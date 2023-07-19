@@ -9,6 +9,7 @@ import {
 } from "native-base";
 
 import { Star } from "phosphor-react-native";
+import { useState } from "react";
 
 import { formatDate } from "~/utils/format";
 
@@ -18,8 +19,10 @@ interface RouteCardProps {
 }
 
 export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
+  const [favorite, setFavorite] = useState(route?.favorite);
+
   return (
-    <Pressable px="4" marginY={1} onPress={onPressCard}>
+    <Pressable marginY={1} onPress={onPressCard}>
       {({ isPressed }) => {
         return (
           <Box
@@ -37,7 +40,7 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
             }}
           >
             <HStack alignItems="center" mb="3">
-              <Text fontFamily="medium" fontSize="md" color="gray.900">
+              <Text fontSize="md" fontWeight={"500"} color="gray.900">
                 {route?.name}
               </Text>
 
@@ -46,7 +49,7 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
               <Pressable
                 zIndex={1}
                 onPress={() => {
-                  // logica para add aos fav
+                  setFavorite(!favorite);
                 }}
               >
                 {({ isPressed }) => {
@@ -64,7 +67,7 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
                       <Star
                         size={18}
                         weight="fill"
-                        color={route.favorite ? "#E9C25F" : "#9C9C9C"}
+                        color={favorite ? "#E9C25F" : "#9C9C9C"}
                       />
                     </Box>
                   );

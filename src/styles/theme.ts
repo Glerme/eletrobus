@@ -1,6 +1,31 @@
 import { extendTheme } from "native-base";
 
 export const THEME = extendTheme({
+  fontConfig: {
+    Montserrat: {
+      300: {
+        normal: "Montserrat_300Light",
+      },
+      400: {
+        normal: "Montserrat_400Regular",
+      },
+      500: {
+        normal: "Montserrat_500Medium",
+      },
+      600: {
+        normal: "Montserrat_600SemiBold",
+      },
+      700: {
+        normal: "Montserrat_700Bold",
+      },
+      800: {
+        normal: "Montserrat_800ExtraBold",
+      },
+      900: {
+        normal: "Montserrat_900Black",
+      },
+    },
+  },
   colors: {
     primary: {
       "50": "#d1c9fe",
@@ -37,15 +62,16 @@ export const THEME = extendTheme({
     overlay: "rgba(0,0,0,0.7)",
   },
   fonts: {
-    heading: "Montserrat_700Bold",
-    medium: "Montserrat_500Medium",
-    body: "Montserrat_400Regular",
+    heading: "Montserrat",
+    medium: "Montserrat",
+    body: "Montserrat",
   },
   fontSizes: {
     xs: 12,
     sm: 14,
     md: 16,
-    lg: 20,
+    lg: 18,
+    xl: 20,
   },
   sizes: {
     14: 56,

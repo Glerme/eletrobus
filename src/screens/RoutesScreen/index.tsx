@@ -99,6 +99,7 @@ export const RoutesScreen = ({
 
               <Text
                 fontSize="md"
+                fontWeight={"500"}
                 fontFamily="medium"
                 color={
                   kindPeople == "todos"
@@ -134,6 +135,7 @@ export const RoutesScreen = ({
               </CirculedIcon>
               <Text
                 fontSize="md"
+                fontWeight={"500"}
                 fontFamily="medium"
                 color={
                   kindPeople == "estudantes"
@@ -147,9 +149,16 @@ export const RoutesScreen = ({
           </TouchableNativeFeedback>
         </HStack>
 
-        <VStack mt={1}>
-          <Box w={"140"} mb={2}>
-            <Title size="sm">Intermunicipais</Title>
+        <VStack mt={2}>
+          <Box mb={2}>
+            {/* <Title></Title> */}
+            <Text
+              fontSize={"md"}
+              color={THEME.colors.gray["800"]}
+              fontWeight={"600"}
+            >
+              Intermunicipais
+            </Text>
           </Box>
 
           <FlatList
@@ -171,8 +180,14 @@ export const RoutesScreen = ({
           />
         </VStack>
 
-        <Box w={"140"} mt={4} mb={2}>
-          <Title size="sm">Listagem</Title>
+        <Box w={"140"} mt={6} mb={2}>
+          <Text
+            fontSize={"md"}
+            color={THEME.colors.gray["800"]}
+            fontWeight={"600"}
+          >
+            Listagem
+          </Text>
         </Box>
 
         <FlatList
