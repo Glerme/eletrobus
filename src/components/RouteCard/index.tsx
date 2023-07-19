@@ -8,8 +8,9 @@ import {
   View,
 } from "native-base";
 
-import { Star } from "phosphor-react-native";
+import { Star, Student, UsersThree } from "phosphor-react-native";
 import { useState } from "react";
+import { THEME } from "~/styles/theme";
 
 import { formatDate } from "~/utils/format";
 
@@ -83,20 +84,34 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
               <Text fontSize="sm" color="coolGray.700">
                 Chegada: {formatDate(route?.chegada)}
               </Text>
-            </VStack>
+              <HStack alignItems="center" mt="2" space="1">
+                {route.tipo === "estudantes" ? (
+                  <>
+                    <Student size={14} />
+                    <Text
+                      fontSize={11}
+                      fontWeight="medium"
+                      color="coolGray.500"
+                    >
+                      Estudantes
+                    </Text>
+                  </>
+                ) : (
+                  <></>
+                )}
 
-            <HStack alignItems="center" mt="2" space="1">
-              <Spacer />
-              <View
-                width={11}
-                height={11}
-                borderRadius={50}
-                backgroundColor={route?.status ? "#A7E179" : "#E17979"}
-              />
-              <Text fontSize={11} fontWeight="medium" color="coolGray.500">
-                {route?.status ? "Disponível" : "Indisponivel"}
-              </Text>
-            </HStack>
+                <Spacer />
+                <View
+                  width={11}
+                  height={11}
+                  borderRadius={50}
+                  backgroundColor={route?.status ? "#A7E179" : "#E17979"}
+                />
+                <Text fontSize={11} fontWeight="medium" color="coolGray.500">
+                  {route?.status ? "Disponível" : "Indisponivel"}
+                </Text>
+              </HStack>
+            </VStack>
           </Box>
         );
       }}

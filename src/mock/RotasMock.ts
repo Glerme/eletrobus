@@ -6,6 +6,7 @@ const RotasMock = [
     saida: new Date(),
     chegada: new Date(),
     status: true,
+    tipo: "todos",
   },
   {
     id: 2,
@@ -14,6 +15,7 @@ const RotasMock = [
     saida: new Date(),
     chegada: new Date(),
     status: true,
+    tipo: "estudantes",
   },
   {
     id: 3,
@@ -22,6 +24,7 @@ const RotasMock = [
     saida: new Date(),
     chegada: new Date(),
     status: false,
+    tipo: "todos",
   },
   {
     id: 4,
@@ -30,6 +33,7 @@ const RotasMock = [
     saida: new Date(),
     chegada: new Date(),
     status: true,
+    tipo: "estudantes",
   },
   {
     id: 5,
@@ -38,6 +42,7 @@ const RotasMock = [
     saida: new Date(),
     chegada: new Date(),
     status: true,
+    tipo: "estudantes",
   },
 ];
 export default RotasMock;

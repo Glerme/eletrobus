@@ -58,19 +58,17 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
         <ScrollView horizontal>
           <HStack space={4}>
             {data?.map((item) => (
-              <>
-                <RouteCard
-                  key={item?.id}
-                  route={item}
-                  onPressCard={() =>
-                    navigation.navigate("RouteDetails", {
-                      params: {
-                        id: item?.id,
-                      },
-                    })
-                  }
-                />
-              </>
+              <RouteCard
+                key={item.id}
+                route={item}
+                onPressCard={() =>
+                  navigation.navigate("RouteDetails", {
+                    params: {
+                      id: item?.id,
+                    },
+                  })
+                }
+              />
             ))}
           </HStack>
         </ScrollView>
