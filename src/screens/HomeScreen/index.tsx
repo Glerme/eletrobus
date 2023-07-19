@@ -37,33 +37,33 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
             {/* Todos e Estudante no card */}
           </View>
           <View>
-            <Box alignItems="center" mb="4">
+            <Box alignItems="center" mb="3">
               <Button
-                h={14}
+                h={12}
                 w={"full"}
                 colorScheme="secondary"
                 bg={THEME.colors.secondary["500"]}
                 onPress={() => navigation.navigate("Routes")}
               >
                 <HStack space={1} alignItems={"center"}>
-                  <MagnifyingGlass color="white" />
-                  <Text fontSize={"md"} fontWeight={"500"} color={"white"}>
-                    Encontrar Rota
+                  <MagnifyingGlass size={20} color="white" />
+                  <Text fontSize={"sm"} fontWeight={"500"} color={"white"}>
+                    Buscar Rotas
                   </Text>
                 </HStack>
               </Button>
             </Box>
             <Box alignItems="center">
               <Button
-                h={14}
+                h={12}
                 w={"full"}
                 bg={THEME.colors.primary["500"]}
                 colorScheme="primary"
                 onPress={() => navigation.navigate("Map")}
               >
                 <HStack space={1} alignItems={"center"}>
-                  <GlobeHemisphereWest color="white" />
-                  <Text fontSize={"md"} fontWeight={"500"} color={"white"}>
+                  <GlobeHemisphereWest size={20} color="white" />
+                  <Text fontSize={"sm"} fontWeight={"500"} color={"white"}>
                     Descobrir
                   </Text>
                 </HStack>

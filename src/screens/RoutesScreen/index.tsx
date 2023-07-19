@@ -74,7 +74,7 @@ export const RoutesScreen = ({
           }
         />
 
-        <HStack space={4} paddingY={2}>
+        <HStack space={4} paddingY={2} mt={2}>
           <TouchableNativeFeedback
             onPress={() => setKindPeople("todos")}
             background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
