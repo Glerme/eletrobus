@@ -88,7 +88,7 @@ export const RoutesScreen = ({
                 }
               >
                 <UsersThree
-                  size={22}
+                  size={18}
                   color={
                     kindPeople == "todos"
                       ? THEME.colors.primary["500"]
@@ -98,7 +98,7 @@ export const RoutesScreen = ({
               </CirculedIcon>
 
               <Text
-                fontSize="md"
+                fontSize="sm"
                 fontWeight={"500"}
                 fontFamily="medium"
                 color={
@@ -125,7 +125,7 @@ export const RoutesScreen = ({
                 }
               >
                 <Student
-                  size={22}
+                  size={18}
                   color={
                     kindPeople == "estudantes"
                       ? THEME.colors.primary["500"]
@@ -134,7 +134,7 @@ export const RoutesScreen = ({
                 />
               </CirculedIcon>
               <Text
-                fontSize="md"
+                fontSize="sm"
                 fontWeight={"500"}
                 fontFamily="medium"
                 color={
