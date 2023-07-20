@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "eletrobus",
-    "slug": "eletrobus",
+    "slug": "EletroBus",
     "scheme": "eletrobus",
     "version": "1.0.0",
     "orientation": "portrait",
