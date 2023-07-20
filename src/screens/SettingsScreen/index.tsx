@@ -1,23 +1,34 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Icon, VStack, Divider } from "native-base";
+import {
+  ScrollView,
+  Icon,
+  VStack,
+  Divider,
+  Text,
+  HStack,
+  View,
+} from "native-base";
 
 import {
   requestForegroundPermissionsAsync,
   hasServicesEnabledAsync,
 } from "expo-location";
 
-import { SignOut } from "phosphor-react-native";
+import { PencilSimple, SignOut } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
 import { Title } from "~/components/Layouts/Title";
-import { Button } from "~/components/Form/Button";
+
 import { Switch } from "~/components/Form/Switch";
 import { ModalView } from "~/components/Layouts/ModalView";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
+import { TouchableNativeFeedback } from "react-native";
+import { Button } from "~/components/Form/Button";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 export const SettingsScreen = ({
   navigation,
@@ -47,79 +58,89 @@ export const SettingsScreen = ({
 
   return (
     <Background>
-      <ScrollView>
-        <ScreenContent>
-          <Title size="md">Configurações</Title>
+      <ScreenContent>
+        <Text
+          color={THEME.colors.gray["800"]}
+          fontSize={"lg"}
+          fontWeight={"600"}
+        >
+          Configurações
+        </Text>
 
-          <VStack alignItems={"baseline"} mt={4}>
-            <Button
-              title="Editar Perfil"
-              onPress={() => navigation.navigate("Profile", { userId: "123" })}
-              variant="link"
-              fontColor={THEME.colors.gray["900"]}
-            />
-
+        <VStack flex={1} justifyContent={"space-between"} mt={2}>
+          <VStack space={2} alignItems={"baseline"}>
             <Switch
+              color={THEME.colors.gray["800"]}
               label="Localização está ativa?"
               onValueChange={() => setIsEnabled(!isEnabled)}
               value={isEnabled}
               disabled
             />
 
-            <Divider mt={"full"} />
-
-            <Button
-              display={"flex"}
-              alignItems={"center"}
-              title="Sair"
-              onPress={() => setOpenModal(true)}
-              variant="link"
-              fontColor={THEME.colors.danger["500"]}
-              rightIcon={
-                <Icon
-                  as={
-                    <SignOut
-                      color={THEME.colors.danger["500"]}
-                      weight="bold"
-                      size={18}
-                    />
-                  }
-                />
-              }
-            />
-
-            <ModalView
-              visible={openModal}
-              closeModal={() => setOpenModal(false)}
-              modalHeight={600}
+            <TouchableHighlight
+              onPress={() => navigation.navigate("Profile", { userId: "123" })}
+              underlayColor={THEME.colors.gray["200"]}
             >
-              <VStack px={23} mt={6}>
-                <Title size="sm" textAlign={"left"}>
-                  Deseja realmente sair?
-                </Title>
-                <VStack space={2} mt={2}>
-                  <Button
-                    title="Sim, desejo sair."
-                    onPress={() => {
-                      console.log("saiu");
-                    }}
-                    fontColor={THEME.colors.white}
-                    bg={THEME.colors.danger["600"]}
-                  />
-
-                  <Button
-                    title="Não, irei continuar no aplicativo."
-                    onPress={() => setOpenModal(false)}
-                    fontColor={THEME.colors.white}
-                    bg={THEME.colors.primary["900"]}
-                    variant={"outline"}
-                  />
-                </VStack>
-              </VStack>
-            </ModalView>
+              <View>
+                <HStack space={2} alignItems={"center"}>
+                  <PencilSimple color={THEME.colors.gray["800"]} size={16} />
+                  <Text color={THEME.colors.gray["800"]}>Editar Perfil</Text>
+                </HStack>
+              </View>
+            </TouchableHighlight>
           </VStack>
-        </ScreenContent>
-      </ScrollView>
+
+          <Button
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"flex-start"}
+            title="Sair"
+            onPress={() => setOpenModal(true)}
+            variant="link"
+            fontColor={THEME.colors.danger["500"]}
+            rightIcon={
+              <Icon
+                as={
+                  <SignOut
+                    color={THEME.colors.danger["500"]}
+                    weight="bold"
+                    size={18}
+                  />
+                }
+              />
+            }
+          />
+        </VStack>
+        <ModalView
+          visible={openModal}
+          closeModal={() => setOpenModal(false)}
+          modalHeight={600}
+        >
+          <VStack px={23} mt={6}>
+            <Title size="sm" textAlign={"left"}>
+              Deseja realmente sair?
+            </Title>
+            <VStack space={2} mt={2}>
+              <Button
+                title="Sim, desejo sair."
+                onPress={() => {
+                  console.log("saiu");
+                }}
+                fontColor={THEME.colors.white}
+                bg={THEME.colors.danger["600"]}
+              />
+
+              <Button
+                title="Não, irei continuar no aplicativo."
+                onPress={() => setOpenModal(false)}
+                fontColor={THEME.colors.white}
+                bg={THEME.colors.primary["900"]}
+                variant={"outline"}
+              />
+            </VStack>
+          </VStack>
+        </ModalView>
+      </ScreenContent>
     </Background>
   );
 };
