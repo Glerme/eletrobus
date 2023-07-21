@@ -13,6 +13,7 @@ export const HourContainer = styled(Box)<HourContainerProps>`
   border: ${(props) => (props.isToday ? "2px solid #0dac86" : "none")};
 
   background: #f1f1f1;
+
   width: 130px;
   height: 130px;
 `;

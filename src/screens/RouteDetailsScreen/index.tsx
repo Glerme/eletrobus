@@ -16,6 +16,7 @@ import { Title } from "~/components/Layouts/Title";
 import { Button } from "~/components/Form/Button";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
+import { THEME } from "~/styles/theme";
 
 const mockedData = [
   {
@@ -61,78 +62,79 @@ export const RouteDetailsScreen = ({
 }: NavigationProps<"RouteDetails">) => {
   return (
     <Background>
-      <ScrollView>
-        <ScreenContent>
-          <VStack space={4}>
-            <HStack alignItems={"center"}>
-              <Box>
-                <Title>Unip/Unesp</Title>
-              </Box>
+      <ScreenContent>
+        <VStack space={4}>
+          <HStack alignItems={"center"}>
+            <Box>
+              <Text fontSize={"lg"} fontWeight={"600"}>
+                UNIP - BAURU
+              </Text>
+            </Box>
 
+            <Spacer />
+
+            <Box>
+              <Star size={22} weight="fill" color={"#E9C25F"} />
+            </Box>
+          </HStack>
+
+          <Box w={"full"}>
+            <Image
+              source={{
+                uri: "https://wallpaperaccess.com/full/317501.jpg",
+              }}
+              w={"full"}
+              h="56"
+              borderRadius={"md"}
+              alt="Alternate Text"
+            />
+          </Box>
+
+          <Box>
+            <HStack alignItems={"flex-start"} mb={2}>
+              <VStack space={1}>
+                <Text fontWeight={500} fontSize="sm">
+                  Saida: 10h
+                </Text>
+                <Text fontWeight={500} fontSize="sm">
+                  Chegada: 23h
+                </Text>
+              </VStack>
               <Spacer />
-
-              <Box>
-                <Star size={22} weight="fill" color={"#E9C25F"} />
-              </Box>
+              <Text fontSize="sm">Disponivel</Text>
             </HStack>
 
-            <Box w={"full"}>
-              <Image
-                source={{
-                  uri: "https://wallpaperaccess.com/full/317501.jpg",
-                }}
-                w={"full"}
-                h="56"
-                borderRadius={"md"}
-                alt="Alternate Text"
-              />
-            </Box>
-
+            <FlatList
+              data={mockedData}
+              horizontal
+              keyExtractor={(item) => `${item.id}`}
+              renderItem={({ item }) => <HourCard isToday={item.isToday} />}
+            />
+          </Box>
+          <Spacer />
+          <Box>
+            <Text fontSize={"md"} fontWeight={"500"}>
+              Observação
+            </Text>
             <Box>
-              <Title size="sm">Horários</Title>
-              <HStack alignItems={"center"}>
-                <Box>
-                  <Text fontSize="sm">Saída</Text>
-                  <Text fontSize="sm">Entrada</Text>
-                </Box>
-
-                <Spacer />
-
-                <Box>
-                  <Text fontSize="sm">Disponivel</Text>
-                </Box>
-              </HStack>
-
-              <FlatList
-                data={mockedData}
-                horizontal
-                keyExtractor={(item) => `${item.id}`}
-                renderItem={({ item }) => <HourCard isToday={item.isToday} />}
-              />
+              <Text fontSize="sm" color={"gray.700"}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
+                officia, ex, dignissimos assumenda libero reiciendis possimus
+                ipsam repudiandae eligendi repellendus blanditiis rerum saepe
+                numquam!
+              </Text>
             </Box>
+          </Box>
 
-            <Box>
-              <Title size="sm">Observação</Title>
-              <Box>
-                <Text fontSize="sm">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
-                  officia, ex, dignissimos assumenda libero reiciendis possimus
-                  ipsam repudiandae eligendi repellendus blanditiis rerum saepe
-                  numquam!
-                </Text>
-              </Box>
-            </Box>
-
-            <Box mb={10}>
-              <Button
-                onPress={() => console.log("click")}
-                title="Acompanhar Viagem"
-                fontColor={"white"}
-              />
-            </Box>
-          </VStack>
-        </ScreenContent>
-      </ScrollView>
+          <Box mb={10}>
+            <Button
+              onPress={() => console.log("click")}
+              title="Acompanhar Viagem"
+              fontColor={"white"}
+            />
+          </Box>
+        </VStack>
+      </ScreenContent>
     </Background>
   );
 };
