@@ -11,14 +11,13 @@ import {
 import { Star } from "phosphor-react-native";
 import { NavigationProps } from "~/routes";
 
+import { Status } from "~/components/Status";
 import { HourCard } from "~/components/HourCard";
-import { Title } from "~/components/Layouts/Title";
 import { Button } from "~/components/Form/Button";
+import { EStatus } from "~/components/Status/EStatus";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { THEME } from "~/styles/theme";
-import { EStatus } from "~/components/Status/EStatus";
-import { Status } from "~/components/Status";
+import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 const mockedData = [
   {
@@ -65,77 +64,79 @@ export const RouteDetailsScreen = ({
   return (
     <Background>
       <ScreenContent>
-        <VStack space={4}>
-          <HStack alignItems={"center"}>
-            <Box>
-              <Text fontSize={"lg"} fontWeight={"600"}>
-                UNIP - BAURU
-              </Text>
-            </Box>
-
-            <Spacer />
-
-            <Box>
-              <Star size={22} weight="fill" color={"#E9C25F"} />
-            </Box>
-          </HStack>
-
-          <Box w={"full"}>
-            <Image
-              source={{
-                uri: "https://wallpaperaccess.com/full/317501.jpg",
-              }}
-              w={"full"}
-              h="56"
-              borderRadius={"md"}
-              alt="Alternate Text"
-            />
-          </Box>
-
-          <Box>
-            <HStack alignItems={"flex-start"} mb={2}>
-              <VStack space={1}>
-                <Text fontWeight={500} fontSize="sm">
-                  Saida: 10h
+        <ScrollViewContainer>
+          <VStack space={4}>
+            <HStack alignItems={"center"}>
+              <Box>
+                <Text fontSize={"lg"} fontWeight={"600"}>
+                  UNIP - BAURU
                 </Text>
-                <Text fontWeight={500} fontSize="sm">
-                  Chegada: 23h
-                </Text>
-              </VStack>
+              </Box>
+
               <Spacer />
-              <Status status={EStatus.DISPONIVEL} />
+
+              <Box>
+                <Star size={22} weight="fill" color={"#E9C25F"} />
+              </Box>
             </HStack>
 
-            <FlatList
-              data={mockedData}
-              horizontal
-              keyExtractor={(item) => `${item.id}`}
-              renderItem={({ item }) => <HourCard isToday={item.isToday} />}
-            />
-          </Box>
-          <Spacer />
-          <Box>
-            <Text fontSize={"md"} fontWeight={"500"}>
-              Observação
-            </Text>
-            <Box>
-              <Text fontSize="sm" color={"gray.700"}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
-                officia, ex, dignissimos assumenda libero reiciendis possimus
-                ipsam repudiandae eligendi repellendus blanditiis rerum saepe
-                numquam!
-              </Text>
+            <Box w={"full"}>
+              <Image
+                source={{
+                  uri: "https://wallpaperaccess.com/full/317501.jpg",
+                }}
+                w={"full"}
+                h="56"
+                borderRadius={"md"}
+                alt="Alternate Text"
+              />
             </Box>
-          </Box>
 
-          <Box mb={10}>
-            <Button
-              onPress={() => console.log("click")}
-              title="Acompanhar Viagem"
-              fontColor={"white"}
-            />
-          </Box>
-        </VStack>
+            <Box>
+              <HStack alignItems={"flex-start"} mb={2}>
+                <VStack space={1}>
+                  <Text fontWeight={500} fontSize="sm">
+                    Saida: 10h
+                  </Text>
+                  <Text fontWeight={500} fontSize="sm">
+                    Chegada: 23h
+                  </Text>
+                </VStack>
+                <Spacer />
+                <Status status={EStatus.DISPONIVEL} />
+              </HStack>
+
+              <FlatList
+                data={mockedData}
+                horizontal
+                keyExtractor={(item) => `${item.id}`}
+                renderItem={({ item }) => <HourCard isToday={item.isToday} />}
+              />
+            </Box>
+            <Spacer />
+            <Box>
+              <Text fontSize={"md"} fontWeight={"500"}>
+                Observação
+              </Text>
+              <Box>
+                <Text fontSize="sm" color={"gray.700"}>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
+                  officia, ex, dignissimos assumenda libero reiciendis possimus
+                  ipsam repudiandae eligendi repellendus blanditiis rerum saepe
+                  numquam!
+                </Text>
+              </Box>
+            </Box>
+
+            <Box mb={10}>
+              <Button
+                onPress={() => console.log("click")}
+                title="Acompanhar Viagem"
+                fontColor={"white"}
+              />
+            </Box>
+          </VStack>
+        </ScrollViewContainer>
       </ScreenContent>
     </Background>
   );
