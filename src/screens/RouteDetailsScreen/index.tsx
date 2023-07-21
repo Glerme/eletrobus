@@ -17,6 +17,8 @@ import { Button } from "~/components/Form/Button";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { THEME } from "~/styles/theme";
+import { EStatus } from "~/components/Status/EStatus";
+import { Status } from "~/components/Status";
 
 const mockedData = [
   {
@@ -101,7 +103,7 @@ export const RouteDetailsScreen = ({
                 </Text>
               </VStack>
               <Spacer />
-              <Text fontSize="sm">Disponivel</Text>
+              <Status status={EStatus.DISPONIVEL} />
             </HStack>
 
             <FlatList

@@ -31,10 +31,6 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
             </View>
             <ListRouteCards description="Ônibus em tráfego" data={RotasMock} />
             <ListRouteCards description="Favoritos" data={RotasMock} />
-            {/* <ListRouteCards description="Corridas cadastradas" data={RotasMock} /> */}
-            {/* 🔍 Encontrar Rota */}
-            {/* Descobrir */}
-            {/* Todos e Estudante no card */}
           </View>
           <View>
             <Box alignItems="center" mb="3">

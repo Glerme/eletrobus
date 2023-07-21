@@ -17,17 +17,13 @@ import {
 
 import { THEME } from "~/styles/theme";
 import { formatDate } from "~/utils/format";
+import { Status } from "../Status";
+
+import { IStatus } from "../Status/IStatus";
 
 interface IProps extends TouchableNativeFeedbackProps {
   navigation: NativeStackNavigationProp<any>;
-  item: {
-    id: number;
-    name: string;
-    favorite: boolean;
-    saida: Date;
-    chegada: Date;
-    status: boolean;
-  };
+  item: IStatus;
 }
 
 export const ListItem = (props: IProps) => {
@@ -68,15 +64,7 @@ export const ListItem = (props: IProps) => {
 
           <HStack alignItems="center" space="1">
             <Spacer />
-            <View
-              width={11}
-              height={11}
-              borderRadius={50}
-              backgroundColor={props.item?.status ? "#A7E179" : "#E17979"}
-            />
-            <Text fontSize={10} fontWeight="medium" color="coolGray.500">
-              {props.item?.status ? "Disponível" : "Indisponivel"}
-            </Text>
+            <Status status={props.item.status} />
           </HStack>
         </HStack>
       </Box>

@@ -13,10 +13,12 @@ import { useState } from "react";
 import { THEME } from "~/styles/theme";
 
 import { formatDate } from "~/utils/format";
+import { Status } from "../Status";
+import { IStatus } from "../Status/IStatus";
 
 interface RouteCardProps {
   onPressCard: () => void;
-  route: any;
+  route: IStatus;
 }
 
 export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
@@ -99,17 +101,8 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
                 ) : (
                   <></>
                 )}
-
                 <Spacer />
-                <View
-                  width={11}
-                  height={11}
-                  borderRadius={50}
-                  backgroundColor={route?.status ? "#A7E179" : "#E17979"}
-                />
-                <Text fontSize={11} fontWeight="medium" color="coolGray.500">
-                  {route?.status ? "Disponível" : "Indisponivel"}
-                </Text>
+                <Status status={route.status} />
               </HStack>
             </VStack>
           </Box>
