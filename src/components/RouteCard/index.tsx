@@ -8,7 +8,7 @@ import {
   View,
 } from "native-base";
 
-import { Star, Student, UsersThree } from "phosphor-react-native";
+import { Info, Star, Student, UsersThree } from "phosphor-react-native";
 import { useState } from "react";
 import { THEME } from "~/styles/theme";
 
@@ -44,9 +44,12 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
             }}
           >
             <HStack alignItems="center" mb="3">
-              <Text fontSize="md" fontWeight={"500"} color="gray.900">
-                {route?.name}
-              </Text>
+              <HStack alignItems="center" space={1}>
+                <Info size={20} color="#444444" weight="duotone" />
+                <Text fontSize="md" fontWeight={"500"} color="gray.900">
+                  {route?.name}
+                </Text>
+              </HStack>
 
               <Spacer />
               {/* componentizar */}
