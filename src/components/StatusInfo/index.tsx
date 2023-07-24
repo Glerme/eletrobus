@@ -13,30 +13,30 @@ import { useState } from "react";
 import { THEME } from "~/styles/theme";
 
 import { formatDate } from "~/utils/format";
-import { EStatus } from "./EStatus";
+import { EStatusInfo } from "./EStatusInfo";
 
 interface StatusProps {
-  status: EStatus;
+  status: EStatusInfo;
 }
 
-export const Status = ({ status }: StatusProps) => {
+export const StatusInfo = ({ status }: StatusProps) => {
   // const [favorite, setFavorite] = useState(route?.favorite);
 
   let color = "";
   switch (status) {
-    case EStatus.DISPONIVEL:
+    case EStatusInfo.DISPONIVEL:
       color = "#A7E179";
       break;
-    case EStatus.INDISPONIVEL:
+    case EStatusInfo.INDISPONIVEL:
       color = "#E17979";
       break;
-    case EStatus.MANUTENCAO:
+    case EStatusInfo.MANUTENCAO:
       color = "#e1d379";
       break;
-    case EStatus.DESCONECTADO:
+    case EStatusInfo.DESCONECTADO:
       color = "#a9abac";
       break;
-    case EStatus.PARADO:
+    case EStatusInfo.PARADO:
       color = "#79c9e1";
       break;
   }

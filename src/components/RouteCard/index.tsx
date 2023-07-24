@@ -13,12 +13,13 @@ import { useState } from "react";
 import { THEME } from "~/styles/theme";
 
 import { formatDate } from "~/utils/format";
-import { Status } from "../Status";
-import { IStatus } from "../Status/IStatus";
+import { StatusInfo } from "../StatusInfo";
+import { IStatusInfo } from "../StatusInfo/IStatusInfo";
+import { RouteStudents } from "../RouteStudents";
 
 interface RouteCardProps {
   onPressCard: () => void;
-  route: IStatus;
+  route: IStatusInfo;
 }
 
 export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
@@ -48,7 +49,7 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
               </Text>
 
               <Spacer />
-
+              {/* componentizar */}
               <Pressable
                 zIndex={1}
                 onPress={() => {
@@ -76,6 +77,7 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
                   );
                 }}
               </Pressable>
+              {/* componentizar */}
             </HStack>
 
             <VStack space="0">
@@ -87,22 +89,9 @@ export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
                 Chegada: {formatDate(route?.chegada)}
               </Text>
               <HStack alignItems="center" mt="2" space="1">
-                {route.tipo === "estudantes" ? (
-                  <>
-                    <Student size={14} />
-                    <Text
-                      fontSize={11}
-                      fontWeight="medium"
-                      color="coolGray.500"
-                    >
-                      Estudantes
-                    </Text>
-                  </>
-                ) : (
-                  <></>
-                )}
+                <RouteStudents tipo={route?.tipo} />
                 <Spacer />
-                <Status status={route.status} />
+                <StatusInfo status={route.status} />
               </HStack>
             </VStack>
           </Box>

@@ -17,13 +17,12 @@ import {
 
 import { THEME } from "~/styles/theme";
 import { formatDate } from "~/utils/format";
-import { Status } from "../Status";
-
-import { IStatus } from "../Status/IStatus";
+import { IStatusInfo } from "../StatusInfo/IStatusInfo";
+import { StatusInfo } from "../StatusInfo";
 
 interface IProps extends TouchableNativeFeedbackProps {
   navigation: NativeStackNavigationProp<any>;
-  item: IStatus;
+  item: IStatusInfo;
 }
 
 export const ListItem = (props: IProps) => {
@@ -63,8 +62,7 @@ export const ListItem = (props: IProps) => {
           </View>
 
           <HStack alignItems="center" space="1">
-            <Spacer />
-            <Status status={props.item.status} />
+            <StatusInfo status={props.item.status} />
           </HStack>
         </HStack>
       </Box>

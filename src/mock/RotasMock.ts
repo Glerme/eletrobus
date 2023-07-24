@@ -1,4 +1,4 @@
-import { EStatus } from "~/components/Status/EStatus";
+import { EStatusInfo } from "~/components/StatusInfo/EStatusInfo";
 
 const RotasMock = [
   {
@@ -7,7 +7,7 @@ const RotasMock = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatus.DISPONIVEL,
+    status: EStatusInfo.DISPONIVEL,
     tipo: "todos",
   },
   {
@@ -16,7 +16,7 @@ const RotasMock = [
     favorite: false,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatus.DESCONECTADO,
+    status: EStatusInfo.DESCONECTADO,
     tipo: "estudantes",
   },
   {
@@ -25,7 +25,7 @@ const RotasMock = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatus.INDISPONIVEL,
+    status: EStatusInfo.INDISPONIVEL,
     tipo: "todos",
   },
   {
@@ -34,7 +34,7 @@ const RotasMock = [
     favorite: false,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatus.MANUTENCAO,
+    status: EStatusInfo.MANUTENCAO,
     tipo: "estudantes",
   },
   {
@@ -43,7 +43,7 @@ const RotasMock = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatus.PARADO,
+    status: EStatusInfo.PARADO,
     tipo: "estudantes",
   },
 ];

@@ -1,11 +1,11 @@
-import { EStatus } from "./EStatus";
+import { EStatusInfo } from "./EStatusInfo";
 
-export interface IStatus {
+export interface IStatusInfo {
   id: number;
   name: string;
   favorite: boolean;
   saida: Date;
   chegada: Date;
-  status: EStatus;
+  status: EStatusInfo;
   tipo: string;
 }
