@@ -1,4 +1,4 @@
-export enum EStatusInfo {
+export enum EStatusType {
   DISPONIVEL = "Disponível",
   INDISPONIVEL = "Indisponível",
   MANUTENCAO = "Manutenção",

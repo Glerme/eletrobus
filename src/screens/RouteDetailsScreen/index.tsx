@@ -13,12 +13,12 @@ import { NavigationProps } from "~/routes";
 
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
-import { EStatusInfo } from "~/components/StatusInfo/EStatusInfo";
+import { EStatusType } from "~/components/StatusInfo/EStatusType";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 import { StatusInfo } from "~/components/StatusInfo";
-import { RouteStudents } from "~/components/RouteStudents";
+import { RouteStudents } from "~/components/RouteCard/RouteStudents";
 
 const mockedData = [
   {
@@ -104,7 +104,7 @@ export const RouteDetailsScreen = ({
               </VStack>
               <Spacer />
               <VStack space={1} alignItems="flex-end">
-                <StatusInfo status={EStatusInfo.DISPONIVEL} />
+                <StatusInfo status={EStatusType.DISPONIVEL} />
                 <RouteStudents mt={1} tipo={"estudantes"} />
               </VStack>
             </HStack>

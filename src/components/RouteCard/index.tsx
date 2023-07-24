@@ -14,12 +14,12 @@ import { THEME } from "~/styles/theme";
 
 import { formatDate } from "~/utils/format";
 import { StatusInfo } from "../StatusInfo";
-import { IStatusInfo } from "../StatusInfo/IStatusInfo";
-import { RouteStudents } from "../RouteStudents";
+import { IRoute } from "../../interfaces/IRoute";
+import { RouteStudents } from "./RouteStudents";
 
 interface RouteCardProps {
   onPressCard: () => void;
-  route: IStatusInfo;
+  route: IRoute;
 }
 
 export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {

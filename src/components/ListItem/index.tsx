@@ -17,12 +17,12 @@ import {
 
 import { THEME } from "~/styles/theme";
 import { formatDate } from "~/utils/format";
-import { IStatusInfo } from "../StatusInfo/IStatusInfo";
+import { IRoute } from "../../interfaces/IRoute";
 import { StatusInfo } from "../StatusInfo";
 
 interface IProps extends TouchableNativeFeedbackProps {
   navigation: NativeStackNavigationProp<any>;
-  item: IStatusInfo;
+  item: IRoute;
 }
 
 export const ListItem = (props: IProps) => {

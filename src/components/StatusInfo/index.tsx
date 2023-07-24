@@ -13,10 +13,10 @@ import { useState } from "react";
 import { THEME } from "~/styles/theme";
 
 import { formatDate } from "~/utils/format";
-import { EStatusInfo } from "./EStatusInfo";
+import { EStatusType } from "./EStatusType";
 
 interface StatusProps {
-  status: EStatusInfo;
+  status: EStatusType;
 }
 
 export const StatusInfo = ({ status }: StatusProps) => {
@@ -24,19 +24,19 @@ export const StatusInfo = ({ status }: StatusProps) => {
 
   let color = "";
   switch (status) {
-    case EStatusInfo.DISPONIVEL:
+    case EStatusType.DISPONIVEL:
       color = "#A7E179";
       break;
-    case EStatusInfo.INDISPONIVEL:
+    case EStatusType.INDISPONIVEL:
       color = "#E17979";
       break;
-    case EStatusInfo.MANUTENCAO:
+    case EStatusType.MANUTENCAO:
       color = "#e1d379";
       break;
-    case EStatusInfo.DESCONECTADO:
+    case EStatusType.DESCONECTADO:
       color = "#a9abac";
       break;
-    case EStatusInfo.PARADO:
+    case EStatusType.PARADO:
       color = "#79c9e1";
       break;
   }

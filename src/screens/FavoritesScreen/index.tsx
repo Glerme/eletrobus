@@ -10,14 +10,17 @@ import { THEME } from "~/styles/theme";
 import { NavigationProps } from "~/routes";
 
 import CorridasSalvasSvg from "~/assets/corridas-salvas.svg";
+import { IRoute } from "~/interfaces/IRoute";
+import { EStatusType } from "~/components/StatusInfo/EStatusType";
 
-const mockedData = {
+const mockedData: IRoute = {
   id: 1,
   name: "Unip/Unesp",
   favorite: true,
   saida: new Date(),
   chegada: new Date(),
-  status: true,
+  status: EStatusType.DISPONIVEL,
+  tipo: "estudantes",
 };
 
 export const FavoritesScreen = ({
