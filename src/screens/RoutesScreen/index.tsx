@@ -40,6 +40,7 @@ import { BoxButton } from "~/components/BoxButton";
 import { ListItem } from "~/components/ListItem";
 import CidadesMock from "~/mock/CidadesMock";
 import RotasMock from "~/mock/RotasMock";
+import { IRoute } from "~/interfaces/IRoute";
 
 interface ICity {
   id: number;
@@ -193,7 +194,7 @@ export const RoutesScreen = ({
         <FlatList
           keyExtractor={(item) => `${item.id}`}
           data={RotasMock}
-          renderItem={({ item }) => (
+          renderItem={({ item }: { item: IRoute }) => (
             <ListItem item={item} navigation={navigation} key={item.id} />
           )}
         />
