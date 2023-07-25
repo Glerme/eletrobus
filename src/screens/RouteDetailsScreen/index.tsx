@@ -8,7 +8,7 @@ import {
   Text,
   VStack,
 } from "native-base";
-import { Info, Star, Warning } from "phosphor-react-native";
+import { Info, Star } from "phosphor-react-native";
 import { NavigationProps } from "~/routes";
 
 import { HourCard } from "~/components/HourCard";

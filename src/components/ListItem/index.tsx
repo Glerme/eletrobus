@@ -1,38 +1,30 @@
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import {
-  Box,
-  HStack,
-  Heading,
-  IPressableProps,
-  Pressable,
-  Spacer,
-  Text,
-  View,
-} from "native-base";
-import { Star } from "phosphor-react-native";
 import {
   TouchableNativeFeedback,
   TouchableNativeFeedbackProps,
 } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { THEME } from "~/styles/theme";
-import { formatDate } from "~/utils/format";
-import { IRoute } from "../../interfaces/IRoute";
+import { Box, HStack, Text, View } from "native-base";
+
+import { Star } from "phosphor-react-native";
+
 import { StatusInfo } from "../StatusInfo";
+
+import { IRoute } from "../../interfaces/IRoute";
 
 interface IProps extends TouchableNativeFeedbackProps {
   navigation: NativeStackNavigationProp<any>;
   item: IRoute;
 }
 
-export const ListItem = (props: IProps) => {
+export const ListItem = ({ item, navigation, ...rest }: IProps) => {
   return (
     <TouchableNativeFeedback
       background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
-      {...props}
+      {...rest}
       onPress={() =>
-        props.navigation.navigate("RouteDetails", {
-          id: `${props.item?.id}`,
+        navigation.navigate("RouteDetails", {
+          id: `${item?.id}`,
         })
       }
     >
@@ -52,18 +44,20 @@ export const ListItem = (props: IProps) => {
               <Star
                 size={14}
                 weight="fill"
-                color={props.item.favorite ? "#E9C25F" : "#9C9C9C"}
+                color={item.favorite ? "#E9C25F" : "#9C9C9C"}
               />
 
               <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
-                {props.item.name}
+                {item.name}
               </Text>
             </HStack>
           </View>
 
-          <HStack alignItems="center" space="1">
-            <StatusInfo status={props.item.status} />
-          </HStack>
+          {item?.status && (
+            <HStack alignItems="center" space="1">
+              <StatusInfo status={item.status} />
+            </HStack>
+          )}
         </HStack>
       </Box>
     </TouchableNativeFeedback>

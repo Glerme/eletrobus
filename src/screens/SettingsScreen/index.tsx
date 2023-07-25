@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Icon,
-  VStack,
-  Divider,
-  Text,
-  HStack,
-  View,
-} from "native-base";
+import { TouchableHighlight } from "react-native";
+
+import { Icon, VStack, Text, HStack, View } from "native-base";
 
 import {
   requestForegroundPermissionsAsync,
@@ -18,17 +12,14 @@ import { PencilSimple, SignOut } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
-import { Title } from "~/components/Layouts/Title";
-
 import { Switch } from "~/components/Form/Switch";
+import { Button } from "~/components/Form/Button";
+import { Title } from "~/components/Layouts/Title";
 import { ModalView } from "~/components/Layouts/ModalView";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
-import { TouchableNativeFeedback } from "react-native";
-import { Button } from "~/components/Form/Button";
-import { TouchableHighlight } from "react-native-gesture-handler";
 
 export const SettingsScreen = ({
   navigation,

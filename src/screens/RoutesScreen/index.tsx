@@ -1,45 +1,23 @@
-import {
-  Box,
-  FlatList,
-  Flex,
-  HStack,
-  Heading,
-  Icon,
-  Pressable,
-  ScrollView,
-  Spacer,
-  Text,
-  VStack,
-} from "native-base";
-import {
-  TouchableHighlight,
-  TouchableNativeFeedback,
-  View,
-} from "react-native";
+import { useState } from "react";
+import { TouchableHighlight, TouchableNativeFeedback } from "react-native";
 
-import {
-  MagnifyingGlass,
-  Student,
-  UsersThree,
-  Star,
-} from "phosphor-react-native";
+import { Box, FlatList, Flex, HStack, Icon, Text, VStack } from "native-base";
+
+import { MagnifyingGlass, Student, UsersThree } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
-import { Title } from "~/components/Layouts/Title";
 import { Input } from "~/components/Form/Input";
+import { ListItem } from "~/components/ListItem";
+import { BoxButton } from "~/components/BoxButton";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
-import { THEME } from "~/styles/theme";
-import { CirculedIcon } from "./styles";
-import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-
-import { BoxButton } from "~/components/BoxButton";
-import { ListItem } from "~/components/ListItem";
 import CidadesMock from "~/mock/CidadesMock";
 import RotasMock from "~/mock/RotasMock";
+
+import { THEME } from "~/styles/theme";
+import { CirculedIcon } from "./styles";
 
 interface ICity {
   id: number;
@@ -151,7 +129,6 @@ export const RoutesScreen = ({
 
         <VStack mt={2}>
           <Box mb={2}>
-            {/* <Title></Title> */}
             <Text
               fontSize={"md"}
               color={THEME.colors.gray["800"]}

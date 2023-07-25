@@ -13,11 +13,17 @@ interface ModalViewProps extends ModalProps {
 export const ModalView = ({
   children,
   closeModal,
-  modalHeight = 300,
+  modalHeight = 100,
+  animationType = "slide",
   ...rest
 }: ModalViewProps) => {
   return (
-    <Modal transparent animationType="fade" statusBarTranslucent {...rest}>
+    <Modal
+      transparent
+      animationType={animationType}
+      statusBarTranslucent
+      {...rest}
+    >
       <TouchableWithoutFeedback
         onPress={(e) => {
           if (e.target === e.currentTarget) {

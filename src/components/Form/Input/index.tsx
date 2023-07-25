@@ -8,17 +8,18 @@ export const Input: React.FC<InputProps> = ({ ...rest }) => {
   return (
     <NativeBaseInput
       size="md"
-      borderWidth={2}
+      borderWidth={1}
       pl={3}
-      borderColor={"gray.800"}
+      borderColor={"gray.600"}
       fontSize="md"
+      fontWeight={"semibold"}
       fontFamily="body"
-      borderRadius={16}
+      borderRadius={6}
       color="gray.900"
       placeholderTextColor="gray.700"
       _focus={{
-        borderWidth: 2,
-        borderColor: "primary.400",
+        borderWidth: 1,
+        borderColor: "primary.200",
       }}
       {...rest}
     />

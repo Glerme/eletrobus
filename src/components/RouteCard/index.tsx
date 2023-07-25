@@ -8,25 +8,27 @@ import {
   View,
 } from "native-base";
 
-import { Star, Student, UsersThree } from "phosphor-react-native";
 import { useState } from "react";
-import { THEME } from "~/styles/theme";
+
+import { Star } from "phosphor-react-native";
+
+import { InterfacePressableProps } from "native-base/lib/typescript/components/primitives/Pressable/types";
 
 import { formatDate } from "~/utils/format";
 import { StatusInfo } from "../StatusInfo";
 import { IRoute } from "../../interfaces/IRoute";
 import { RouteStudents } from "./RouteStudents";
 
-interface RouteCardProps {
+interface RouteCardProps extends InterfacePressableProps {
   onPressCard: () => void;
   route: IRoute;
 }
 
-export const RouteCard = ({ onPressCard, route }: RouteCardProps) => {
+export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
   const [favorite, setFavorite] = useState(route?.favorite);
 
   return (
-    <Pressable marginY={1} onPress={onPressCard}>
+    <Pressable marginY={1} onPress={onPressCard} {...rest}>
       {({ isPressed }) => {
         return (
           <Box

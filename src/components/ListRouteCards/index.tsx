@@ -1,10 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import {
+  Box,
+  FlatList,
   Flex,
   HStack,
   Pressable,
-  ScrollView,
-  Spacer,
   Text,
   VStack,
 } from "native-base";
@@ -25,12 +25,7 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
   return (
     <>
       <VStack mt="2" mb="3">
-        <HStack
-          // px="4"
-          py="2"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <HStack py="2" justifyContent="space-between" alignItems="center">
           <Text
             fontSize={"md"}
             fontWeight={"600"}
@@ -55,23 +50,37 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
           </Pressable>
         </HStack>
 
-        <ScrollView horizontal>
-          <HStack space={4}>
-            {data?.map((item) => (
-              <RouteCard
-                key={item.id}
-                route={item}
-                onPressCard={() =>
-                  navigation.navigate("RouteDetails", {
-                    params: {
-                      id: item?.id,
-                    },
-                  })
-                }
-              />
-            ))}
-          </HStack>
-        </ScrollView>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => `${item.id}`}
+          horizontal
+          ListEmptyComponent={() => (
+            <Box
+              flex={1}
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              <Text fontSize={"md"} fontWeight={"semibold"}>
+                Nenhuma rota encontrada
+              </Text>
+            </Box>
+          )}
+          ItemSeparatorComponent={() => <Box w={2} />}
+          renderItem={({ item }) => (
+            <RouteCard
+              key={item.id}
+              route={item}
+              onPressCard={() =>
+                navigation.navigate("RouteDetails", {
+                  params: {
+                    id: item?.id,
+                  },
+                })
+              }
+            />
+          )}
+        />
       </VStack>
     </>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet, Text } from "react-native";
 
 import { Box } from "native-base";
 import MapView, { Marker } from "react-native-maps";
@@ -9,21 +9,32 @@ import {
   watchPositionAsync,
   LocationAccuracy,
   LocationObject,
+  LocationPermissionResponse,
 } from "expo-location";
 
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 
+import { THEME } from "~/styles/theme";
+
 export const Map = () => {
   const mapRef = useRef<MapView>(null);
   const [location, setLocation] = useState<LocationObject | null>(null);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const requestLocationPermissions = async () => {
-    const { granted } = await requestForegroundPermissionsAsync();
+    const { granted }: LocationPermissionResponse =
+      await requestForegroundPermissionsAsync();
 
     if (granted) {
-      const currentPosition = await getCurrentPositionAsync();
-      setLocation(currentPosition);
+      try {
+        const currentPosition = await getCurrentPositionAsync();
+        setLocation(currentPosition);
+      } catch (error) {
+        setLocationError("Falha ao buscar a localização.");
+      }
+    } else {
+      setLocationError("Permita o acesso à localização para continuar.");
     }
   };
 
@@ -55,39 +66,45 @@ export const Map = () => {
 
   return (
     <Box flex={1}>
-      <ListRoutesButton />
-      <MyLocationButton getCurrentPosition={getCurrentPosition} />
-
-      {location && (
-        <MapView
-          ref={mapRef}
-          // provider={PROVIDER_GOOGLE}
-          style={{
-            ...StyleSheet.absoluteFillObject,
-            width: "100%",
-            height: "100%",
-          }}
-          region={{
-            longitudeDelta: 0.005,
-            latitudeDelta: 0.005,
-            latitude: location?.coords?.latitude,
-            longitude: location?.coords?.longitude,
-          }}
-          showsUserLocation={true}
-          showsMyLocationButton={false}
-          showsScale
-          showsBuildings
-          scrollEnabled
-          toolbarEnabled
-          showsCompass={false}
-        >
-          <Marker
-            coordinate={{
-              latitude: location?.coords?.latitude ?? 0,
-              longitude: location?.coords?.longitude ?? 0,
+      {locationError ? (
+        <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+          <Text>{locationError}</Text>
+        </Box>
+      ) : location ? (
+        <>
+          <ListRoutesButton />
+          <MyLocationButton getCurrentPosition={getCurrentPosition} />
+          <MapView
+            ref={mapRef}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              width: "100%",
+              height: "100%",
             }}
+            region={{
+              longitudeDelta: 0.005,
+              latitudeDelta: 0.005,
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            showsUserLocation={true}
+            showsMyLocationButton={false}
+            showsScale
+            showsBuildings
+            scrollEnabled
+            toolbarEnabled
+            showsCompass={false}
+          >
+            {/* <Marker coordinate={location.coords} /> */}
+          </MapView>
+        </>
+      ) : (
+        <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+          <ActivityIndicator
+            size={"large"}
+            color={THEME.colors.primary["900"]}
           />
-        </MapView>
+        </Box>
       )}
     </Box>
   );

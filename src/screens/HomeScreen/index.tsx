@@ -1,18 +1,18 @@
-import { ScrollView } from "react-native-gesture-handler";
-
-import { NavigationProps } from "~/routes";
-
-import { Background } from "~/components/Layouts/Background";
-import { Input } from "~/components/Form/Input";
-import { ListRouteCards } from "~/components/ListRouteCards";
-import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import RotasMock from "~/mock/RotasMock";
 import { Box, Button, HStack, Text, VStack, View } from "native-base";
 import {
   GlobeHemisphereWest,
   MagnifyingGlass,
   MapPin,
 } from "phosphor-react-native";
+
+import RotasMock from "~/mock/RotasMock";
+
+import { NavigationProps } from "~/routes";
+
+import { Background } from "~/components/Layouts/Background";
+import { ListRouteCards } from "~/components/ListRouteCards";
+import { ScreenContent } from "~/components/Layouts/ScreenContent";
+
 import { THEME } from "~/styles/theme";
 
 export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {

@@ -31,7 +31,7 @@ export const TabNavigator = ({}) => {
     >
       <Tabs.Screen
         name={"Home"}
-        component={HomeScreen}
+        component={HomeScreen as any}
         options={{
           headerShown: true,
           headerStyle: {
@@ -61,7 +61,7 @@ export const TabNavigator = ({}) => {
 
       <Tabs.Screen
         name={"Map"}
-        component={MapScreen}
+        component={MapScreen as any}
         options={{
           headerShown: false,
           tabBarLabel: "Mapa",
@@ -77,7 +77,7 @@ export const TabNavigator = ({}) => {
 
       <Tabs.Screen
         name={"Routes"}
-        component={RoutesScreen}
+        component={RoutesScreen as any}
         options={{
           headerShown: true,
           headerStyle: {
@@ -107,7 +107,7 @@ export const TabNavigator = ({}) => {
 
       <Tabs.Screen
         name={"Settings"}
-        component={SettingsScreen}
+        component={SettingsScreen as any}
         options={{
           headerShown: true,
           headerStyle: {
