@@ -36,6 +36,8 @@ export const TabNavigator = ({}) => {
           headerShown: true,
           headerStyle: {
             backgroundColor: "#0DAC86",
+            borderWidth: 0,
+            elevation: 0,
           },
           headerTintColor: THEME.colors.white,
           headerLeft: () => {
@@ -82,6 +84,8 @@ export const TabNavigator = ({}) => {
           headerShown: true,
           headerStyle: {
             backgroundColor: "#0DAC86",
+            borderWidth: 0,
+            elevation: 0,
           },
           headerTintColor: THEME.colors.white,
           headerLeft: () => {
@@ -112,6 +116,8 @@ export const TabNavigator = ({}) => {
           headerShown: true,
           headerStyle: {
             backgroundColor: "#0DAC86",
+            borderWidth: 0,
+            elevation: 0,
           },
           headerTintColor: THEME.colors.white,
           headerLeft: () => {
