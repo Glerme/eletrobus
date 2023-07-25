@@ -1,12 +1,4 @@
-import {
-  Box,
-  HStack,
-  Pressable,
-  Spacer,
-  Text,
-  VStack,
-  View,
-} from "native-base";
+import { Box, HStack, Pressable, Spacer, Text, VStack } from "native-base";
 
 import { useState } from "react";
 

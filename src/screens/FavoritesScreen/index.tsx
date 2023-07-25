@@ -1,4 +1,4 @@
-import { Box, FlatList, ScrollView, Text, VStack } from "native-base";
+import { Box, FlatList, Text } from "native-base";
 
 import { Title } from "~/components/Layouts/Title";
 import { RouteCard } from "~/components/RouteCard";
@@ -51,7 +51,9 @@ export const FavoritesScreen = ({
   return (
     <Background>
       <ScreenContent>
-        <Title>Corridas salvas</Title>
+        <Title fontWeight={"600"} fontSize={"lg"}>
+          Corridas salvas
+        </Title>
 
         <Box alignItems={"center"} display={"flex"} mt={4}>
           <CorridasSalvasSvg />
@@ -61,7 +63,6 @@ export const FavoritesScreen = ({
             </Text>
           </Box>
         </Box>
-
         <FlatList
           w={"full"}
           style={{ alignSelf: "flex-start" }}
