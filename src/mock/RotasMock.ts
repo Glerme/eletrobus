@@ -1,6 +1,7 @@
 import { EStatusType } from "~/components/StatusInfo/EStatusType";
+import { IRoute } from "~/interfaces/IRoute";
 
-const RotasMock = [
+const RotasMock: IRoute[] = [
   {
     id: 1,
     name: "Unesp",

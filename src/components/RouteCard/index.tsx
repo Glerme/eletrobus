@@ -10,7 +10,7 @@ import {
 
 import { useState } from "react";
 
-import { Star } from "phosphor-react-native";
+import { Info, Star } from "phosphor-react-native";
 
 import { InterfacePressableProps } from "native-base/lib/typescript/components/primitives/Pressable/types";
 
@@ -46,9 +46,12 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
             }}
           >
             <HStack alignItems="center" mb="3">
-              <Text fontSize="md" fontWeight={"500"} color="gray.900">
-                {route?.name}
-              </Text>
+              <HStack alignItems="center" space={1}>
+                <Info size={20} color="#444444" weight="duotone" />
+                <Text fontSize="md" fontWeight={"500"} color="gray.900">
+                  {route?.name}
+                </Text>
+              </HStack>
 
               <Spacer />
               {/* componentizar */}

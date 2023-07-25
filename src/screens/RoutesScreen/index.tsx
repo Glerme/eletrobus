@@ -15,6 +15,7 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import CidadesMock from "~/mock/CidadesMock";
 import RotasMock from "~/mock/RotasMock";
+import { IRoute } from "~/interfaces/IRoute";
 
 import { THEME } from "~/styles/theme";
 import { CirculedIcon } from "./styles";
@@ -170,7 +171,7 @@ export const RoutesScreen = ({
         <FlatList
           keyExtractor={(item) => `${item.id}`}
           data={RotasMock}
-          renderItem={({ item }) => (
+          renderItem={({ item }: { item: IRoute }) => (
             <ListItem item={item} navigation={navigation} key={item.id} />
           )}
         />
