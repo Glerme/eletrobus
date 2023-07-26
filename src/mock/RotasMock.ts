@@ -8,8 +8,9 @@ const RotasMock: IRoute[] = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatusType.DISPONIVEL,
+    statusCorrida: EStatusType.EM_MOVIMENTO,
     tipo: "todos",
+    trafegando: true,
   },
   {
     id: 2,
@@ -17,8 +18,9 @@ const RotasMock: IRoute[] = [
     favorite: false,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatusType.DESCONECTADO,
+    statusCorrida: EStatusType.DESCONECTADO,
     tipo: "estudantes",
+    trafegando: true,
   },
   {
     id: 3,
@@ -26,8 +28,9 @@ const RotasMock: IRoute[] = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatusType.INDISPONIVEL,
+    statusCorrida: EStatusType.EM_MOVIMENTO,
     tipo: "todos",
+    trafegando: false,
   },
   {
     id: 4,
@@ -35,8 +38,9 @@ const RotasMock: IRoute[] = [
     favorite: false,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatusType.MANUTENCAO,
+    statusCorrida: EStatusType.MANUTENCAO,
     tipo: "estudantes",
+    trafegando: true,
   },
   {
     id: 5,
@@ -44,8 +48,9 @@ const RotasMock: IRoute[] = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatusType.PARADO,
+    statusCorrida: EStatusType.PARADO,
     tipo: "estudantes",
+    trafegando: true,
   },
 ];
 export default RotasMock;

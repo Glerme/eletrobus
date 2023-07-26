@@ -1,7 +1,6 @@
 export enum EStatusType {
-  DISPONIVEL = "Disponível",
-  INDISPONIVEL = "Indisponível",
   MANUTENCAO = "Manutenção",
   PARADO = "Parado",
   DESCONECTADO = "Desconectado",
+  EM_MOVIMENTO = "Em movimento",
 }

@@ -104,7 +104,7 @@ export const RouteDetailsScreen = ({
               </VStack>
               <Spacer />
               <VStack space={1} alignItems="flex-end">
-                <StatusInfo status={EStatusType.DISPONIVEL} />
+                <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
                 <RouteStudents mt={1} tipo={"estudantes"} />
               </VStack>
             </HStack>

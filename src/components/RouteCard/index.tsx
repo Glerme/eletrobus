@@ -88,7 +88,7 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
               <HStack alignItems="center" mt="2" space="1">
                 <RouteStudents tipo={route?.tipo} />
                 <Spacer />
-                <StatusInfo status={route.status} />
+                <StatusInfo statusCorrida={route?.statusCorrida} />
               </HStack>
             </VStack>
           </Box>

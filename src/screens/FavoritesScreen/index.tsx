@@ -21,8 +21,9 @@ const mockedData: IRoute[] = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-    status: EStatusType.DISPONIVEL,
+    statusCorrida: EStatusType.EM_MOVIMENTO,
     tipo: "estudantes",
+    trafegando: true,
   },
   {
     id: 2,
@@ -30,8 +31,9 @@ const mockedData: IRoute[] = [
     favorite: false,
     saida: new Date("2023-07-25T14:00:00"),
     chegada: new Date("2023-07-25T15:30:00"),
-    status: EStatusType.DISPONIVEL,
+    statusCorrida: EStatusType.EM_MOVIMENTO,
     tipo: "todos",
+    trafegando: true,
   },
   {
     id: 3,
@@ -39,8 +41,9 @@ const mockedData: IRoute[] = [
     favorite: true,
     saida: new Date("2023-07-26T11:00:00"),
     chegada: new Date("2023-07-26T13:00:00"),
-    status: EStatusType.DISPONIVEL,
+    statusCorrida: EStatusType.EM_MOVIMENTO,
     tipo: "todos",
+    trafegando: true,
   },
 ];
 
