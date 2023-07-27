@@ -7,6 +7,7 @@ import {
   Spacer,
   Text,
   VStack,
+  View,
 } from "native-base";
 import { Info, Star } from "phosphor-react-native";
 import { NavigationProps } from "~/routes";
@@ -67,11 +68,18 @@ export const RouteDetailsScreen = ({
       <ScreenContent>
         <VStack space={4} flex={1}>
           <HStack alignItems={"center"}>
-            <Box>
-              <Text fontSize={"lg"} fontWeight={"600"}>
-                UNIP - BAURU
+            <HStack space={2} alignItems="center">
+              <View
+                width={4}
+                height={4}
+                borderRadius={50}
+                // backgroundColor={color}
+                backgroundColor={true ? "#A7E179" : "#E17979"}
+              />
+              <Text fontSize="lg" fontWeight={"600"}>
+                UNESP - Bauru
               </Text>
-            </Box>
+            </HStack>
 
             <Spacer />
 

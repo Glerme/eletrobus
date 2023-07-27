@@ -28,7 +28,7 @@ const RotasMock: IRoute[] = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-    statusCorrida: EStatusType.EM_MOVIMENTO,
+
     tipo: "todos",
     trafegando: false,
   },
