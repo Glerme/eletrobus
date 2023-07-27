@@ -1,4 +1,12 @@
-import { Box, HStack, Pressable, Spacer, Text, VStack } from "native-base";
+import {
+  Box,
+  HStack,
+  Pressable,
+  Spacer,
+  Text,
+  VStack,
+  View,
+} from "native-base";
 
 import { useState } from "react";
 
@@ -6,7 +14,7 @@ import { Info, Star } from "phosphor-react-native";
 
 import { InterfacePressableProps } from "native-base/lib/typescript/components/primitives/Pressable/types";
 
-import { formatDate } from "~/utils/format";
+import { formatDate, formatHours } from "~/utils/format";
 import { StatusInfo } from "../StatusInfo";
 import { IRoute } from "../../interfaces/IRoute";
 import { RouteStudents } from "./RouteStudents";
@@ -37,12 +45,20 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
               ],
             }}
           >
-            <HStack alignItems="center" mb="3">
+            <HStack alignItems="center" mb="2">
               <HStack alignItems="center" space={1}>
-                <Info size={20} color="#444444" weight="duotone" />
-                <Text fontSize="md" fontWeight={"500"} color="gray.900">
-                  {route?.name}
-                </Text>
+                <HStack space={2} alignItems="center">
+                  <View
+                    width={11}
+                    height={11}
+                    borderRadius={50}
+                    // backgroundColor={color}
+                    backgroundColor={route?.trafegando ? "#A7E179" : "#E17979"}
+                  />
+                  <Text fontSize="md" fontWeight={"500"} color="gray.900">
+                    {route?.name}
+                  </Text>
+                </HStack>
               </HStack>
 
               <Spacer />
@@ -79,11 +95,11 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
 
             <VStack space="0">
               <Text fontSize="sm" color="coolGray.700">
-                Saída: {formatDate(route?.saida)}
+                Saída: {formatHours(route?.saida)}
               </Text>
 
               <Text fontSize="sm" color="coolGray.700">
-                Chegada: {formatDate(route?.chegada)}
+                Chegada: {formatHours(route?.chegada)}
               </Text>
               <HStack alignItems="center" mt="2" space="1">
                 <RouteStudents tipo={route?.tipo} />

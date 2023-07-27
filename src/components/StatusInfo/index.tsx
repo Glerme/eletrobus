@@ -24,9 +24,6 @@ export const StatusInfo = ({ statusCorrida }: StatusProps) => {
 
   let color = "";
   switch (statusCorrida) {
-    // case EStatusType.DISPONIVEL:
-    //   color = "#A7E179";
-    //   break;
     case EStatusType.EM_MOVIMENTO:
       color = "#7990e1";
       break;
@@ -39,6 +36,9 @@ export const StatusInfo = ({ statusCorrida }: StatusProps) => {
     case EStatusType.PARADO:
       color = "#79e1cc";
       break;
+    default:
+      color = "none";
+      break;
   }
 
   return (
@@ -47,11 +47,11 @@ export const StatusInfo = ({ statusCorrida }: StatusProps) => {
         width={11}
         height={11}
         borderRadius={50}
+        display={statusCorrida ? "flex" : "none"}
         backgroundColor={color}
-        // backgroundColor={route?.status ? "#A7E179" : "#E17979"}
       />
       <Text fontSize={11} fontWeight="medium" color="coolGray.500">
-        {statusCorrida}
+        {statusCorrida ? statusCorrida : "------------"}
       </Text>
     </HStack>
   );

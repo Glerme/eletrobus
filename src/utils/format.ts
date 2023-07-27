@@ -11,3 +11,6 @@ export const formatDate = (date: Date) => {
 export const formatDatetime = (date: Date) => {
   return format(date, "dd/MM/yyyy HH:mm:ss");
 };
+export const formatHours = (date: Date) => {
+  return format(date, "HH:mm").replace(":", "h");
+};
