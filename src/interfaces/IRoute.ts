@@ -6,6 +6,7 @@ export interface IRoute {
   favorite: boolean;
   saida: Date;
   chegada: Date;
-  status?: EStatusType;
+  statusCorrida?: EStatusType;
+  trafegando: boolean;
   tipo?: "estudantes" | "todos" | string;
 }

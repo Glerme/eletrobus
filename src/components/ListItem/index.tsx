@@ -53,9 +53,9 @@ export const ListItem = ({ item, navigation, ...rest }: IProps) => {
             </HStack>
           </View>
 
-          {item?.status && (
+          {item?.statusCorrida && (
             <HStack alignItems="center" space="1">
-              <StatusInfo status={item.status} />
+              <StatusInfo statusCorrida={item.statusCorrida} />
             </HStack>
           )}
         </HStack>

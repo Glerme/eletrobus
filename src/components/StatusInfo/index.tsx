@@ -16,19 +16,16 @@ import { formatDate } from "~/utils/format";
 import { EStatusType } from "./EStatusType";
 
 interface StatusProps {
-  status: EStatusType;
+  statusCorrida: EStatusType | undefined;
 }
 
-export const StatusInfo = ({ status }: StatusProps) => {
+export const StatusInfo = ({ statusCorrida }: StatusProps) => {
   // const [favorite, setFavorite] = useState(route?.favorite);
 
   let color = "";
-  switch (status) {
-    case EStatusType.DISPONIVEL:
-      color = "#A7E179";
-      break;
-    case EStatusType.INDISPONIVEL:
-      color = "#E17979";
+  switch (statusCorrida) {
+    case EStatusType.EM_MOVIMENTO:
+      color = "#7990e1";
       break;
     case EStatusType.MANUTENCAO:
       color = "#e1d379";
@@ -37,7 +34,10 @@ export const StatusInfo = ({ status }: StatusProps) => {
       color = "#a9abac";
       break;
     case EStatusType.PARADO:
-      color = "#79c9e1";
+      color = "#79e1cc";
+      break;
+    default:
+      color = "none";
       break;
   }
 
@@ -47,11 +47,11 @@ export const StatusInfo = ({ status }: StatusProps) => {
         width={11}
         height={11}
         borderRadius={50}
+        display={statusCorrida ? "flex" : "none"}
         backgroundColor={color}
-        // backgroundColor={route?.status ? "#A7E179" : "#E17979"}
       />
       <Text fontSize={11} fontWeight="medium" color="coolGray.500">
-        {status}
+        {statusCorrida ? statusCorrida : "------------"}
       </Text>
     </HStack>
   );

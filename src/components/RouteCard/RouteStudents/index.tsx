@@ -12,7 +12,7 @@ import { InterfaceHStackProps } from "native-base/lib/typescript/components/prim
 import { Student } from "phosphor-react-native";
 
 interface RouteStudentsProps extends InterfaceHStackProps {
-  tipo: string;
+  tipo: string | undefined;
 }
 
 export const RouteStudents = (props: RouteStudentsProps) => {
