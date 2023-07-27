@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
-
-import { Box, Image } from "native-base";
+import { Dimensions, TouchableOpacity } from "react-native";
 
 import * as ExpoImagePicker from "expo-image-picker";
+import { Avatar, Box, HStack, Icon, Text, VStack } from "native-base";
 
-import { Button } from "../Button";
+import { ImageSquare, Camera, PencilSimple } from "phosphor-react-native";
+
+import { ModalView } from "~/components/Layouts/ModalView";
+
+import { THEME } from "~/styles/theme";
 
 export const ImagePicker = ({}) => {
+  const [openModal, setOpenModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -54,28 +59,111 @@ export const ImagePicker = ({}) => {
     }
   };
 
-  //! envolver o Image em um touchableOpacity
-  //! Abrir um modal em baixo perguntando se quer abrir a câmera ou a galeria
-  //! utilizar o modal view
+  console.log(selectedImage);
 
   return (
-    <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
-      <Image
-        source={{
-          uri:
-            selectedImage ??
-            "https://icon-library.com/images/no-profile-pic-icon/no-profile-pic-icon-27.jpg",
-        }}
-        alt="Foto de perfil"
-        w={150}
-        h={150}
-        rounded={100}
-      />
-
-      <Box>
-        <Button title="Abrir Câmera" onPress={openCamera} mb={2} mt={2} />
-        <Button title="Abrir Galeria" onPress={openGallery} />
+    <>
+      <Box w={"100%"} display={"flex"} alignItems={"center"}>
+        <TouchableOpacity onPress={() => setOpenModal(true)}>
+          <VStack space="5">
+            <Avatar
+              bg="lightBlue.400"
+              source={{
+                uri: "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+              }}
+              size="2xl"
+            >
+              <Avatar.Badge
+                bg="primary.500"
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                size={"10"}
+              >
+                <Icon
+                  as={<PencilSimple size={22} color={THEME.colors.white} />}
+                />
+              </Avatar.Badge>
+            </Avatar>
+          </VStack>
+        </TouchableOpacity>
       </Box>
-    </Box>
+
+      <ModalView
+        closeModal={() => setOpenModal(false)}
+        visible={openModal}
+        modalHeight={650}
+      >
+        <HStack
+          justifyContent={"center"}
+          alignItems={"center"}
+          w={"100%"}
+          h={"100%"}
+          space={"10"}
+        >
+          <TouchableOpacity onPress={openCamera}>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              borderColor={"primary.800"}
+              borderWidth={2}
+              borderRadius={8}
+              p={4}
+              w={Dimensions.get("window").width / 2 - 40}
+            >
+              <Box
+                borderRadius={50}
+                p={2}
+                borderWidth={1}
+                borderColor={"fuchsia.100"}
+                background={"fuchsia.100"}
+              >
+                <Icon
+                  as={<Camera size={50} color={THEME.colors.primary["800"]} />}
+                />
+              </Box>
+              <Text fontSize={"md"} fontWeight={"bold"} color={"gray.900"}>
+                Câmera
+              </Text>
+            </Box>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={openGallery}>
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              borderColor={"primary.800"}
+              borderWidth={2}
+              borderRadius={8}
+              p={4}
+              w={Dimensions.get("window").width / 2 - 40}
+            >
+              <Box
+                borderRadius={50}
+                p={2}
+                borderWidth={1}
+                borderColor={"fuchsia.100"}
+                background={"fuchsia.100"}
+              >
+                <Icon
+                  as={
+                    <ImageSquare
+                      size={50}
+                      color={THEME.colors.primary["800"]}
+                    />
+                  }
+                />
+              </Box>
+
+              <Text fontSize={"md"} fontWeight={"bold"} color={"gray.900"}>
+                Galeria
+              </Text>
+            </Box>
+          </TouchableOpacity>
+        </HStack>
+      </ModalView>
+    </>
   );
 };

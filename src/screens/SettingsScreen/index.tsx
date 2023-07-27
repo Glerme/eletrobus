@@ -48,17 +48,17 @@ export const SettingsScreen = ({
   }, []);
 
   return (
-    <Background>
-      <ScreenContent>
-        <Text
-          color={THEME.colors.gray["800"]}
-          fontSize={"lg"}
-          fontWeight={"600"}
-        >
-          Configurações
-        </Text>
+    <>
+      <Background>
+        <ScreenContent>
+          <Text
+            color={THEME.colors.gray["800"]}
+            fontSize={"lg"}
+            fontWeight={"600"}
+          >
+            Configurações
+          </Text>
 
-        <VStack flex={1} justifyContent={"space-between"} mt={2}>
           <VStack space={2} alignItems={"baseline"}>
             <Switch
               color={THEME.colors.gray["800"]}
@@ -101,37 +101,38 @@ export const SettingsScreen = ({
               />
             }
           />
-        </VStack>
-        <ModalView
-          visible={openModal}
-          closeModal={() => setOpenModal(false)}
-          modalHeight={600}
-        >
-          <VStack px={23} mt={6}>
-            <Title size="sm" textAlign={"left"}>
-              Deseja realmente sair?
-            </Title>
-            <VStack space={2} mt={2}>
-              <Button
-                title="Sim, desejo sair."
-                onPress={() => {
-                  console.log("saiu");
-                }}
-                fontColor={THEME.colors.white}
-                bg={THEME.colors.danger["600"]}
-              />
+        </ScreenContent>
+      </Background>
 
-              <Button
-                title="Não, irei continuar no aplicativo."
-                onPress={() => setOpenModal(false)}
-                fontColor={THEME.colors.white}
-                bg={THEME.colors.primary["900"]}
-                variant={"outline"}
-              />
-            </VStack>
+      <ModalView
+        visible={openModal}
+        closeModal={() => setOpenModal(false)}
+        modalHeight={600}
+      >
+        <VStack px={23} mt={6}>
+          <Title size="sm" textAlign={"left"}>
+            Deseja realmente sair?
+          </Title>
+          <VStack space={2} mt={2}>
+            <Button
+              title="Sim, desejo sair."
+              onPress={() => {
+                console.log("saiu");
+              }}
+              fontColor={THEME.colors.white}
+              bg={THEME.colors.danger["600"]}
+            />
+
+            <Button
+              title="Não, irei continuar no aplicativo."
+              onPress={() => setOpenModal(false)}
+              fontColor={THEME.colors.white}
+              bg={THEME.colors.primary["900"]}
+              variant={"outline"}
+            />
           </VStack>
-        </ModalView>
-      </ScreenContent>
-    </Background>
+        </VStack>
+      </ModalView>
+    </>
   );
 };

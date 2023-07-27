@@ -1,8 +1,8 @@
 import "react-native-gesture-handler";
-import { NativeBaseProvider } from "native-base";
+import { NativeBaseProvider, View } from "native-base";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useFonts } from "expo-font";
 
+import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 
 import {
@@ -34,9 +34,14 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar translucent style="light" />
-
       <NativeBaseProvider theme={THEME}>
+        <StatusBar
+          style="light"
+          translucent
+          backgroundColor="transparent"
+          animated
+        />
+
         {fontsLoaded ? <Routes /> : <Loading />}
       </NativeBaseProvider>
     </SafeAreaProvider>

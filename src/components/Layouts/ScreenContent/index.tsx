@@ -7,12 +7,7 @@ interface ScreenContentProps extends InterfaceScrollViewProps {
 
 export const ScreenContent = ({ children, ...rest }: ScreenContentProps) => {
   return (
-    <ScreenContentContainer
-      nestedScrollEnabled
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
-      {...rest}
-    >
+    <ScreenContentContainer nestedScrollEnabled {...rest}>
       {children}
     </ScreenContentContainer>
   );

@@ -9,12 +9,8 @@ export const Container = styled.View`
 `;
 
 export const BackgroundHeader = styled(LinearGradient)`
-  height: 10%;
-  margin-bottom: -18%;
+  height: 20%;
+  margin-bottom: -35%;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
-`;
-
-export const Content = styled.KeyboardAvoidingView`
-  flex: 1;
 `;
