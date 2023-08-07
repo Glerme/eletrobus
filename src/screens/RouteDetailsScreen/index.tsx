@@ -14,11 +14,11 @@ import { NavigationProps } from "~/routes";
 
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
-import { EStatusType } from "~/components/StatusInfo/EStatusType";
+import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
-import { StatusInfo } from "~/components/StatusInfo";
+import { StatusInfo } from "~/components/BusStatus/StatusInfo";
 import { RouteStudents } from "~/components/RouteCard/RouteStudents";
 
 const mockedData = [

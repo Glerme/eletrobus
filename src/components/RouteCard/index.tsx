@@ -10,18 +10,20 @@ import {
 
 import { useState } from "react";
 
-import { Info, Star } from "phosphor-react-native";
+import { ArrowRight, Info, Star, Timer } from "phosphor-react-native";
 
 import { InterfacePressableProps } from "native-base/lib/typescript/components/primitives/Pressable/types";
 
 import { formatDate, formatHours } from "~/utils/format";
-import { StatusInfo } from "../StatusInfo";
-import { IRoute } from "../../interfaces/IRoute";
+import { StatusInfo } from "../BusStatus/StatusInfo";
+import { IBusRoute } from "../../interfaces/IBusRoute";
 import { RouteStudents } from "./RouteStudents";
+import { StatusTime } from "../BusStatus/StatusTime";
+import { StatusRun } from "../BusStatus/StatusRun";
 
 interface RouteCardProps extends InterfacePressableProps {
   onPressCard: () => void;
-  route: IRoute;
+  route: IBusRoute;
 }
 
 export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
@@ -29,7 +31,7 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
 
   return (
     <Pressable marginY={1} onPress={onPressCard} {...rest}>
-      {({ isPressed }) => {
+      {({ isPressed }: any) => {
         return (
           <Box
             minW="72"
@@ -48,13 +50,6 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
             <HStack alignItems="center" mb="2">
               <HStack alignItems="center" space={1}>
                 <HStack space={2} alignItems="center">
-                  <View
-                    width={11}
-                    height={11}
-                    borderRadius={50}
-                    // backgroundColor={color}
-                    backgroundColor={route?.trafegando ? "#A7E179" : "#E17979"}
-                  />
                   <Text fontSize="md" fontWeight={"500"} color="gray.900">
                     {route?.name}
                   </Text>
@@ -69,7 +64,7 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
                   setFavorite(!favorite);
                 }}
               >
-                {({ isPressed }) => {
+                {({ isPressed }: any) => {
                   return (
                     <Box
                       p={2}
@@ -93,16 +88,14 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
               {/* componentizar */}
             </HStack>
 
-            <VStack space="0">
-              <Text fontSize="sm" color="coolGray.700">
+            <VStack space="1">
+              <Text fontSize="md" color="coolGray.700">
                 Saída: {formatHours(route?.saida)}
               </Text>
-
-              <Text fontSize="sm" color="coolGray.700">
-                Chegada: {formatHours(route?.chegada)}
-              </Text>
+              <StatusTime busRoute={route}></StatusTime>
+              {/* <Text fontSize="md" color="coolGray.700"></Text> */}
               <HStack alignItems="center" mt="2" space="1">
-                <RouteStudents tipo={route?.tipo} />
+                <StatusRun busRoute={route} />
                 <Spacer />
                 <StatusInfo statusCorrida={route?.statusCorrida} />
               </HStack>

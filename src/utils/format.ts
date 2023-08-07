@@ -14,3 +14,15 @@ export const formatDatetime = (date: Date) => {
 export const formatHours = (date: Date) => {
   return format(date, "dd/MM - HH:mm").replace(":", "h");
 };
+
+export const formatSecounds = (sec: number) => {
+  const hrs = Math.floor(sec / 3600);
+  const min = Math.floor((sec % 3600) / 60);
+  const secondsRest = sec % 60;
+
+  const formatado = `${hrs.toString().padStart(2, "0")}h${min
+    .toString()
+    .padStart(2, "0")}m${secondsRest.toString().padStart(2, "0")}s`;
+
+  return formatado;
+};

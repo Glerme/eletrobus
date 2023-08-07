@@ -1,7 +1,7 @@
-import { EStatusType } from "~/components/StatusInfo/EStatusType";
-import { IRoute } from "~/interfaces/IRoute";
+import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
+import { IBusRoute } from "~/interfaces/IBusRoute";
 
-const RotasMock: IRoute[] = [
+const RotasMock: IBusRoute[] = [
   {
     id: 1,
     name: "Unesp",
@@ -20,7 +20,7 @@ const RotasMock: IRoute[] = [
     chegada: new Date(),
     statusCorrida: EStatusType.DESCONECTADO,
     tipo: "estudantes",
-    trafegando: true,
+    trafegando: false,
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ const RotasMock: IRoute[] = [
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
-
+    statusCorrida: EStatusType.INDISPONIVEL,
     tipo: "todos",
     trafegando: false,
   },
@@ -46,11 +46,12 @@ const RotasMock: IRoute[] = [
     id: 5,
     name: "PUC-RS",
     favorite: true,
-    saida: new Date(),
+    saida: new Date("2023-08-07T12:00:00"),
     chegada: new Date(),
     statusCorrida: EStatusType.PARADO,
     tipo: "estudantes",
-    trafegando: true,
+    trafegando: false,
   },
 ];
+
 export default RotasMock;

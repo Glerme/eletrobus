@@ -8,13 +8,13 @@ import { Box, HStack, Text, View } from "native-base";
 
 import { Star } from "phosphor-react-native";
 
-import { StatusInfo } from "../StatusInfo";
+import { StatusInfo } from "../BusStatus/StatusInfo";
 
-import { IRoute } from "../../interfaces/IRoute";
+import { IBusRoute } from "../../interfaces/IBusRoute";
 
 interface IProps extends TouchableNativeFeedbackProps {
   navigation: NativeStackNavigationProp<any>;
-  item: IRoute;
+  item: IBusRoute;
 }
 
 export const ListItem = ({ item, navigation, ...rest }: IProps) => {
