@@ -6,6 +6,7 @@ import { THEME } from "~/styles/theme";
 
 interface ModalViewProps extends ModalProps {
   children: ReactNode;
+  visible: boolean;
   closeModal: () => void;
   modalHeight?: number;
 }
@@ -14,6 +15,7 @@ export const ModalView = ({
   children,
   closeModal,
   modalHeight = 100,
+  visible,
   animationType = "slide",
   ...rest
 }: ModalViewProps) => {
@@ -22,6 +24,7 @@ export const ModalView = ({
       transparent
       animationType={animationType}
       statusBarTranslucent
+      visible={visible}
       {...rest}
     >
       <TouchableWithoutFeedback

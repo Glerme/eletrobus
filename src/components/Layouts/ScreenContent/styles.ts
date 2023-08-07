@@ -8,6 +8,5 @@ export const ScreenContentContainer = styled(View)`
   flex-direction: column;
   border-radius: 12px;
   padding: 16px;
-  height: 100%;
   flex: 1;
 `;
