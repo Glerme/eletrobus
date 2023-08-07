@@ -3,18 +3,18 @@ import { Box, FlatList, Text } from "native-base";
 import { Title } from "~/components/Layouts/Title";
 import { RouteCard } from "~/components/RouteCard";
 import { Background } from "~/components/Layouts/Background";
-import { EStatusType } from "~/components/StatusInfo/EStatusType";
+import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import CorridasSalvasSvg from "~/assets/corridas-salvas.svg";
 
-import { IRoute } from "~/interfaces/IRoute";
+import { IBusRoute } from "~/interfaces/IBusRoute";
 
 import { NavigationProps } from "~/routes";
 
 import { THEME } from "~/styles/theme";
 
-const mockedData: IRoute[] = [
+const mockedData: IBusRoute[] = [
   {
     id: 1,
     name: "Unip/Unesp",

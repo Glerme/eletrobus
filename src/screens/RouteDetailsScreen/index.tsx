@@ -7,17 +7,18 @@ import {
   Spacer,
   Text,
   VStack,
+  View,
 } from "native-base";
 import { Info, Star } from "phosphor-react-native";
 import { NavigationProps } from "~/routes";
 
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
-import { EStatusType } from "~/components/StatusInfo/EStatusType";
+import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
-import { StatusInfo } from "~/components/StatusInfo";
+import { StatusInfo } from "~/components/BusStatus/StatusInfo";
 import { RouteStudents } from "~/components/RouteCard/RouteStudents";
 
 const mockedData = [
@@ -67,11 +68,18 @@ export const RouteDetailsScreen = ({
       <ScreenContent>
         <VStack space={4} flex={1}>
           <HStack alignItems={"center"}>
-            <Box>
-              <Text fontSize={"lg"} fontWeight={"600"}>
-                UNIP - BAURU
+            <HStack space={2} alignItems="center">
+              <View
+                width={4}
+                height={4}
+                borderRadius={50}
+                // backgroundColor={color}
+                backgroundColor={true ? "#A7E179" : "#E17979"}
+              />
+              <Text fontSize="lg" fontWeight={"600"}>
+                UNESP - Bauru
               </Text>
-            </Box>
+            </HStack>
 
             <Spacer />
 

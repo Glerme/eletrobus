@@ -36,8 +36,11 @@ export const StatusInfo = ({ statusCorrida }: StatusProps) => {
     case EStatusType.PARADO:
       color = "#79e1cc";
       break;
+    case EStatusType.CANCELADA:
+      color = "#e1a979";
+      break;
     default:
-      color = "none";
+      color = "#e17979";
       break;
   }
 

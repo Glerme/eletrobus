@@ -1,6 +1,6 @@
-import { EStatusType } from "../components/StatusInfo/EStatusType";
+import { EStatusType } from "../components/BusStatus/StatusInfo/EStatusType";
 
-export interface IRoute {
+export interface IBusRoute {
   id: number;
   name: string;
   favorite: boolean;
