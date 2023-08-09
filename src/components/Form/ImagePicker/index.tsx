@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 
 import * as ExpoImagePicker from "expo-image-picker";
-import { Box } from "native-base";
+import { Box, Skeleton, VStack } from "native-base";
 
 import { useQuery } from "@tanstack/react-query";
 
 import { api } from "~/services/axios";
 
-import { Loading } from "~/components/Loading";
 import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
 
@@ -68,14 +67,23 @@ export const ImagePicker = ({}) => {
     }
   };
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <Box w={"100%"} display={"flex"} alignItems={"center"}>
-        <Loading />
+        <VStack space="5">
+          <Skeleton
+            borderWidth={1}
+            borderColor="primary.50"
+            endColor="primary.50"
+            size="130px"
+            rounded="full"
+          />
+        </VStack>
       </Box>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
       <Box w={"100%"} display={"flex"} alignItems={"center"}>
         <ButtonOpenModal
@@ -91,6 +99,7 @@ export const ImagePicker = ({}) => {
         />
       </Box>
     );
+  }
 
   return (
     <>
