@@ -5,6 +5,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
 import {
   Montserrat_300Light,
   Montserrat_400Regular,
@@ -21,6 +23,8 @@ import { Loading } from "~/components/Loading";
 
 import { THEME } from "./src/styles/theme";
 
+const queryClient = new QueryClient();
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Montserrat_300Light,
@@ -33,22 +37,24 @@ export default function App() {
   });
 
   return (
-    <SafeAreaProvider>
-      <NativeBaseProvider theme={THEME}>
-        {fontsLoaded ? (
-          <>
-            <StatusBar
-              style="light"
-              translucent
-              backgroundColor="transparent"
-              animated
-            />
-            <Routes />
-          </>
-        ) : (
-          <Loading />
-        )}
-      </NativeBaseProvider>
-    </SafeAreaProvider>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider>
+        <NativeBaseProvider theme={THEME}>
+          {fontsLoaded ? (
+            <>
+              <StatusBar
+                style="light"
+                translucent
+                backgroundColor="transparent"
+                animated
+              />
+              <Routes />
+            </>
+          ) : (
+            <Loading />
+          )}
+        </NativeBaseProvider>
+      </SafeAreaProvider>
+    </QueryClientProvider>
   );
 }
