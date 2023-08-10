@@ -12,12 +12,15 @@ import {
   LocationPermissionResponse,
 } from "expo-location";
 
+import { IMap } from "~/interfaces/IMap";
+
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 
 import { THEME } from "~/styles/theme";
+import { CustomMarker } from "./components/CustomMarker";
 
-export const Map = () => {
+export const Map = ({ markers }: IMap) => {
   const mapRef = useRef<MapView>(null);
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -94,8 +97,11 @@ export const Map = () => {
             scrollEnabled
             toolbarEnabled
             showsCompass={false}
+            zoomEnabled
           >
-            {/* <Marker coordinate={location.coords} /> */}
+            {markers.map((marker) => (
+              <CustomMarker key={marker.id} marker={marker} />
+            ))}
           </MapView>
         </>
       ) : (
