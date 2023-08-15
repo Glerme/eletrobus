@@ -10,8 +10,8 @@ const markers: IMarker[] = [
     title: "Casa",
     description: "Minha casa",
     coordinate: {
-      latitude: -22.35172,
-      longitude: -48.779252,
+      latitude: -22.37074,
+      longitude: -48.771654,
     },
     type: "point",
   },
@@ -20,8 +20,8 @@ const markers: IMarker[] = [
     title: "onibus",
     description: "onibus 2",
     coordinate: {
-      latitude: -22.352,
-      longitude: -48.779252,
+      latitude: -22.372185,
+      longitude: -48.772031,
     },
     type: "bus",
   },

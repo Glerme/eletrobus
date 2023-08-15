@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text } from "react-native";
 
 import { Box } from "native-base";
-import MapView, { Marker } from "react-native-maps";
+import MapView from "react-native-maps";
 import {
   requestForegroundPermissionsAsync,
   getCurrentPositionAsync,
@@ -12,18 +12,26 @@ import {
   LocationPermissionResponse,
 } from "expo-location";
 
-import { IMap } from "~/interfaces/IMap";
+import { IMap, IMarker } from "~/interfaces/IMap";
 
+import { CustomMarker } from "./components/CustomMarker";
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
+import { ModalDescription } from "./components/ModalDescription";
 
 import { THEME } from "~/styles/theme";
-import { CustomMarker } from "./components/CustomMarker";
 
 export const Map = ({ markers }: IMap) => {
   const mapRef = useRef<MapView>(null);
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [openModalDescription, setOpenModalDescription] = useState<{
+    open: boolean;
+    point: IMarker | null;
+  }>({
+    open: false,
+    point: null,
+  });
 
   const requestLocationPermissions = async () => {
     const { granted }: LocationPermissionResponse =
@@ -68,50 +76,62 @@ export const Map = ({ markers }: IMap) => {
   }, []);
 
   return (
-    <Box flex={1}>
-      {locationError ? (
-        <Box flex={1} justifyContent={"center"} alignItems={"center"}>
-          <Text>{locationError}</Text>
-        </Box>
-      ) : location ? (
-        <>
-          <ListRoutesButton />
-          <MyLocationButton getCurrentPosition={getCurrentPosition} />
-          <MapView
-            ref={mapRef}
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              width: "100%",
-              height: "100%",
-            }}
-            region={{
-              longitudeDelta: 0.005,
-              latitudeDelta: 0.005,
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            showsUserLocation={true}
-            showsMyLocationButton={false}
-            showsScale
-            showsBuildings
-            scrollEnabled
-            toolbarEnabled
-            showsCompass={false}
-            zoomEnabled
-          >
-            {markers.map((marker) => (
-              <CustomMarker key={marker.id} marker={marker} />
-            ))}
-          </MapView>
-        </>
-      ) : (
-        <Box flex={1} justifyContent={"center"} alignItems={"center"}>
-          <ActivityIndicator
-            size={"large"}
-            color={THEME.colors.primary["900"]}
-          />
-        </Box>
-      )}
-    </Box>
+    <>
+      <Box flex={1}>
+        {locationError ? (
+          <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+            <Text>{locationError}</Text>
+          </Box>
+        ) : location ? (
+          <>
+            <ListRoutesButton />
+            <MyLocationButton getCurrentPosition={getCurrentPosition} />
+            <MapView
+              ref={mapRef}
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                width: "100%",
+                height: "100%",
+              }}
+              region={{
+                longitudeDelta: 0.005,
+                latitudeDelta: 0.005,
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+              showsUserLocation={true}
+              showsMyLocationButton={false}
+              scrollEnabled
+              zoomEnabled
+            >
+              {markers.map((marker) => (
+                <CustomMarker
+                  key={marker.id}
+                  marker={marker}
+                  setOpenModalDescription={() =>
+                    setOpenModalDescription({ open: true, point: marker })
+                  }
+                />
+              ))}
+            </MapView>
+          </>
+        ) : (
+          <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+            <ActivityIndicator
+              size={"large"}
+              color={THEME.colors.primary["900"]}
+            />
+          </Box>
+        )}
+      </Box>
+
+      <ModalDescription
+        data={openModalDescription.point}
+        openModal={openModalDescription.open}
+        setOpenModal={() =>
+          setOpenModalDescription({ open: false, point: null })
+        }
+      />
+    </>
   );
 };

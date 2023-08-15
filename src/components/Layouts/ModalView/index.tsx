@@ -8,13 +8,13 @@ interface ModalViewProps extends ModalProps {
   children: ReactNode;
   visible: boolean;
   closeModal: () => void;
-  modalHeight?: number;
+  modalMarginTop?: number;
 }
 
 export const ModalView = ({
   children,
   closeModal,
-  modalHeight = 100,
+  modalMarginTop = 100,
   visible,
   animationType = "slide",
   ...rest
@@ -35,7 +35,7 @@ export const ModalView = ({
         }}
       >
         <Box bgColor={THEME.colors.overlay} flex={1}>
-          <Box flex={1} mt={modalHeight}>
+          <Box flex={1} mt={modalMarginTop}>
             <Box bgColor={THEME.colors.white} flex={1} borderTopRadius={"lg"}>
               <Box
                 w={39}

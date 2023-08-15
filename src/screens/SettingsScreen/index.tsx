@@ -107,7 +107,7 @@ export const SettingsScreen = ({
       <ModalView
         visible={openModal}
         closeModal={() => setOpenModal(false)}
-        modalHeight={600}
+        modalMarginTop={600}
       >
         <VStack px={23} mt={6}>
           <Title size="sm" textAlign={"left"}>

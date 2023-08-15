@@ -24,7 +24,7 @@ export const ModalPicker = ({
     <ModalView
       closeModal={() => setOpenModal(false)}
       visible={openModal}
-      modalHeight={650}
+      modalMarginTop={650}
     >
       <HStack
         justifyContent={"center"}
