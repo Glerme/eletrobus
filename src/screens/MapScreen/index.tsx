@@ -9,6 +9,7 @@ const markers: IMarker[] = [
     id: "1",
     title: "Casa",
     description: "Minha casa",
+    image: "https://images.pexels.com/lib/api/pexels.png",
     coordinate: {
       latitude: -22.37074,
       longitude: -48.771654,

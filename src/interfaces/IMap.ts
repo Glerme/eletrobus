@@ -5,6 +5,7 @@ export interface IMap {
 export interface IMarker {
   id: string;
   title: string;
+  image?: string;
   description: string;
   coordinate: {
     latitude: number;

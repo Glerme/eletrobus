@@ -1,7 +1,8 @@
 import { ReactNode } from "react";
 import { Modal, ModalProps, TouchableWithoutFeedback } from "react-native";
 
-import { Box } from "native-base";
+import { Box, ScrollView } from "native-base";
+
 import { THEME } from "~/styles/theme";
 
 interface ModalViewProps extends ModalProps {
@@ -36,7 +37,7 @@ export const ModalView = ({
       >
         <Box bgColor={THEME.colors.overlay} flex={1}>
           <Box flex={1} mt={modalMarginTop}>
-            <Box bgColor={THEME.colors.white} flex={1} borderTopRadius={"lg"}>
+            <ScrollView bgColor={THEME.colors.white} borderTopRadius={"lg"}>
               <Box
                 w={39}
                 h={"2px"}
@@ -47,7 +48,7 @@ export const ModalView = ({
               />
 
               {children}
-            </Box>
+            </ScrollView>
           </Box>
         </Box>
       </TouchableWithoutFeedback>
