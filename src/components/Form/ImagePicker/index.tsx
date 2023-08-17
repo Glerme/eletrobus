@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import * as ExpoImagePicker from "expo-image-picker";
 import { Box, Skeleton, VStack } from "native-base";
+import { Modalize } from "react-native-modalize";
 
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,8 +12,8 @@ import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
 
 export const ImagePicker = ({}) => {
-  const [openModal, setOpenModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const modalRef = useRef<Modalize>(null);
 
   const { data, isLoading, error } = useQuery(["getPhoto"], () =>
     api.get("/users/thiag-o").then(({ data }) => data.avatar_url)
@@ -67,6 +68,14 @@ export const ImagePicker = ({}) => {
     }
   };
 
+  const handleOpenModal = () => {
+    modalRef?.current?.open();
+  };
+
+  const handleCloseModal = () => {
+    modalRef?.current?.close();
+  };
+
   if (isLoading) {
     return (
       <Box w={"100%"} display={"flex"} alignItems={"center"}>
@@ -88,14 +97,14 @@ export const ImagePicker = ({}) => {
       <Box w={"100%"} display={"flex"} alignItems={"center"}>
         <ButtonOpenModal
           avatarUrl={"~/assets/user-profile.svg"}
-          setOpenModal={() => setOpenModal(true)}
+          handleOpenModal={handleOpenModal}
         />
 
         <ModalPicker
           openCamera={openCamera}
           openGallery={openGallery}
-          openModal={openModal}
-          setOpenModal={setOpenModal}
+          forwardedRef={modalRef}
+          closeModal={handleCloseModal}
         />
       </Box>
     );
@@ -103,16 +112,13 @@ export const ImagePicker = ({}) => {
 
   return (
     <>
-      <ButtonOpenModal
-        avatarUrl={data}
-        setOpenModal={() => setOpenModal(true)}
-      />
+      <ButtonOpenModal avatarUrl={data} handleOpenModal={handleOpenModal} />
 
       <ModalPicker
         openCamera={openCamera}
         openGallery={openGallery}
-        openModal={openModal}
-        setOpenModal={setOpenModal}
+        forwardedRef={modalRef}
+        closeModal={handleCloseModal}
       />
     </>
   );

@@ -1,38 +1,34 @@
 import { Dimensions, TouchableOpacity } from "react-native";
 
+import { Modalize } from "react-native-modalize";
 import { Box, HStack, Icon, Text } from "native-base";
 import { Camera, ImageSquare } from "phosphor-react-native";
 
-import { ModalView } from "~/components/Layouts/ModalView";
-
 import { THEME } from "~/styles/theme";
+import { Modal } from "~/components/Modal";
 
 interface ModalPickerProps {
-  setOpenModal: (value: boolean) => void;
-  openModal: boolean;
   openCamera: () => Promise<void>;
   openGallery: () => Promise<void>;
+  forwardedRef: React.RefObject<Modalize>;
+  closeModal: () => void;
 }
 
 export const ModalPicker = ({
   openCamera,
   openGallery,
-  openModal,
-  setOpenModal,
+  closeModal,
+  forwardedRef,
 }: ModalPickerProps) => {
   return (
-    <ModalView
-      closeModal={() => setOpenModal(false)}
-      visible={openModal}
-      modalMarginTop={650}
+    <Modal
+      forwardedRef={forwardedRef}
+      withReactModal
+      onClose={closeModal}
+      adjustToContentHeight={false}
+      modalHeight={180}
     >
-      <HStack
-        justifyContent={"center"}
-        alignItems={"center"}
-        w={"100%"}
-        h={"100%"}
-        space={"10"}
-      >
+      <HStack justifyContent={"space-around"} alignItems={"center"} p={4}>
         <TouchableOpacity onPress={openCamera}>
           <Box
             display={"flex"}
@@ -92,6 +88,6 @@ export const ModalPicker = ({
           </Box>
         </TouchableOpacity>
       </HStack>
-    </ModalView>
+    </Modal>
   );
 };

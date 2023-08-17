@@ -7,17 +7,17 @@ import { PencilSimple } from "phosphor-react-native";
 import { THEME } from "~/styles/theme";
 
 interface ButtonOpenModalProps {
-  setOpenModal: (value: boolean) => void;
+  handleOpenModal: () => void;
   avatarUrl: string;
 }
 
 export const ButtonOpenModal = ({
   avatarUrl,
-  setOpenModal,
+  handleOpenModal,
 }: ButtonOpenModalProps) => {
   return (
     <Box w={"100%"} display={"flex"} alignItems={"center"}>
-      <TouchableOpacity onPress={() => setOpenModal(true)}>
+      <TouchableOpacity onPress={handleOpenModal}>
         <VStack space="5">
           <Avatar
             bg="lightBlue.400"

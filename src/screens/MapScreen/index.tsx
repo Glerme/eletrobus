@@ -1,8 +1,11 @@
-import { Box } from "native-base";
-import { Map } from "~/components/Map";
+import { Box, Text } from "native-base";
+
 import { IMarker } from "~/interfaces/IMap";
 
 import { NavigationProps } from "~/routes";
+
+import { Map } from "~/components/Map";
+import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 
 const markers: IMarker[] = [
   {
@@ -15,6 +18,9 @@ const markers: IMarker[] = [
       longitude: -48.771654,
     },
     type: "point",
+    status: EStatusType.EM_MOVIMENTO,
+    tipo: "estudantes",
+    favorite: true,
   },
   {
     id: "2",
@@ -25,6 +31,9 @@ const markers: IMarker[] = [
       longitude: -48.772031,
     },
     type: "bus",
+    status: EStatusType.CANCELADA,
+    tipo: "circulares",
+    favorite: false,
   },
 ];
 

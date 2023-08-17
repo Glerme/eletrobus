@@ -12,6 +12,8 @@ import {
   LocationPermissionResponse,
 } from "expo-location";
 
+import { Modalize } from "react-native-modalize";
+
 import { IMap, IMarker } from "~/interfaces/IMap";
 
 import { CustomMarker } from "./components/CustomMarker";
@@ -23,15 +25,16 @@ import { THEME } from "~/styles/theme";
 
 export const Map = ({ markers }: IMap) => {
   const mapRef = useRef<MapView>(null);
+  const modalRef = useRef<Modalize>(null);
+
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
-  const [openModalDescription, setOpenModalDescription] = useState<{
-    open: boolean;
-    point: IMarker | null;
-  }>({
-    open: false,
-    point: null,
-  });
+  const [dataPoint, setDataPoint] = useState<IMarker | null>(null);
+
+  const handleOpenModal = (data: IMarker) => {
+    setDataPoint(data);
+    modalRef?.current?.open();
+  };
 
   const requestLocationPermissions = async () => {
     const { granted }: LocationPermissionResponse =
@@ -108,9 +111,7 @@ export const Map = ({ markers }: IMap) => {
                 <CustomMarker
                   key={marker.id}
                   marker={marker}
-                  setOpenModalDescription={() =>
-                    setOpenModalDescription({ open: true, point: marker })
-                  }
+                  handleOpenModal={handleOpenModal}
                 />
               ))}
             </MapView>
@@ -125,13 +126,7 @@ export const Map = ({ markers }: IMap) => {
         )}
       </Box>
 
-      <ModalDescription
-        data={openModalDescription.point}
-        openModal={openModalDescription.open}
-        setOpenModal={() =>
-          setOpenModalDescription({ open: false, point: null })
-        }
-      />
+      <ModalDescription data={dataPoint} forwardedRef={modalRef} />
     </>
   );
 };

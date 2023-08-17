@@ -5,18 +5,12 @@ import { IMarker } from "~/interfaces/IMap";
 
 type CustomMarkerProps = {
   marker: IMarker;
-  setOpenModalDescription: ({
-    open,
-    marker,
-  }: {
-    open: boolean;
-    marker: IMarker | null;
-  }) => void;
+  handleOpenModal: (data: IMarker) => void;
 };
 
 export const CustomMarker = ({
   marker,
-  setOpenModalDescription,
+  handleOpenModal,
 }: CustomMarkerProps) => {
   const markerDescription = {
     point: "Ponto de ônibus",
@@ -32,12 +26,7 @@ export const CustomMarker = ({
     <Marker
       coordinate={marker.coordinate}
       description={markerDescription[marker.type]}
-      onPress={() =>
-        setOpenModalDescription({
-          open: true,
-          marker,
-        })
-      }
+      onPress={() => handleOpenModal(marker)}
     >
       <Image
         source={imgMarkerType[marker.type]}

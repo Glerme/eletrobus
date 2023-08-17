@@ -1,25 +1,17 @@
-import {
-  Box,
-  HStack,
-  Pressable,
-  Spacer,
-  Text,
-  VStack,
-  View,
-} from "native-base";
+import { Box, HStack, Pressable, Spacer, Text, VStack } from "native-base";
 
 import { useState } from "react";
 
-import { ArrowRight, Info, Star, Timer } from "phosphor-react-native";
+import { Star } from "phosphor-react-native";
 
 import { InterfacePressableProps } from "native-base/lib/typescript/components/primitives/Pressable/types";
 
-import { formatDate, formatHours } from "~/utils/format";
-import { StatusInfo } from "../BusStatus/StatusInfo";
-import { IBusRoute } from "../../interfaces/IBusRoute";
-import { RouteStudents } from "./RouteStudents";
-import { StatusTime } from "../BusStatus/StatusTime";
 import { StatusRun } from "../BusStatus/StatusRun";
+import { StatusInfo } from "../BusStatus/StatusInfo";
+import { StatusTime } from "../BusStatus/StatusTime";
+import { IBusRoute } from "../../interfaces/IBusRoute";
+
+import { formatHours } from "~/utils/format";
 
 interface RouteCardProps extends InterfacePressableProps {
   onPressCard: () => void;

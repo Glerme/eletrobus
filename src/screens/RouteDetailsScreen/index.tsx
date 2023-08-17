@@ -19,7 +19,7 @@ import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 import { StatusInfo } from "~/components/BusStatus/StatusInfo";
-import { RouteStudents } from "~/components/RouteCard/RouteStudents";
+import { TypeRoute } from "~/components/TypeRoute";
 
 const mockedData = [
   {
@@ -113,7 +113,7 @@ export const RouteDetailsScreen = ({
               <Spacer />
               <VStack space={1} alignItems="flex-end">
                 <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
-                <RouteStudents mt={1} tipo={"estudantes"} />
+                <TypeRoute mt={1} tipo={"estudantes"} />
               </VStack>
             </HStack>
 

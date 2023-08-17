@@ -1,18 +1,5 @@
-import {
-  Box,
-  HStack,
-  Pressable,
-  Spacer,
-  Text,
-  VStack,
-  View,
-} from "native-base";
+import { HStack, Text, View } from "native-base";
 
-import { Star, Student, UsersThree } from "phosphor-react-native";
-import { useState } from "react";
-import { THEME } from "~/styles/theme";
-
-import { formatDate } from "~/utils/format";
 import { EStatusType } from "./EStatusType";
 
 interface StatusProps {
@@ -37,10 +24,10 @@ export const StatusInfo = ({ statusCorrida }: StatusProps) => {
       color = "#79e1cc";
       break;
     case EStatusType.CANCELADA:
-      color = "#e1a979";
+      color = "#ff0000";
       break;
     default:
-      color = "#e17979";
+      color = "#000000";
       break;
   }
 
@@ -53,7 +40,7 @@ export const StatusInfo = ({ statusCorrida }: StatusProps) => {
         display={statusCorrida ? "flex" : "none"}
         backgroundColor={color}
       />
-      <Text fontSize={11} fontWeight="medium" color="coolGray.500">
+      <Text fontSize={14} fontWeight="medium" color="coolGray.500">
         {statusCorrida ? statusCorrida : "------------"}
       </Text>
     </HStack>
