@@ -25,7 +25,6 @@ export const CustomMarker = ({
   return (
     <Marker
       coordinate={marker.coordinate}
-      description={markerDescription[marker.type]}
       onPress={() => handleOpenModal(marker)}
     >
       <Image

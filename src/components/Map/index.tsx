@@ -56,24 +56,26 @@ export const Map = ({ markers }: IMap) => {
   const getCurrentPosition = () => {
     mapRef.current?.animateCamera({
       center: location?.coords,
+      zoom: 17,
+      altitude: 1000,
     });
   };
 
-  useEffect(() => {
-    watchPositionAsync(
-      {
-        accuracy: LocationAccuracy.Highest,
-        timeInterval: 1000,
-        distanceInterval: 1,
-      },
-      (response) => {
-        setLocation(response);
-        mapRef.current?.animateCamera({
-          center: response.coords,
-        });
-      }
-    );
-  }, []);
+  // useEffect(() => {
+  //   watchPositionAsync(
+  //     {
+  //       accuracy: LocationAccuracy.Highest,
+  //       timeInterval: 5000,
+  //       distanceInterval: 1,
+  //     },
+  //     (response) => {
+  //       setLocation(response);
+  //       mapRef.current?.animateCamera({
+  //         center: response.coords,
+  //       });
+  //     }
+  //   );
+  // }, []);
 
   useEffect(() => {
     requestLocationPermissions();
@@ -94,8 +96,8 @@ export const Map = ({ markers }: IMap) => {
               ref={mapRef}
               style={{
                 ...StyleSheet.absoluteFillObject,
-                width: "100%",
-                height: "100%",
+                width: "110%",
+                height: "110%",
               }}
               region={{
                 longitudeDelta: 0.005,

@@ -29,8 +29,12 @@ export const ModalDescription = ({
   };
 
   return (
-    <Modal forwardedRef={forwardedRef}>
-      <VStack px={23} mt={6} mb={4} space={2}>
+    <Modal
+      forwardedRef={forwardedRef}
+      modalHeight={500}
+      adjustToContentHeight={false}
+    >
+      <VStack px={23} mt={6} mb={10} space={2}>
         <HStack alignItems={"center"}>
           <Title size="md" textAlign={"left"}>
             {data?.title}
@@ -64,13 +68,13 @@ export const ModalDescription = ({
           />
         </Box>
 
-        <HStack alignItems="center" space="1">
+        <HStack alignItems="center" space={1}>
           <TypeRoute tipo={data?.tipo} />
           <Spacer />
           <StatusInfo statusCorrida={data?.status} />
         </HStack>
 
-        <Box width={"full"} mt={1}>
+        <VStack mt={1} space={1}>
           <Box>
             <Text bold fontSize={"md"}>
               Descrição:
@@ -82,7 +86,19 @@ export const ModalDescription = ({
               sapiente accusamus.
             </Text>
           </Box>
-        </Box>
+
+          <Box>
+            <Text bold fontSize={"md"}>
+              Descrição:
+            </Text>
+
+            <Text fontSize={"md"}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
+              excepturi odit error debitis placeat, numquam quae commodi eum
+              sapiente accusamus.
+            </Text>
+          </Box>
+        </VStack>
       </VStack>
     </Modal>
   );

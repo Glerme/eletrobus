@@ -1,4 +1,4 @@
-import { MaterialIcons } from "@expo/vector-icons";
+import { NavigationArrow } from "phosphor-react-native";
 
 import { Container } from "./styles";
 
@@ -11,7 +11,7 @@ export const MyLocationButton = ({
 }: MyLocationButtonProps) => {
   return (
     <Container onPress={getCurrentPosition}>
-      <MaterialIcons name="my-location" size={24} color={"#fff"} />
+      <NavigationArrow size={24} color={"#fff"} />
     </Container>
   );
 };
