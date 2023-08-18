@@ -2,7 +2,6 @@ import {
   TouchableNativeFeedback,
   TouchableNativeFeedbackProps,
 } from "react-native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { Box, HStack, Text, View } from "native-base";
 
@@ -10,23 +9,19 @@ import { Star } from "phosphor-react-native";
 
 import { StatusInfo } from "../BusStatus/StatusInfo";
 
-import { IBusRoute } from "../../interfaces/IBusRoute";
+import { RouteInterface } from "~/interfaces/Route.interface";
 
 interface IProps extends TouchableNativeFeedbackProps {
-  navigation: NativeStackNavigationProp<any>;
-  item: IBusRoute;
+  item: RouteInterface;
+  onPress: () => void;
 }
 
-export const ListItem = ({ item, navigation, ...rest }: IProps) => {
+export const ListItem = ({ item, onPress, ...rest }: IProps) => {
   return (
     <TouchableNativeFeedback
       background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
+      onPress={onPress}
       {...rest}
-      onPress={() =>
-        navigation.navigate("RouteDetails", {
-          id: `${item?.id}`,
-        })
-      }
     >
       <Box
         borderBottomWidth="1"
@@ -53,9 +48,9 @@ export const ListItem = ({ item, navigation, ...rest }: IProps) => {
             </HStack>
           </View>
 
-          {item?.statusCorrida && (
+          {item?.status && (
             <HStack alignItems="center" space="1">
-              <StatusInfo statusCorrida={item.statusCorrida} />
+              <StatusInfo statusCorrida={item.status} />
             </HStack>
           )}
         </HStack>

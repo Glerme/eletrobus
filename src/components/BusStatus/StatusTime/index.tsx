@@ -1,20 +1,14 @@
-import {
-  Box,
-  HStack,
-  Pressable,
-  Spacer,
-  Text,
-  VStack,
-  View,
-} from "native-base";
-import { ArrowRight, Timer } from "phosphor-react-native";
 import { useEffect, useState } from "react";
-import { IBusRoute } from "~/interfaces/IBusRoute";
-import { diferenceTimeSeconds } from "~/utils/date";
-import { formatSecounds } from "~/utils/format";
+
+import { HStack, Text } from "native-base";
+import { ArrowRight, Timer } from "phosphor-react-native";
+
+import { RouteInterface } from "~/interfaces/Route.interface";
+
+import { diferenceTimeSeconds, formatSecounds } from "~/utils/format";
 
 interface StatusTime {
-  busRoute: IBusRoute;
+  busRoute: RouteInterface;
 }
 
 export const StatusTime = ({ busRoute }: StatusTime) => {
@@ -22,14 +16,14 @@ export const StatusTime = ({ busRoute }: StatusTime) => {
   let interval: any;
 
   useEffect(() => {
-    if (busRoute.trafegando) {
-      setTime(diferenceTimeSeconds(busRoute.saida));
-      clearInterval(interval);
-      incrementTime();
-    } else {
-      setTime(0);
-    }
-  }, [busRoute.saida, busRoute.trafegando]);
+    // if (busRoute.trafegando) {
+    //   setTime(diferenceTimeSeconds(busRoute.saida));
+    //   clearInterval(interval);
+    //   incrementTime();
+    // } else {
+    //   setTime(0);
+    // }
+  }, [busRoute.saida]);
 
   const incrementTime = () => {
     interval = setInterval(() => {
@@ -39,14 +33,14 @@ export const StatusTime = ({ busRoute }: StatusTime) => {
 
   // const [favorite, setFavorite] = useState(route?.favorite);
 
-  const getStatusRun = (r: IBusRoute) => {
-    if (r.trafegando) {
-      return "Em andamento";
-    } else if (!r.trafegando && diferenceTimeSeconds(new Date()) < 3600) {
-      return "Aguardando";
-    } else {
-      return "Finalizado";
-    }
+  const getStatusRun = (r: RouteInterface) => {
+    // if (r.trafegando) {
+    //   return "Em andamento";
+    // } else if (!r.trafegando && diferenceTimeSeconds(new Date()) < 3600) {
+    //   return "Aguardando";
+    // } else {
+    //   return "Finalizado";
+    // }
   };
 
   return (

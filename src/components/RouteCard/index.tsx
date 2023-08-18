@@ -4,18 +4,19 @@ import { useState } from "react";
 
 import { Star } from "phosphor-react-native";
 
+import { RouteInterface } from "~/interfaces/Route.interface";
+
 import { InterfacePressableProps } from "native-base/lib/typescript/components/primitives/Pressable/types";
 
 import { StatusRun } from "../BusStatus/StatusRun";
 import { StatusInfo } from "../BusStatus/StatusInfo";
 import { StatusTime } from "../BusStatus/StatusTime";
-import { IBusRoute } from "../../interfaces/IBusRoute";
 
 import { formatHours } from "~/utils/format";
 
 interface RouteCardProps extends InterfacePressableProps {
   onPressCard: () => void;
-  route: IBusRoute;
+  route: RouteInterface;
 }
 
 export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
@@ -49,7 +50,6 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
               </HStack>
 
               <Spacer />
-              {/* componentizar */}
               <Pressable
                 zIndex={1}
                 onPress={() => {
@@ -85,11 +85,10 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
                 Saída: {formatHours(route?.saida)}
               </Text>
               <StatusTime busRoute={route}></StatusTime>
-              {/* <Text fontSize="md" color="coolGray.700"></Text> */}
               <HStack alignItems="center" mt="2" space="1">
                 <StatusRun busRoute={route} />
                 <Spacer />
-                <StatusInfo statusCorrida={route?.statusCorrida} />
+                <StatusInfo statusCorrida={route?.status} />
               </HStack>
             </VStack>
           </Box>

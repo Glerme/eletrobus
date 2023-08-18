@@ -1,12 +1,8 @@
 import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 
-export interface IMap {
-  markers: IMarker[];
-}
-
-export interface IMarker {
+export interface RouteInterface {
   id: string;
-  title: string;
+  name: string;
   image?: string;
   description: string;
   status: EStatusType;
@@ -14,7 +10,9 @@ export interface IMarker {
     latitude: number;
     longitude: number;
   };
-  type: "point" | "bus";
+  markerType: "point" | "bus";
   tipo: "estudantes" | "circulares";
   favorite: boolean;
+  saida?: Date;
+  chegada?: Date;
 }

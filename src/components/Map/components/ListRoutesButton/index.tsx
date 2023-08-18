@@ -1,5 +1,3 @@
-import { TouchableNativeFeedback } from "react-native";
-
 import {
   Box,
   Divider,
@@ -7,32 +5,34 @@ import {
   HStack,
   Icon,
   IconButton,
+  ScrollView,
   Text,
   VStack,
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import { MagnifyingGlass } from "phosphor-react-native";
+
 import { useModal } from "~/hooks/useModal";
 
-import { MagnifyingGlass } from "phosphor-react-native";
+import { routesMock } from "~/mock/RotasMock";
+
+import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { Modal } from "~/components/Modal";
 import { Input } from "~/components/Form/Input";
+import { ListItem } from "~/components/ListItem";
 import { Title } from "~/components/Layouts/Title";
 
 import { Container } from "./styles";
 import { THEME } from "~/styles/theme";
 
-interface ListRoutesButtonProps {}
+interface ListRoutesButtonProps {
+  onPressRoute: (route: RouteInterface) => void;
+}
 
-export const ListRoutesButton = ({}: ListRoutesButtonProps) => {
+export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
   const { handleOpenModal, modalRef } = useModal();
-
-  const arrayDeObjetos = [];
-
-  for (let i = 1; i <= 50; i++) {
-    arrayDeObjetos.push({ value: i });
-  }
 
   return (
     <>
@@ -40,12 +40,17 @@ export const ListRoutesButton = ({}: ListRoutesButtonProps) => {
         <MaterialIcons name="menu" size={24} color={"#fff"} />
       </Container>
 
-      <Modal forwardedRef={modalRef}>
+      <Modal
+        forwardedRef={modalRef}
+        HeaderComponent={
+          <VStack px={23} mt={6}>
+            <Title size="md" textAlign={"left"}>
+              Rotas
+            </Title>
+          </VStack>
+        }
+      >
         <VStack px={23} mt={6} mb={6}>
-          <Title size="md" textAlign={"left"}>
-            Rotas
-          </Title>
-
           <HStack
             mt={2}
             display={"flex"}
@@ -72,39 +77,41 @@ export const ListRoutesButton = ({}: ListRoutesButtonProps) => {
             </IconButton>
           </HStack>
 
-          <FlatList
-            data={arrayDeObjetos}
-            keyExtractor={(item) => `${item.value}`}
-            mt={4}
-            maxH={"500px"}
-            ItemSeparatorComponent={() => <Divider />}
-            ListEmptyComponent={() => (
-              <Box
-                flex={1}
-                display={"flex"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <Text fontSize={"md"} fontWeight={"semibold"}>
-                  Nenhuma rota encontrada
-                </Text>
-              </Box>
-            )}
-            contentContainerStyle={{
-              paddingBottom: 16,
-            }}
-            borderWidth={1}
-            borderRadius={4}
-            borderColor={"gray.400"}
-            p={2}
-            renderItem={({ item, index }) => (
-              <TouchableNativeFeedback key={index}>
-                <Box padding={"4"}>
-                  <Text>{item.value}</Text>
+          <ScrollView flex={1}>
+            <FlatList
+              keyExtractor={(item) => `${item.id}`}
+              data={routesMock}
+              mt={4}
+              maxH={"500"}
+              ItemSeparatorComponent={() => <Divider />}
+              ListEmptyComponent={() => (
+                <Box
+                  flex={1}
+                  display={"flex"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                >
+                  <Text fontSize={"md"} fontWeight={"semibold"}>
+                    Nenhuma rota encontrada
+                  </Text>
                 </Box>
-              </TouchableNativeFeedback>
-            )}
-          />
+              )}
+              contentContainerStyle={{
+                paddingBottom: 16,
+              }}
+              borderWidth={1}
+              borderRadius={4}
+              borderColor={"gray.400"}
+              p={2}
+              renderItem={({ item }: { item: RouteInterface }) => (
+                <ListItem
+                  item={item}
+                  onPress={() => onPressRoute(item)}
+                  key={item.id}
+                />
+              )}
+            />
+          </ScrollView>
         </VStack>
       </Modal>
     </>

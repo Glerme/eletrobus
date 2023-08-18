@@ -12,7 +12,8 @@ import {
   LocationPermissionResponse,
 } from "expo-location";
 
-import { IMap, IMarker } from "~/interfaces/IMap";
+import { MapInterface } from "~/interfaces/Map.interface";
+import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { useModal } from "~/hooks/useModal";
 
@@ -23,16 +24,16 @@ import { ModalDescription } from "./components/ModalDescription";
 
 import { THEME } from "~/styles/theme";
 
-export const Map = ({ markers }: IMap) => {
+export const Map = ({ markers }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
 
   const { modalRef, handleOpenModal } = useModal();
 
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
-  const [dataPoint, setDataPoint] = useState<IMarker | null>(null);
+  const [dataPoint, setDataPoint] = useState<RouteInterface | null>(null);
 
-  const openModal = (data: IMarker) => {
+  const openModal = (data: RouteInterface) => {
     setDataPoint(data);
     handleOpenModal();
   };
@@ -59,6 +60,11 @@ export const Map = ({ markers }: IMap) => {
       zoom: 17,
       altitude: 1000,
     });
+  };
+
+  const onPressRoute = (route: RouteInterface) => {
+    console.log(route);
+    setDataPoint(route);
   };
 
   // useEffect(() => {
@@ -90,7 +96,7 @@ export const Map = ({ markers }: IMap) => {
           </Box>
         ) : location ? (
           <>
-            <ListRoutesButton />
+            <ListRoutesButton onPressRoute={onPressRoute} />
             <MyLocationButton getCurrentPosition={getCurrentPosition} />
             <MapView
               ref={mapRef}

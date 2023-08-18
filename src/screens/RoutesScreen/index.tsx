@@ -7,15 +7,16 @@ import { MagnifyingGlass, Student, UsersThree } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
+import { RouteInterface } from "~/interfaces/Route.interface";
+
+import { routesMock } from "~/mock/RotasMock";
+import CidadesMock from "~/mock/CidadesMock";
+
 import { Input } from "~/components/Form/Input";
 import { ListItem } from "~/components/ListItem";
 import { BoxButton } from "~/components/BoxButton";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-
-import CidadesMock from "~/mock/CidadesMock";
-import RotasMock from "~/mock/RotasMock";
-import { IBusRoute } from "~/interfaces/IBusRoute";
 
 import { THEME } from "~/styles/theme";
 import { CirculedIcon } from "./styles";
@@ -170,9 +171,17 @@ export const RoutesScreen = ({
 
         <FlatList
           keyExtractor={(item) => `${item.id}`}
-          data={RotasMock}
-          renderItem={({ item }: { item: IBusRoute }) => (
-            <ListItem item={item} navigation={navigation} key={item.id} />
+          data={routesMock}
+          renderItem={({ item }: { item: RouteInterface }) => (
+            <ListItem
+              item={item}
+              onPress={() => {
+                navigation.navigate("RouteDetails", {
+                  id: `${item?.id}`,
+                });
+              }}
+              key={item.id}
+            />
           )}
         />
       </ScreenContent>

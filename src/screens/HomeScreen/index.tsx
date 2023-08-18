@@ -5,9 +5,9 @@ import {
   MapPin,
 } from "phosphor-react-native";
 
-import RotasMock from "~/mock/RotasMock";
-
 import { NavigationProps } from "~/routes";
+
+import { routesMock } from "~/mock/RotasMock";
 
 import { Background } from "~/components/Layouts/Background";
 import { ListRouteCards } from "~/components/ListRouteCards";
@@ -29,8 +29,8 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                 </Text>
               </HStack>
             </View>
-            <ListRouteCards description="Ônibus em tráfego" data={RotasMock} />
-            <ListRouteCards description="Favoritos" data={RotasMock} />
+            <ListRouteCards description="Ônibus em tráfego" data={routesMock} />
+            <ListRouteCards description="Favoritos" data={routesMock} />
           </View>
           <View>
             <Box alignItems="center" mb="3">
