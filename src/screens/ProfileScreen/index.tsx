@@ -18,31 +18,29 @@ export const ProfileScreen = ({
   route,
 }: NavigationProps<"Profile">) => {
   return (
-    <>
-      <Background>
-        <ScreenContent>
-          <Title>Profile Screen</Title>
+    <Background>
+      <ScreenContent>
+        <Title>Profile Screen</Title>
 
-          <Box mt={5} mb={5}>
-            <ImagePicker />
-          </Box>
+        <Box mt={5} mb={5}>
+          <ImagePicker />
+        </Box>
 
-          <KeyboardAwareScrollView
-            resetScrollToCoords={{ x: 0, y: 0 }}
-            scrollEnabled={true}
-            enableOnAndroid
-            enableAutomaticScroll={Platform.OS === "ios"}
-          >
-            <View>
-              <Input placeholder="Nome" mb={2} />
-              <Input placeholder="Email" keyboardType="email-address" mb={2} />
+        <KeyboardAwareScrollView
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          scrollEnabled={true}
+          enableOnAndroid
+          enableAutomaticScroll={Platform.OS === "ios"}
+        >
+          <View>
+            <Input placeholder="Nome" mb={2} />
+            <Input placeholder="Email" keyboardType="email-address" mb={2} />
 
-              <Input placeholder="Senha" secureTextEntry={true} mb={2} />
+            <Input placeholder="Senha" secureTextEntry={true} mb={2} />
 
-              <Input placeholder="Nova Senha" secureTextEntry={true} />
-            </View>
-          </KeyboardAwareScrollView>
-        </ScreenContent>
+            <Input placeholder="Nova Senha" secureTextEntry={true} />
+          </View>
+        </KeyboardAwareScrollView>
 
         <Button
           title="Salvar"
@@ -52,7 +50,7 @@ export const ProfileScreen = ({
           mb={2}
           mx={2}
         />
-      </Background>
-    </>
+      </ScreenContent>
+    </Background>
   );
 };

@@ -92,6 +92,7 @@ export const SettingsScreen = ({
             onPress={handleOpenModal}
             variant="link"
             fontColor={THEME.colors.danger["500"]}
+            mt={"auto"}
             rightIcon={
               <Icon
                 as={
