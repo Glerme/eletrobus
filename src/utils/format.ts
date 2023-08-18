@@ -1,18 +1,16 @@
 import { format } from "date-fns";
 
 export const formatDate = (date: Date) => {
-  try {
-    return date ? format(date, "dd/MM/yyyy") : "";
-  } catch (error) {
-    return "-";
-  }
+  if (!date) return "-";
+  return format(date, "dd/MM/yyyy");
 };
 
 export const formatDatetime = (date: Date) => {
+  if (!date) return "-";
   return format(date, "dd/MM/yyyy HH:mm:ss");
 };
 export const formatHours = (date?: Date) => {
-  if (!date) return "";
+  if (!date) return "-";
   return format(date, "dd/MM - HH:mm").replace(":", "h");
 };
 
@@ -29,6 +27,6 @@ export const formatSecounds = (sec: number) => {
 };
 
 export const diferenceTimeSeconds = (date: Date) => {
-  if (!date) return "";
+  if (!date) return "-";
   return Math.floor((new Date().getTime() - date.getTime()) / 1000);
 };
