@@ -9,6 +9,7 @@ import { DrawerNavigator } from "./drawer.routes";
 import { ProfileScreen } from "~/screens/ProfileScreen";
 import { FavoritesScreen } from "~/screens/FavoritesScreen";
 import { RouteDetailsScreen } from "~/screens/RouteDetailsScreen";
+import { Host } from "react-native-portalize";
 
 // Tipagem das telas e parâmetros
 export type RootStackParamList = {
@@ -49,41 +50,18 @@ const stacks: {
 export const Routes = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-          statusBarStyle: "light",
-        }}
-        initialRouteName="DrawerNavigator"
-      >
-        <Stack.Screen
-          name="DrawerNavigator"
-          component={DrawerNavigator}
-          options={{
-            headerStyle: {
-              backgroundColor: "#0DAC86",
-            },
+      <Host>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
             statusBarStyle: "light",
-            statusBarColor: "#0DAC86",
-            contentStyle: {
-              elevation: 0,
-              shadowOpacity: 0,
-              borderBottomWidth: 0,
-            },
-            headerShadowVisible: false,
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-              fontWeight: "bold",
-            },
           }}
-        />
-        {stacks.map((stack, index) => (
+          initialRouteName="DrawerNavigator"
+        >
           <Stack.Screen
-            name={stack.name}
-            component={stack.component}
-            key={index}
+            name="DrawerNavigator"
+            component={DrawerNavigator}
             options={{
-              headerShown: true,
               headerStyle: {
                 backgroundColor: "#0DAC86",
               },
@@ -101,8 +79,33 @@ export const Routes = () => {
               },
             }}
           />
-        ))}
-      </Stack.Navigator>
+          {stacks.map((stack, index) => (
+            <Stack.Screen
+              name={stack.name}
+              component={stack.component}
+              key={index}
+              options={{
+                headerShown: true,
+                headerStyle: {
+                  backgroundColor: "#0DAC86",
+                },
+                statusBarStyle: "light",
+                statusBarColor: "#0DAC86",
+                contentStyle: {
+                  elevation: 0,
+                  shadowOpacity: 0,
+                  borderBottomWidth: 0,
+                },
+                headerShadowVisible: false,
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                },
+              }}
+            />
+          ))}
+        </Stack.Navigator>
+      </Host>
     </NavigationContainer>
   );
 };

@@ -12,9 +12,9 @@ import {
   LocationPermissionResponse,
 } from "expo-location";
 
-import { Modalize } from "react-native-modalize";
-
 import { IMap, IMarker } from "~/interfaces/IMap";
+
+import { useModal } from "~/hooks/useModal";
 
 import { CustomMarker } from "./components/CustomMarker";
 import { MyLocationButton } from "./components/MyLocationButton";
@@ -25,15 +25,16 @@ import { THEME } from "~/styles/theme";
 
 export const Map = ({ markers }: IMap) => {
   const mapRef = useRef<MapView>(null);
-  const modalRef = useRef<Modalize>(null);
+
+  const { modalRef, handleOpenModal } = useModal();
 
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [dataPoint, setDataPoint] = useState<IMarker | null>(null);
 
-  const handleOpenModal = (data: IMarker) => {
+  const openModal = (data: IMarker) => {
     setDataPoint(data);
-    modalRef?.current?.open();
+    handleOpenModal();
   };
 
   const requestLocationPermissions = async () => {
@@ -111,7 +112,7 @@ export const Map = ({ markers }: IMap) => {
                 <CustomMarker
                   key={marker.id}
                   marker={marker}
-                  handleOpenModal={handleOpenModal}
+                  handleOpenModal={openModal}
                 />
               ))}
             </MapView>

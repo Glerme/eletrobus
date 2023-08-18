@@ -1,5 +1,7 @@
 import { forwardRef } from "react";
 import { Platform } from "react-native";
+
+import { Portal } from "react-native-portalize";
 import { Modalize, ModalizeProps } from "react-native-modalize";
 
 interface ModalProps extends ModalizeProps {
@@ -30,7 +32,7 @@ export const Modal = forwardRef<Modalize, ModalProps>(
     const modalHeightParsed = adjustToContentHeight ? undefined : modalHeight;
 
     return (
-      <>
+      <Portal>
         <Modalize
           ref={forwardedRef}
           adjustToContentHeight={adjustToContentHeight}
@@ -41,7 +43,7 @@ export const Modal = forwardRef<Modalize, ModalProps>(
         >
           {children}
         </Modalize>
-      </>
+      </Portal>
     );
   }
 );

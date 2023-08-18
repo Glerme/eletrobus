@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TouchableHighlight } from "react-native";
 
 import { Icon, VStack, Text, HStack, View } from "native-base";
@@ -12,10 +12,12 @@ import { PencilSimple, SignOut } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
+import { useModal } from "~/hooks/useModal";
+
+import { Modal } from "~/components/Modal";
 import { Switch } from "~/components/Form/Switch";
 import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
-import { ModalView } from "~/components/Layouts/ModalView";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
@@ -25,8 +27,9 @@ export const SettingsScreen = ({
   navigation,
   route,
 }: NavigationProps<"Settings">) => {
-  const [openModal, setOpenModal] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+
+  const { handleCloseModal, handleOpenModal, modalRef } = useModal();
 
   const checkLocationStatus = async () => {
     try {
@@ -86,7 +89,7 @@ export const SettingsScreen = ({
             alignItems={"center"}
             justifyContent={"flex-start"}
             title="Sair"
-            onPress={() => setOpenModal(true)}
+            onPress={handleOpenModal}
             variant="link"
             fontColor={THEME.colors.danger["500"]}
             rightIcon={
@@ -104,10 +107,10 @@ export const SettingsScreen = ({
         </ScreenContent>
       </Background>
 
-      <ModalView
-        visible={openModal}
-        closeModal={() => setOpenModal(false)}
-        modalMarginTop={600}
+      <Modal
+        forwardedRef={modalRef}
+        modalHeight={200}
+        adjustToContentHeight={false}
       >
         <VStack px={23} mt={6}>
           <Title size="sm" textAlign={"left"}>
@@ -125,14 +128,14 @@ export const SettingsScreen = ({
 
             <Button
               title="Não, irei continuar no aplicativo."
-              onPress={() => setOpenModal(false)}
+              onPress={handleCloseModal}
               fontColor={THEME.colors.white}
               bg={THEME.colors.primary["900"]}
               variant={"outline"}
             />
           </VStack>
         </VStack>
-      </ModalView>
+      </Modal>
     </>
   );
 };

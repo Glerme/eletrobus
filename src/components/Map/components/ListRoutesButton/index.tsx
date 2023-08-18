@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { TouchableNativeFeedback } from "react-native";
 
 import {
@@ -13,11 +12,13 @@ import {
 } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import { useModal } from "~/hooks/useModal";
+
 import { MagnifyingGlass } from "phosphor-react-native";
 
+import { Modal } from "~/components/Modal";
 import { Input } from "~/components/Form/Input";
 import { Title } from "~/components/Layouts/Title";
-import { ModalView } from "~/components/Layouts/ModalView";
 
 import { Container } from "./styles";
 import { THEME } from "~/styles/theme";
@@ -25,7 +26,7 @@ import { THEME } from "~/styles/theme";
 interface ListRoutesButtonProps {}
 
 export const ListRoutesButton = ({}: ListRoutesButtonProps) => {
-  const [openModal, setOpenModal] = useState(false);
+  const { handleOpenModal, modalRef } = useModal();
 
   const arrayDeObjetos = [];
 
@@ -35,12 +36,12 @@ export const ListRoutesButton = ({}: ListRoutesButtonProps) => {
 
   return (
     <>
-      <Container onPress={() => setOpenModal(true)}>
+      <Container onPress={handleOpenModal}>
         <MaterialIcons name="menu" size={24} color={"#fff"} />
       </Container>
 
-      <ModalView visible={openModal} closeModal={() => setOpenModal(false)}>
-        <VStack px={23} mt={6}>
+      <Modal forwardedRef={modalRef}>
+        <VStack px={23} mt={6} mb={6}>
           <Title size="md" textAlign={"left"}>
             Rotas
           </Title>
@@ -105,7 +106,7 @@ export const ListRoutesButton = ({}: ListRoutesButtonProps) => {
             )}
           />
         </VStack>
-      </ModalView>
+      </Modal>
     </>
   );
 };

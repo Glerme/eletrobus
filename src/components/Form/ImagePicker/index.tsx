@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 import * as ExpoImagePicker from "expo-image-picker";
-import { Box, Skeleton, VStack } from "native-base";
+import { Box, Skeleton, VStack, View } from "native-base";
 import { Modalize } from "react-native-modalize";
 
 import { useQuery } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { api } from "~/services/axios";
 
 import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
+import { Host } from "react-native-portalize";
 
 export const ImagePicker = ({}) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -92,23 +93,23 @@ export const ImagePicker = ({}) => {
     );
   }
 
-  if (error) {
-    return (
-      <Box w={"100%"} display={"flex"} alignItems={"center"}>
-        <ButtonOpenModal
-          avatarUrl={"~/assets/user-profile.svg"}
-          handleOpenModal={handleOpenModal}
-        />
+  // if (error) {
+  //   return (
+  //     <Box w={"100%"} display={"flex"} alignItems={"center"}>
+  //       <ButtonOpenModal
+  //         avatarUrl={"~/assets/user-profile.svg"}
+  //         handleOpenModal={handleOpenModal}
+  //       />
 
-        <ModalPicker
-          openCamera={openCamera}
-          openGallery={openGallery}
-          forwardedRef={modalRef}
-          closeModal={handleCloseModal}
-        />
-      </Box>
-    );
-  }
+  //       <ModalPicker
+  //         openCamera={openCamera}
+  //         openGallery={openGallery}
+  //         forwardedRef={modalRef}
+  //         closeModal={handleCloseModal}
+  //       />
+  //     </Box>
+  //   );
+  // }
 
   return (
     <>
@@ -118,7 +119,6 @@ export const ImagePicker = ({}) => {
         openCamera={openCamera}
         openGallery={openGallery}
         forwardedRef={modalRef}
-        closeModal={handleCloseModal}
       />
     </>
   );

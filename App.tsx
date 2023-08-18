@@ -5,6 +5,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 import {
@@ -40,19 +42,21 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <NativeBaseProvider theme={THEME}>
-          {fontsLoaded ? (
-            <>
-              <StatusBar
-                style="light"
-                translucent
-                backgroundColor="transparent"
-                animated
-              />
-              <Routes />
-            </>
-          ) : (
-            <Loading />
-          )}
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            {fontsLoaded ? (
+              <>
+                <StatusBar
+                  style="light"
+                  translucent
+                  backgroundColor="transparent"
+                  animated
+                />
+                <Routes />
+              </>
+            ) : (
+              <Loading />
+            )}
+          </GestureHandlerRootView>
         </NativeBaseProvider>
       </SafeAreaProvider>
     </QueryClientProvider>
