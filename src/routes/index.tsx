@@ -4,12 +4,13 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 
+import { Host } from "react-native-portalize";
+
 import { DrawerNavigator } from "./drawer.routes";
 
 import { ProfileScreen } from "~/screens/ProfileScreen";
 import { FavoritesScreen } from "~/screens/FavoritesScreen";
 import { RouteDetailsScreen } from "~/screens/RouteDetailsScreen";
-import { Host } from "react-native-portalize";
 
 // Tipagem das telas e parâmetros
 export type RootStackParamList = {

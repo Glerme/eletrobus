@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, Platform, StyleSheet, Text } from "react-native";
 
 import { Box } from "native-base";
 import MapView from "react-native-maps";
@@ -28,6 +28,7 @@ export const Map = ({ markers }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
 
   const { modalRef, handleOpenModal } = useModal();
+  const [zoomLevel, setZoomLevel] = useState(10);
 
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -102,8 +103,8 @@ export const Map = ({ markers }: MapInterface) => {
               ref={mapRef}
               style={{
                 ...StyleSheet.absoluteFillObject,
-                width: "110%",
-                height: "110%",
+                width: "100%",
+                height: "100%",
               }}
               region={{
                 longitudeDelta: 0.005,
@@ -115,6 +116,8 @@ export const Map = ({ markers }: MapInterface) => {
               showsMyLocationButton={false}
               scrollEnabled
               zoomEnabled
+              zoomControlEnabled={false}
+              loadingEnabled
             >
               {markers.map((marker) => (
                 <CustomMarker

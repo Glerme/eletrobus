@@ -1,11 +1,11 @@
 import { Image } from "native-base";
 import { Marker } from "react-native-maps";
 
-import { IMarker } from "~/interfaces/IMap";
+import { RouteInterface } from "~/interfaces/Route.interface";
 
 type CustomMarkerProps = {
-  marker: IMarker;
-  handleOpenModal: (data: IMarker) => void;
+  marker: RouteInterface;
+  handleOpenModal: (data: RouteInterface) => void;
 };
 
 export const CustomMarker = ({
@@ -22,14 +22,19 @@ export const CustomMarker = ({
     bus: require("~/assets/img/bus.png"),
   };
 
+  console.log(marker.coordinate);
+
   return (
     <Marker
-      coordinate={marker.coordinate}
+      coordinate={{
+        latitude: marker.coordinate.latitude,
+        longitude: marker.coordinate.longitude,
+      }}
       onPress={() => handleOpenModal(marker)}
     >
       <Image
-        source={imgMarkerType[marker.type]}
-        alt={markerDescription[marker.type]}
+        source={imgMarkerType[marker.markerType]}
+        alt={markerDescription[marker.markerType]}
         style={{
           height: 40,
           width: 40,
