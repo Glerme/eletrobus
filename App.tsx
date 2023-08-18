@@ -49,7 +49,6 @@ export default function App() {
                   style="light"
                   translucent
                   backgroundColor="transparent"
-                  animated
                 />
                 <Routes />
               </>
