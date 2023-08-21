@@ -5,7 +5,6 @@ export const routesMock: RouteInterface[] = [
   {
     id: "1",
     name: "Route A",
-    image: "image-url-1",
     description: "Description for Route A",
     status: EStatusType.EM_MOVIMENTO,
     coordinate: { latitude: -22.370875, longitude: -48.771728 },
@@ -77,7 +76,6 @@ export const routesMock: RouteInterface[] = [
     description: "Description for Route G",
     status: EStatusType.DESCONECTADO,
     coordinate: { latitude: -22.378952, longitude: -48.95487 },
-
     markerType: "point",
     tipo: "estudantes",
     favorite: false,
@@ -88,7 +86,6 @@ export const routesMock: RouteInterface[] = [
     description: "Description for Route H",
     status: EStatusType.INDISPONIVEL,
     coordinate: { latitude: -22.365, longitude: -48.3284 },
-
     markerType: "bus",
     tipo: "circulares",
     favorite: true,

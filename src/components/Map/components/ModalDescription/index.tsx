@@ -3,7 +3,7 @@ import { Box, HStack, Image, Spacer, Text, VStack } from "native-base";
 
 import { Modalize } from "react-native-modalize";
 
-import { IMarker } from "~/interfaces/IMap";
+import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { Modal } from "~/components/Modal";
 import { Title } from "~/components/Layouts/Title";
@@ -12,7 +12,7 @@ import { StatusInfo } from "~/components/BusStatus/StatusInfo";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
 
 interface ModalDescriptionProps {
-  data: IMarker | null;
+  data: RouteInterface | null;
   forwardedRef: React.RefObject<Modalize>;
 }
 
@@ -37,7 +37,7 @@ export const ModalDescription = ({
       <VStack px={23} mt={6} mb={10} space={2}>
         <HStack alignItems={"center"}>
           <Title size="md" textAlign={"left"}>
-            {data?.title}
+            {data?.name}
           </Title>
 
           <Spacer />
@@ -61,7 +61,7 @@ export const ModalDescription = ({
                 ? { uri: data?.image }
                 : require("~/assets/img/not-found.png")
             }
-            alt={data?.title}
+            alt={data?.name}
             w={"full"}
             h={"150"}
             resizeMode={"contain"}
@@ -80,23 +80,7 @@ export const ModalDescription = ({
               Descrição:
             </Text>
 
-            <Text fontSize={"md"}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
-              excepturi odit error debitis placeat, numquam quae commodi eum
-              sapiente accusamus.
-            </Text>
-          </Box>
-
-          <Box>
-            <Text bold fontSize={"md"}>
-              Descrição:
-            </Text>
-
-            <Text fontSize={"md"}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat
-              excepturi odit error debitis placeat, numquam quae commodi eum
-              sapiente accusamus.
-            </Text>
+            <Text fontSize={"md"}>{data?.description}</Text>
           </Box>
         </VStack>
       </VStack>

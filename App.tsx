@@ -1,4 +1,6 @@
 import "react-native-gesture-handler";
+import { Platform } from "react-native";
+
 import { NativeBaseProvider } from "native-base";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
@@ -43,18 +45,12 @@ export default function App() {
       <SafeAreaProvider>
         <NativeBaseProvider theme={THEME}>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            {fontsLoaded ? (
-              <>
-                <StatusBar
-                  style="light"
-                  translucent
-                  backgroundColor="transparent"
-                />
-                <Routes />
-              </>
-            ) : (
-              <Loading />
-            )}
+            <StatusBar
+              backgroundColor={Platform.OS === "android" ? "transparent" : ""}
+              style={"light"}
+              translucent={Platform.OS === "android" ? true : false}
+            />
+            {fontsLoaded ? <Routes /> : <Loading />}
           </GestureHandlerRootView>
         </NativeBaseProvider>
       </SafeAreaProvider>

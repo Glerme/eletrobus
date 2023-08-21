@@ -103,8 +103,8 @@ export const Map = ({ markers }: MapInterface) => {
               ref={mapRef}
               style={{
                 ...StyleSheet.absoluteFillObject,
-                width: "100%",
-                height: "100%",
+                width: "110%",
+                height: "110%",
               }}
               region={{
                 longitudeDelta: 0.005,
