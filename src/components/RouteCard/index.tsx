@@ -39,7 +39,7 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
               ],
             }}
           >
-            <HStack alignItems="center" mb="2">
+            <HStack alignItems="center" mb="1">
               <HStack alignItems="center" space={1}>
                 <HStack space={2} alignItems="center">
                   <Text fontSize="sm" fontWeight={"500"} color="gray.900">
@@ -84,7 +84,7 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
                 Saída: {formatHours(route?.saida)}
               </Text>
               <StatusTime busRoute={route}></StatusTime>
-              <HStack alignItems="center" mt="2" space="1">
+              <HStack alignItems="center" mt="1" space="1">
                 <Spacer />
                 <StatusInfo statusCorrida={route?.status} />
               </HStack>
