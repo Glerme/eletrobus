@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Platform, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, StyleSheet, Text } from "react-native";
 
-import { Box } from "native-base";
+import { Box, Button } from "native-base";
 import MapView from "react-native-maps";
 import {
   requestForegroundPermissionsAsync,
@@ -23,13 +23,14 @@ import { ListRoutesButton } from "./components/ListRoutesButton";
 import { ModalDescription } from "./components/ModalDescription";
 
 import { THEME } from "~/styles/theme";
+import { ZoomButtons } from "./components/ZoomButtons";
 
 export const Map = ({ markers }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
 
   const { modalRef, handleOpenModal } = useModal();
-  const [zoomLevel, setZoomLevel] = useState(10);
 
+  const [zoom, setZoom] = useState<number>(0);
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [dataPoint, setDataPoint] = useState<RouteInterface | null>(null);
@@ -64,8 +65,11 @@ export const Map = ({ markers }: MapInterface) => {
   };
 
   const onPressRoute = (route: RouteInterface) => {
-    console.log(route);
-    setDataPoint(route);
+    mapRef?.current?.animateCamera({
+      center: route?.coordinate,
+      zoom: 17,
+      altitude: 1000,
+    });
   };
 
   // useEffect(() => {
@@ -88,6 +92,15 @@ export const Map = ({ markers }: MapInterface) => {
     requestLocationPermissions();
   }, []);
 
+  const onZoomPress = (type: "in" | "out") => {
+    let currentZoom = type === "in" ? zoom + 1 : zoom - 1;
+    setZoom(currentZoom);
+
+    mapRef?.current?.animateCamera({
+      zoom: currentZoom,
+      altitude: 1000,
+    });
+  };
   return (
     <>
       <Box flex={1}>
@@ -97,6 +110,7 @@ export const Map = ({ markers }: MapInterface) => {
           </Box>
         ) : location ? (
           <>
+            <ZoomButtons onZoomPress={onZoomPress} />
             <ListRoutesButton onPressRoute={onPressRoute} />
             <MyLocationButton getCurrentPosition={getCurrentPosition} />
             <MapView

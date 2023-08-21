@@ -9,9 +9,8 @@ import {
   Text,
   VStack,
 } from "native-base";
-import { MaterialIcons } from "@expo/vector-icons";
 
-import { MagnifyingGlass } from "phosphor-react-native";
+import { MagnifyingGlass, List } from "phosphor-react-native";
 
 import { useModal } from "~/hooks/useModal";
 
@@ -32,12 +31,12 @@ interface ListRoutesButtonProps {
 }
 
 export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
-  const { handleOpenModal, modalRef } = useModal();
+  const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
   return (
     <>
       <Container onPress={handleOpenModal}>
-        <MaterialIcons name="menu" size={24} color={"#fff"} />
+        <List size={24} color={"#fff"} />
       </Container>
 
       <Modal
@@ -106,7 +105,10 @@ export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
               renderItem={({ item }: { item: RouteInterface }) => (
                 <ListItem
                   item={item}
-                  onPress={() => onPressRoute(item)}
+                  onPress={() => {
+                    onPressRoute(item);
+                    handleCloseModal();
+                  }}
                   key={item.id}
                 />
               )}

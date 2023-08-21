@@ -18,11 +18,9 @@ export const CustomMarker = ({
   };
 
   const imgMarkerType = {
-    point: require("~/assets/img/point.png"),
+    point: require("~/assets/img/bus-stop.png"),
     bus: require("~/assets/img/bus.png"),
   };
-
-  console.log(marker.coordinate);
 
   return (
     <Marker
@@ -36,8 +34,8 @@ export const CustomMarker = ({
         source={imgMarkerType[marker.markerType]}
         alt={markerDescription[marker.markerType]}
         style={{
-          height: 40,
-          width: 40,
+          height: 30,
+          width: 30,
           resizeMode: "center",
         }}
       />
