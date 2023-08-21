@@ -46,8 +46,8 @@ export const StatusTime = ({ busRoute }: StatusTime) => {
   return (
     <HStack alignItems={"center"} space={1}>
       <Timer size={22} />
-      <ArrowRight size={14} color="#080808" />
-      <Text fontSize="md" color="coolGray.700" lineHeight={"md"}>
+      <ArrowRight size={11} color="#080808" />
+      <Text fontSize="sm" color="coolGray.700" lineHeight={"md"}>
         {formatSecounds(time)}
       </Text>
     </HStack>

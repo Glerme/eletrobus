@@ -1,4 +1,12 @@
-import { Box, Button, HStack, Text, VStack, View } from "native-base";
+import {
+  Box,
+  Button,
+  HStack,
+  ScrollView,
+  Text,
+  VStack,
+  View,
+} from "native-base";
 import {
   GlobeHemisphereWest,
   MagnifyingGlass,
@@ -20,7 +28,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
     <Background>
       <ScreenContent>
         <VStack flex={1} justifyContent="space-between">
-          <View>
+          <View flex={1}>
             <View mb={4}>
               <HStack space={1} alignItems={"center"} justifyContent={"center"}>
                 <MapPin size={28} color="#ea3c10" weight="fill" />
@@ -29,8 +37,19 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                 </Text>
               </HStack>
             </View>
-            <ListRouteCards description="Ônibus em tráfego" data={routesMock} />
-            <ListRouteCards description="Favoritos" data={routesMock} />
+            <View>
+              <ScrollView mb={16}>
+                <ListRouteCards
+                  description="Sairá em Breve"
+                  data={routesMock}
+                />
+                <ListRouteCards
+                  description="Ônibus em tráfego"
+                  data={routesMock}
+                />
+                <ListRouteCards description="Favoritos" data={routesMock} />
+              </ScrollView>
+            </View>
           </View>
           <View>
             <Box alignItems="center" mb="3">
