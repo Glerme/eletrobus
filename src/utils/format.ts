@@ -19,11 +19,12 @@ export const formatSecounds = (sec: number) => {
   const min = Math.floor((sec % 3600) / 60);
   const secondsRest = sec % 60;
 
-  const formatado = `${hrs.toString().padStart(2, "0")}h${min
+  const formated = `${hrs.toString().padStart(2, "0")}h${min
     .toString()
-    .padStart(2, "0")}m${secondsRest.toString().padStart(2, "0")}s`;
+    .padStart(2, "0")}`;
+  // ${secondsRest.toString().padStart(2, "0")}s;
 
-  return formatado;
+  return formated;
 };
 
 export const diferenceTimeSeconds = (date: Date) => {

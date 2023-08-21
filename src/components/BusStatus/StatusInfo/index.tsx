@@ -40,7 +40,7 @@ export const StatusInfo = ({ statusCorrida }: StatusProps) => {
         display={statusCorrida ? "flex" : "none"}
         backgroundColor={color}
       />
-      <Text fontSize={14} fontWeight="medium" color="coolGray.500">
+      <Text fontSize={12} fontWeight="medium" color="coolGray.500">
         {statusCorrida ? statusCorrida : "------------"}
       </Text>
     </HStack>

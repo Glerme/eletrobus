@@ -24,7 +24,7 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
 
   return (
     <>
-      <VStack mt="2" mb="3">
+      <VStack mt="2" mb="2">
         <HStack py="2" justifyContent="space-between" alignItems="center">
           <Text
             fontSize={"md"}

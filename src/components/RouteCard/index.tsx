@@ -8,7 +8,6 @@ import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { InterfacePressableProps } from "native-base/lib/typescript/components/primitives/Pressable/types";
 
-import { StatusRun } from "../BusStatus/StatusRun";
 import { StatusInfo } from "../BusStatus/StatusInfo";
 import { StatusTime } from "../BusStatus/StatusTime";
 
@@ -40,10 +39,10 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
               ],
             }}
           >
-            <HStack alignItems="center" mb="2">
+            <HStack alignItems="center" mb="1">
               <HStack alignItems="center" space={1}>
                 <HStack space={2} alignItems="center">
-                  <Text fontSize="md" fontWeight={"500"} color="gray.900">
+                  <Text fontSize="sm" fontWeight={"500"} color="gray.900">
                     {route?.name}
                   </Text>
                 </HStack>
@@ -81,12 +80,11 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
             </HStack>
 
             <VStack space="1">
-              <Text fontSize="md" color="coolGray.700">
+              <Text fontSize="sm" color="coolGray.700">
                 Saída: {formatHours(route?.saida)}
               </Text>
               <StatusTime busRoute={route}></StatusTime>
-              <HStack alignItems="center" mt="2" space="1">
-                <StatusRun busRoute={route} />
+              <HStack alignItems="center" mt="1" space="1">
                 <Spacer />
                 <StatusInfo statusCorrida={route?.status} />
               </HStack>
