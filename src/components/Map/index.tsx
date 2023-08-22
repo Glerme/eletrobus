@@ -3,19 +3,13 @@ import { ActivityIndicator, StyleSheet, Text } from "react-native";
 
 import { Box } from "native-base";
 import MapView from "react-native-maps";
-import {
-  requestForegroundPermissionsAsync,
-  getCurrentPositionAsync,
-  watchPositionAsync,
-  LocationAccuracy,
-  LocationObject,
-  LocationPermissionResponse,
-} from "expo-location";
 
 import { MapInterface } from "~/interfaces/Map.interface";
 import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { useModal } from "~/hooks/useModal";
+
+import { useLocation } from "~/contexts/LocationContext";
 
 import { ZoomButtons } from "./components/ZoomButtons";
 import { CustomMarker } from "./components/CustomMarker";
@@ -31,29 +25,18 @@ export const Map = ({ markers }: MapInterface) => {
   const { modalRef, handleOpenModal } = useModal();
 
   const [zoom, setZoom] = useState<number>(0);
-  const [location, setLocation] = useState<LocationObject | null>(null);
-  const [locationError, setLocationError] = useState<string | null>(null);
   const [dataPoint, setDataPoint] = useState<RouteInterface | null>(null);
+
+  const {
+    location,
+    locationError,
+    getActualCurrentPosition,
+    requestLocationPermissions,
+  } = useLocation();
 
   const openModal = (data: RouteInterface) => {
     setDataPoint(data);
     handleOpenModal();
-  };
-
-  const requestLocationPermissions = async () => {
-    const { granted }: LocationPermissionResponse =
-      await requestForegroundPermissionsAsync();
-
-    if (granted) {
-      try {
-        const currentPosition = await getCurrentPositionAsync();
-        setLocation(currentPosition);
-      } catch (error) {
-        setLocationError("Falha ao buscar a localização.");
-      }
-    } else {
-      setLocationError("Permita o acesso à localização para continuar.");
-    }
   };
 
   const getCurrentPosition = () => {
@@ -82,25 +65,13 @@ export const Map = ({ markers }: MapInterface) => {
     });
   };
 
-  // useEffect(() => {
-  //   watchPositionAsync(
-  //     {
-  //       accuracy: LocationAccuracy.Highest,
-  //       timeInterval: 5000,
-  //       distanceInterval: 1,
-  //     },
-  //     (response) => {
-  //       setLocation(response);
-  //       mapRef.current?.animateCamera({
-  //         center: response.coords,
-  //       });
-  //     }
-  //   );
-  // }, []);
+  useEffect(() => {
+    getActualCurrentPosition();
+  }, []);
 
   useEffect(() => {
     requestLocationPermissions();
-  }, [location]);
+  }, []);
 
   return (
     <>

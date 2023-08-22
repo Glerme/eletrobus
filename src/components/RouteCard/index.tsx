@@ -2,14 +2,13 @@ import { Box, HStack, Pressable, Spacer, Text, VStack } from "native-base";
 
 import { useState } from "react";
 
-import { Star } from "phosphor-react-native";
-
 import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { InterfacePressableProps } from "native-base/lib/typescript/components/primitives/Pressable/types";
 
 import { StatusInfo } from "../BusStatus/StatusInfo";
 import { StatusTime } from "../BusStatus/StatusTime";
+import { FavoriteButton } from "../Form/FavoriteButton";
 
 import { formatHours } from "~/utils/format";
 
@@ -49,34 +48,12 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
               </HStack>
 
               <Spacer />
-              <Pressable
-                zIndex={1}
-                onPress={() => {
-                  setFavorite(!favorite);
-                }}
-              >
-                {({ isPressed }: any) => {
-                  return (
-                    <Box
-                      p={2}
-                      style={{
-                        transform: [
-                          {
-                            scale: isPressed ? 0.8 : 1,
-                          },
-                        ],
-                      }}
-                    >
-                      <Star
-                        size={18}
-                        weight="fill"
-                        color={favorite ? "#E9C25F" : "#9C9C9C"}
-                      />
-                    </Box>
-                  );
-                }}
-              </Pressable>
-              {/* componentizar */}
+              <FavoriteButton
+                favorite={route?.favorite}
+                handlePress={() => {}}
+                disabled
+                size={18}
+              />
             </HStack>
 
             <VStack space="1">

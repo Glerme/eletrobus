@@ -87,6 +87,12 @@ export const SettingsScreen = ({
                 <Text color={THEME.colors.gray["800"]}>Sou Motorista</Text>
               </HStack>
             </TouchableHighlight>
+
+            <Button
+              onPress={() => {}}
+              title="Sou motorista"
+              fontColor="white"
+            />
           </VStack>
 
           <Button

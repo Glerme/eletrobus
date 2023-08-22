@@ -1,17 +1,5 @@
-import {
-  Box,
-  Button,
-  HStack,
-  ScrollView,
-  Text,
-  VStack,
-  View,
-} from "native-base";
-import {
-  GlobeHemisphereWest,
-  MagnifyingGlass,
-  MapPin,
-} from "phosphor-react-native";
+import { Box, Button, HStack, ScrollView, Text, VStack } from "native-base";
+import { GlobeHemisphereWest, MagnifyingGlass } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
@@ -27,31 +15,12 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   return (
     <Background>
       <ScreenContent>
-        <VStack flex={1} justifyContent="space-between">
-          <View flex={1}>
-            <View mb={4}>
-              <HStack space={1} alignItems={"center"} justifyContent={"center"}>
-                <MapPin size={28} color="#ea3c10" weight="fill" />
-                <Text fontSize={"lg"} fontWeight={"600"}>
-                  Pederneiras-SP
-                </Text>
-              </HStack>
-            </View>
-            <View>
-              <ScrollView mb={16}>
-                <ListRouteCards
-                  description="Sairá em Breve"
-                  data={routesMock}
-                />
-                <ListRouteCards
-                  description="Ônibus em tráfego"
-                  data={routesMock}
-                />
-                <ListRouteCards description="Favoritos" data={routesMock} />
-              </ScrollView>
-            </View>
-          </View>
-          <View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <VStack flex={1} justifyContent="space-between">
+            <ListRouteCards description="Sairá em Breve" data={routesMock} />
+            <ListRouteCards description="Ônibus em tráfego" data={routesMock} />
+            <ListRouteCards description="Favoritos" data={routesMock} />
+
             <Box alignItems="center" mb="3">
               <Button
                 h={12}
@@ -84,8 +53,8 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                 </HStack>
               </Button>
             </Box>
-          </View>
-        </VStack>
+          </VStack>
+        </ScrollView>
       </ScreenContent>
     </Background>
   );
