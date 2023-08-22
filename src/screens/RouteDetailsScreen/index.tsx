@@ -1,25 +1,28 @@
+import { useState } from "react";
+
 import {
   Box,
   FlatList,
   HStack,
   Image,
-  ScrollView,
   Spacer,
   Text,
   VStack,
   View,
 } from "native-base";
-import { Info, Star } from "phosphor-react-native";
+import { Info } from "phosphor-react-native";
+
 import { NavigationProps } from "~/routes";
 
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
-import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
-import { Background } from "~/components/Layouts/Background";
-import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
-import { StatusInfo } from "~/components/BusStatus/StatusInfo";
 import { TypeRoute } from "~/components/TypeRoute";
+import { Background } from "~/components/Layouts/Background";
+import { StatusInfo } from "~/components/BusStatus/StatusInfo";
+import { FavoriteButton } from "~/components/Form/FavoriteButton";
+import { ScreenContent } from "~/components/Layouts/ScreenContent";
+import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
+import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 const mockedData = [
   {
@@ -63,6 +66,8 @@ export const RouteDetailsScreen = ({
   navigation,
   route,
 }: NavigationProps<"RouteDetails">) => {
+  const [favorite, setFavorite] = useState<boolean>(false);
+
   return (
     <Background>
       <ScreenContent>
@@ -84,9 +89,10 @@ export const RouteDetailsScreen = ({
 
               <Spacer />
 
-              <Box>
-                <Star size={22} weight="fill" color={"#E9C25F"} />
-              </Box>
+              <FavoriteButton
+                favorite={favorite}
+                handlePress={() => setFavorite(!favorite)}
+              />
             </HStack>
 
             <Box w={"full"}>

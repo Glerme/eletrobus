@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text } from "react-native";
 
-import { Box, Button } from "native-base";
+import { Box } from "native-base";
 import MapView from "react-native-maps";
 import {
   requestForegroundPermissionsAsync,
@@ -17,13 +17,13 @@ import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { useModal } from "~/hooks/useModal";
 
+import { ZoomButtons } from "./components/ZoomButtons";
 import { CustomMarker } from "./components/CustomMarker";
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { ModalDescription } from "./components/ModalDescription";
 
 import { THEME } from "~/styles/theme";
-import { ZoomButtons } from "./components/ZoomButtons";
 
 export const Map = ({ markers }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
@@ -72,6 +72,16 @@ export const Map = ({ markers }: MapInterface) => {
     });
   };
 
+  const onZoomPress = (type: "in" | "out") => {
+    let currentZoom = type === "in" ? zoom + 1 : zoom <= 3 ? 3 : zoom - 1;
+    setZoom(currentZoom);
+
+    mapRef?.current?.animateCamera({
+      zoom: currentZoom,
+      altitude: 1000,
+    });
+  };
+
   // useEffect(() => {
   //   watchPositionAsync(
   //     {
@@ -90,17 +100,8 @@ export const Map = ({ markers }: MapInterface) => {
 
   useEffect(() => {
     requestLocationPermissions();
-  }, []);
+  }, [location]);
 
-  const onZoomPress = (type: "in" | "out") => {
-    let currentZoom = type === "in" ? zoom + 1 : zoom - 1;
-    setZoom(currentZoom);
-
-    mapRef?.current?.animateCamera({
-      zoom: currentZoom,
-      altitude: 1000,
-    });
-  };
   return (
     <>
       <Box flex={1}>

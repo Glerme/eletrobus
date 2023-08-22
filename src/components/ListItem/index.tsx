@@ -5,11 +5,10 @@ import {
 
 import { Box, HStack, Text, View } from "native-base";
 
-import { Star } from "phosphor-react-native";
+import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { StatusInfo } from "../BusStatus/StatusInfo";
-
-import { RouteInterface } from "~/interfaces/Route.interface";
+import { FavoriteButton } from "../Form/FavoriteButton";
 
 interface IProps extends TouchableNativeFeedbackProps {
   item: RouteInterface;
@@ -36,10 +35,10 @@ export const ListItem = ({ item, onPress, ...rest }: IProps) => {
         <HStack py="2" justifyContent={"space-between"}>
           <View>
             <HStack space={2} alignItems={"center"}>
-              <Star
+              <FavoriteButton
+                favorite={item.favorite}
+                handlePress={() => {}}
                 size={14}
-                weight="fill"
-                color={item.favorite ? "#E9C25F" : "#9C9C9C"}
               />
 
               <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
