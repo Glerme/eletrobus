@@ -11,7 +11,7 @@ export interface RouteInterface {
     longitude: number;
   };
   markerType: "point" | "bus";
-  tipo: "estudantes" | "circulares";
+  tipo: "estudantes" | "circulares" | "point";
   favorite: boolean;
   saida?: Date;
   chegada?: Date;

@@ -9,7 +9,7 @@ export const routesMock: RouteInterface[] = [
     status: EStatusType.EM_MOVIMENTO,
     coordinate: { latitude: -22.370875, longitude: -48.771728 },
     markerType: "point",
-    tipo: "estudantes",
+    tipo: "point",
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
@@ -30,9 +30,8 @@ export const routesMock: RouteInterface[] = [
     description: "Description for Route C",
     status: EStatusType.INDISPONIVEL,
     coordinate: { latitude: -22.5, longitude: -48.801809 },
-
     markerType: "point",
-    tipo: "estudantes",
+    tipo: "point",
     favorite: true,
     saida: new Date(),
     chegada: new Date(),
@@ -43,7 +42,6 @@ export const routesMock: RouteInterface[] = [
     description: "Description for Route D",
     status: EStatusType.MANUTENCAO,
     coordinate: { latitude: -22.6595, longitude: -48.63 },
-
     markerType: "bus",
     tipo: "circulares",
     favorite: false,
@@ -55,7 +53,7 @@ export const routesMock: RouteInterface[] = [
     status: EStatusType.PARADO,
     coordinate: { latitude: -22.35, longitude: -48.7 },
     markerType: "point",
-    tipo: "estudantes",
+    tipo: "point",
     favorite: true,
   },
   {
@@ -77,7 +75,7 @@ export const routesMock: RouteInterface[] = [
     status: EStatusType.DESCONECTADO,
     coordinate: { latitude: -22.378952, longitude: -48.95487 },
     markerType: "point",
-    tipo: "estudantes",
+    tipo: "point",
     favorite: false,
   },
   {
@@ -99,7 +97,7 @@ export const routesMock: RouteInterface[] = [
     status: EStatusType.MANUTENCAO,
     coordinate: { latitude: -22.131232, longitude: -48.12314 },
     markerType: "point",
-    tipo: "estudantes",
+    tipo: "point",
     favorite: false,
   },
   {

@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet, Text } from "react-native";
 
 import { Box } from "native-base";
 import MapView from "react-native-maps";
+import MapViewDirections from "react-native-maps-directions";
 
 import { MapInterface } from "~/interfaces/Map.interface";
 import { RouteInterface } from "~/interfaces/Route.interface";
@@ -106,12 +107,26 @@ export const Map = ({ markers }: MapInterface) => {
               loadingEnabled
             >
               {markers.map((marker) => (
-                <CustomMarker
-                  key={marker.id}
-                  marker={marker}
-                  handleOpenModal={openModal}
-                />
+                <>
+                  <CustomMarker
+                    key={marker.id}
+                    marker={marker}
+                    handleOpenModal={openModal}
+                  />
+                </>
               ))}
+
+              {/* 
+                testar dps
+                           <MapViewDirections
+                key={markers[0].id}
+                apikey="AIzaSyDW5JTkYEy3KHgXAg0BYXQU2X5-J6KPbbY"
+                origin={location.coords}
+                destination={markers[0].coordinate}
+                strokeWidth={3}
+                strokeColor="hotpink"
+              />
+              */}
             </MapView>
           </>
         ) : (
