@@ -39,6 +39,7 @@ export const ListItem = ({ item, onPress, ...rest }: IProps) => {
                 favorite={item.favorite}
                 handlePress={() => {}}
                 size={14}
+                disabled
               />
 
               <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>

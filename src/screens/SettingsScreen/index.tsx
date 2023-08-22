@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { TouchableHighlight } from "react-native";
 
-import { Icon, VStack, Text, HStack, View } from "native-base";
+import { Icon, VStack, Text, HStack } from "native-base";
 
 import {
   requestForegroundPermissionsAsync,
   hasServicesEnabledAsync,
 } from "expo-location";
 
-import { PencilSimple, SignOut } from "phosphor-react-native";
+import { PencilSimple, SignOut, HardDrive } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
@@ -62,25 +62,30 @@ export const SettingsScreen = ({
             Configurações
           </Text>
 
-          <VStack space={2} alignItems={"baseline"}>
-            <Switch
+          <VStack space={2} alignItems={"baseline"} mt={2}>
+            {/* <Switch
               color={THEME.colors.gray["800"]}
               label="Localização está ativa?"
               onValueChange={() => setIsEnabled(!isEnabled)}
               value={isEnabled}
               disabled
-            />
+            /> */}
 
             <TouchableHighlight
               onPress={() => navigation.navigate("Profile", { userId: "123" })}
               underlayColor={THEME.colors.gray["200"]}
             >
-              <View>
-                <HStack space={2} alignItems={"center"}>
-                  <PencilSimple color={THEME.colors.gray["800"]} size={16} />
-                  <Text color={THEME.colors.gray["800"]}>Editar Perfil</Text>
-                </HStack>
-              </View>
+              <HStack space={2} alignItems={"center"}>
+                <PencilSimple color={THEME.colors.gray["800"]} size={16} />
+                <Text color={THEME.colors.gray["800"]}>Editar Perfil</Text>
+              </HStack>
+            </TouchableHighlight>
+
+            <TouchableHighlight underlayColor={THEME.colors.gray["200"]}>
+              <HStack space={2} alignItems={"center"}>
+                <HardDrive color={THEME.colors.gray["800"]} size={16} />
+                <Text color={THEME.colors.gray["800"]}>Sou Motorista</Text>
+              </HStack>
             </TouchableHighlight>
           </VStack>
 
