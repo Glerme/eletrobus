@@ -1,5 +1,6 @@
 {
   "name": "eletrobus",
+  "slug": "EletroBus",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -29,8 +30,8 @@
     "expo-image-picker": "~14.1.1",
     "expo-linear-gradient": "~12.1.2",
     "expo-location": "~15.1.1",
+    "expo-random": "~13.1.1",
     "expo-status-bar": "~1.4.4",
-    "expo-web-browser": "~12.1.1",
     "native-base": "^3.4.28",
     "phosphor-react-native": "^1.1.2",
     "react": "18.2.0",

@@ -1,5 +1,3 @@
-import { MapInterface } from "~/interfaces/Map.interface";
-
 import { Box } from "native-base";
 
 import { NavigationProps } from "~/routes";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TouchableHighlight } from "react-native";
 
-import { Icon, VStack, Text, HStack } from "native-base";
+import { Icon, VStack, Text, HStack, Avatar } from "native-base";
 
 import {
   requestForegroundPermissionsAsync,
@@ -13,6 +13,7 @@ import { PencilSimple, SignOut, HardDrive } from "phosphor-react-native";
 import { NavigationProps } from "~/routes";
 
 import { useModal } from "~/hooks/useModal";
+import { useAuth } from "~/contexts/AuthContext";
 
 import { Modal } from "~/components/Modal";
 import { Switch } from "~/components/Form/Switch";
@@ -28,6 +29,8 @@ export const SettingsScreen = ({
   route,
 }: NavigationProps<"Settings">) => {
   const [isEnabled, setIsEnabled] = useState(false);
+
+  const { handleGoogleLogin, user } = useAuth();
 
   const { handleCloseModal, handleOpenModal, modalRef } = useModal();
 
@@ -89,10 +92,19 @@ export const SettingsScreen = ({
             </TouchableHighlight>
 
             <Button
-              onPress={() => {}}
+              onPress={handleGoogleLogin}
               title="Sou motorista"
               fontColor="white"
             />
+
+            <Avatar
+              source={{
+                uri: user?.picture,
+              }}
+            />
+
+            <Text>{user?.name}</Text>
+            <Text>{user?.email}</Text>
           </VStack>
 
           <Button

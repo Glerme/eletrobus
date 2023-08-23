@@ -1,3 +1,4 @@
+import { AuthContextProvider } from "~/contexts/AuthContext";
 import { LocationContextProvider } from "~/contexts/LocationContext";
 
 interface ContextsProps {
@@ -5,5 +6,11 @@ interface ContextsProps {
 }
 
 export const Contexts = ({ children }: ContextsProps) => {
-  return <LocationContextProvider>{children}</LocationContextProvider>;
+  return (
+    <>
+      <AuthContextProvider>
+        <LocationContextProvider>{children}</LocationContextProvider>
+      </AuthContextProvider>
+    </>
+  );
 };
