@@ -48,7 +48,7 @@ export interface IFilters {
   cities: ICity[];
   district: ICity[];
   // runStarted: boolean;
-  time: string | null;
+  time: Date;
 }
 
 export const RoutesScreen = ({
@@ -61,7 +61,7 @@ export const RoutesScreen = ({
     kindRoute: "todos",
     cities: [],
     district: [],
-    time: "",
+    time: new Date(),
   });
   const [showAdvancedFilters, setShowAdvancedFilters] =
     useState<boolean>(false);

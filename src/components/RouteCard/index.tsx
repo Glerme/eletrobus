@@ -11,7 +11,7 @@ import { InterfacePressableProps } from "native-base/lib/typescript/components/p
 import { StatusInfo } from "../BusStatus/StatusInfo";
 import { StatusTime } from "../BusStatus/StatusTime";
 
-import { formatHours } from "~/utils/format";
+import { formatHoursDataMin } from "~/utils/format";
 
 interface RouteCardProps extends InterfacePressableProps {
   onPressCard: () => void;
@@ -81,7 +81,7 @@ export const RouteCard = ({ onPressCard, route, ...rest }: RouteCardProps) => {
 
             <VStack space="1">
               <Text fontSize="sm" color="coolGray.700">
-                Saída: {formatHours(route?.saida)}
+                Saída: {formatHoursDataMin(route?.saida)}
               </Text>
               <StatusTime busRoute={route}></StatusTime>
               <HStack alignItems="center" mt="1" space="1">
