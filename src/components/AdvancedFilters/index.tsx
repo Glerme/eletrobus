@@ -31,6 +31,7 @@ import {
   formatHoursDataMin,
   formatHoursMinutes,
 } from "~/utils/format";
+import { InputTime } from "./styles";
 
 interface AdvancedFiltersProps {
   filters: IFilters;
@@ -300,12 +301,43 @@ export const AdvancedFilters = ({
       </VStack>
       <View mt={2}>
         {/* <Button onPress={showDatepicker}>a</Button> */}
-        <TouchableHighlight onPress={() => showMode("date")}>
-          <Text>{formatDate(filters.time)}</Text>
-        </TouchableHighlight>
-        <TouchableHighlight onPress={() => showMode("time")}>
-          <Text>{formatHoursMinutes(filters.time)}</Text>
-        </TouchableHighlight>
+        <HStack space={2}>
+          <InputTime
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? "rgb(216, 216, 216)" : "transparent",
+              },
+            ]}
+            onPress={() => showMode("date")}
+          >
+            <HStack alignItems={"center"} space={1}>
+              <View>
+                <Text fontSize={"sm"} fontWeight={500} color={"gray.800"}>
+                  Data:
+                </Text>
+              </View>
+              <Text color={"gray.800"}>{formatDate(filters.time)}</Text>
+            </HStack>
+          </InputTime>
+
+          <InputTime
+            style={({ pressed }) => [
+              {
+                backgroundColor: pressed ? "rgb(216, 216, 216)" : "transparent",
+              },
+            ]}
+            onPress={() => showMode("time")}
+          >
+            <HStack alignItems={"center"} space={1}>
+              <View>
+                <Text fontSize={"sm"} fontWeight={500} color={"gray.800"}>
+                  Hora:
+                </Text>
+              </View>
+              <Text color={"gray.800"}>{formatHoursMinutes(filters.time)}</Text>
+            </HStack>
+          </InputTime>
+        </HStack>
       </View>
     </View>
   );
