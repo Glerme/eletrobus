@@ -9,9 +9,13 @@ export const formatDatetime = (date: Date) => {
   if (!date) return "-";
   return format(date, "dd/MM/yyyy HH:mm:ss");
 };
-export const formatHours = (date?: Date) => {
+export const formatHoursDataMin = (date?: Date) => {
   if (!date) return "-";
   return format(date, "dd/MM - HH:mm").replace(":", "h");
+};
+export const formatHoursMinutes = (date?: Date) => {
+  if (!date) return "-";
+  return format(date, "HH:mm").replace(":", "h");
 };
 
 export const formatSecounds = (sec: number) => {
