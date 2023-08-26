@@ -280,25 +280,29 @@ export const AdvancedFilters = ({
         </HStack>
       </VStack>
       {/* cidades */}
-      <VStack mt={2}>
-        <FlatList
-          horizontal
-          contentContainerStyle={{ alignSelf: "flex-start" }}
-          showsVerticalScrollIndicator={false}
-          data={CidadesMock}
-          keyExtractor={(item) => `${item.id}`}
-          renderItem={({ item }) => (
-            <BoxButton
-              item={item}
-              isActive={
-                filters.cities.filter((city) => city.id === item.id).length > 0
-              }
-              onPress={() => selectCities(item)}
-              key={item.id}
-            />
-          )}
-        />
-      </VStack>
+      {filters.kindRoute === "intermunicipal" && (
+        <VStack mt={2}>
+          <FlatList
+            horizontal
+            contentContainerStyle={{ alignSelf: "flex-start" }}
+            showsVerticalScrollIndicator={false}
+            data={CidadesMock}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={({ item }) => (
+              <BoxButton
+                item={item}
+                isActive={
+                  filters.cities.filter((city) => city.id === item.id).length >
+                  0
+                }
+                onPress={() => selectCities(item)}
+                key={item.id}
+              />
+            )}
+          />
+        </VStack>
+      )}
+
       <View mt={2}>
         {/* <Button onPress={showDatepicker}>a</Button> */}
         <HStack space={2}>
