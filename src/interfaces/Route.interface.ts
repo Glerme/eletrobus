@@ -10,12 +10,13 @@ export interface RouteInterface {
     latitude: number;
     longitude: number;
   };
-  markerType: "point" | "bus";
-  tipo: "estudantes" | "circulares" | "point";
+  markerType: MarkerType;
   favorite: boolean;
   saida?: Date;
   chegada?: Date;
 }
+
+export type MarkerType = "point" | "bus";
 
 // interface Ponto {
 //   id: string;

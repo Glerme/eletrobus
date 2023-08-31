@@ -1,67 +1,34 @@
 import { HStack, Image, Text } from "native-base";
 import { InterfaceHStackProps } from "native-base/lib/typescript/components/primitives/Stack/HStack";
 
+import { MarkerType } from "~/interfaces/Route.interface";
+
 interface TypeRouteProps extends InterfaceHStackProps {
-  tipo: "estudantes" | "circulares" | "point";
+  tipo?: MarkerType;
 }
 
-export const TypeRoute = ({ tipo, ...rest }: TypeRouteProps) => {
-  const imgMarkerType = {
-    point: require("~/assets/img/bus-stop.png"),
-    bus: require("~/assets/img/bus.png"),
+export const TypeRoute = ({ tipo = "bus", ...rest }: TypeRouteProps) => {
+  const marker = {
+    image:
+      tipo === "bus"
+        ? require("~/assets/img/bus.png")
+        : require("~/assets/img/bus-stop.png"),
+    description: tipo === "bus" ? "Ônibus" : "Ponto de ônibus",
   };
-
-  if (tipo === "point") {
-    return (
-      <HStack alignItems="center" space={1} {...rest}>
-        <Image
-          source={imgMarkerType["point"]}
-          alt={"Ponto de Ônibus"}
-          style={{
-            height: 30,
-            width: 30,
-            resizeMode: "center",
-          }}
-        />
-        <Text fontSize={14} fontWeight="medium" color="coolGray.500">
-          Ponto
-        </Text>
-      </HStack>
-    );
-  }
-
-  if (tipo === "circulares") {
-    return (
-      <HStack alignItems="center" space={1} {...rest}>
-        <Image
-          source={imgMarkerType.bus}
-          alt={"Ônibus"}
-          style={{
-            height: 30,
-            width: 30,
-            resizeMode: "center",
-          }}
-        />
-        <Text fontSize={14} fontWeight="medium" color="coolGray.500">
-          Circulares
-        </Text>
-      </HStack>
-    );
-  }
 
   return (
     <HStack alignItems="center" space={1} {...rest}>
       <Image
-        source={imgMarkerType.bus}
-        alt={"Ônibus"}
+        source={marker.image}
         style={{
           height: 30,
           width: 30,
           resizeMode: "center",
         }}
+        alt={marker.description}
       />
       <Text fontSize={14} fontWeight="medium" color="coolGray.500">
-        Estudantes
+        {marker.description}
       </Text>
     </HStack>
   );

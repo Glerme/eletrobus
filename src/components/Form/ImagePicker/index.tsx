@@ -1,24 +1,38 @@
 import { useState, useEffect, useRef } from "react";
 
-import * as ExpoImagePicker from "expo-image-picker";
-import { Box, Skeleton, VStack, View } from "native-base";
 import { Modalize } from "react-native-modalize";
+import { Box, Skeleton, VStack } from "native-base";
+import * as ExpoImagePicker from "expo-image-picker";
 
 import { useQuery } from "@tanstack/react-query";
+
+import { UserProps } from "~/interfaces/User.interface";
 
 import { api } from "~/services/axios";
 
 import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
-import { Host } from "react-native-portalize";
 
-export const ImagePicker = ({}) => {
+interface ImagePickerProps {
+  user: UserProps | null;
+}
+
+export const ImagePicker = ({ user }: ImagePickerProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const modalRef = useRef<Modalize>(null);
 
-  const { data, isLoading, error } = useQuery(["getPhoto"], () =>
-    api.get("/users/thiag-o").then(({ data }) => data.avatar_url)
-  );
+  const { data, isLoading } = useQuery({
+    queryKey: ["getPhoto"],
+    queryFn: async () => {
+      if (!user) return "";
+
+      const { data } = await api.get(
+        `/users/${user?.given_name === "Guilherme" ? "glerme" : "thiag-o"}`
+      );
+
+      return data?.avatar_url;
+    },
+  });
 
   useEffect(() => {
     (async () => {
@@ -73,10 +87,6 @@ export const ImagePicker = ({}) => {
     modalRef?.current?.open();
   };
 
-  const handleCloseModal = () => {
-    modalRef?.current?.close();
-  };
-
   if (isLoading) {
     return (
       <Box w={"100%"} display={"flex"} alignItems={"center"}>
@@ -93,23 +103,16 @@ export const ImagePicker = ({}) => {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <Box w={"100%"} display={"flex"} alignItems={"center"}>
-  //       <ButtonOpenModal
-  //         avatarUrl={"~/assets/user-profile.svg"}
-  //         handleOpenModal={handleOpenModal}
-  //       />
-
-  //       <ModalPicker
-  //         openCamera={openCamera}
-  //         openGallery={openGallery}
-  //         forwardedRef={modalRef}
-  //         closeModal={handleCloseModal}
-  //       />
-  //     </Box>
-  //   );
-  // }
+  if (!user) {
+    return (
+      <Box w={"100%"} display={"flex"} alignItems={"center"}>
+        <ButtonOpenModal
+          avatarUrl={require("~/assets/img/user-profile-light.png")}
+          handleOpenModal={handleOpenModal}
+        />
+      </Box>
+    );
+  }
 
   return (
     <>

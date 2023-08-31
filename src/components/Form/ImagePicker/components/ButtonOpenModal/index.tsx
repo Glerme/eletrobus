@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native";
+import { ImageSourcePropType, TouchableOpacity } from "react-native";
 
 import { Avatar, Box, Icon, VStack } from "native-base";
 
@@ -8,7 +8,7 @@ import { THEME } from "~/styles/theme";
 
 interface ButtonOpenModalProps {
   handleOpenModal: () => void;
-  avatarUrl: string;
+  avatarUrl: ImageSourcePropType;
 }
 
 export const ButtonOpenModal = ({
@@ -19,13 +19,7 @@ export const ButtonOpenModal = ({
     <Box w={"100%"} display={"flex"} alignItems={"center"}>
       <TouchableOpacity onPress={handleOpenModal}>
         <VStack space="5">
-          <Avatar
-            bg="lightBlue.400"
-            source={{
-              uri: avatarUrl,
-            }}
-            size="2xl"
-          >
+          <Avatar bg="lightBlue.400" source={avatarUrl} size="2xl">
             <Avatar.Badge
               bg="primary.500"
               display={"flex"}

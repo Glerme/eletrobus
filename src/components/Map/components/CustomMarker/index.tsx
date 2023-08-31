@@ -1,6 +1,9 @@
 import { Image } from "native-base";
 import { Marker } from "react-native-maps";
 
+import busImage from "~/assets/img/bus.png";
+import busStopImage from "~/assets/img/bus-stop.png";
+
 import { RouteInterface } from "~/interfaces/Route.interface";
 
 type CustomMarkerProps = {
@@ -12,33 +15,24 @@ export const CustomMarker = ({
   marker,
   handleOpenModal,
 }: CustomMarkerProps) => {
-  const markerDescription = {
-    point: "Ponto de ônibus",
-    bus: "Ônibus",
-  };
-
-  const imgMarkerType = {
-    point: require("~/assets/img/bus-stop.png"),
-    bus: require("~/assets/img/bus.png"),
+  const point = {
+    image:
+      marker?.markerType === "bus"
+        ? require("~/assets/img/bus.png")
+        : require("~/assets/img/bus-stop.png"),
+    description: marker?.markerType === "bus" ? "Ônibus" : "Ponto de ônibus",
   };
 
   return (
-    <Marker
+    <Marker.Animated
       coordinate={{
         latitude: marker.coordinate.latitude,
         longitude: marker.coordinate.longitude,
       }}
       onPress={() => handleOpenModal(marker)}
+      image={marker?.markerType === "bus" ? busImage : busStopImage}
     >
-      <Image
-        source={imgMarkerType[marker.markerType]}
-        alt={markerDescription[marker.markerType]}
-        style={{
-          height: 30,
-          width: 30,
-          resizeMode: "center",
-        }}
-      />
-    </Marker>
+      {/* <Image source={point.image} alt={point.description} /> */}
+    </Marker.Animated>
   );
 };

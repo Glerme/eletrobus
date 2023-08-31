@@ -62,16 +62,12 @@ export const Map = ({ markers }: MapInterface) => {
 
     mapRef?.current?.animateCamera({
       zoom: currentZoom,
-      altitude: 1000,
     });
   };
 
   useEffect(() => {
-    getActualCurrentPosition();
-  }, []);
-
-  useEffect(() => {
     requestLocationPermissions();
+    getActualCurrentPosition();
   }, []);
 
   return (
@@ -104,12 +100,11 @@ export const Map = ({ markers }: MapInterface) => {
               scrollEnabled
               zoomEnabled
               zoomControlEnabled={false}
-              loadingEnabled
             >
-              {markers.map((marker) => (
+              {markers.map((marker, i) => (
                 <>
                   <CustomMarker
-                    key={marker.id}
+                    key={i}
                     marker={marker}
                     handleOpenModal={openModal}
                   />
@@ -130,7 +125,12 @@ export const Map = ({ markers }: MapInterface) => {
             </MapView>
           </>
         ) : (
-          <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+          <Box
+            flex={1}
+            justifyContent={"center"}
+            alignItems={"center"}
+            backgroundColor={"gray.400"}
+          >
             <ActivityIndicator
               size={"large"}
               color={THEME.colors.primary["900"]}
@@ -139,7 +139,13 @@ export const Map = ({ markers }: MapInterface) => {
         )}
       </Box>
 
-      <ModalDescription data={dataPoint} forwardedRef={modalRef} />
+      {dataPoint && (
+        <ModalDescription
+          data={dataPoint}
+          forwardedRef={modalRef}
+          onClose={() => setDataPoint(null)}
+        />
+      )}
     </>
   );
 };

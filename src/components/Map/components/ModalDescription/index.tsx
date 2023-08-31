@@ -14,14 +14,14 @@ import { FavoriteButton } from "~/components/Form/FavoriteButton";
 interface ModalDescriptionProps {
   data: RouteInterface | null;
   forwardedRef: React.RefObject<Modalize>;
+  onClose: () => void;
 }
 
 export const ModalDescription = ({
   data,
   forwardedRef,
+  onClose,
 }: ModalDescriptionProps) => {
-  if (!data) return null;
-
   const [favorite, setFavorite] = useState(data?.favorite ?? false);
 
   const handleFavoritePoint = () => {
@@ -33,6 +33,7 @@ export const ModalDescription = ({
       forwardedRef={forwardedRef}
       modalHeight={500}
       adjustToContentHeight={false}
+      onClose={onClose}
     >
       <VStack px={23} mt={6} mb={10} space={2}>
         <HStack alignItems={"center"}>
@@ -69,7 +70,7 @@ export const ModalDescription = ({
         </Box>
 
         <HStack alignItems="center" space={1}>
-          <TypeRoute tipo={data?.tipo} />
+          <TypeRoute tipo={data?.markerType} />
           <Spacer />
           <StatusInfo statusCorrida={data?.status} />
         </HStack>

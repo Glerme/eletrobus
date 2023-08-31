@@ -9,7 +9,19 @@
     "userInterfaceStyle": "light",
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": ["ts", "tsx", "js", "jsx", "svg"]
+      "sourceExts": [
+        "expo.ts",
+        "expo.tsx",
+        "expo.js",
+        "expo.jsx",
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
     },
     "splash": {
       "image": "./assets/splash.png",
