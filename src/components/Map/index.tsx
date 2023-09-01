@@ -25,7 +25,7 @@ export const Map = ({ markers }: MapInterface) => {
 
   const { modalRef, handleOpenModal } = useModal();
 
-  const [zoom, setZoom] = useState<number>(0);
+  const [zoom, setZoom] = useState<number>(17);
   const [dataPoint, setDataPoint] = useState<RouteInterface | null>(null);
 
   const {
@@ -44,7 +44,6 @@ export const Map = ({ markers }: MapInterface) => {
     mapRef.current?.animateCamera({
       center: location?.coords,
       zoom: 17,
-      altitude: 1000,
     });
   };
 
@@ -52,12 +51,14 @@ export const Map = ({ markers }: MapInterface) => {
     mapRef?.current?.animateCamera({
       center: route?.coordinate,
       zoom: 17,
-      altitude: 1000,
     });
   };
 
   const onZoomPress = (type: "in" | "out") => {
-    let currentZoom = type === "in" ? zoom + 1 : zoom <= 3 ? 3 : zoom - 1;
+    let currentZoom = type === "in" ? zoom + 1 : zoom - 1;
+
+    if (zoom < 0 && currentZoom < 0) currentZoom = 0;
+
     setZoom(currentZoom);
 
     mapRef?.current?.animateCamera({
@@ -86,8 +87,8 @@ export const Map = ({ markers }: MapInterface) => {
               ref={mapRef}
               style={{
                 ...StyleSheet.absoluteFillObject,
-                width: "110%",
-                height: "110%",
+                width: "120%",
+                height: "120%",
               }}
               region={{
                 longitudeDelta: 0.005,
@@ -102,13 +103,11 @@ export const Map = ({ markers }: MapInterface) => {
               zoomControlEnabled={false}
             >
               {markers.map((marker, i) => (
-                <>
-                  <CustomMarker
-                    key={i}
-                    marker={marker}
-                    handleOpenModal={openModal}
-                  />
-                </>
+                <CustomMarker
+                  key={i}
+                  marker={marker}
+                  handleOpenModal={openModal}
+                />
               ))}
 
               {/* 

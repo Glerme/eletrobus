@@ -1,4 +1,4 @@
-import { IconButton } from "native-base";
+import { Platform } from "react-native";
 
 import { Plus, Minus } from "phosphor-react-native";
 import { Container, IconItem } from "./styles";
@@ -8,7 +8,7 @@ interface ZoomButtonsProps {
 }
 
 export const ZoomButtons = ({ onZoomPress }: ZoomButtonsProps) => {
-  return (
+  return Platform.OS === "android" ? (
     <Container space={1}>
       <IconItem
         onPress={() => onZoomPress("in")}
@@ -27,5 +27,7 @@ export const ZoomButtons = ({ onZoomPress }: ZoomButtonsProps) => {
         <Minus color="white" />
       </IconItem>
     </Container>
+  ) : (
+    <></>
   );
 };

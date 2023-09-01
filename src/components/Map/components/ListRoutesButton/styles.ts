@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 export const Container = styled.TouchableOpacity`
   background-color: #5a42e7;
   position: absolute;
-  bottom: 90px;
+  bottom: 80px;
   right: 10px;
   padding: 15px;
   z-index: 3;

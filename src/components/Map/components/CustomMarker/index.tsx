@@ -1,8 +1,7 @@
-import { Image } from "native-base";
+import { Image, View } from "native-base";
 import { Marker } from "react-native-maps";
 
-import busImage from "~/assets/img/bus.png";
-import busStopImage from "~/assets/img/bus-stop.png";
+import { scale } from "react-native-size-matters";
 
 import { RouteInterface } from "~/interfaces/Route.interface";
 
@@ -24,15 +23,21 @@ export const CustomMarker = ({
   };
 
   return (
-    <Marker.Animated
+    <Marker
       coordinate={{
         latitude: marker.coordinate.latitude,
         longitude: marker.coordinate.longitude,
       }}
       onPress={() => handleOpenModal(marker)}
-      image={marker?.markerType === "bus" ? busImage : busStopImage}
+      tracksViewChanges
     >
-      {/* <Image source={point.image} alt={point.description} /> */}
-    </Marker.Animated>
+      <View w={50} h={50}>
+        <Image
+          source={point.image}
+          alt={point.description}
+          style={{ height: scale(40), width: scale(40) }}
+        />
+      </View>
+    </Marker>
   );
 };
