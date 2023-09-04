@@ -1,4 +1,5 @@
 import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
+import { UserProps } from "./User.interface";
 
 export interface RouteInterface {
   id: string;
@@ -9,7 +10,8 @@ export interface RouteInterface {
   coordinate: {
     latitude: number;
     longitude: number;
-  };
+  }; // fixo qnd for ponto
+  coordinateBus: {};
   markerType: MarkerType;
   favorite: boolean;
   saida?: Date;
@@ -18,39 +20,49 @@ export interface RouteInterface {
 
 export type MarkerType = "point" | "bus";
 
-// interface Ponto {
-//   id: string;
-//   name: string;
-//   image?: string;
-//   description: string;
-//   coordinate: {
-//     latitude: number;
-//     longitude: number;
-//   };
-//   markerType: "point";
-//   favorite: boolean;
-// }
-// interface Onibus {
-//   id: string;
-//   name: string;
-//   image?: string;
-//   description: string;
-//   broken: boolean;
-//   coordinate: {
-//     latitude: number;
-//     longitude: number;
-//   };
-//   markerType:  "bus";
-//   typeBus: "estudantes" | "circulares";
-//   driver: DriverInterface
-//   course: CourseInterface;
-//   busNumber: string;
-//   renavam: string;
-//   status: EStatusType;
-//   favorite: boolean;
-//   saida?: Date;
-//   chegada?: Date;
+interface Institution {
+  id: string;
+  name: string;
+  cnpj: string;
+  email: string;
+  avatar: string;
+  drivers: Driver[];
+  buses: Bus[];
+  routes: Route[];
+  points: Ponto[];
+}
 
-// }
+interface Driver extends UserProps {
+  cpf: string;
+  cnh: string;
+}
 
-interface DriverInterface {}
+interface Bus {
+  id: string;
+  name: string;
+  route: Route;
+  status: EStatusType;
+  currentPosition: {
+    latitude: string;
+    longitude: string;
+  };
+  driver: Driver;
+}
+
+interface Route {
+  id: string;
+  name: string;
+  points?: Ponto[] | null;
+}
+
+interface Ponto {
+  id: string;
+  name: string;
+  image?: string;
+  description?: string;
+  coordinate: {
+    latitude: string;
+    longitude: string;
+  };
+  routes?: Route[] | null;
+}

@@ -110,17 +110,14 @@ export const Map = ({ markers }: MapInterface) => {
                 />
               ))}
 
-              {/* 
-                testar dps
-                           <MapViewDirections
+              <MapViewDirections
                 key={markers[0].id}
-                apikey="AIzaSyDW5JTkYEy3KHgXAg0BYXQU2X5-J6KPbbY"
+                apikey="AIzaSyDj5Q9JKX4XIsYXFde1CZcRuv7Y3P2pZzQ"
                 origin={location.coords}
                 destination={markers[0].coordinate}
                 strokeWidth={3}
                 strokeColor="hotpink"
               />
-              */}
             </MapView>
           </>
         ) : (

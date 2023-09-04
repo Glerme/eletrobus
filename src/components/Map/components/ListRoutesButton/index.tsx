@@ -33,6 +33,9 @@ interface ListRoutesButtonProps {
 export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
+  // se for motorista
+  // troca o botao para adicionar avisos
+
   return (
     <>
       <Container onPress={handleOpenModal}>

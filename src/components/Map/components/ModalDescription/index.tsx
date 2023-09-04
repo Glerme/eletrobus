@@ -28,6 +28,10 @@ export const ModalDescription = ({
     setFavorite(!favorite);
   };
 
+  //COLOCAR DOIS BOTOES
+  // UM PARA CONFIRMAR Q ESTA NO ONIBUS
+  // OUTRO PARA COLOCAR AVISOS DE ATRASO ETC
+
   return (
     <Modal
       forwardedRef={forwardedRef}

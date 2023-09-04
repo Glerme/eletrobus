@@ -21,12 +21,12 @@ export const AuthContext = createContext<AuthContextProps>({
   handleGoogleLogin: async () => {},
 });
 
-type AuthResponse = {
+interface AuthResponse {
   params: {
     access_token: string;
   };
   type: string;
-};
+}
 
 interface AuthContextProviderProps {
   children: React.ReactNode;
@@ -58,6 +58,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         const { data } = await axios.get(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`
         );
+
+        //enviar dados para cadastro
 
         setUser(data);
         console.log(data);

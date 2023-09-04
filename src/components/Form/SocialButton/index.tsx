@@ -1,4 +1,4 @@
-import { Heading, IButtonProps, Button as RNButton } from "native-base";
+import { Heading, IButtonProps } from "native-base";
 
 import * as S from "./styles";
 
