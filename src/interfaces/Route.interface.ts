@@ -58,7 +58,7 @@ interface Route {
 interface Ponto {
   id: string;
   name: string;
-  image?: string;
+  image?: string[];
   description?: string;
   coordinate: {
     latitude: string;

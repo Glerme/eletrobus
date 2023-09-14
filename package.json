@@ -34,6 +34,7 @@
     "expo-location": "~15.1.1",
     "expo-random": "~13.1.1",
     "expo-status-bar": "~1.4.4",
+    "lottie-react-native": "5.1.4",
     "native-base": "^3.4.28",
     "phosphor-react-native": "^1.1.2",
     "react": "18.2.0",
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@expo/ngrok": "^4.1.0",
     "@types/react": "~18.0.14",
     "@types/styled-components": "^5.1.26",
     "@types/styled-components-react-native": "^5.2.1",

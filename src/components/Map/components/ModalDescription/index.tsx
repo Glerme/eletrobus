@@ -3,9 +3,12 @@ import { Box, HStack, Image, Spacer, Text, VStack } from "native-base";
 
 import { Modalize } from "react-native-modalize";
 
+import { useAuth } from "~/contexts/AuthContext";
+
 import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { Modal } from "~/components/Modal";
+import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
 import { TypeRoute } from "~/components/TypeRoute";
 import { StatusInfo } from "~/components/BusStatus/StatusInfo";
@@ -22,6 +25,7 @@ export const ModalDescription = ({
   forwardedRef,
   onClose,
 }: ModalDescriptionProps) => {
+  const { user } = useAuth();
   const [favorite, setFavorite] = useState(data?.favorite ?? false);
 
   const handleFavoritePoint = () => {
@@ -87,6 +91,20 @@ export const ModalDescription = ({
 
             <Text fontSize={"md"}>{data?.description}</Text>
           </Box>
+
+          {user?.driver ? (
+            <Button
+              title="Iniciar Corrida"
+              onPress={() => console.log("iniciar corrida")}
+              fontColor="white"
+            />
+          ) : (
+            <Button
+              title="Acompanhar Corrida"
+              onPress={() => console.log("Acompanhar corrida")}
+              fontColor="white"
+            />
+          )}
         </VStack>
       </VStack>
     </Modal>

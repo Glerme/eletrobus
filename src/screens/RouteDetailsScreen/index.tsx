@@ -12,6 +12,8 @@ import {
 } from "native-base";
 import { Info } from "phosphor-react-native";
 
+import { useAuth } from "~/contexts/AuthContext";
+
 import { NavigationProps } from "~/routes";
 
 import { HourCard } from "~/components/HourCard";
@@ -66,6 +68,8 @@ export const RouteDetailsScreen = ({
   navigation,
   route,
 }: NavigationProps<"RouteDetails">) => {
+  const { user } = useAuth();
+
   const [favorite, setFavorite] = useState<boolean>(false);
 
   return (
@@ -149,11 +153,19 @@ export const RouteDetailsScreen = ({
             </Box>
             <Spacer />
             <Box>
-              <Button
-                onPress={() => console.log("click")}
-                title="Acompanhar Viagem"
-                fontColor={"white"}
-              />
+              {user?.driver ? (
+                <Button
+                  onPress={() => console.log("click")}
+                  title="Iniciar Viagem"
+                  fontColor={"white"}
+                />
+              ) : (
+                <Button
+                  onPress={() => console.log("click")}
+                  title="Acompanhar Viagem"
+                  fontColor={"white"}
+                />
+              )}
             </Box>
           </VStack>
         </ScrollViewContainer>
