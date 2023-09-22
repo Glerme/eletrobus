@@ -7,7 +7,7 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlass, Sliders } from "phosphor-react-native";
-import { Box, FlatList, HStack, Icon, Text, View } from "native-base";
+import { Alert, Box, FlatList, HStack, Icon, Text, View } from "native-base";
 
 import { NavigationProps } from "~/routes";
 
@@ -63,13 +63,14 @@ export const RoutesScreen = ({
 
   if (isLoading) {
     return (
-      <Background>
-        <ScreenContent>
-          <View flex={1} alignItems={"center"} justifyItems={"center"}>
-            <ActivityIndicator size="large" color="#442ccd" />
-          </View>
-        </ScreenContent>
-      </Background>
+      <Box
+        flex={1}
+        justifyContent={"center"}
+        alignItems={"center"}
+        backgroundColor={"gray.400"}
+      >
+        <ActivityIndicator size={"large"} color={THEME.colors.primary["900"]} />
+      </Box>
     );
   }
 
@@ -79,7 +80,12 @@ export const RoutesScreen = ({
     return (
       <Background>
         <ScreenContent>
-          <Text>Ocorreu um erro ao carregar os dados</Text>
+          <Alert colorScheme={"error"} status="error">
+            <Alert.Icon />
+            <Text fontSize="md" fontWeight="medium" color="coolGray.800">
+              Erro ao carregar os dados, por favor tente novamente mais tarde.
+            </Text>
+          </Alert>
         </ScreenContent>
       </Background>
     );
