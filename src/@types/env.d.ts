@@ -6,5 +6,6 @@ declare namespace NodeJS {
     REDIRECT_URI: string;
     SCOPE: string;
     RESPONSE_TYPE: string;
+    API_URL: string;
   }
 }

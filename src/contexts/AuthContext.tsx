@@ -7,7 +7,7 @@ import { UserProps } from "~/interfaces/User.interface";
 
 interface AuthContextProps {
   // user: UserProps | null;
-  user: { driver: boolean } | null
+  user: { driver: boolean } | null;
   signIn: () => Promise<void>;
   signOut: () => void;
   loading: boolean;
@@ -15,11 +15,11 @@ interface AuthContextProps {
 }
 
 export const AuthContext = createContext<AuthContextProps>({
-  signIn: async () => { },
-  signOut: () => { },
+  signIn: async () => {},
+  signOut: () => {},
   user: null,
   loading: true,
-  handleGoogleLogin: async () => { },
+  handleGoogleLogin: async () => {},
 });
 
 interface AuthResponse {
@@ -70,15 +70,15 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   };
 
-  const signIn = async () => { };
+  const signIn = async () => {};
 
-  const signOut = () => { };
+  const signOut = () => {};
 
   return (
     <AuthContext.Provider
       value={{
         loading,
-        user: { driver: true },
+        user: { driver: false },
         signIn,
         signOut,
         handleGoogleLogin,

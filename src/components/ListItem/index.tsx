@@ -3,15 +3,16 @@ import {
   TouchableNativeFeedbackProps,
 } from "react-native";
 
-import { Box, HStack, Text, View } from "native-base";
+import { Avatar, Box, HStack, Text } from "native-base";
 
+import { BusStopInterface } from "~/interfaces/BusStop.interface";
 import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { StatusInfo } from "../BusStatus/StatusInfo";
 import { FavoriteButton } from "../Form/FavoriteButton";
 
 interface IProps extends TouchableNativeFeedbackProps {
-  item: RouteInterface;
+  item: BusStopInterface;
   onPress: () => void;
 }
 
@@ -33,26 +34,31 @@ export const ListItem = ({ item, onPress, ...rest }: IProps) => {
         px="2"
       >
         <HStack py="2" justifyContent={"space-between"}>
-          <View>
-            <HStack space={2} alignItems={"center"}>
-              <FavoriteButton
+          <HStack space={4} alignItems={"center"}>
+            <Avatar
+              source={{
+                uri: item?.images[0] ?? "",
+              }}
+              size={"md"}
+            />
+
+            {/* <FavoriteButton
                 favorite={item.favorite}
                 handlePress={() => {}}
                 size={14}
                 disabled
-              />
+              /> */}
 
-              <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
-                {item.name}
-              </Text>
-            </HStack>
-          </View>
+            <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
+              {item.name}
+            </Text>
+          </HStack>
 
-          {item?.status && (
+          {/* {item?.status && (
             <HStack alignItems="center" space="1">
               <StatusInfo statusCorrida={item.status} />
             </HStack>
-          )}
+          )} */}
         </HStack>
       </Box>
     </TouchableNativeFeedback>

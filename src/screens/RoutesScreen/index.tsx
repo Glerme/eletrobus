@@ -1,40 +1,27 @@
 import { useState } from "react";
-import { TouchableHighlight, TouchableNativeFeedback } from "react-native";
-
 import {
-  Box,
-  FlatList,
-  Flex,
-  HStack,
-  Icon,
-  Text,
-  VStack,
-  View,
-} from "native-base";
+  ActivityIndicator,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+} from "react-native";
 
-import {
-  MagnifyingGlass,
-  Sliders,
-  Student,
-  UsersThree,
-} from "phosphor-react-native";
+import { useQuery } from "@tanstack/react-query";
+import { MagnifyingGlass, Sliders } from "phosphor-react-native";
+import { Box, FlatList, HStack, Icon, Text, View } from "native-base";
 
 import { NavigationProps } from "~/routes";
 
-import { RouteInterface } from "~/interfaces/Route.interface";
+import { api } from "~/services/axios";
 
-import { routesMock } from "~/mock/RotasMock";
-import CidadesMock from "~/mock/CidadesMock";
+import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { Input } from "~/components/Form/Input";
 import { ListItem } from "~/components/ListItem";
-import { BoxButton } from "~/components/BoxButton";
 import { Background } from "~/components/Layouts/Background";
+import { AdvancedFilters } from "~/components/AdvancedFilters";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
-import { CirculedIcon } from "./styles";
-import { AdvancedFilters } from "~/components/AdvancedFilters";
 
 export interface ICity {
   id: number;
@@ -55,7 +42,6 @@ export const RoutesScreen = ({
   navigation,
   route,
 }: NavigationProps<"Routes">) => {
-  // const [kindPeople, setKindPeople] = useState("todos");
   const [filters, setFilters] = useState<IFilters>({
     kindPeople: "todos",
     kindRoute: "todos",
@@ -63,16 +49,41 @@ export const RoutesScreen = ({
     district: [],
     time: new Date(),
   });
+
   const [showAdvancedFilters, setShowAdvancedFilters] =
     useState<boolean>(false);
 
-  // const selectCities = (city: ICity) => {
-  //   if (cities.filter((item) => item.id === city.id).length > 0) {
-  //     setCities(cities.filter((item) => item.id !== city.id));
-  //   } else {
-  //     setCities((prevCities) => [...prevCities, city]);
-  //   }
-  // };
+  const { data, isLoading, isError, error } = useQuery<BusStopInterface[]>({
+    queryKey: ["bus-stop"],
+    queryFn: async () => {
+      const { data } = await api.get<BusStopInterface[]>("/bus-stop");
+      return data;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <Background>
+        <ScreenContent>
+          <View flex={1} alignItems={"center"} justifyItems={"center"}>
+            <ActivityIndicator size="large" color="#442ccd" />
+          </View>
+        </ScreenContent>
+      </Background>
+    );
+  }
+
+  if (isError) {
+    console.error(error);
+
+    return (
+      <Background>
+        <ScreenContent>
+          <Text>Ocorreu um erro ao carregar os dados</Text>
+        </ScreenContent>
+      </Background>
+    );
+  }
 
   return (
     <Background>
@@ -101,14 +112,11 @@ export const RoutesScreen = ({
           </TouchableNativeFeedback>
         </HStack>
 
-        {/* Filtros Avançados */}
         {showAdvancedFilters && (
           <View>
             <AdvancedFilters filters={filters} setFilters={setFilters} />
           </View>
         )}
-
-        {/* Filtros Avançados */}
 
         <Box w={"140"} mt={6} mb={2}>
           <Text
@@ -121,9 +129,9 @@ export const RoutesScreen = ({
         </Box>
 
         <FlatList
-          keyExtractor={(item) => `${item.id}`}
-          data={routesMock}
-          renderItem={({ item }: { item: RouteInterface }) => (
+          keyExtractor={(item) => `${item?.id}`}
+          data={data}
+          renderItem={({ item }: { item: BusStopInterface }) => (
             <ListItem
               item={item}
               onPress={() => {

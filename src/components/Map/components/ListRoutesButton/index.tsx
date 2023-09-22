@@ -10,13 +10,14 @@ import {
   VStack,
 } from "native-base";
 
+import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlass, List } from "phosphor-react-native";
 
 import { useModal } from "~/hooks/useModal";
 
-import { routesMock } from "~/mock/RotasMock";
+import { api } from "~/services/axios";
 
-import { RouteInterface } from "~/interfaces/Route.interface";
+import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { Modal } from "~/components/Modal";
 import { Input } from "~/components/Form/Input";
@@ -27,14 +28,29 @@ import { Container } from "./styles";
 import { THEME } from "~/styles/theme";
 
 interface ListRoutesButtonProps {
-  onPressRoute: (route: RouteInterface) => void;
+  onPressRoute: (route: BusStopInterface) => void;
 }
 
 export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
-  // se for motorista
-  // troca o botao para adicionar avisos
+  const { data, isLoading, isError, error } = useQuery<BusStopInterface[]>({
+    queryKey: ["bus-stop"],
+    queryFn: async () => {
+      const { data } = await api.get<BusStopInterface[]>("/bus-stop");
+      return data;
+    },
+  });
+
+  if (isLoading) {
+    return <></>;
+  }
+
+  if (isError) {
+    console.error(error);
+
+    return <></>;
+  }
 
   return (
     <>
@@ -47,7 +63,7 @@ export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
         HeaderComponent={
           <VStack px={23} mt={6}>
             <Title size="md" textAlign={"left"}>
-              Rotas
+              Pontos
             </Title>
           </VStack>
         }
@@ -82,7 +98,7 @@ export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
           <ScrollView flex={1}>
             <FlatList
               keyExtractor={(item) => `${item.id}`}
-              data={routesMock}
+              data={data}
               mt={4}
               maxH={"500"}
               ItemSeparatorComponent={() => <Divider />}
@@ -105,7 +121,7 @@ export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
               borderRadius={4}
               borderColor={"gray.400"}
               p={2}
-              renderItem={({ item }: { item: RouteInterface }) => (
+              renderItem={({ item }: { item: BusStopInterface }) => (
                 <ListItem
                   item={item}
                   onPress={() => {

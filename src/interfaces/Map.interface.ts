@@ -1,5 +1,5 @@
-import { RouteInterface } from "./Route.interface";
+import { BusStopInterface } from "./BusStop.interface";
 
 export interface MapInterface {
-  markers: RouteInterface[];
+  markers: BusStopInterface[];
 }

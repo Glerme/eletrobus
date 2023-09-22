@@ -3,10 +3,14 @@ import { ActivityIndicator, StyleSheet, Text } from "react-native";
 
 import { Box } from "native-base";
 import MapView from "react-native-maps";
+import { useQuery } from "@tanstack/react-query";
 import MapViewDirections from "react-native-maps-directions";
+
+import { api } from "~/services/axios";
 
 import { MapInterface } from "~/interfaces/Map.interface";
 import { RouteInterface } from "~/interfaces/Route.interface";
+import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { useModal } from "~/hooks/useModal";
 
@@ -26,7 +30,7 @@ export const Map = ({ markers }: MapInterface) => {
   const { modalRef, handleOpenModal } = useModal();
 
   const [zoom, setZoom] = useState<number>(17);
-  const [dataPoint, setDataPoint] = useState<RouteInterface | null>(null);
+  const [dataPoint, setDataPoint] = useState<BusStopInterface | null>(null);
 
   const {
     location,
@@ -35,7 +39,7 @@ export const Map = ({ markers }: MapInterface) => {
     requestLocationPermissions,
   } = useLocation();
 
-  const openModal = (data: RouteInterface) => {
+  const openModal = (data: BusStopInterface) => {
     setDataPoint(data);
     handleOpenModal();
   };
@@ -47,9 +51,9 @@ export const Map = ({ markers }: MapInterface) => {
     });
   };
 
-  const onPressRoute = (route: RouteInterface) => {
+  const onPressRoute = (route: BusStopInterface) => {
     mapRef?.current?.animateCamera({
-      center: route?.coordinate,
+      center: { latitude: route.latitude, longitude: route.longitude },
       zoom: 17,
     });
   };
@@ -102,7 +106,7 @@ export const Map = ({ markers }: MapInterface) => {
               zoomEnabled
               zoomControlEnabled={false}
             >
-              {markers.map((marker, i) => (
+              {markers?.map((marker, i) => (
                 <CustomMarker
                   key={i}
                   marker={marker}
@@ -110,14 +114,14 @@ export const Map = ({ markers }: MapInterface) => {
                 />
               ))}
 
-              <MapViewDirections
+              {/* <MapViewDirections
                 key={markers[0].id}
                 apikey="AIzaSyDj5Q9JKX4XIsYXFde1CZcRuv7Y3P2pZzQ"
                 origin={location.coords}
                 destination={markers[0].coordinate}
                 strokeWidth={3}
                 strokeColor="hotpink"
-              />
+              /> */}
             </MapView>
           </>
         ) : (
