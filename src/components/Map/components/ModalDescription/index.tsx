@@ -30,17 +30,20 @@ import { FavoriteButton } from "~/components/Form/FavoriteButton";
 
 import { THEME } from "~/styles/theme";
 import { RoutesProps } from "~/interfaces/Routes.interface";
+import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 interface ModalDescriptionProps {
   point: BusStopInterface | null;
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
+  handleOpenRoute: (route: RoutesProps) => void;
 }
 
 export const ModalDescription = ({
   point,
   forwardedRef,
   onClose,
+  handleOpenRoute,
 }: ModalDescriptionProps) => {
   const { user } = useAuth();
   const [favorite, setFavorite] = useState(point?.favorito ?? false);
@@ -58,13 +61,6 @@ export const ModalDescription = ({
       return data;
     },
   });
-
-  const handleOpenBus = async (route: RoutesProps) => {
-    console.log({ route });
-    const { data } = await api.get(`/bus-stop/${route.route_id}`);
-
-    console.log("BUSCAR ROTA", data);
-  };
 
   return (
     <Modal
@@ -97,7 +93,7 @@ export const ModalDescription = ({
           <Image
             source={
               point?.images
-                ? { uri: point?.images[0] }
+                ? { uri: point?.images[0] ?? point.images[1] }
                 : require("~/assets/img/not-found.png")
             }
             alt={point?.name}
@@ -138,7 +134,7 @@ export const ModalDescription = ({
                   <ListRoutes
                     key={route.route_id}
                     route={route}
-                    onPress={() => handleOpenBus(route)}
+                    onPress={() => handleOpenRoute(route)}
                   />
                 ))
               )}

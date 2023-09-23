@@ -6,7 +6,11 @@ import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 
 import { MapInterface } from "~/interfaces/Map.interface";
+import { RoutesProps } from "~/interfaces/Routes.interface";
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
+
+import { api } from "~/services/axios";
 
 import { useModal } from "~/hooks/useModal";
 
@@ -27,6 +31,9 @@ export const Map = ({ markers }: MapInterface) => {
 
   const [zoom, setZoom] = useState<number>(17);
   const [dataPoint, setDataPoint] = useState<BusStopInterface | null>(null);
+  const [directions, setDirections] = useState<RoutesBusStopsInterface | null>(
+    null
+  );
 
   const {
     location,
@@ -64,6 +71,18 @@ export const Map = ({ markers }: MapInterface) => {
     mapRef?.current?.animateCamera({
       zoom: currentZoom,
     });
+  };
+
+  const handleOpenBus = async (route: RoutesProps) => {
+    const { data } = await api.get<RoutesBusStopsInterface>(
+      `/route/${route.route_id}`
+    );
+
+    console.log({
+      test: data?.bus_stops,
+    });
+
+    setDirections(data);
   };
 
   useEffect(() => {
@@ -110,14 +129,21 @@ export const Map = ({ markers }: MapInterface) => {
                 />
               ))}
 
-              {/* <MapViewDirections
-                key={markers[0].id}
-                apikey="AIzaSyDj5Q9JKX4XIsYXFde1CZcRuv7Y3P2pZzQ"
-                origin={location.coords}
-                destination={markers[0].coordinate}
-                strokeWidth={3}
-                strokeColor="hotpink"
-              /> */}
+              {directions && (
+                <MapViewDirections
+                  apikey="AIzaSyDj5Q9JKX4XIsYXFde1CZcRuv7Y3P2pZzQ"
+                  origin={{
+                    latitude: directions?.bus_stops[0]?.latitude,
+                    longitude: directions?.bus_stops[0]?.longitude,
+                  }}
+                  destination={{
+                    latitude: directions?.bus_stops[1].latitude,
+                    longitude: directions?.bus_stops[1].longitude,
+                  }}
+                  strokeWidth={3}
+                  strokeColor="hotpink"
+                />
+              )}
             </MapView>
           </>
         ) : (
@@ -140,6 +166,7 @@ export const Map = ({ markers }: MapInterface) => {
           point={dataPoint}
           forwardedRef={modalRef}
           onClose={() => setDataPoint(null)}
+          handleOpenRoute={handleOpenBus}
         />
       )}
     </>

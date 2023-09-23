@@ -11,8 +11,13 @@ import {
   View,
 } from "native-base";
 import { Info } from "phosphor-react-native";
+import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "~/contexts/AuthContext";
+
+import { BusStopInterface } from "~/interfaces/BusStop.interface";
+
+import { api } from "~/services/axios";
 
 import { NavigationProps } from "~/routes";
 
@@ -72,6 +77,23 @@ export const RouteDetailsScreen = ({
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
+  const {
+    data: point,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<BusStopInterface>({
+    queryKey: ["routes-bus"],
+    queryFn: async () => {
+      const { data } = await api.get<BusStopInterface>(
+        `/bus-stop/${route.params.id}`
+      );
+      return data;
+    },
+  });
+
+  console.log(point);
+
   return (
     <Background>
       <ScreenContent>
@@ -83,11 +105,10 @@ export const RouteDetailsScreen = ({
                   width={4}
                   height={4}
                   borderRadius={50}
-                  // backgroundColor={color}
                   backgroundColor={true ? "#A7E179" : "#E17979"}
                 />
                 <Text fontSize="lg" fontWeight={"600"}>
-                  UNESP - Bauru
+                  {point?.name}
                 </Text>
               </HStack>
 
@@ -101,13 +122,15 @@ export const RouteDetailsScreen = ({
 
             <Box w={"full"}>
               <Image
-                source={{
-                  uri: "https://wallpaperaccess.com/full/317501.jpg",
-                }}
+                source={
+                  point?.images
+                    ? { uri: point?.images[0] ?? point.images[1] }
+                    : require("~/assets/img/not-found.png")
+                }
                 w={"full"}
                 h="56"
                 borderRadius={"md"}
-                alt="Alternate Text"
+                alt={point?.name}
               />
             </Box>
 
@@ -140,15 +163,11 @@ export const RouteDetailsScreen = ({
               <HStack alignItems={"center"} space={1} mb={1}>
                 <Info size={18} color="#e8b10e" weight="duotone" />
                 <Text fontSize={"sm"} fontWeight={"500"}>
-                  Observação
+                  Descrição
                 </Text>
               </HStack>
               <Text fontSize={"sm"} flex={1} color={"gray.700"}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
-                officia, ex, dignissimos assumenda libero reiciendis possimus
-                officia, ex, dignissimos assumenda libero reiciendis possimus
-                ipsam repudiandae eligendi repellendus blanditiis rerum saepe
-                numquam! numquam! numquam! numquam! numquam!
+                {point?.description}
               </Text>
             </Box>
             <Spacer />

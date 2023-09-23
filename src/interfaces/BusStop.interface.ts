@@ -9,4 +9,5 @@ export interface BusStopInterface {
   images: string[];
   rotas: RoutesProps[];
   favorito?: boolean;
+  description?: string;
 }
