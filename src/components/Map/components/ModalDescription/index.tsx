@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ActivityIndicator } from "react-native";
+
 import {
   Box,
   Divider,
@@ -11,40 +13,57 @@ import {
 } from "native-base";
 
 import { Modalize } from "react-native-modalize";
+import { useQuery } from "@tanstack/react-query";
+
+import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
+
+import { api } from "~/services/axios";
 
 import { Modal } from "~/components/Modal";
 import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
 import { ListRoutes } from "~/components/ListRoutes";
+import { ErrorAlert } from "~/components/ErrorAlert";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+
+import { THEME } from "~/styles/theme";
+import { RoutesProps } from "~/interfaces/Routes.interface";
 
 interface ModalDescriptionProps {
-  data: BusStopInterface | null;
+  point: BusStopInterface | null;
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
 }
 
 export const ModalDescription = ({
-  data,
+  point,
   forwardedRef,
   onClose,
 }: ModalDescriptionProps) => {
   const { user } = useAuth();
-  const [favorite, setFavorite] = useState(data?.favorite ?? false);
+  const [favorite, setFavorite] = useState(point?.favorito ?? false);
 
   const handleFavoritePoint = () => {
     setFavorite(!favorite);
   };
 
-  //COLOCAR DOIS BOTOES
-  // UM PARA CONFIRMAR Q ESTA NO ONIBUS
-  // OUTRO PARA COLOCAR AVISOS DE ATRASO ETC
+  const { data, isLoading, isError, error } = useQuery<BusStopInterface>({
+    queryKey: ["routes-bus"],
+    queryFn: async () => {
+      const { data } = await api.get<BusStopInterface>(
+        `/bus-stop/${point?.id}`
+      );
+      return data;
+    },
+  });
 
-  const handleOpenBus = (route: any) => {
-    console.log("BUSCAR ROTA", route);
+  const handleOpenBus = async (route: RoutesProps) => {
+    console.log({ route });
+    const { data } = await api.get(`/bus-stop/${route.route_id}`);
+
+    console.log("BUSCAR ROTA", data);
   };
 
   return (
@@ -57,7 +76,7 @@ export const ModalDescription = ({
       <VStack px={23} mt={6} space={2}>
         <HStack alignItems={"center"}>
           <Title size="md" textAlign={"left"}>
-            {data?.name}
+            {point?.name}
           </Title>
 
           <Spacer />
@@ -77,21 +96,19 @@ export const ModalDescription = ({
         >
           <Image
             source={
-              data?.images
-                ? { uri: data?.images[0] }
+              point?.images
+                ? { uri: point?.images[0] }
                 : require("~/assets/img/not-found.png")
             }
-            alt={data?.name}
+            alt={point?.name}
             w={"full"}
             h={"150"}
             resizeMode={"contain"}
           />
         </Box>
 
-        <VStack px={23} mt={6}>
-          <Title size="md" textAlign={"left"}>
-            Pontos
-          </Title>
+        <VStack mt={6}>
+          <Title size="md">Pontos</Title>
         </VStack>
 
         <VStack mt={1} space={1}>
@@ -105,46 +122,26 @@ export const ModalDescription = ({
             </>
           ) : (
             <>
-              <FlatList
-                keyExtractor={(item) => `${item.id}`}
-                data={[
-                  {
-                    id: 1,
-                    name: "Rota 1",
-                    description: "Rota 1",
-                  },
-                  {
-                    id: 2,
-                    name: "Rota 2",
-                    description: "Rota 2",
-                  },
-                ]}
-                maxH={"500"}
-                ItemSeparatorComponent={() => <Divider />}
-                ListEmptyComponent={() => (
-                  <Box
-                    flex={1}
-                    display={"flex"}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                  >
-                    <Text fontSize={"md"} fontWeight={"semibold"}>
-                      Nenhuma rota encontrada
-                    </Text>
-                  </Box>
-                )}
-                borderWidth={1}
-                borderRadius={4}
-                marginBottom={"full"}
-                borderColor={"gray.400"}
-                p={2}
-                renderItem={({ item }: { item: any }) => (
-                  <ListRoutes
-                    route={item}
-                    onPress={() => handleOpenBus(item)}
+              {isLoading ? (
+                <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+                  <ActivityIndicator
+                    size={"large"}
+                    color={THEME.colors.primary["900"]}
                   />
-                )}
-              />
+                </Box>
+              ) : isError ? (
+                <Box>
+                  <ErrorAlert error={error} />
+                </Box>
+              ) : (
+                data?.rotas?.map((route) => (
+                  <ListRoutes
+                    key={route.route_id}
+                    route={route}
+                    onPress={() => handleOpenBus(route)}
+                  />
+                ))
+              )}
             </>
           )}
         </VStack>

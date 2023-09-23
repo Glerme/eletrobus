@@ -2,10 +2,10 @@ import { TouchableNativeFeedback } from "react-native";
 
 import { Box, HStack, Text } from "native-base";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { RoutesProps } from "~/interfaces/Routes.interface";
 
 interface ListRoutesProps {
-  route: BusStopInterface;
+  route: RoutesProps;
   onPress: () => void;
 }
 
@@ -29,7 +29,7 @@ export const ListRoutes = ({ route, onPress, ...rest }: ListRoutesProps) => {
         <HStack py="2" justifyContent={"space-between"}>
           <HStack space={4} alignItems={"center"}>
             <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
-              {route?.name}
+              {route?.route_name ?? "Rota não encontrada"}
             </Text>
           </HStack>
         </HStack>

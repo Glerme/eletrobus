@@ -7,7 +7,7 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlass, Sliders } from "phosphor-react-native";
-import { Alert, Box, FlatList, HStack, Icon, Text, View } from "native-base";
+import { Box, FlatList, HStack, Icon, Text, View } from "native-base";
 
 import { NavigationProps } from "~/routes";
 
@@ -17,6 +17,7 @@ import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { Input } from "~/components/Form/Input";
 import { ListItem } from "~/components/ListItem";
+import { ErrorAlert } from "~/components/ErrorAlert";
 import { Background } from "~/components/Layouts/Background";
 import { AdvancedFilters } from "~/components/AdvancedFilters";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
@@ -80,12 +81,7 @@ export const RoutesScreen = ({
     return (
       <Background>
         <ScreenContent>
-          <Alert colorScheme={"error"} status="error">
-            <Alert.Icon />
-            <Text fontSize="md" fontWeight="medium" color="coolGray.800">
-              Erro ao carregar os dados, por favor tente novamente mais tarde.
-            </Text>
-          </Alert>
+          <ErrorAlert />
         </ScreenContent>
       </Background>
     );

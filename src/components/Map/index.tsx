@@ -3,13 +3,9 @@ import { ActivityIndicator, StyleSheet, Text } from "react-native";
 
 import { Box } from "native-base";
 import MapView from "react-native-maps";
-import { useQuery } from "@tanstack/react-query";
 import MapViewDirections from "react-native-maps-directions";
 
-import { api } from "~/services/axios";
-
 import { MapInterface } from "~/interfaces/Map.interface";
-import { RouteInterface } from "~/interfaces/Route.interface";
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { useModal } from "~/hooks/useModal";
@@ -141,7 +137,7 @@ export const Map = ({ markers }: MapInterface) => {
 
       {dataPoint && (
         <ModalDescription
-          data={dataPoint}
+          point={dataPoint}
           forwardedRef={modalRef}
           onClose={() => setDataPoint(null)}
         />

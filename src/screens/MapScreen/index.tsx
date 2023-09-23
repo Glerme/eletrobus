@@ -1,6 +1,6 @@
 import { ActivityIndicator } from "react-native";
 
-import { Alert, Box, Text } from "native-base";
+import { Box } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
@@ -10,6 +10,7 @@ import { api } from "~/services/axios";
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { Map } from "~/components/Map";
+import { ErrorAlert } from "~/components/ErrorAlert";
 import { SafeAreaView } from "~/components/Layouts/SafeAreaView";
 
 import { THEME } from "~/styles/theme";
@@ -42,12 +43,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
         <Box>
-          <Alert colorScheme={"error"} status="error">
-            <Alert.Icon />
-            <Text fontSize="md" fontWeight="medium" color="coolGray.800">
-              Erro ao carregar os dados, por favor tente novamente mais tarde.
-            </Text>
-          </Alert>
+          <ErrorAlert error={error} />
         </Box>
         <Box flex={1}>
           <Map markers={[]} />

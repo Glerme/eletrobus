@@ -1,3 +1,5 @@
+import { RoutesProps } from "./Routes.interface";
+
 // /bus-stop
 export interface BusStopInterface {
   id: string;
@@ -5,4 +7,6 @@ export interface BusStopInterface {
   latitude: number;
   longitude: number;
   images: string[];
+  rotas: RoutesProps[];
+  favorito?: boolean;
 }
