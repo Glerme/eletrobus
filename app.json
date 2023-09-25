@@ -37,11 +37,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1f252a"
       },
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyDW5JTkYEy3KHgXAg0BYXQU2X5-J6KPbbY"
-        }
-      },
       "package": "com.glerme.eletrobus"
     },
     "extra": {

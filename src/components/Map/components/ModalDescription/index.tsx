@@ -1,20 +1,12 @@
 import { useState } from "react";
 import { ActivityIndicator } from "react-native";
 
-import {
-  Box,
-  Divider,
-  FlatList,
-  HStack,
-  Image,
-  Spacer,
-  Text,
-  VStack,
-} from "native-base";
+import { Box, HStack, Image, Spacer, VStack } from "native-base";
 
 import { Modalize } from "react-native-modalize";
 import { useQuery } from "@tanstack/react-query";
 
+import { RoutesProps } from "~/interfaces/Routes.interface";
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
@@ -22,15 +14,13 @@ import { useAuth } from "~/contexts/AuthContext";
 import { api } from "~/services/axios";
 
 import { Modal } from "~/components/Modal";
+import { Alert } from "~/components/Alert";
 import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
 import { ListRoutes } from "~/components/ListRoutes";
-import { ErrorAlert } from "~/components/ErrorAlert";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
 
 import { THEME } from "~/styles/theme";
-import { RoutesProps } from "~/interfaces/Routes.interface";
-import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 interface ModalDescriptionProps {
   point: BusStopInterface | null;
@@ -104,7 +94,7 @@ export const ModalDescription = ({
         </Box>
 
         <VStack mt={6}>
-          <Title size="md">Pontos</Title>
+          <Title size="md">Rotas</Title>
         </VStack>
 
         <VStack mt={1} space={1}>
@@ -127,9 +117,9 @@ export const ModalDescription = ({
                 </Box>
               ) : isError ? (
                 <Box>
-                  <ErrorAlert error={error} />
+                  <Alert status="error" />
                 </Box>
-              ) : (
+              ) : data?.rotas?.length > 0 ? (
                 data?.rotas?.map((route) => (
                   <ListRoutes
                     key={route.route_id}
@@ -137,6 +127,13 @@ export const ModalDescription = ({
                     onPress={() => handleOpenRoute(route)}
                   />
                 ))
+              ) : (
+                <Box>
+                  <Alert
+                    status="warning"
+                    text="Ainda não há rotas cadastradas!"
+                  />
+                </Box>
               )}
             </>
           )}

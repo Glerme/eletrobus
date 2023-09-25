@@ -31,7 +31,7 @@ export const Map = ({ markers }: MapInterface) => {
 
   const [zoom, setZoom] = useState<number>(17);
   const [dataPoint, setDataPoint] = useState<BusStopInterface | null>(null);
-  const [directions, setDirections] = useState<RoutesBusStopsInterface | null>(
+  const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
 
@@ -78,11 +78,7 @@ export const Map = ({ markers }: MapInterface) => {
       `/route/${route.route_id}`
     );
 
-    console.log({
-      test: data?.bus_stops,
-    });
-
-    setDirections(data);
+    setBusStops(data);
   };
 
   useEffect(() => {
@@ -129,21 +125,24 @@ export const Map = ({ markers }: MapInterface) => {
                 />
               ))}
 
-              {directions && (
-                <MapViewDirections
-                  apikey="AIzaSyDj5Q9JKX4XIsYXFde1CZcRuv7Y3P2pZzQ"
-                  origin={{
-                    latitude: directions?.bus_stops[0]?.latitude,
-                    longitude: directions?.bus_stops[0]?.longitude,
-                  }}
-                  destination={{
-                    latitude: directions?.bus_stops[1].latitude,
-                    longitude: directions?.bus_stops[1].longitude,
-                  }}
-                  strokeWidth={3}
-                  strokeColor="hotpink"
-                />
-              )}
+              {busStops &&
+                busStops?.bus_stops?.map((stop, index) => {
+                  if (index < busStops?.bus_stops?.length - 1) {
+                    const origin = stop;
+                    const destination = busStops?.bus_stops[index + 1];
+
+                    return (
+                      <MapViewDirections
+                        origin={origin}
+                        destination={destination}
+                        apikey={process.env.GOOGLE_MAPS_API_KEY}
+                        strokeWidth={5}
+                        strokeColor="blue"
+                        key={index}
+                      />
+                    );
+                  }
+                })}
             </MapView>
           </>
         ) : (

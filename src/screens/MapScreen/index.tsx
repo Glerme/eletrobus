@@ -10,7 +10,7 @@ import { api } from "~/services/axios";
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { Map } from "~/components/Map";
-import { ErrorAlert } from "~/components/ErrorAlert";
+import { Alert } from "~/components/Alert";
 import { SafeAreaView } from "~/components/Layouts/SafeAreaView";
 
 import { THEME } from "~/styles/theme";
@@ -43,7 +43,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
         <Box>
-          <ErrorAlert error={error} />
+          <Alert status="error" />
         </Box>
         <Box flex={1}>
           <Map markers={[]} />

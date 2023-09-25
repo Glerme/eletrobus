@@ -17,7 +17,7 @@ import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { Input } from "~/components/Form/Input";
 import { ListItem } from "~/components/ListItem";
-import { ErrorAlert } from "~/components/ErrorAlert";
+import { Alert } from "~/components/Alert";
 import { Background } from "~/components/Layouts/Background";
 import { AdvancedFilters } from "~/components/AdvancedFilters";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
@@ -81,7 +81,7 @@ export const RoutesScreen = ({
     return (
       <Background>
         <ScreenContent>
-          <ErrorAlert />
+          <Alert status="error" />
         </ScreenContent>
       </Background>
     );

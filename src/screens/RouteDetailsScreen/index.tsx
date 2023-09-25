@@ -147,7 +147,7 @@ export const RouteDetailsScreen = ({
                 <Spacer />
                 <VStack space={1} alignItems="flex-end">
                   <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
-                  <TypeRoute mt={1} tipo={"estudantes"} />
+                  {/* <TypeRoute mt={1} tipo={"estudantes"} /> */}
                 </VStack>
               </HStack>
 
