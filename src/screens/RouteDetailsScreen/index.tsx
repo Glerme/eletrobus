@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, RefreshControl } from "react-native";
 
 import {
   Box,
@@ -48,6 +48,8 @@ export const RouteDetailsScreen = ({
     isLoading,
     isError,
     error,
+    refetch,
+    isRefetching,
   } = useQuery<BusStopInterface>({
     queryKey: ["point-bus-details"],
     queryFn: async () => {
@@ -89,7 +91,11 @@ export const RouteDetailsScreen = ({
   return (
     <Background>
       <ScreenContent>
-        <ScrollViewContainer>
+        <ScrollViewContainer
+          refreshControl={
+            <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
+          }
+        >
           <VStack space={4} flex={1}>
             <HStack alignItems={"center"}>
               <HStack space={2} alignItems="center">

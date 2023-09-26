@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   ActivityIndicator,
+  RefreshControl,
   TouchableHighlight,
   TouchableNativeFeedback,
 } from "react-native";
@@ -54,7 +55,9 @@ export const RoutesScreen = ({
   const [showAdvancedFilters, setShowAdvancedFilters] =
     useState<boolean>(false);
 
-  const { data, isLoading, isError, error } = useQuery<BusStopInterface[]>({
+  const { data, isLoading, isError, error, refetch, isRefetching } = useQuery<
+    BusStopInterface[]
+  >({
     queryKey: ["bus-stop"],
     refetchInterval: 5000,
     queryFn: async () => {
@@ -134,6 +137,9 @@ export const RoutesScreen = ({
         <FlatList
           keyExtractor={(item) => `${item?.id}`}
           data={data}
+          refreshControl={
+            <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
+          }
           renderItem={({ item }: { item: BusStopInterface }) => (
             <ListItem
               item={item}
