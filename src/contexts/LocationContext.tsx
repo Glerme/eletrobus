@@ -2,10 +2,9 @@ import { createContext, useContext, useState } from "react";
 import {
   LocationAccuracy,
   LocationObject,
-  LocationPermissionResponse,
   getCurrentPositionAsync,
-  requestForegroundPermissionsAsync,
   watchPositionAsync,
+  requestBackgroundPermissionsAsync,
 } from "expo-location";
 
 interface LocationContextProps {
@@ -33,20 +32,21 @@ export const LocationContextProvider = ({
   const [locationError, setLocationError] = useState<string | null>(null);
 
   const requestLocationPermissions = async () => {
-    const { granted }: LocationPermissionResponse =
-      await requestForegroundPermissionsAsync();
+    const { granted } = await requestBackgroundPermissionsAsync();
 
     if (granted) {
       try {
-        const currentPosition = await getCurrentPositionAsync();
+        const currentPosition = await getCurrentPositionAsync({});
 
         setLocation(currentPosition);
       } catch (error) {
         setLocationError("Falha ao buscar a localização.");
       }
-    } else {
-      setLocationError("Permita o acesso à localização para continuar.");
+      return;
     }
+
+    setLocationError("Permita o acesso à localização para continuar.");
+    return;
   };
 
   const getActualCurrentPosition = async () => {

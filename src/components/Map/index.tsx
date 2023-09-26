@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
 
-import { Box } from "native-base";
+import { Box, Flex, Text } from "native-base";
 import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 
@@ -90,9 +90,17 @@ export const Map = ({ markers }: MapInterface) => {
     <>
       <Box flex={1}>
         {locationError ? (
-          <Box flex={1} justifyContent={"center"} alignItems={"center"}>
-            <Text>{locationError}</Text>
-          </Box>
+          <Flex
+            flex={1}
+            justifyContent={"center"}
+            alignItems={"center"}
+            flexDir={"column"}
+          >
+            <Text fontSize={"16"} fontWeight={"bold"} mb={2}>
+              {locationError ??
+                "Permita acesso à localização do seu dispositivo."}
+            </Text>
+          </Flex>
         ) : location ? (
           <>
             <ZoomButtons onZoomPress={onZoomPress} />
