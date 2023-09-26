@@ -15,9 +15,9 @@ import { api } from "~/services/axios";
 
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
+import { Alert } from "~/components/Alert";
 import { Input } from "~/components/Form/Input";
 import { ListItem } from "~/components/ListItem";
-import { Alert } from "~/components/Alert";
 import { Background } from "~/components/Layouts/Background";
 import { AdvancedFilters } from "~/components/AdvancedFilters";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
@@ -56,6 +56,7 @@ export const RoutesScreen = ({
 
   const { data, isLoading, isError, error } = useQuery<BusStopInterface[]>({
     queryKey: ["bus-stop"],
+    refetchInterval: 5000,
     queryFn: async () => {
       const { data } = await api.get<BusStopInterface[]>("/bus-stop");
       return data;

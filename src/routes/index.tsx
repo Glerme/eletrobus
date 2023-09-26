@@ -21,7 +21,7 @@ export type RootStackParamList = {
   Favorites: undefined;
   Routes: undefined;
   Settings: undefined;
-  Map: undefined;
+  Map: { pointId?: string };
 };
 
 // Tipagem das props de navegação

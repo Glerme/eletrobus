@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet } from "react-native";
 
-import { Box, Flex, Text } from "native-base";
+import { Box, Flex } from "native-base";
 import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 
@@ -16,6 +16,7 @@ import { useModal } from "~/hooks/useModal";
 
 import { useLocation } from "~/contexts/LocationContext";
 
+import { Alert } from "../Alert";
 import { ZoomButtons } from "./components/ZoomButtons";
 import { CustomMarker } from "./components/CustomMarker";
 import { MyLocationButton } from "./components/MyLocationButton";
@@ -24,7 +25,7 @@ import { ModalDescription } from "./components/ModalDescription";
 
 import { THEME } from "~/styles/theme";
 
-export const Map = ({ markers }: MapInterface) => {
+export const Map = ({ markers, pointId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
 
   const { modalRef, handleOpenModal } = useModal();
@@ -54,7 +55,7 @@ export const Map = ({ markers }: MapInterface) => {
     });
   };
 
-  const onPressRoute = (route: BusStopInterface) => {
+  const onPressRoute = async (route: BusStopInterface) => {
     mapRef?.current?.animateCamera({
       center: { latitude: route.latitude, longitude: route.longitude },
       zoom: 17,
@@ -84,6 +85,21 @@ export const Map = ({ markers }: MapInterface) => {
   useEffect(() => {
     requestLocationPermissions();
     getActualCurrentPosition();
+  }, [locationError]);
+
+  useEffect(() => {
+    if (pointId) {
+      const point = markers?.find((marker) => marker.id === pointId);
+      console.log("ACHOaU", point);
+      if (point) {
+        mapRef?.current?.animateCamera({
+          center: { latitude: point?.latitude, longitude: point.longitude },
+          zoom: 17,
+        });
+
+        openModal(point);
+      }
+    }
   }, []);
 
   return (
@@ -96,10 +112,10 @@ export const Map = ({ markers }: MapInterface) => {
             alignItems={"center"}
             flexDir={"column"}
           >
-            <Text fontSize={"16"} fontWeight={"bold"} mb={2}>
-              {locationError ??
-                "Permita acesso à localização do seu dispositivo."}
-            </Text>
+            <Alert
+              status="warning"
+              text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
+            />
           </Flex>
         ) : location ? (
           <>
@@ -116,8 +132,8 @@ export const Map = ({ markers }: MapInterface) => {
               region={{
                 longitudeDelta: 0.005,
                 latitudeDelta: 0.005,
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
+                latitude: location?.coords?.latitude,
+                longitude: location?.coords?.longitude,
               }}
               showsUserLocation={true}
               showsMyLocationButton={false}

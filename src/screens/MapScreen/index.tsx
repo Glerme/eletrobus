@@ -16,7 +16,14 @@ import { SafeAreaView } from "~/components/Layouts/SafeAreaView";
 import { THEME } from "~/styles/theme";
 
 export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
-  const { data, isLoading, isError, error } = useQuery<BusStopInterface[]>({
+  const pointId = route.params?.pointId ?? "";
+
+  const {
+    data: points,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<BusStopInterface[]>({
     queryKey: ["bus-stop"],
     queryFn: async () => {
       const { data } = await api.get<BusStopInterface[]>("/bus-stop");
@@ -56,7 +63,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
         <Box flex={1}>
-          <Map markers={data} />
+          <Map markers={points} pointId={pointId} />
         </Box>
       </SafeAreaView>
     </>

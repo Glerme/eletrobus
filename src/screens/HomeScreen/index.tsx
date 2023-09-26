@@ -105,7 +105,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                     w={"full"}
                     bg={THEME.colors.secondary["500"]}
                     colorScheme="secondary"
-                    onPress={() => navigation.navigate("Map")}
+                    onPress={() => navigation.navigate("Map", {})}
                   >
                     <HStack space={1} alignItems={"center"}>
                       <GlobeHemisphereWest size={20} color="white" />

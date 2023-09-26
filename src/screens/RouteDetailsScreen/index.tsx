@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ActivityIndicator } from "react-native";
 
 import {
   Box,
@@ -21,6 +22,7 @@ import { api } from "~/services/axios";
 
 import { NavigationProps } from "~/routes";
 
+import { Alert } from "~/components/Alert";
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
 import { TypeRoute } from "~/components/TypeRoute";
@@ -31,43 +33,7 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
-const mockedData = [
-  {
-    id: 1,
-    name: "Bauru",
-    isToday: true,
-  },
-  {
-    id: 2,
-    name: "São Paulo",
-    isToday: false,
-  },
-  {
-    id: 3,
-    name: "Rio de Janeiro",
-    isToday: false,
-  },
-  {
-    id: 4,
-    name: "Belo Horizonte",
-    isToday: false,
-  },
-  {
-    id: 5,
-    name: "Porto Alegre",
-    isToday: false,
-  },
-  {
-    id: 6,
-    name: "Porto Alegre",
-    isToday: false,
-  },
-  {
-    id: 7,
-    name: "Porto Alegre",
-    isToday: false,
-  },
-];
+import { THEME } from "~/styles/theme";
 
 export const RouteDetailsScreen = ({
   navigation,
@@ -83,16 +49,42 @@ export const RouteDetailsScreen = ({
     isError,
     error,
   } = useQuery<BusStopInterface>({
-    queryKey: ["routes-bus"],
+    queryKey: ["point-bus-details"],
     queryFn: async () => {
       const { data } = await api.get<BusStopInterface>(
         `/bus-stop/${route.params.id}`
       );
+
       return data;
     },
   });
 
-  console.log(point);
+  if (isLoading) {
+    return (
+      <Background>
+        <ScreenContent>
+          <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+            <ActivityIndicator
+              size={"large"}
+              color={THEME.colors.primary["900"]}
+            />
+          </Box>
+        </ScreenContent>
+      </Background>
+    );
+  }
+
+  if (isError) {
+    console.error(error);
+
+    return (
+      <Background>
+        <ScreenContent>
+          <Alert status="error" />
+        </ScreenContent>
+      </Background>
+    );
+  }
 
   return (
     <Background>
@@ -151,12 +143,12 @@ export const RouteDetailsScreen = ({
                 </VStack>
               </HStack>
 
-              <FlatList
+              {/* <FlatList
                 data={mockedData}
                 horizontal
                 keyExtractor={(item) => `${item.id}`}
                 renderItem={({ item }) => <HourCard isToday={item.isToday} />}
-              />
+              /> */}
             </Box>
 
             <Box>
@@ -180,7 +172,11 @@ export const RouteDetailsScreen = ({
                 />
               ) : (
                 <Button
-                  onPress={() => console.log("click")}
+                  onPress={() =>
+                    navigation.navigate("Map", {
+                      pointId: point?.id,
+                    })
+                  }
                   title="Acompanhar Viagem"
                   fontColor={"white"}
                 />
