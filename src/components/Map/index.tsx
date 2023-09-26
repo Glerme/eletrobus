@@ -135,7 +135,7 @@ export const Map = ({ markers }: MapInterface) => {
                       <MapViewDirections
                         origin={origin}
                         destination={destination}
-                        apikey={process.env.GOOGLE_MAPS_API_KEY}
+                        apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
                         strokeWidth={5}
                         strokeColor="blue"
                         key={index}

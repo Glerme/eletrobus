@@ -37,10 +37,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [user, setUser] = useState<null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const CLIENT_ID = process.env.CLIENT_ID;
-  const REDIRECT_URI = process.env.REDIRECT_URI;
-  const SCOPE = encodeURI(process.env.SCOPE ?? "profile email");
-  const RESPONSE_TYPE = process.env.RESPONSE_TYPE;
+  const CLIENT_ID = process.env.EXPO_PUBLIC_CLIENT_ID;
+  const REDIRECT_URI = process.env.EXPO_PUBLIC_REDIRECT_URI;
+  const SCOPE = encodeURI(process.env.EXPO_PUBLIC_SCOPE ?? "profile email");
+  const RESPONSE_TYPE = process.env.EXPO_PUBLIC_RESPONSE_TYPE;
 
   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
 
