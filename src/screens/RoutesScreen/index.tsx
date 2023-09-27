@@ -59,7 +59,6 @@ export const RoutesScreen = ({
     BusStopInterface[]
   >({
     queryKey: ["bus-stop"],
-    refetchInterval: 5000,
     queryFn: async () => {
       const { data } = await api.get<BusStopInterface[]>("/bus-stop");
       return data;
