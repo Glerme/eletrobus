@@ -16,10 +16,10 @@ import {
   UsersThree,
 } from "phosphor-react-native";
 import { TouchableHighlight, TouchableNativeFeedback } from "react-native";
-import { CirculedIcon } from "~/screens/RoutesScreen/styles";
+import { CirculedIcon } from "~/screens/PointsScreen/styles";
 import { THEME } from "~/styles/theme";
 import { BoxButton } from "../BoxButton";
-import { ICity, IFilters } from "~/screens/RoutesScreen";
+import { ICity, IFilters } from "~/screens/PointsScreen";
 import { Dispatch, SetStateAction, useState } from "react";
 import CidadesMock from "~/mock/CidadesMock";
 

@@ -7,7 +7,7 @@ import { House, Gear, MapPinLine, Path, List } from "phosphor-react-native";
 
 import { HomeScreen } from "~/screens/HomeScreen";
 import { MapScreen } from "~/screens/MapScreen";
-import { PointsScreen } from "~/screens/RoutesScreen";
+import { PointsScreen } from "~/screens/PointsScreen";
 import { SettingsScreen } from "~/screens/SettingsScreen";
 
 import { THEME } from "~/styles/theme";
@@ -26,6 +26,7 @@ export const TabNavigator = ({}) => {
         tabBarStyle: {
           backgroundColor: THEME.colors.white,
         },
+        // unmountOnBlur: true, // ver dps se isso esta deixando lento
       }}
       initialRouteName={"Home"}
     >

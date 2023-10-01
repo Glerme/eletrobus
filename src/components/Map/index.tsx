@@ -162,6 +162,7 @@ export const Map = ({ markers, pointId }: MapInterface) => {
                         strokeWidth={5}
                         strokeColor="blue"
                         key={index}
+                        mode="TRANSIT"
                       />
                     );
                   }

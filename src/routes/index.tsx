@@ -10,7 +10,7 @@ import { DrawerNavigator } from "./drawer.routes";
 
 import { ProfileScreen } from "~/screens/ProfileScreen";
 import { FavoritesScreen } from "~/screens/FavoritesScreen";
-import { PointDetailsScreen } from "~/screens/RouteDetailsScreen";
+import { PointDetailsScreen } from "~/screens/PointDetailsScreen";
 
 import { Contexts } from "./contexts.routes";
 
