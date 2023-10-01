@@ -40,10 +40,10 @@ export interface IFilters {
   time: Date;
 }
 
-export const RoutesScreen = ({
+export const PointsScreen = ({
   navigation,
   route,
-}: NavigationProps<"Routes">) => {
+}: NavigationProps<"Points">) => {
   const [filters, setFilters] = useState<IFilters>({
     kindPeople: "todos",
     kindRoute: "todos",
@@ -143,7 +143,7 @@ export const RoutesScreen = ({
             <ListItem
               item={item}
               onPress={() => {
-                navigation.navigate("RouteDetails", {
+                navigation.navigate("PointDetails", {
                   id: `${item?.id}`,
                 });
               }}

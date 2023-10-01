@@ -43,8 +43,8 @@ export const Map = ({ markers, pointId }: MapInterface) => {
     requestLocationPermissions,
   } = useLocation();
 
-  const openModal = (data: BusStopInterface) => {
-    setDataPoint(data);
+  const openModal = (marker: BusStopInterface) => {
+    setDataPoint(marker);
     handleOpenModal();
   };
 
@@ -58,7 +58,7 @@ export const Map = ({ markers, pointId }: MapInterface) => {
   const onPressRoute = async (route: BusStopInterface) => {
     mapRef?.current?.animateCamera({
       center: { latitude: route.latitude, longitude: route.longitude },
-      zoom: 17,
+      zoom: 20,
     });
   };
 
@@ -89,18 +89,15 @@ export const Map = ({ markers, pointId }: MapInterface) => {
 
   useEffect(() => {
     if (pointId) {
-      const point = markers?.find((marker) => marker.id === pointId);
-      console.log("ACHOaU", point);
+      const point = markers?.find((marker) => marker.id === pointId) ?? false;
       if (point) {
         mapRef?.current?.animateCamera({
           center: { latitude: point?.latitude, longitude: point.longitude },
-          zoom: 17,
+          zoom: 20,
         });
-
-        openModal(point);
       }
     }
-  }, []);
+  }, [pointId]);
 
   return (
     <>

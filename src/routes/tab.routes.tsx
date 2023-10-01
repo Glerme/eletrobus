@@ -7,7 +7,7 @@ import { House, Gear, MapPinLine, Path, List } from "phosphor-react-native";
 
 import { HomeScreen } from "~/screens/HomeScreen";
 import { MapScreen } from "~/screens/MapScreen";
-import { RoutesScreen } from "~/screens/RoutesScreen";
+import { PointsScreen } from "~/screens/RoutesScreen";
 import { SettingsScreen } from "~/screens/SettingsScreen";
 
 import { THEME } from "~/styles/theme";
@@ -78,8 +78,8 @@ export const TabNavigator = ({}) => {
       />
 
       <Tabs.Screen
-        name={"Routes"}
-        component={RoutesScreen as any}
+        name={"Points"}
+        component={PointsScreen as any}
         options={{
           headerShown: true,
           headerStyle: {
@@ -98,7 +98,7 @@ export const TabNavigator = ({}) => {
               </TouchableOpacity>
             );
           },
-          tabBarLabel: "Rotas",
+          tabBarLabel: "Pontos",
           tabBarIcon: ({ color, size, focused }) => (
             <Path
               color={color}

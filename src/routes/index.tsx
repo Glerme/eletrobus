@@ -10,16 +10,17 @@ import { DrawerNavigator } from "./drawer.routes";
 
 import { ProfileScreen } from "~/screens/ProfileScreen";
 import { FavoritesScreen } from "~/screens/FavoritesScreen";
-import { RouteDetailsScreen } from "~/screens/RouteDetailsScreen";
+import { PointDetailsScreen } from "~/screens/RouteDetailsScreen";
+
 import { Contexts } from "./contexts.routes";
 
 // Tipagem das telas e parâmetros
 export type RootStackParamList = {
   Home: undefined;
   Profile: { userId: string };
-  RouteDetails: { id: string };
+  PointDetails: { id: string };
   Favorites: undefined;
-  Routes: undefined;
+  Points: undefined;
   Settings: undefined;
   Map: { pointId?: string };
 };
@@ -34,18 +35,22 @@ const Stack = createNativeStackNavigator();
 const stacks: {
   name: keyof RootStackParamList;
   component: React.ComponentType<any>;
+  label: string;
 }[] = [
   {
-    name: "RouteDetails",
-    component: RouteDetailsScreen,
+    name: "PointDetails",
+    component: PointDetailsScreen,
+    label: "Detalhes do ponto",
   },
   {
     name: "Favorites",
     component: FavoritesScreen,
+    label: "Favoritos",
   },
   {
     name: "Profile",
     component: ProfileScreen,
+    label: "Perfil",
   },
 ];
 
@@ -89,6 +94,7 @@ export const Routes = () => {
                 key={index}
                 options={{
                   headerShown: true,
+                  title: stack.label,
                   headerStyle: {
                     backgroundColor: "#0DAC86",
                   },

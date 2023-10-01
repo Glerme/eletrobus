@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { ActivityIndicator, RefreshControl } from "react-native";
 
-import {
-  Box,
-  FlatList,
-  HStack,
-  Image,
-  Spacer,
-  Text,
-  VStack,
-  View,
-} from "native-base";
+import { Box, HStack, Image, Spacer, Text, VStack, View } from "native-base";
 import { Info } from "phosphor-react-native";
 import { useQuery } from "@tanstack/react-query";
 
@@ -35,10 +26,10 @@ import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
 
-export const RouteDetailsScreen = ({
+export const PointDetailsScreen = ({
   navigation,
   route,
-}: NavigationProps<"RouteDetails">) => {
+}: NavigationProps<"PointDetails">) => {
   const { user } = useAuth();
 
   const [favorite, setFavorite] = useState<boolean>(false);
@@ -183,7 +174,7 @@ export const RouteDetailsScreen = ({
                       pointId: point?.id,
                     })
                   }
-                  title="Acompanhar Viagem"
+                  title="Ver Ponto de Ônibus"
                   fontColor={"white"}
                 />
               )}

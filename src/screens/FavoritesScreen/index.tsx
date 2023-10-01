@@ -8,13 +8,11 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import CorridasSalvasSvg from "~/assets/corridas-salvas.svg";
 
-import { IBusRoute } from "~/interfaces/IBusRoute";
-
 import { NavigationProps } from "~/routes";
 
 import { THEME } from "~/styles/theme";
 
-const mockedData: IBusRoute[] = [
+const mockedData: any[] = [
   {
     id: 1,
     name: "Unip/Unesp",
@@ -80,7 +78,7 @@ export const FavoritesScreen = ({
             <RouteCard
               route={item}
               onPressCard={() =>
-                navigation.navigate("RouteDetails", { id: "123" })
+                navigation.navigate("PointDetails", { id: "123" })
               }
               w={"full"}
             />

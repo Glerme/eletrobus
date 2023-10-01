@@ -72,7 +72,7 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
               key={item.id}
               route={item}
               onPressCard={() =>
-                navigation.navigate("RouteDetails", {
+                navigation.navigate("PointDetails", {
                   params: {
                     id: item?.id,
                   },
