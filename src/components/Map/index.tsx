@@ -22,6 +22,7 @@ import { CustomMarker } from "./components/CustomMarker";
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { ModalDescription } from "./components/ModalDescription";
+import { BusRouteSelected } from "./components/BusRouteSelected";
 
 import { THEME } from "~/styles/theme";
 
@@ -83,8 +84,8 @@ export const Map = ({ markers, pointId }: MapInterface) => {
   };
 
   useEffect(() => {
-    requestLocationPermissions();
-    getActualCurrentPosition();
+    (async () => await requestLocationPermissions())();
+    (async () => await getActualCurrentPosition())();
   }, [locationError]);
 
   useEffect(() => {
@@ -116,6 +117,7 @@ export const Map = ({ markers, pointId }: MapInterface) => {
           </Flex>
         ) : location ? (
           <>
+            {busStops && <BusRouteSelected busRoute={busStops} />}
             <ZoomButtons onZoomPress={onZoomPress} />
             <ListRoutesButton onPressRoute={onPressRoute} />
             <MyLocationButton getCurrentPosition={getCurrentPosition} />

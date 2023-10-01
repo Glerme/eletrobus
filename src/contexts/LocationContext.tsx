@@ -10,8 +10,8 @@ import {
 interface LocationContextProps {
   location: LocationObject | null;
   locationError: string | null;
-  getActualCurrentPosition: () => void;
-  requestLocationPermissions: () => void;
+  getActualCurrentPosition: () => Promise<void>;
+  requestLocationPermissions: () => Promise<void>;
 }
 
 interface LocationContextProviderProps {
@@ -21,8 +21,8 @@ interface LocationContextProviderProps {
 export const LocationContext = createContext<LocationContextProps>({
   location: null,
   locationError: null,
-  getActualCurrentPosition: () => {},
-  requestLocationPermissions: () => {},
+  getActualCurrentPosition: async () => {},
+  requestLocationPermissions: async () => {},
 });
 
 export const LocationContextProvider = ({
