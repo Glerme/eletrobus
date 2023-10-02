@@ -14,6 +14,8 @@ import { NavigationProps } from "~/routes";
 
 import { api } from "~/services/axios";
 
+import { useAuth } from "~/contexts/AuthContext";
+
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
 import { Alert } from "~/components/Alert";
@@ -44,6 +46,8 @@ export const PointsScreen = ({
   navigation,
   route,
 }: NavigationProps<"Points">) => {
+  const { user } = useAuth();
+
   const [filters, setFilters] = useState<IFilters>({
     kindPeople: "todos",
     kindRoute: "todos",
@@ -60,8 +64,17 @@ export const PointsScreen = ({
   >({
     queryKey: ["bus-stop"],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface[]>("/bus-stop");
-      return data;
+      if (user?.driver) {
+        const { data } = await api.get<BusStopInterface[]>("/bus-stop", {
+          // params: {
+          //   driver: user?.driver?.id
+          // }
+        });
+        return data;
+      } else {
+        const { data } = await api.get<BusStopInterface[]>("/bus-stop");
+        return data;
+      }
     },
   });
 

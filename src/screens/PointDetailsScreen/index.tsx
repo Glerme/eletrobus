@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ActivityIndicator, RefreshControl } from "react-native";
 
 import { Box, HStack, Image, Spacer, Text, VStack, View } from "native-base";
-import { Info } from "phosphor-react-native";
+import { Info, Path } from "phosphor-react-native";
 import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "~/contexts/AuthContext";
@@ -25,6 +25,8 @@ import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
+import { ListItem } from "~/components/ListItem";
+import { ListRoutes } from "~/components/ListRoutes";
 
 export const PointDetailsScreen = ({
   navigation,
@@ -44,11 +46,19 @@ export const PointDetailsScreen = ({
   } = useQuery<BusStopInterface>({
     queryKey: ["point-bus-details"],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface>(
-        `/bus-stop/${route.params.id}`
-      );
+      if (user?.driver) {
+        const { data } = await api.get<BusStopInterface>(
+          `/bus-stop/${route.params.id}`
+        );
 
-      return data;
+        return data;
+      } else {
+        const { data } = await api.get<BusStopInterface>(
+          `/bus-stop/${route.params.id}`
+        );
+
+        return data;
+      }
     },
   });
 
@@ -87,43 +97,41 @@ export const PointDetailsScreen = ({
             <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
           }
         >
-          <VStack space={4} flex={1}>
-            <HStack alignItems={"center"}>
-              <HStack space={2} alignItems="center">
-                <View
-                  width={4}
-                  height={4}
-                  borderRadius={50}
-                  backgroundColor={true ? "#A7E179" : "#E17979"}
-                />
-                <Text fontSize="lg" fontWeight={"600"}>
-                  {point?.name}
-                </Text>
-              </HStack>
-
-              <Spacer />
-
-              <FavoriteButton
-                favorite={favorite}
-                handlePress={() => setFavorite(!favorite)}
+          <HStack alignItems={"center"} space={2}>
+            <HStack space={2} alignItems="center">
+              <View
+                width={4}
+                height={4}
+                borderRadius={50}
+                backgroundColor={true ? "#A7E179" : "#E17979"}
               />
+              <Text fontSize="lg" fontWeight={"600"}>
+                {point?.name}
+              </Text>
             </HStack>
 
-            <Box w={"full"}>
-              <Image
-                source={
-                  point?.images
-                    ? { uri: point?.images[0] ?? point.images[1] }
-                    : require("~/assets/img/not-found.png")
-                }
-                w={"full"}
-                h="56"
-                borderRadius={"md"}
-                alt={point?.name}
-              />
-            </Box>
+            <Spacer />
 
-            <Box>
+            <FavoriteButton
+              favorite={favorite}
+              handlePress={() => setFavorite(!favorite)}
+            />
+          </HStack>
+
+          <Box w={"full"}>
+            <Image
+              source={
+                point?.images
+                  ? { uri: point?.images[0] ?? point.images[1] }
+                  : require("~/assets/img/not-found.png")
+              }
+              w={"full"}
+              h="56"
+              borderRadius={"md"}
+              alt={point?.name}
+            />
+          </Box>
+          {/* <Box>
               <HStack alignItems={"flex-start"} mb={2}>
                 <VStack space={1}>
                   <Text fontWeight={500} fontSize="sm">
@@ -136,50 +144,62 @@ export const PointDetailsScreen = ({
                 <Spacer />
                 <VStack space={1} alignItems="flex-end">
                   <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
-                  {/* <TypeRoute mt={1} tipo={"estudantes"} /> */}
+                  <TypeRoute mt={1} tipo={"estudantes"} />
                 </VStack>
               </HStack>
 
-              {/* <FlatList
+              <FlatList
                 data={mockedData}
                 horizontal
                 keyExtractor={(item) => `${item.id}`}
                 renderItem={({ item }) => <HourCard isToday={item.isToday} />}
-              /> */}
-            </Box>
+              />
+            </Box> */}
 
-            <Box>
-              <HStack alignItems={"center"} space={1} mb={1}>
-                <Info size={18} color="#e8b10e" weight="duotone" />
-                <Text fontSize={"sm"} fontWeight={"500"}>
-                  Descrição
+          <VStack>
+            <HStack alignItems={"center"} mt={2} space={2}>
+              <Info size={18} color="#4d34dd" weight="duotone" />
+              <Text fontSize={"sm"} fontWeight={"600"}>
+                Descrição
+              </Text>
+            </HStack>
+            <Text fontSize={"sm"} color={"gray.700"}>
+              {point?.description}
+            </Text>
+          </VStack>
+
+          {user?.driver && (
+            <VStack>
+              <HStack alignItems={"center"} mt={2} space={2}>
+                <Path size={18} color="#46B99E" weight="duotone" />
+                <Text fontSize={"sm"} fontWeight={"600"}>
+                  Rotas
                 </Text>
               </HStack>
-              <Text fontSize={"sm"} flex={1} color={"gray.700"}>
-                {point?.description}
-              </Text>
-            </Box>
-            <Spacer />
-            <Box>
-              {user?.driver ? (
-                <Button
-                  onPress={() => console.log("click")}
-                  title="Iniciar Viagem"
-                  fontColor={"white"}
+
+              {point?.rotas.map((rota) => (
+                <ListRoutes
+                  key={rota.route_id}
+                  route={rota}
+                  onPress={() => alert(JSON.stringify(rota, null, 2))}
                 />
-              ) : (
-                <Button
-                  onPress={() =>
-                    navigation.navigate("Map", {
-                      pointId: point?.id,
-                    })
-                  }
-                  title="Ver Ponto de Ônibus"
-                  fontColor={"white"}
-                />
-              )}
-            </Box>
-          </VStack>
+              ))}
+            </VStack>
+          )}
+
+          <Box>
+            {!user?.driver && (
+              <Button
+                onPress={() =>
+                  navigation.navigate("Map", {
+                    pointId: point?.id,
+                  })
+                }
+                title="Ver Ponto de Ônibus"
+                fontColor={"white"}
+              />
+            )}
+          </Box>
         </ScrollViewContainer>
       </ScreenContent>
     </Background>
