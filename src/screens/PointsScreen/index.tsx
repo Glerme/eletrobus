@@ -34,7 +34,6 @@ export interface ICity {
 }
 
 export interface IFilters {
-  kindPeople: "todos" | "estudantes";
   kindRoute: "todos" | "municipal" | "intermunicipal";
   cities: ICity[];
   district: ICity[];
@@ -49,7 +48,6 @@ export const PointsScreen = ({
   const { user } = useAuth();
 
   const [filters, setFilters] = useState<IFilters>({
-    kindPeople: "todos",
     kindRoute: "todos",
     cities: [],
     district: [],
