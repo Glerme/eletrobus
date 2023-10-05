@@ -187,7 +187,7 @@ export const PointDetailsScreen = ({
             </VStack>
           )}
 
-          <Box>
+          <Box mt={2}>
             {!user?.driver && (
               <Button
                 onPress={() =>
@@ -197,6 +197,7 @@ export const PointDetailsScreen = ({
                 }
                 title="Ver Ponto de Ônibus"
                 fontColor={"white"}
+                disabled={isRefetching || isLoading}
               />
             )}
           </Box>

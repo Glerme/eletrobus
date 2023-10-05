@@ -34,7 +34,6 @@ export const TabNavigator = ({}) => {
         name={"Home"}
         component={HomeScreen as any}
         options={{
-          headerShown: true,
           headerStyle: {
             backgroundColor: "#0DAC86",
             borderWidth: 0,
@@ -82,7 +81,6 @@ export const TabNavigator = ({}) => {
         name={"Points"}
         component={PointsScreen as any}
         options={{
-          headerShown: true,
           headerStyle: {
             backgroundColor: "#0DAC86",
             borderWidth: 0,
@@ -114,7 +112,6 @@ export const TabNavigator = ({}) => {
         name={"Settings"}
         component={SettingsScreen as any}
         options={{
-          headerShown: true,
           headerStyle: {
             backgroundColor: "#0DAC86",
             borderWidth: 0,
