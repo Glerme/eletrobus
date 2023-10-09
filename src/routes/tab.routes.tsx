@@ -62,7 +62,7 @@ export const TabNavigator = ({}) => {
       />
 
       <Tabs.Screen
-        name={"Map"}
+        name={"Mapa"}
         component={MapScreen as any}
         options={{
           headerShown: false,
@@ -78,7 +78,7 @@ export const TabNavigator = ({}) => {
       />
 
       <Tabs.Screen
-        name={"Points"}
+        name={"Pontos"}
         component={PointsScreen as any}
         options={{
           headerStyle: {
@@ -109,7 +109,7 @@ export const TabNavigator = ({}) => {
       />
 
       <Tabs.Screen
-        name={"Settings"}
+        name={"Configurações"}
         component={SettingsScreen as any}
         options={{
           headerStyle: {

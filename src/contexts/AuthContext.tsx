@@ -78,7 +78,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     <AuthContext.Provider
       value={{
         loading,
-        user: { driver: false },
+        user: { driver: true },
         signIn,
         signOut,
         handleGoogleLogin,

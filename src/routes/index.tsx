@@ -13,6 +13,7 @@ import { FavoritesScreen } from "~/screens/FavoritesScreen";
 import { PointDetailsScreen } from "~/screens/PointDetailsScreen";
 
 import { Contexts } from "./contexts.routes";
+import { CourseDetailsScreen } from "~/screens/CourseDetailsScreen";
 
 // Tipagem das telas e parâmetros
 export type RootStackParamList = {
@@ -23,6 +24,7 @@ export type RootStackParamList = {
   Points: undefined;
   Settings: undefined;
   Map: { pointId?: string };
+  CouseDetails: { id: string };
 };
 
 // Tipagem das props de navegação
@@ -51,6 +53,11 @@ const stacks: {
     name: "Profile",
     component: ProfileScreen,
     label: "Perfil",
+  },
+  {
+    name: "CouseDetails",
+    component: CourseDetailsScreen,
+    label: "Rotas",
   },
 ];
 
