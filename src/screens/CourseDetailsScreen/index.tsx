@@ -14,9 +14,11 @@ import { api } from "~/services/axios";
 import { NavigationProps } from "~/routes";
 
 import { Alert } from "~/components/Alert";
+import { ListItem } from "~/components/ListItem";
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
 import { TypeRoute } from "~/components/TypeRoute";
+import { ListRoutes } from "~/components/ListRoutes";
 import { Background } from "~/components/Layouts/Background";
 import { StatusInfo } from "~/components/BusStatus/StatusInfo";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
@@ -25,8 +27,6 @@ import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
-import { ListItem } from "~/components/ListItem";
-import { ListRoutes } from "~/components/ListRoutes";
 
 export const CourseDetailsScreen = ({
   navigation,

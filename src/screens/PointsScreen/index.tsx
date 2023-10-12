@@ -133,7 +133,7 @@ export const PointsScreen = ({
             </Box>
 
             <FlatList
-              keyExtractor={(item) => `${item?.route_id}`}
+              keyExtractor={(item) => `${item?.vehicle_id}`}
               data={courses}
               refreshControl={
                 <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
@@ -143,10 +143,10 @@ export const PointsScreen = ({
                   item={item}
                   onPress={() => {
                     navigation.navigate("CouseDetails", {
-                      id: `${item?.route_id}`,
+                      id: `${item?.vehicle_id}`,
                     });
                   }}
-                  key={item?.route_id}
+                  key={item?.vehicle_id}
                 />
               )}
             />

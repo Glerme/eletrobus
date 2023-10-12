@@ -4,4 +4,5 @@ export interface CourseProps {
   route_id: string;
   initial_hour: string;
   final_hour: string;
+  route_name: string;
 }

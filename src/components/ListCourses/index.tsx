@@ -7,12 +7,15 @@ import { Box, HStack, Text } from "native-base";
 
 import { CourseProps } from "~/interfaces/Course.interface";
 
+import { formatDatetime } from "~/utils/format";
+
 interface IProps extends TouchableNativeFeedbackProps {
   item: CourseProps;
   onPress: () => void;
 }
 
 export const ListCourses = ({ item, onPress, ...rest }: IProps) => {
+  console.log(item);
   return (
     <TouchableNativeFeedback
       background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
@@ -32,13 +35,13 @@ export const ListCourses = ({ item, onPress, ...rest }: IProps) => {
         <HStack py="2" justifyContent={"space-between"}>
           <HStack space={4} alignItems={"center"}>
             <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
-              {item.vehicle_id}
+              {item?.route_name}
             </Text>
           </HStack>
 
           <HStack alignItems="center" space="1">
-            <Text>Initial: {item?.initial_hour}</Text>
-            <Text>Final: {item?.final_hour}</Text>
+            <Text>Initial: {formatDatetime(new Date(item?.initial_hour))}</Text>
+            <Text>Final: {formatDatetime(new Date(item?.final_hour))}</Text>
           </HStack>
         </HStack>
       </Box>
