@@ -85,19 +85,21 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
 
     return (
       <Background>
-        <ScreenContent
-          refreshControl={
-            <RefreshControl
-              onRefresh={handleUpdateData}
-              refreshing={
-                favoritesQuery.isRefetching ||
-                busStopsQuery.isRefetching ||
-                coursesQuery.isRefetching
-              }
-            />
-          }
-        >
-          <Alert status="error" />
+        <ScreenContent>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                onRefresh={handleUpdateData}
+                refreshing={
+                  favoritesQuery.isRefetching ||
+                  busStopsQuery.isRefetching ||
+                  coursesQuery.isRefetching
+                }
+              />
+            }
+          >
+            <Alert status="error" />
+          </ScrollView>
         </ScreenContent>
       </Background>
     );
