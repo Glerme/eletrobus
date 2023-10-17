@@ -28,6 +28,7 @@ import { AdvancedFilters } from "~/components/AdvancedFilters";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
+import { useMultipleQueryRefetch } from "~/hooks/useMultipleQueryRefetch";
 
 export interface ICity {
   id: number;

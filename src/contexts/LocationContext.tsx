@@ -4,7 +4,7 @@ import {
   LocationObject,
   getCurrentPositionAsync,
   watchPositionAsync,
-  requestBackgroundPermissionsAsync,
+  requestForegroundPermissionsAsync,
 } from "expo-location";
 
 interface LocationContextProps {
@@ -32,11 +32,14 @@ export const LocationContextProvider = ({
   const [locationError, setLocationError] = useState<string | null>(null);
 
   const requestLocationPermissions = async () => {
-    const { granted } = await requestBackgroundPermissionsAsync();
+    const { granted } = await requestForegroundPermissionsAsync();
 
     if (granted) {
       try {
-        const currentPosition = await getCurrentPositionAsync({});
+        const currentPosition = await getCurrentPositionAsync({
+          accuracy: LocationAccuracy.Highest,
+          timeInterval: 5000,
+        });
 
         setLocation(currentPosition);
       } catch (error) {

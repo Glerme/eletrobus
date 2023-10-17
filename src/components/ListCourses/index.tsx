@@ -15,7 +15,6 @@ interface IProps extends TouchableNativeFeedbackProps {
 }
 
 export const ListCourses = ({ item, onPress, ...rest }: IProps) => {
-  console.log(item);
   return (
     <TouchableNativeFeedback
       background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}

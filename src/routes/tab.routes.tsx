@@ -62,7 +62,7 @@ export const TabNavigator = ({}) => {
       />
 
       <Tabs.Screen
-        name={"Mapa"}
+        name={"Map"}
         component={MapScreen as any}
         options={{
           headerShown: false,

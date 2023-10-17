@@ -46,19 +46,10 @@ export const PointDetailsScreen = ({
   } = useQuery<BusStopInterface>({
     queryKey: ["point-bus-details"],
     queryFn: async () => {
-      if (user?.driver) {
-        const { data } = await api.get<BusStopInterface>(
-          `/bus-stop/${route.params.id}`
-        );
-
-        return data;
-      } else {
-        const { data } = await api.get<BusStopInterface>(
-          `/bus-stop/${route.params.id}`
-        );
-
-        return data;
-      }
+      const { data } = await api.get<BusStopInterface>(
+        `/bus-stop/${route.params.id}`
+      );
+      return data;
     },
   });
 
@@ -168,38 +159,34 @@ export const PointDetailsScreen = ({
             </Text>
           </VStack>
 
-          {user?.driver && (
-            <VStack>
-              <HStack alignItems={"center"} mt={2} space={2}>
-                <Path size={18} color="#46B99E" weight="duotone" />
-                <Text fontSize={"sm"} fontWeight={"600"}>
-                  Rotas
-                </Text>
-              </HStack>
+          <VStack>
+            <HStack alignItems={"center"} mt={2} space={2}>
+              <Path size={18} color="#46B99E" weight="duotone" />
+              <Text fontSize={"sm"} fontWeight={"600"}>
+                Rotas
+              </Text>
+            </HStack>
 
-              {point?.rotas.map((rota) => (
-                <ListRoutes
-                  key={rota.route_id}
-                  route={rota}
-                  onPress={() => alert(JSON.stringify(rota, null, 2))}
-                />
-              ))}
-            </VStack>
-          )}
+            {point?.rotas.map((rota) => (
+              <ListRoutes
+                key={rota.route_id}
+                route={rota}
+                onPress={() => alert(JSON.stringify(rota, null, 2))}
+              />
+            ))}
+          </VStack>
 
           <Box mt={2}>
-            {!user?.driver && (
-              <Button
-                onPress={() =>
-                  navigation.navigate("Map", {
-                    pointId: point?.id,
-                  })
-                }
-                title="Ver Ponto de Ônibus"
-                fontColor={"white"}
-                disabled={isRefetching || isLoading}
-              />
-            )}
+            <Button
+              onPress={() =>
+                navigation.navigate("Map", {
+                  pointId: point?.id,
+                })
+              }
+              title="Ver Ponto de Ônibus"
+              fontColor={"white"}
+              disabled={isRefetching || isLoading}
+            />
           </Box>
         </ScrollViewContainer>
       </ScreenContent>

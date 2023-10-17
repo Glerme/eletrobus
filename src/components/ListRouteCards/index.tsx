@@ -1,27 +1,18 @@
-import { useNavigation } from "@react-navigation/native";
-import {
-  Box,
-  FlatList,
-  Flex,
-  HStack,
-  Pressable,
-  Text,
-  VStack,
-} from "native-base";
-import { CaretRight } from "phosphor-react-native";
-
-import { RouteCard } from "../RouteCard";
-
-import { THEME } from "~/styles/theme";
+import { Box, FlatList, HStack, Text, VStack } from "native-base";
 
 interface ListRouteCardsProps {
   description: string;
   data: any[];
+  cardComponent: React.FC<any>;
+  onPressCard: (item: any) => void;
 }
 
-export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
-  const navigation = useNavigation<any>();
-
+export const ListRouteCards = ({
+  data,
+  description,
+  cardComponent: CardComponent,
+  onPressCard,
+}: ListRouteCardsProps) => {
   return (
     <>
       <VStack mt="2" mb="2">
@@ -34,20 +25,6 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
           >
             {description}
           </Text>
-          <Pressable
-            alignItems="center"
-            onPress={() => navigation.navigate("Favorites")}
-            display={"flex"}
-            justifyContent={"center"}
-            alignContent={"center"}
-          >
-            <Flex direction="row" alignItems={"center"}>
-              <Text fontWeight={500} color="primary.400">
-                exibir mais
-              </Text>
-              <CaretRight color={THEME.colors.primary[400]} size={16} />
-            </Flex>
-          </Pressable>
         </HStack>
 
         <FlatList
@@ -61,23 +38,17 @@ export const ListRouteCards = ({ data, description }: ListRouteCardsProps) => {
               alignItems={"center"}
               justifyContent={"center"}
             >
-              <Text fontSize={"md"} fontWeight={"semibold"}>
-                Nenhuma rota encontrada
+              <Text fontSize={"md"} fontWeight={"medium"} alignItems={"center"}>
+                Nenhum item encontrado
               </Text>
             </Box>
           )}
           ItemSeparatorComponent={() => <Box w={2} />}
-          renderItem={({ item }) => (
-            <RouteCard
-              key={item.id}
-              route={item}
-              onPressCard={() =>
-                navigation.navigate("PointDetails", {
-                  params: {
-                    id: item?.id,
-                  },
-                })
-              }
+          renderItem={({ item, index }) => (
+            <CardComponent
+              key={index}
+              data={item}
+              onPressCard={() => onPressCard(item)}
             />
           )}
         />

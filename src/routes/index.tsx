@@ -11,9 +11,9 @@ import { DrawerNavigator } from "./drawer.routes";
 import { ProfileScreen } from "~/screens/ProfileScreen";
 import { FavoritesScreen } from "~/screens/FavoritesScreen";
 import { PointDetailsScreen } from "~/screens/PointDetailsScreen";
+import { CourseDetailsScreen } from "~/screens/CourseDetailsScreen";
 
 import { Contexts } from "./contexts.routes";
-import { CourseDetailsScreen } from "~/screens/CourseDetailsScreen";
 
 // Tipagem das telas e parâmetros
 export type RootStackParamList = {
