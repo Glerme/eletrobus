@@ -87,7 +87,6 @@ export const Routes = () => {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-              statusBarStyle: "light",
             }}
             initialRouteName="TabNavigator"
           >
@@ -95,9 +94,6 @@ export const Routes = () => {
               name="TabNavigator"
               component={TabNavigator}
               options={{
-                headerStyle: {
-                  backgroundColor: "#0DAC86",
-                },
                 statusBarStyle: "light",
                 statusBarColor: "#0DAC86",
                 contentStyle: {

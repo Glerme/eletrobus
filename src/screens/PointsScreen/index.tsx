@@ -8,7 +8,7 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { MagnifyingGlass, Sliders } from "phosphor-react-native";
-import { Box, FlatList, HStack, Icon, Text, View } from "native-base";
+import { Box, Center, FlatList, HStack, Icon, Text, View } from "native-base";
 
 import { NavigationProps } from "~/routes";
 
@@ -22,6 +22,7 @@ import { BusStopInterface } from "~/interfaces/BusStop.interface";
 import { Alert } from "~/components/Alert";
 import { Input } from "~/components/Form/Input";
 import { ListItem } from "~/components/ListItem";
+import { StatusBar } from "~/components/StatusBar";
 import { ListCourses } from "~/components/ListCourses";
 import { Background } from "~/components/Layouts/Background";
 import { AdvancedFilters } from "~/components/AdvancedFilters";
@@ -81,14 +82,16 @@ export const PointsScreen = ({
 
   if (isLoading) {
     return (
-      <Box
-        flex={1}
-        justifyContent={"center"}
-        alignItems={"center"}
-        backgroundColor={"gray.400"}
-      >
-        <ActivityIndicator size={"large"} color={THEME.colors.primary["900"]} />
-      </Box>
+      <Background>
+        <ScreenContent>
+          <Center flex={1}>
+            <ActivityIndicator
+              size={"large"}
+              color={THEME.colors.primary["900"]}
+            />
+          </Center>
+        </ScreenContent>
+      </Background>
     );
   }
 
@@ -107,117 +110,129 @@ export const PointsScreen = ({
   switch (user?.driver) {
     case true:
       return (
-        <Background>
-          <ScreenContent>
-            <HStack space={1}>
-              <View flex={1} alignItems={"center"}>
-                <Input
-                  placeholder="Pesquisar"
-                  InputRightElement={
-                    <TouchableHighlight onPress={() => console.log(filters)}>
-                      <Icon as={<MagnifyingGlass />} mr={2} />
-                    </TouchableHighlight>
-                  }
-                />
-              </View>
-            </HStack>
+        <>
+          <StatusBar />
+          <Background>
+            <ScreenContent>
+              <HStack space={1}>
+                <View flex={1} alignItems={"center"}>
+                  <Input
+                    placeholder="Pesquisar"
+                    InputRightElement={
+                      <TouchableHighlight onPress={() => console.log(filters)}>
+                        <Icon as={<MagnifyingGlass />} mr={2} />
+                      </TouchableHighlight>
+                    }
+                  />
+                </View>
+              </HStack>
 
-            <Box w={"140"} mt={6} mb={2}>
-              <Text
-                fontSize={"md"}
-                color={THEME.colors.gray["800"]}
-                fontWeight={"600"}
-              >
-                Listagem
-              </Text>
-            </Box>
+              <Box w={"140"} mt={6} mb={2}>
+                <Text
+                  fontSize={"md"}
+                  color={THEME.colors.gray["800"]}
+                  fontWeight={"600"}
+                >
+                  Listagem
+                </Text>
+              </Box>
 
-            <FlatList
-              keyExtractor={(item) => `${item?.vehicle_id}`}
-              data={courses}
-              refreshControl={
-                <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
-              }
-              renderItem={({ item }: { item: CourseProps }) => (
-                <ListCourses
-                  item={item}
-                  onPress={() => {
-                    navigation.navigate("CouseDetails", {
-                      id: `${item?.vehicle_id}`,
-                    });
-                  }}
-                  key={item?.vehicle_id}
-                />
-              )}
-            />
-          </ScreenContent>
-        </Background>
+              <FlatList
+                keyExtractor={(item) => `${item?.vehicle_id}`}
+                data={courses}
+                refreshControl={
+                  <RefreshControl
+                    onRefresh={refetch}
+                    refreshing={isRefetching}
+                  />
+                }
+                renderItem={({ item }: { item: CourseProps }) => (
+                  <ListCourses
+                    item={item}
+                    onPress={() => {
+                      navigation.navigate("CouseDetails", {
+                        id: `${item?.vehicle_id}`,
+                      });
+                    }}
+                    key={item?.vehicle_id}
+                  />
+                )}
+              />
+            </ScreenContent>
+          </Background>
+        </>
       );
 
     default:
       return (
-        <Background>
-          <ScreenContent>
-            <HStack space={1}>
-              <View flex={1} alignItems={"center"}>
-                <Input
-                  placeholder="Pesquisar"
-                  InputRightElement={
-                    <TouchableHighlight onPress={() => console.log(filters)}>
-                      <Icon as={<MagnifyingGlass />} mr={2} />
-                    </TouchableHighlight>
-                  }
-                />
-              </View>
-              <TouchableNativeFeedback
-                onPress={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
-              >
-                <Box p={2}>
-                  <Sliders
-                    size={28}
-                    color={showAdvancedFilters ? "#442ccd" : "#404040"}
+        <>
+          <StatusBar />
+          <Background>
+            <ScreenContent>
+              <HStack space={1}>
+                <View flex={1} alignItems={"center"}>
+                  <Input
+                    placeholder="Pesquisar"
+                    InputRightElement={
+                      <TouchableHighlight onPress={() => console.log(filters)}>
+                        <Icon as={<MagnifyingGlass />} mr={2} />
+                      </TouchableHighlight>
+                    }
                   />
-                </Box>
-              </TouchableNativeFeedback>
-            </HStack>
+                </View>
+                <TouchableNativeFeedback
+                  onPress={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                  background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
+                >
+                  <Box p={2}>
+                    <Sliders
+                      size={28}
+                      color={showAdvancedFilters ? "#442ccd" : "#404040"}
+                    />
+                  </Box>
+                </TouchableNativeFeedback>
+              </HStack>
 
-            {showAdvancedFilters && (
-              <View>
-                <AdvancedFilters filters={filters} setFilters={setFilters} />
-              </View>
-            )}
-
-            <Box w={"140"} mt={6} mb={2}>
-              <Text
-                fontSize={"md"}
-                color={THEME.colors.gray["800"]}
-                fontWeight={"600"}
-              >
-                Listagem
-              </Text>
-            </Box>
-
-            <FlatList
-              keyExtractor={(item) => `${item?.id}`}
-              data={busStops}
-              refreshControl={
-                <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
-              }
-              renderItem={({ item }: { item: BusStopInterface }) => (
-                <ListItem
-                  item={item}
-                  onPress={() => {
-                    navigation.navigate("PointDetails", {
-                      id: `${item?.id}`,
-                    });
-                  }}
-                  key={item.id}
-                />
+              {showAdvancedFilters && (
+                <View>
+                  <AdvancedFilters filters={filters} setFilters={setFilters} />
+                </View>
               )}
-            />
-          </ScreenContent>
-        </Background>
+
+              <Box w={"140"} mt={6} mb={2}>
+                <Text
+                  fontSize={"md"}
+                  color={THEME.colors.gray["800"]}
+                  fontWeight={"600"}
+                >
+                  Listagem
+                </Text>
+              </Box>
+
+              <FlatList
+                keyExtractor={(item) => `${item?.id}`}
+                data={busStops}
+                refreshControl={
+                  <RefreshControl
+                    onRefresh={refetch}
+                    refreshing={isRefetching}
+                  />
+                }
+                renderItem={({ item }: { item: BusStopInterface }) => (
+                  <ListItem
+                    item={item}
+                    onPress={() => {
+                      navigation.navigate("PointDetails", {
+                        id: `${item?.id}`,
+                      });
+                    }}
+                    key={item.id}
+                  />
+                )}
+              />
+            </ScreenContent>
+          </Background>
+        </>
       );
   }
 };

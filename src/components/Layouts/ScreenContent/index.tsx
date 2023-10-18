@@ -1,14 +1,10 @@
-import { InterfaceScrollViewProps } from "native-base/lib/typescript/components/basic/ScrollView/types";
 import { ScreenContentContainer } from "./styles";
+import { InterfaceViewProps } from "native-base/lib/typescript/components/basic/View/types";
 
-interface ScreenContentProps extends InterfaceScrollViewProps {
+interface ScreenContentProps extends InterfaceViewProps {
   children: React.ReactNode;
 }
 
 export const ScreenContent = ({ children, ...rest }: ScreenContentProps) => {
-  return (
-    <ScreenContentContainer nestedScrollEnabled {...rest}>
-      {children}
-    </ScreenContentContainer>
-  );
+  return <ScreenContentContainer {...rest}>{children}</ScreenContentContainer>;
 };

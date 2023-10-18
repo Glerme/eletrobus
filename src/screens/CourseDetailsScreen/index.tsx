@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { ActivityIndicator, RefreshControl } from "react-native";
 
-import { Box, HStack, Image, Spacer, Text, VStack, View } from "native-base";
+import {
+  Box,
+  Center,
+  HStack,
+  Image,
+  Spacer,
+  Text,
+  VStack,
+  View,
+} from "native-base";
 import { Info, Path } from "phosphor-react-native";
 import { useQuery } from "@tanstack/react-query";
 
@@ -18,6 +27,7 @@ import { ListItem } from "~/components/ListItem";
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
 import { TypeRoute } from "~/components/TypeRoute";
+import { StatusBar } from "~/components/StatusBar";
 import { ListRoutes } from "~/components/ListRoutes";
 import { Background } from "~/components/Layouts/Background";
 import { StatusInfo } from "~/components/BusStatus/StatusInfo";
@@ -56,16 +66,13 @@ export const CourseDetailsScreen = ({
 
   // if (isLoading) {
   //   return (
-  //     <Background>
-  //       <ScreenContent>
-  //         <Box flex={1} justifyContent={"center"} alignItems={"center"}>
-  //           <ActivityIndicator
-  //             size={"large"}
-  //             color={THEME.colors.primary["900"]}
-  //           />
-  //         </Box>
-  //       </ScreenContent>
-  //     </Background>
+  // <Background>
+  //   <ScreenContent>
+  //     <Center flex={1}>
+  //       <ActivityIndicator size={"large"} color={THEME.colors.primary["900"]} />
+  //     </Center>
+  //   </ScreenContent>
+  // </Background>;
   //   );
   // }
 
@@ -82,60 +89,64 @@ export const CourseDetailsScreen = ({
   // }
 
   return (
-    <Background>
-      <ScreenContent>
-        <ScrollViewContainer
-        // refreshControl={
-        //   <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
-        // }
-        >
-          <HStack alignItems={"center"} space={2}>
-            <HStack space={2} alignItems="center">
-              <View
-                width={4}
-                height={4}
-                borderRadius={50}
-                backgroundColor={true ? "#A7E179" : "#E17979"}
-              />
-              <Text fontSize="lg" fontWeight={"600"}>
-                NOME
-              </Text>
-            </HStack>
+    <>
+      <StatusBar />
 
-            <Spacer />
-
-            <FavoriteButton
-              favorite={favorite}
-              handlePress={() => setFavorite(!favorite)}
-            />
-          </HStack>
-
-          <Box>
-            <HStack alignItems={"flex-start"} mb={2}>
-              <VStack space={1}>
-                <Text fontWeight={500} fontSize="sm">
-                  Saida: 10h
+      <Background>
+        <ScreenContent>
+          <ScrollViewContainer
+          // refreshControl={
+          //   <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
+          // }
+          >
+            <HStack alignItems={"center"} space={2}>
+              <HStack space={2} alignItems="center">
+                <View
+                  width={4}
+                  height={4}
+                  borderRadius={50}
+                  backgroundColor={true ? "#A7E179" : "#E17979"}
+                />
+                <Text fontSize="lg" fontWeight={"600"}>
+                  NOME
                 </Text>
-                <Text fontWeight={500} fontSize="sm">
-                  Chegada: 23h
-                </Text>
-              </VStack>
+              </HStack>
+
               <Spacer />
-              <VStack space={1} alignItems="flex-end">
-                <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
-                {/* <TypeRoute mt={1} tipo={"estudantes"} /> */}
-              </VStack>
+
+              <FavoriteButton
+                favorite={favorite}
+                handlePress={() => setFavorite(!favorite)}
+              />
             </HStack>
 
-            {/* <FlatList
+            <Box>
+              <HStack alignItems={"flex-start"} mb={2}>
+                <VStack space={1}>
+                  <Text fontWeight={500} fontSize="sm">
+                    Saida: 10h
+                  </Text>
+                  <Text fontWeight={500} fontSize="sm">
+                    Chegada: 23h
+                  </Text>
+                </VStack>
+                <Spacer />
+                <VStack space={1} alignItems="flex-end">
+                  <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
+                  {/* <TypeRoute mt={1} tipo={"estudantes"} /> */}
+                </VStack>
+              </HStack>
+
+              {/* <FlatList
                 data={mockedData}
                 horizontal
                 keyExtractor={(item) => `${item.id}`}
                 renderItem={({ item }) => <HourCard isToday={item.isToday} />}
               /> */}
-          </Box>
-        </ScrollViewContainer>
-      </ScreenContent>
-    </Background>
+            </Box>
+          </ScrollViewContainer>
+        </ScreenContent>
+      </Background>
+    </>
   );
 };

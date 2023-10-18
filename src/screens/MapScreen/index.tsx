@@ -1,6 +1,6 @@
 import { ActivityIndicator } from "react-native";
 
-import { Box } from "native-base";
+import { Box, Center } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
@@ -39,7 +39,12 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
         alignItems={"center"}
         backgroundColor={"gray.400"}
       >
-        <ActivityIndicator size={"large"} color={THEME.colors.primary["900"]} />
+        <Center flex={1}>
+          <ActivityIndicator
+            size={"large"}
+            color={THEME.colors.primary["900"]}
+          />
+        </Center>
       </Box>
     );
   }

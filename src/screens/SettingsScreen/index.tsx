@@ -18,6 +18,7 @@ import { useAuth } from "~/contexts/AuthContext";
 
 import { Modal } from "~/components/Modal";
 import { Switch } from "~/components/Form/Switch";
+import { StatusBar } from "~/components/StatusBar";
 import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
 import { Background } from "~/components/Layouts/Background";
@@ -41,6 +42,7 @@ export const SettingsScreen = ({
 
   return (
     <>
+      <StatusBar />
       <Background>
         <ScreenContent>
           <Text
