@@ -1,11 +1,14 @@
 import { createContext, useContext, useState } from "react";
+import { Alert } from "react-native";
 
 import axios from "axios";
 import * as AuthSession from "expo-auth-session";
 
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
+
 import { UserProps } from "~/interfaces/User.interface";
+
 import { api } from "~/services/axios";
-import { Alert } from "react-native";
 
 interface AuthContextProps {
   // user: UserProps | null;
@@ -92,19 +95,19 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     try {
       setLoading(true);
 
-      const { data } = await api.post("/singin", { email, password });
+      const { data } = await api.post("/user/session", { email, password });
 
       if (data) {
         setUser(data);
         return data;
-      } else {
-        Alert.alert("Login não encontrado", "Faça seu cadastro!");
       }
     } catch (error) {
       setUser(null);
-      console.error(error);
+      const errorMessage = axiosErrorHandler(error);
 
-      Alert.alert("Erro ao fazer login", "Email ou senha incorretos");
+      console.error(errorMessage);
+
+      Alert.alert("Erro ao fazer login", errorMessage?.message);
     } finally {
       setLoading(false);
     }
