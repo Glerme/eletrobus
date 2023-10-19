@@ -146,7 +146,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                     w={"full"}
                     colorScheme="primary"
                     bg={THEME.colors.primary["500"]}
-                    // onPress={() => navigation.navigate("Routes")}
+                    onPress={() => navigation.navigate("Pontos" as any)}
                   >
                     <HStack space={1} alignItems={"center"}>
                       <MagnifyingGlass size={20} color="white" />
@@ -161,7 +161,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                     w={"full"}
                     colorScheme="secondary"
                     bg={THEME.colors.secondary["500"]}
-                    // onPress={() => navigation.navigate("Routes")}
+                    onPress={() => navigation.navigate("Pontos" as any)}
                   >
                     <HStack space={1} alignItems={"center"}>
                       <MagnifyingGlass size={20} color="white" />

@@ -24,7 +24,6 @@ import { Input } from "~/components/Form/Input";
 import { ListItem } from "~/components/ListItem";
 import { ListCourses } from "~/components/ListCourses";
 import { Background } from "~/components/Layouts/Background";
-import { AdvancedFilters } from "~/components/AdvancedFilters";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
@@ -36,13 +35,16 @@ export interface ICity {
   favorite: boolean;
 }
 
-export interface IFilters {
-  kindRoute: "todos" | "municipal" | "intermunicipal";
-  cities: ICity[];
-  district: ICity[];
-  // runStarted: boolean;
-  time: Date;
-}
+const courseMock: CourseProps[] = [
+  {
+    route_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
+    initial_hour: "2023-10-08T17:03:21.204Z",
+    final_hour: "2023-10-08T17:03:21.204Z",
+    vehicle_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
+    route_name: "Rota 1",
+    user_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
+  },
+];
 
 export const PointsScreen = ({
   navigation,
@@ -50,7 +52,7 @@ export const PointsScreen = ({
 }: NavigationProps<"Points">) => {
   const { user } = useAuth();
 
-  const [courses, setCourses] = useState<CourseProps[] | null>(null);
+  const [courses, setCourses] = useState<CourseProps[] | null>(courseMock);
   const [busStops, setBusStops] = useState<BusStopInterface[] | null>(null);
 
   const { isLoading, isError, error, refetch, isRefetching } = useQuery<
@@ -60,7 +62,8 @@ export const PointsScreen = ({
     queryFn: async () => {
       if (user?.driver) {
         const { data } = await api.get<CourseProps[]>("/course");
-        setCourses(data);
+        // console.log(data);
+        // setCourses(data);
 
         return data;
       } else {

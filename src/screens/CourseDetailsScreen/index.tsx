@@ -28,6 +28,7 @@ import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
 
+function teste() {}
 export const CourseDetailsScreen = ({
   navigation,
   route,
@@ -36,6 +37,7 @@ export const CourseDetailsScreen = ({
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
+  const routeIdMock = "651327d4b937f4bb0215d6e8";
   // const {
   //   data: point,
   //   isLoading,
@@ -133,6 +135,18 @@ export const CourseDetailsScreen = ({
                 keyExtractor={(item) => `${item.id}`}
                 renderItem={({ item }) => <HourCard isToday={item.isToday} />}
               /> */}
+          </Box>
+          <Box mt={2}>
+            <Button
+              onPress={() =>
+                navigation.navigate("Map", {
+                  routeId: routeIdMock,
+                })
+              }
+              title="Iniciar rota"
+              fontColor={"white"}
+              //              disabled={isRefetching || isLoading}
+            />
           </Box>
         </ScrollViewContainer>
       </ScreenContent>

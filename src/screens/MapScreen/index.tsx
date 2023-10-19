@@ -17,6 +17,7 @@ import { THEME } from "~/styles/theme";
 
 export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
+  const routeId = route.params?.routeId ?? "";
 
   const {
     data: points,
@@ -63,7 +64,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
         <Box flex={1}>
-          <Map markers={points} pointId={pointId} />
+          <Map markers={points} pointId={pointId} routeId={routeId} />
         </Box>
       </SafeAreaView>
     </>

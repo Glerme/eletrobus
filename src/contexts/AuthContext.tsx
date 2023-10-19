@@ -4,6 +4,7 @@ import axios from "axios";
 import * as AuthSession from "expo-auth-session";
 
 import { UserProps } from "~/interfaces/User.interface";
+import { TabRouter } from "@react-navigation/native";
 
 interface AuthContextProps {
   // user: UserProps | null;
@@ -78,7 +79,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     <AuthContext.Provider
       value={{
         loading,
-        user: { driver: false },
+        user: { driver: true },
         signIn,
         signOut,
         handleGoogleLogin,
