@@ -77,7 +77,7 @@ export const PointsScreen = ({
         const oldData = busStops?.data ?? [];
 
         setBusStops(() => ({
-          data: [...oldData, ...data.data, ...data.data],
+          data: [...oldData, ...data.data],
           hasNextPage: data.hasNextPage,
           hasPreviousPage: data.hasPreviousPage,
           totalPages: data.totalPages,

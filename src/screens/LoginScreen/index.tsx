@@ -53,14 +53,8 @@ export const LoginScreen = ({
     }
   };
 
-  console.log({
-    user,
-  });
-
   return (
     <>
-      <StatusBar backgroundIos={THEME.colors.primary["500"]} />
-
       <View
         background={"primary.500"}
         flex={1}
@@ -80,7 +74,7 @@ export const LoginScreen = ({
                     placeholder="E-mail"
                     InputLeftElement={<Icon as={<Envelope />} ml={4} />}
                     onChangeText={(text) =>
-                      setLoginFields({ ...loginFields, email: text })
+                      setLoginFields((state) => ({ ...state, email: text }))
                     }
                     keyboardType="email-address"
                   />
@@ -90,7 +84,7 @@ export const LoginScreen = ({
                     InputLeftElement={<Icon as={<Key />} ml={4} />}
                     secureTextEntry
                     onChangeText={(text) =>
-                      setLoginFields({ ...loginFields, password: text })
+                      setLoginFields((state) => ({ ...state, password: text }))
                     }
                   />
 
@@ -140,7 +134,7 @@ export const LoginScreen = ({
                   placeholder="Nome"
                   InputLeftElement={<Icon as={<User />} ml={4} />}
                   onChangeText={(text) =>
-                    setRegisterFields({ ...registerFields, name: text })
+                    setRegisterFields((state) => ({ ...state, name: text }))
                   }
                   keyboardType="default"
                 />
@@ -149,7 +143,7 @@ export const LoginScreen = ({
                   placeholder="E-mail"
                   InputLeftElement={<Icon as={<Envelope />} ml={4} />}
                   onChangeText={(text) =>
-                    setRegisterFields({ ...registerFields, email: text })
+                    setRegisterFields((state) => ({ ...state, email: text }))
                   }
                   keyboardType="email-address"
                 />
@@ -159,7 +153,7 @@ export const LoginScreen = ({
                   InputLeftElement={<Icon as={<Key />} ml={4} />}
                   secureTextEntry
                   onChangeText={(text) =>
-                    setRegisterFields({ ...registerFields, password: text })
+                    setRegisterFields((state) => ({ ...state, password: text }))
                   }
                 />
 
