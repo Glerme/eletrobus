@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   RefreshControl,
@@ -50,16 +50,6 @@ export const PointsScreen = ({
 }: NavigationProps<"Points">) => {
   const { user } = useAuth();
 
-  const [filters, setFilters] = useState<IFilters>({
-    kindRoute: "todos",
-    cities: [],
-    district: [],
-    time: new Date(),
-  });
-
-  const [showAdvancedFilters, setShowAdvancedFilters] =
-    useState<boolean>(false);
-
   const [courses, setCourses] = useState<CourseProps[] | null>(null);
   const [busStops, setBusStops] = useState<BusStopInterface[] | null>(null);
 
@@ -71,10 +61,12 @@ export const PointsScreen = ({
       if (user?.driver) {
         const { data } = await api.get<CourseProps[]>("/course");
         setCourses(data);
+
         return data;
       } else {
         const { data } = await api.get<BusStopInterface[]>("/bus-stop");
         setBusStops(data);
+
         return data;
       }
     },
@@ -119,7 +111,9 @@ export const PointsScreen = ({
                   <Input
                     placeholder="Pesquisar"
                     InputRightElement={
-                      <TouchableHighlight onPress={() => console.log(filters)}>
+                      <TouchableHighlight
+                        onPress={() => console.log("filters")}
+                      >
                         <Icon as={<MagnifyingGlass />} mr={2} />
                       </TouchableHighlight>
                     }
@@ -174,13 +168,15 @@ export const PointsScreen = ({
                   <Input
                     placeholder="Pesquisar"
                     InputRightElement={
-                      <TouchableHighlight onPress={() => console.log(filters)}>
+                      <TouchableHighlight
+                        onPress={() => console.log("filters")}
+                      >
                         <Icon as={<MagnifyingGlass />} mr={2} />
                       </TouchableHighlight>
                     }
                   />
                 </View>
-                <TouchableNativeFeedback
+                {/* <TouchableNativeFeedback
                   onPress={() => setShowAdvancedFilters(!showAdvancedFilters)}
                   background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
                 >
@@ -190,14 +186,14 @@ export const PointsScreen = ({
                       color={showAdvancedFilters ? "#442ccd" : "#404040"}
                     />
                   </Box>
-                </TouchableNativeFeedback>
+                </TouchableNativeFeedback> */}
               </HStack>
 
-              {showAdvancedFilters && (
+              {/* {showAdvancedFilters && (
                 <View>
                   <AdvancedFilters filters={filters} setFilters={setFilters} />
                 </View>
-              )}
+              )} */}
 
               <Box w={"140"} mt={6} mb={2}>
                 <Text
