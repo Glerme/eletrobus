@@ -5,6 +5,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
+    "start-clear": "expo start --clear",
     "wsl": "expo start --tunnel",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -61,7 +62,7 @@
     "@types/styled-components-react-native": "^5.2.1",
     "babel-plugin-root-import": "^6.6.0",
     "react-native-dotenv": "^3.4.8",
-    "react-native-svg-transformer": "^1.0.0",
+    "react-native-svg-transformer": "^1.1.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^4.9.4"
   },

@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { ActivityIndicator, RefreshControl } from "react-native";
 
-import { Box, HStack, Image, Spacer, Text, VStack, View } from "native-base";
+import {
+  Box,
+  Center,
+  HStack,
+  Image,
+  Spacer,
+  Text,
+  VStack,
+  View,
+} from "native-base";
 import { Info, Path } from "phosphor-react-native";
 import { useQuery } from "@tanstack/react-query";
 
@@ -57,12 +66,12 @@ export const PointDetailsScreen = ({
     return (
       <Background>
         <ScreenContent>
-          <Box flex={1} justifyContent={"center"} alignItems={"center"}>
+          <Center flex={1}>
             <ActivityIndicator
               size={"large"}
               color={THEME.colors.primary["900"]}
             />
-          </Box>
+          </Center>
         </ScreenContent>
       </Background>
     );
