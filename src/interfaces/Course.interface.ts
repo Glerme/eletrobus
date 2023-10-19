@@ -1,3 +1,10 @@
+export interface CourseInterface {
+  data: CourseProps[];
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
 export interface CourseProps {
   user_id: string;
   vehicle_id: string;

@@ -23,13 +23,15 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     isLoading,
     isError,
     error,
-  } = useQuery<BusStopInterface[]>({
+  } = useQuery<BusStopInterface>({
     queryKey: ["bus-stop"],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface[]>("/bus-stop");
+      const { data } = await api.get<BusStopInterface>("/bus-stop");
       return data;
     },
   });
+
+  console.log({ points });
 
   if (isLoading) {
     return (
@@ -68,7 +70,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
         <Box flex={1}>
-          <Map markers={points} pointId={pointId} />
+          <Map markers={points.data} pointId={pointId} />
         </Box>
       </SafeAreaView>
     </>

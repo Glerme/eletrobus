@@ -17,7 +17,7 @@ import { useModal } from "~/hooks/useModal";
 
 import { api } from "~/services/axios";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { Modal } from "~/components/Modal";
 import { Input } from "~/components/Form/Input";
@@ -28,16 +28,21 @@ import { Container } from "./styles";
 import { THEME } from "~/styles/theme";
 
 interface ListRoutesButtonProps {
-  onPressRoute: (route: BusStopInterface) => void;
+  onPressRoute: (route: BusStopProps) => void;
 }
 
 export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
-  const { data, isLoading, isError, error } = useQuery<BusStopInterface[]>({
+  const {
+    data: busStops,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<BusStopInterface>({
     queryKey: ["bus-stop"],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface[]>("/bus-stop");
+      const { data } = await api.get<BusStopInterface>("/bus-stop");
       return data;
     },
   });
@@ -98,7 +103,7 @@ export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
           <ScrollView flex={1}>
             <FlatList
               keyExtractor={(item) => `${item.id}`}
-              data={data}
+              data={busStops.data}
               mt={4}
               maxH={"500"}
               ItemSeparatorComponent={() => <Divider />}
@@ -121,7 +126,7 @@ export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
               borderRadius={4}
               borderColor={"gray.400"}
               p={2}
-              renderItem={({ item }: { item: BusStopInterface }) => (
+              renderItem={({ item }: { item: BusStopProps }) => (
                 <ListItem
                   item={item}
                   onPress={() => {
