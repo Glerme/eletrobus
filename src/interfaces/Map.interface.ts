@@ -1,6 +1,6 @@
-import { BusStopInterface } from "./BusStop.interface";
+import { BusStopProps } from "./BusStop.interface";
 
 export interface MapInterface {
-  markers: BusStopInterface[];
+  markers: BusStopProps[];
   pointId?: string;
 }

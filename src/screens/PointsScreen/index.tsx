@@ -1,14 +1,9 @@
-import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  RefreshControl,
-  TouchableHighlight,
-  TouchableNativeFeedback,
-} from "react-native";
+import { useRef, useState } from "react";
+import { RefreshControl, TouchableHighlight } from "react-native";
 
 import { useQuery } from "@tanstack/react-query";
-import { MagnifyingGlass, Sliders } from "phosphor-react-native";
-import { Box, Center, FlatList, HStack, Icon, Text, View } from "native-base";
+import { MagnifyingGlass } from "phosphor-react-native";
+import { Box, FlatList, HStack, Icon, Text, View } from "native-base";
 
 import { NavigationProps } from "~/routes";
 
@@ -16,12 +11,13 @@ import { api } from "~/services/axios";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { CourseProps } from "~/interfaces/Course.interface";
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
+import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { Alert } from "~/components/Alert";
 import { Input } from "~/components/Form/Input";
 import { ListItem } from "~/components/ListItem";
+import { Button } from "~/components/Form/Button";
 import { StatusBar } from "~/components/StatusBar";
 import { ListCourses } from "~/components/ListCourses";
 import { Background } from "~/components/Layouts/Background";
@@ -29,6 +25,7 @@ import { AdvancedFilters } from "~/components/AdvancedFilters";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
+import { Container } from "./styles";
 
 export interface ICity {
   id: number;
@@ -49,96 +46,99 @@ export const PointsScreen = ({
   route,
 }: NavigationProps<"Points">) => {
   const { user } = useAuth();
+  const pageRef = useRef(0);
 
-  const [courses, setCourses] = useState<CourseProps[] | null>(null);
-  const [busStops, setBusStops] = useState<BusStopInterface[] | null>(null);
+  const [courses, setCourses] = useState<CourseInterface | null>(null);
+  const [busStops, setBusStops] = useState<BusStopInterface | null>(null);
 
-  const { isLoading, isError, error, refetch, isRefetching } = useQuery<
-    BusStopInterface[] | CourseProps[]
-  >({
-    queryKey: ["bus-stop"],
+  const { isError, error, refetch, isFetching } = useQuery({
+    queryKey: ["bus-stop", pageRef.current],
     queryFn: async () => {
       if (user?.driver) {
-        const { data } = await api.get<CourseProps[]>("/course");
-        setCourses(data);
+        const { data } = await api.get<CourseInterface>(
+          `/course?page=${pageRef.current}&pageSize=10`
+        );
+
+        const oldData = courses?.data ?? [];
+
+        setCourses(() => ({
+          data: [...oldData, ...data.data],
+          hasNextPage: data.hasNextPage,
+          hasPreviousPage: data.hasPreviousPage,
+          totalPages: data.totalPages,
+        }));
 
         return data;
       } else {
-        const { data } = await api.get<BusStopInterface[]>("/bus-stop");
-        setBusStops(data);
+        const { data } = await api.get<BusStopInterface>(
+          `/bus-stop?page=${pageRef.current}&pageSize=2`
+        );
+
+        const oldData = busStops?.data ?? [];
+
+        setBusStops(() => ({
+          data: [...oldData, ...data.data, ...data.data],
+          hasNextPage: data.hasNextPage,
+          hasPreviousPage: data.hasPreviousPage,
+          totalPages: data.totalPages,
+        }));
 
         return data;
       }
     },
   });
 
-  if (isLoading) {
-    return (
-      <Background>
-        <ScreenContent>
-          <Center flex={1}>
-            <ActivityIndicator
-              size={"large"}
-              color={THEME.colors.primary["900"]}
-            />
-          </Center>
-        </ScreenContent>
-      </Background>
-    );
-  }
-
   if (isError) {
     console.error(error);
 
     return (
-      <Background>
-        <ScreenContent>
-          <Alert status="error" />
-        </ScreenContent>
-      </Background>
+      <>
+        <StatusBar />
+
+        <Background>
+          <ScreenContent>
+            <Alert status="error" />
+          </ScreenContent>
+        </Background>
+      </>
     );
   }
 
-  switch (user?.driver) {
-    case true:
-      return (
-        <>
-          <StatusBar />
-          <Background>
-            <ScreenContent>
-              <HStack space={1}>
-                <View flex={1} alignItems={"center"}>
-                  <Input
-                    placeholder="Pesquisar"
-                    InputRightElement={
-                      <TouchableHighlight
-                        onPress={() => console.log("filters")}
-                      >
-                        <Icon as={<MagnifyingGlass />} mr={2} />
-                      </TouchableHighlight>
-                    }
-                  />
-                </View>
-              </HStack>
+  return (
+    <>
+      <StatusBar />
+      <Background>
+        <Container>
+          <HStack space={1}>
+            <View flex={1} alignItems={"center"}>
+              <Input
+                placeholder="Pesquisar"
+                InputRightElement={
+                  <TouchableHighlight onPress={() => console.log("filters")}>
+                    <Icon as={<MagnifyingGlass />} mr={2} />
+                  </TouchableHighlight>
+                }
+              />
+            </View>
+          </HStack>
 
-              <Box w={"140"} mt={6} mb={2}>
-                <Text
-                  fontSize={"md"}
-                  color={THEME.colors.gray["800"]}
-                  fontWeight={"600"}
-                >
-                  Listagem
-                </Text>
-              </Box>
+          <Box mt={6} mb={2}>
+            <Text
+              fontSize={"md"}
+              color={THEME.colors.gray["800"]}
+              fontWeight={"600"}
+            >
+              Listagem
+            </Text>
+          </Box>
 
+          <View flex={1}>
+            {user?.driver ? (
               <FlatList
                 keyExtractor={(item) => `${item?.vehicle_id}`}
-                data={courses}
+                data={courses?.data}
                 refreshControl={
-                  <RefreshControl
-                    onRefresh={refetch}
-                    refreshing={isRefetching}
-                  />
+                  <RefreshControl onRefresh={refetch} refreshing={isFetching} />
                 }
                 renderItem={({ item }: { item: CourseProps }) => (
                   <ListCourses
@@ -152,69 +152,15 @@ export const PointsScreen = ({
                   />
                 )}
               />
-            </ScreenContent>
-          </Background>
-        </>
-      );
-
-    default:
-      return (
-        <>
-          <StatusBar />
-          <Background>
-            <ScreenContent>
-              <HStack space={1}>
-                <View flex={1} alignItems={"center"}>
-                  <Input
-                    placeholder="Pesquisar"
-                    InputRightElement={
-                      <TouchableHighlight
-                        onPress={() => console.log("filters")}
-                      >
-                        <Icon as={<MagnifyingGlass />} mr={2} />
-                      </TouchableHighlight>
-                    }
-                  />
-                </View>
-                {/* <TouchableNativeFeedback
-                  onPress={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                  background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
-                >
-                  <Box p={2}>
-                    <Sliders
-                      size={28}
-                      color={showAdvancedFilters ? "#442ccd" : "#404040"}
-                    />
-                  </Box>
-                </TouchableNativeFeedback> */}
-              </HStack>
-
-              {/* {showAdvancedFilters && (
-                <View>
-                  <AdvancedFilters filters={filters} setFilters={setFilters} />
-                </View>
-              )} */}
-
-              <Box w={"140"} mt={6} mb={2}>
-                <Text
-                  fontSize={"md"}
-                  color={THEME.colors.gray["800"]}
-                  fontWeight={"600"}
-                >
-                  Listagem
-                </Text>
-              </Box>
-
+            ) : (
               <FlatList
+                display={"flex"}
                 keyExtractor={(item) => `${item?.id}`}
-                data={busStops}
+                data={busStops?.data}
                 refreshControl={
-                  <RefreshControl
-                    onRefresh={refetch}
-                    refreshing={isRefetching}
-                  />
+                  <RefreshControl onRefresh={refetch} refreshing={isFetching} />
                 }
-                renderItem={({ item }: { item: BusStopInterface }) => (
+                renderItem={({ item }: { item: BusStopProps }) => (
                   <ListItem
                     item={item}
                     onPress={() => {
@@ -225,10 +171,22 @@ export const PointsScreen = ({
                     key={item.id}
                   />
                 )}
+                ListEmptyComponent={() => (
+                  <Alert
+                    status="info"
+                    text="Atenção! Sem pontos cadastrados no momento!"
+                  />
+                )}
+                onEndReachedThreshold={0.5}
+                onEndReached={() => {
+                  pageRef.current += 1;
+                  refetch();
+                }}
               />
-            </ScreenContent>
-          </Background>
-        </>
-      );
-  }
+            )}
+          </View>
+        </Container>
+      </Background>
+    </>
+  );
 };

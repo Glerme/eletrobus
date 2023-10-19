@@ -7,10 +7,10 @@ import { Platform } from "react-native";
 import { StatusBarBackground } from "./style";
 
 interface StatusBarProps extends ExpoStatusBarProps {
-  propsIos?: any;
+  backgroundIos?: string;
 }
 
-export const StatusBar = ({ propsIos, ...rest }: StatusBarProps) => {
+export const StatusBar = ({ backgroundIos, ...rest }: StatusBarProps) => {
   return Platform.OS === "android" ? (
     <ExpoStatusBar
       backgroundColor={"transparent"}
@@ -20,7 +20,7 @@ export const StatusBar = ({ propsIos, ...rest }: StatusBarProps) => {
       {...rest}
     />
   ) : (
-    <StatusBarBackground {...propsIos}>
+    <StatusBarBackground backgroundIos={backgroundIos}>
       <ExpoStatusBar style={"light"} animated {...rest} />
     </StatusBarBackground>
   );

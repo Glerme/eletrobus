@@ -15,6 +15,7 @@ import { useAuth } from "~/contexts/AuthContext";
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
 import { StatusBar } from "~/components/StatusBar";
+import { THEME } from "~/styles/theme";
 
 export const LoginScreen = ({
   navigation,
@@ -58,7 +59,7 @@ export const LoginScreen = ({
 
   return (
     <>
-      <StatusBar />
+      <StatusBar backgroundIos={THEME.colors.primary["500"]} />
 
       <View
         background={"primary.500"}

@@ -1,13 +1,13 @@
 import { Marker } from "react-native-maps";
 import { scale } from "react-native-size-matters";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopProps } from "~/interfaces/BusStop.interface";
 
 import BusStop from "~/assets/svg/bus-stop.svg";
 
 type CustomMarkerProps = {
-  marker: BusStopInterface;
-  handleOpenModal: (data: BusStopInterface) => void;
+  marker: BusStopProps;
+  handleOpenModal: (data: BusStopProps) => void;
 };
 
 export const CustomMarker = ({
