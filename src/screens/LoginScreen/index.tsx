@@ -10,12 +10,15 @@ import { NavigationProps } from "~/routes";
 import IconSvg from "~/assets/svg/icon.svg";
 import GoogleIcon from "~/assets/svg/googleIcon.svg";
 
+import { api } from "~/services/axios";
+
 import { useAuth } from "~/contexts/AuthContext";
 
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
-import { StatusBar } from "~/components/StatusBar";
+
 import { THEME } from "~/styles/theme";
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 export const LoginScreen = ({
   navigation,
@@ -23,7 +26,7 @@ export const LoginScreen = ({
 }: NavigationProps<"Login">) => {
   const [step, setStep] = useState(1);
 
-  const { handleGoogleLogin, user, signIn, loading } = useAuth();
+  const { handleGoogleLogin, signIn, loading } = useAuth();
 
   const [loginFields, setLoginFields] = useState({
     email: "",
@@ -41,15 +44,41 @@ export const LoginScreen = ({
       return Alert.alert("Entrar", "Informe seu email e senha");
     }
 
-    await signIn({
+    const user = await signIn({
       email: loginFields.email,
       password: loginFields.password,
     });
+
+    // if (user) {
+    //   navigation.navigate("Home");
+    // }
   };
 
   const handleRegister = async () => {
-    if (!registerFields.email || !registerFields.password) {
+    if (
+      !registerFields.email ||
+      !registerFields.password ||
+      !registerFields.name
+    ) {
       return Alert.alert("Registrar", "Informe seu nome, email e senha ");
+    }
+    try {
+      const { status } = await api.post("/user", {
+        name: registerFields.name,
+        email: registerFields.email,
+        password: registerFields.password,
+      });
+
+      if (status) {
+        setStep(1);
+        return Alert.alert("Sucesso", "Usuário registrado com sucesso");
+      }
+    } catch (error) {
+      const errorMessage = axiosErrorHandler(error);
+
+      console.error(errorMessage);
+
+      Alert.alert("Erro ao fazer registro", errorMessage?.message);
     }
   };
 

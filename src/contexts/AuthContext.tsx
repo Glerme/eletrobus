@@ -97,10 +97,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
       const { data } = await api.post("/user/session", { email, password });
 
-      if (data) {
-        setUser(data);
-        return data;
-      }
+      console.log({ data });
+
+      setUser(data);
+      return data;
     } catch (error) {
       setUser(null);
       const errorMessage = axiosErrorHandler(error);
