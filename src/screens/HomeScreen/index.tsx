@@ -12,13 +12,15 @@ import {
   Text,
   VStack,
 } from "native-base";
-import { MagnifyingGlass, Scroll } from "phosphor-react-native";
+import { MagnifyingGlass } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
 import { useMultipleQueryRefetch } from "~/hooks/useMultipleQueryRefetch";
 
 import { useAuth } from "~/contexts/AuthContext";
+
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 import { api } from "~/services/axios";
 
@@ -37,16 +39,24 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   const { user } = useAuth();
 
   const favoritesQuery = useQuery({
-    queryKey: ["favorites-home"],
+    queryKey: ["favorites-home", user?.token],
     queryFn: async () => {
-      const { data } = await api.get<any[]>("/favorites/home");
-      return data;
+      if (user?.token) {
+        const { data } = await api.get<any[]>("/user/favorite-route", {
+          headers: {
+            authorization: `Bearer ${user?.token}`,
+          },
+        });
+        return data;
+      }
+
+      return [];
     },
     initialData: [],
     placeholderData: [],
   });
   const busStopsQuery = useQuery({
-    queryKey: ["busStops-home"],
+    queryKey: ["busStops-home", user?.token],
     queryFn: async () => {
       const { data } = await api.get("/bus-stop/home");
       return data;
@@ -55,7 +65,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
     placeholderData: [],
   });
   const coursesQuery = useQuery({
-    queryKey: ["courses-home"],
+    queryKey: ["courses-home", user?.token],
     queryFn: async () => {
       const { data } = await api.get("/course/home");
       return data;
@@ -90,9 +100,11 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   }
 
   if (favoritesQuery.error || busStopsQuery.error || coursesQuery.error) {
-    console.error(
+    const errorMessage = axiosErrorHandler(
       favoritesQuery.error || busStopsQuery.error || coursesQuery.error
     );
+
+    console.error(errorMessage);
 
     return (
       <Background>
@@ -116,12 +128,14 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
     );
   }
 
+  console.log(JSON.stringify(user, null, 2));
+
   return (
     <>
       <StatusBar />
       <Background>
         <ScreenContent>
-          {user?.driver ? (
+          {user?.user?.driver ? (
             <ScrollView>
               <Box
                 display={"flex"}
@@ -197,16 +211,20 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                 }
               />
 
-              <ListRouteCards
-                description="Favoritos"
-                data={favoritesQuery.data}
-                cardComponent={FavoritesCards}
-                onPressCard={(item) =>
-                  navigation.navigate("PointDetails", {
-                    id: `${item?.id}`,
-                  })
-                }
-              />
+              {user?.token && (
+                <ListRouteCards
+                  description="Favoritos"
+                  data={favoritesQuery?.data}
+                  cardComponent={FavoritesCards}
+                  onPressCard={(item) =>
+                    navigation.navigate("PointDetails", {
+                      id: `${item?.id}`,
+                    })
+                  }
+                />
+              )}
+
+              <Text>{JSON.stringify(user, null, 2)}</Text>
             </ScrollView>
           )}
         </ScreenContent>

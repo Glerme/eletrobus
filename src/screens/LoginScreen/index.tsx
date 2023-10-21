@@ -49,9 +49,19 @@ export const LoginScreen = ({
       password: loginFields.password,
     });
 
-    // if (user) {
-    //   navigation.navigate("Home");
-    // }
+    if (user) {
+      navigation.navigate("Home");
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const user = await handleGoogleLogin();
+    console.log("foi", user);
+    if (user) {
+      navigation.navigate("Home");
+    } else {
+      Alert.alert("Erro ao fazer login", "Tente novamente mais tarde");
+    }
   };
 
   const handleRegister = async () => {
@@ -129,8 +139,8 @@ export const LoginScreen = ({
                   />
 
                   <Button
-                    title="Entrar com o google"
-                    onPress={handleGoogleLogin}
+                    title="Entrar com o Google"
+                    onPress={handleGoogleSignIn}
                     isLoading={loading}
                     background={"transparent"}
                     borderWidth={1}

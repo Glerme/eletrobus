@@ -54,7 +54,7 @@ export const PointsScreen = ({
   const { isError, error, refetch, isFetching } = useQuery({
     queryKey: ["bus-stop", pageRef.current],
     queryFn: async () => {
-      if (user?.driver) {
+      if (user?.user?.driver) {
         const { data } = await api.get<CourseInterface>(
           `/course?page=${pageRef.current}&pageSize=10`
         );
@@ -71,7 +71,7 @@ export const PointsScreen = ({
         return data;
       } else {
         const { data } = await api.get<BusStopInterface>(
-          `/bus-stop?page=${pageRef.current}&pageSize=2`
+          `/bus-stop?page=${pageRef.current}&pageSize=10`
         );
 
         const oldData = busStops?.data ?? [];
@@ -133,7 +133,7 @@ export const PointsScreen = ({
           </Box>
 
           <View flex={1}>
-            {user?.driver ? (
+            {user?.user?.driver ? (
               <FlatList
                 keyExtractor={(item) => `${item?.vehicle_id}`}
                 data={courses?.data}

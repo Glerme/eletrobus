@@ -1,36 +1,42 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 import axios from "axios";
 import * as AuthSession from "expo-auth-session";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
-import { UserProps } from "~/interfaces/User.interface";
+import { UserGoogleProps, UserProps } from "~/interfaces/User.interface";
 
 import { api } from "~/services/axios";
 
 interface AuthContextProps {
-  // user: UserProps | null;
-  user: { driver: boolean } | null;
+  user: UserProps | null;
   signIn: ({
     email,
     password,
   }: {
     email: string;
     password: string;
-  }) => Promise<void>;
+  }) => Promise<UserProps | null>;
   signOut: () => void;
   loading: boolean;
-  handleGoogleLogin: () => Promise<void>;
+  handleGoogleLogin: () => Promise<UserProps | null>;
+  loadUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
-  signIn: async ({ email, password }) => {},
+  signIn: async ({ email, password }) => {
+    return null;
+  },
   signOut: () => {},
   user: null,
   loading: true,
-  handleGoogleLogin: async () => {},
+  handleGoogleLogin: async () => {
+    return null;
+  },
+  loadUser: async () => {},
 });
 
 interface AuthResponse {
@@ -45,7 +51,7 @@ interface AuthContextProviderProps {
 }
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
-  const [user, setUser] = useState<null>(null);
+  const [user, setUser] = useState<UserProps | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const CLIENT_ID = process.env.EXPO_PUBLIC_CLIENT_ID;
@@ -63,23 +69,40 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         authUrl,
       })) as AuthResponse;
 
-      console.log({
-        type,
-        params,
-      });
-
       if (type === "success") {
-        const { data } = await axios.get(
+        const { data } = await axios.get<UserGoogleProps>(
           `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`
         );
 
-        //enviar dados para cadastro
+        if (data) {
+          const { data: googleData } = await api.post("/google/session", {
+            user_token: params.access_token,
+          });
 
-        setUser(data);
-        console.log(data);
+          const parsedData: UserProps = {
+            token: googleData?.data?.token,
+            user: googleData?.data?.user,
+          };
+
+          console.log("GOOGLE", JSON.stringify(parsedData, null, 2));
+
+          await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
+          await AsyncStorage.setItem(
+            "@token",
+            JSON.stringify(parsedData.token)
+          );
+
+          setUser(parsedData);
+          return parsedData;
+        }
       }
+      return null;
     } catch (error) {
-      console.log("Error ao fazer login com o Google: ", error);
+      const errorMessage = axiosErrorHandler(error);
+
+      console.error(errorMessage);
+      Alert.alert("Erro ao fazer login com o Google:", errorMessage?.message);
+      return null;
     } finally {
       setLoading(false);
     }
@@ -95,32 +118,67 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     try {
       setLoading(true);
 
-      const { data } = await api.post("/user/session", { email, password });
+      const { data } = await api.post("/user/session", {
+        email,
+        password,
+      });
 
-      console.log({ data });
+      console.log(JSON.stringify(data, null, 2));
 
-      setUser(data);
+      const parsedData: UserProps = {
+        token: data?.data?.token,
+        user: data?.data?.user,
+      };
+
+      await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
+      await AsyncStorage.setItem("@token", JSON.stringify(parsedData.token));
+
+      setUser(parsedData);
       return data;
     } catch (error) {
       setUser(null);
       const errorMessage = axiosErrorHandler(error);
 
       console.error(errorMessage);
-
       Alert.alert("Erro ao fazer login", errorMessage?.message);
+      return null;
     } finally {
       setLoading(false);
     }
   };
 
-  const signOut = () => {
+  const signOut = async () => {
     try {
       setUser(null);
+      await AsyncStorage.removeItem("@user");
+      await AsyncStorage.removeItem("@token");
     } catch (error) {
       setUser(null);
       console.error(error);
     }
   };
+
+  const loadUser = async () => {
+    try {
+      setLoading(true);
+
+      const getUser = await AsyncStorage.getItem("@user");
+
+      if (getUser) {
+        console.log("GET USER", JSON.stringify(getUser, null, 2));
+        setUser(JSON.parse(getUser));
+      }
+    } catch (error) {
+      setUser(null);
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -130,6 +188,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         signIn,
         signOut,
         handleGoogleLogin,
+        loadUser,
       }}
     >
       {children}

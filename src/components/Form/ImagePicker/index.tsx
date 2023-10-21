@@ -6,7 +6,7 @@ import * as ExpoImagePicker from "expo-image-picker";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { UserProps } from "~/interfaces/User.interface";
+import { UserGoogleProps } from "~/interfaces/User.interface";
 
 import { api } from "~/services/axios";
 
@@ -14,7 +14,7 @@ import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
 
 interface ImagePickerProps {
-  user: UserProps | null;
+  user: UserGoogleProps | null;
 }
 
 export const ImagePicker = ({ user }: ImagePickerProps) => {
