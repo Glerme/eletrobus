@@ -1,8 +1,15 @@
 import { useState } from "react";
 
 import { Alert } from "react-native";
-import { Box, Center, Icon, VStack, View } from "native-base";
-import { Envelope, Key, User, ArrowLeft } from "phosphor-react-native";
+import { Box, Center, Icon, IconButton, VStack, View } from "native-base";
+import {
+  Envelope,
+  Key,
+  User,
+  ArrowLeft,
+  Eye,
+  EyeSlash,
+} from "phosphor-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { NavigationProps } from "~/routes";
@@ -25,6 +32,7 @@ export const LoginScreen = ({
   route,
 }: NavigationProps<"Login">) => {
   const [step, setStep] = useState(1);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { handleGoogleLogin, signIn, loading } = useAuth();
 
@@ -111,7 +119,7 @@ export const LoginScreen = ({
                 <VStack space={2}>
                   <Input
                     placeholder="E-mail"
-                    InputLeftElement={<Icon as={<Envelope />} ml={4} />}
+                    InputLeftElement={<Icon as={<Envelope />} ml={2} />}
                     onChangeText={(text) =>
                       setLoginFields((state) => ({ ...state, email: text }))
                     }
@@ -120,10 +128,21 @@ export const LoginScreen = ({
 
                   <Input
                     placeholder="Senha"
-                    InputLeftElement={<Icon as={<Key />} ml={4} />}
-                    secureTextEntry
+                    InputLeftElement={<Icon as={<Key />} ml={2} />}
                     onChangeText={(text) =>
                       setLoginFields((state) => ({ ...state, password: text }))
+                    }
+                    secureTextEntry={showPassword}
+                    type={showPassword ? "text" : "password"}
+                    InputRightElement={
+                      <IconButton
+                        onPress={() => setShowPassword(!showPassword)}
+                        borderRadius={"full"}
+                        mr={2}
+                        p={2}
+                      >
+                        <Icon as={showPassword ? <Eye /> : <EyeSlash />} />
+                      </IconButton>
                     }
                   />
 
@@ -171,7 +190,7 @@ export const LoginScreen = ({
 
                 <Input
                   placeholder="Nome"
-                  InputLeftElement={<Icon as={<User />} ml={4} />}
+                  InputLeftElement={<Icon as={<User />} ml={2} />}
                   onChangeText={(text) =>
                     setRegisterFields((state) => ({ ...state, name: text }))
                   }
@@ -180,7 +199,7 @@ export const LoginScreen = ({
 
                 <Input
                   placeholder="E-mail"
-                  InputLeftElement={<Icon as={<Envelope />} ml={4} />}
+                  InputLeftElement={<Icon as={<Envelope />} ml={2} />}
                   onChangeText={(text) =>
                     setRegisterFields((state) => ({ ...state, email: text }))
                   }
@@ -189,10 +208,21 @@ export const LoginScreen = ({
 
                 <Input
                   placeholder="Senha"
-                  InputLeftElement={<Icon as={<Key />} ml={4} />}
-                  secureTextEntry
+                  InputLeftElement={<Icon as={<Key />} ml={2} />}
                   onChangeText={(text) =>
                     setRegisterFields((state) => ({ ...state, password: text }))
+                  }
+                  secureTextEntry={showPassword}
+                  type={showPassword ? "text" : "password"}
+                  InputRightElement={
+                    <IconButton
+                      onPress={() => setShowPassword(!showPassword)}
+                      borderRadius={"full"}
+                      mr={2}
+                      p={2}
+                    >
+                      <Icon as={showPassword ? <Eye /> : <EyeSlash />} />
+                    </IconButton>
                   }
                 />
 
