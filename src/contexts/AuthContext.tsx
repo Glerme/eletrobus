@@ -1,22 +1,33 @@
 import { createContext, useContext, useState } from "react";
+import { Alert } from "react-native";
 
 import axios from "axios";
 import * as AuthSession from "expo-auth-session";
 
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
+
 import { UserProps } from "~/interfaces/User.interface";
 import { TabRouter } from "@react-navigation/native";
+
+import { api } from "~/services/axios";
 
 interface AuthContextProps {
   // user: UserProps | null;
   user: { driver: boolean } | null;
-  signIn: () => Promise<void>;
+  signIn: ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => Promise<void>;
   signOut: () => void;
   loading: boolean;
   handleGoogleLogin: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
-  signIn: async () => {},
+  signIn: async ({ email, password }) => {},
   signOut: () => {},
   user: null,
   loading: true,
@@ -36,7 +47,7 @@ interface AuthContextProviderProps {
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [user, setUser] = useState<null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const CLIENT_ID = process.env.EXPO_PUBLIC_CLIENT_ID;
   const REDIRECT_URI = process.env.EXPO_PUBLIC_REDIRECT_URI;
@@ -47,6 +58,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
   const handleGoogleLogin = async () => {
     try {
+      setLoading(true);
+
       const { type, params } = (await AuthSession.startAsync({
         authUrl,
       })) as AuthResponse;
@@ -68,18 +81,53 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       }
     } catch (error) {
       console.log("Error ao fazer login com o Google: ", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const signIn = async () => {};
+  const signIn = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      setLoading(true);
 
-  const signOut = () => {};
+      const { data } = await api.post("/user/session", { email, password });
+
+      if (data) {
+        setUser(data);
+        return data;
+      }
+    } catch (error) {
+      setUser(null);
+      const errorMessage = axiosErrorHandler(error);
+
+      console.error(errorMessage);
+
+      Alert.alert("Erro ao fazer login", errorMessage?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const signOut = () => {
+    try {
+      setUser(null);
+    } catch (error) {
+      setUser(null);
+      console.error(error);
+    }
+  };
 
   return (
     <AuthContext.Provider
       value={{
         loading,
-        user: { driver: true },
+        user,
         signIn,
         signOut,
         handleGoogleLogin,

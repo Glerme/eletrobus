@@ -5,14 +5,14 @@ import {
 
 import { Avatar, Box, HStack, Text } from "native-base";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopProps } from "~/interfaces/BusStop.interface";
 import { RouteInterface } from "~/interfaces/Route.interface";
 
 import { StatusInfo } from "../BusStatus/StatusInfo";
 import { FavoriteButton } from "../Form/FavoriteButton";
 
 interface IProps extends TouchableNativeFeedbackProps {
-  item: BusStopInterface;
+  item: BusStopProps;
   onPress: () => void;
 }
 

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TouchableHighlight } from "react-native";
 
+import LottieView from "lottie-react-native";
 import { Icon, VStack, Text, HStack, Avatar } from "native-base";
 
 import {
@@ -17,6 +18,7 @@ import { useAuth } from "~/contexts/AuthContext";
 
 import { Modal } from "~/components/Modal";
 import { Switch } from "~/components/Form/Switch";
+import { StatusBar } from "~/components/StatusBar";
 import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
 import { Background } from "~/components/Layouts/Background";
@@ -28,33 +30,19 @@ export const SettingsScreen = ({
   navigation,
   route,
 }: NavigationProps<"Settings">) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-
-  const { handleGoogleLogin, user } = useAuth();
+  const { handleGoogleLogin, user, signOut } = useAuth();
 
   const { handleCloseModal, handleOpenModal, modalRef } = useModal();
 
-  const checkLocationStatus = async () => {
-    try {
-      const { status } = await requestForegroundPermissionsAsync();
-      const isLocationEnabled = await hasServicesEnabledAsync();
-
-      if (status === "granted" && isLocationEnabled) {
-        setIsEnabled(true);
-      } else {
-        setIsEnabled(false);
-      }
-    } catch (error) {
-      console.log("Erro ao verificar a localização: ", error);
-    }
+  const handleSingOut = async () => {
+    handleCloseModal();
+    signOut();
+    navigation.navigate("Settings");
   };
-
-  useEffect(() => {
-    checkLocationStatus();
-  }, []);
 
   return (
     <>
+      <StatusBar />
       <Background>
         <ScreenContent>
           <Text
@@ -65,69 +53,84 @@ export const SettingsScreen = ({
             Configurações
           </Text>
 
-          <VStack space={2} alignItems={"baseline"} mt={2}>
-            {/* <Switch
-              color={THEME.colors.gray["800"]}
-              label="Localização está ativa?"
-              onValueChange={() => setIsEnabled(!isEnabled)}
-              value={isEnabled}
-              disabled
-            /> */}
+          {user ? (
+            <>
+              <VStack space={2} alignItems={"baseline"} mt={2}>
+                <TouchableHighlight
+                  onPress={() =>
+                    navigation.navigate("Profile", { userId: "123" })
+                  }
+                  underlayColor={THEME.colors.gray["200"]}
+                >
+                  <HStack space={2} alignItems={"center"}>
+                    <PencilSimple color={THEME.colors.gray["800"]} size={16} />
+                    <Text color={THEME.colors.gray["800"]}>Editar Perfil</Text>
+                  </HStack>
+                </TouchableHighlight>
 
-            <TouchableHighlight
-              onPress={() => navigation.navigate("Profile", { userId: "123" })}
-              underlayColor={THEME.colors.gray["200"]}
-            >
-              <HStack space={2} alignItems={"center"}>
-                <PencilSimple color={THEME.colors.gray["800"]} size={16} />
-                <Text color={THEME.colors.gray["800"]}>Editar Perfil</Text>
-              </HStack>
-            </TouchableHighlight>
+                <TouchableHighlight underlayColor={THEME.colors.gray["200"]}>
+                  <HStack space={2} alignItems={"center"}>
+                    <HardDrive color={THEME.colors.gray["800"]} size={16} />
+                    <Text color={THEME.colors.gray["800"]}>Sou Motorista</Text>
+                  </HStack>
+                </TouchableHighlight>
 
-            <TouchableHighlight underlayColor={THEME.colors.gray["200"]}>
-              <HStack space={2} alignItems={"center"}>
-                <HardDrive color={THEME.colors.gray["800"]} size={16} />
-                <Text color={THEME.colors.gray["800"]}>Sou Motorista</Text>
-              </HStack>
-            </TouchableHighlight>
+                <Button
+                  onPress={handleGoogleLogin}
+                  title="Sou motorista"
+                  fontColor="white"
+                />
 
-            <Button
-              onPress={handleGoogleLogin}
-              title="Sou motorista"
-              fontColor="white"
-            />
+                <Avatar
+                  source={{
+                    uri: user?.picture,
+                  }}
+                />
 
-            {/* <Avatar
-              source={{
-                uri: user?.picture,
-              }}
-            />
+                <Text>{user?.name}</Text>
+                <Text>{user?.email}</Text>
+              </VStack>
 
-            <Text>{user?.name}</Text>
-            <Text>{user?.email}</Text> */}
-          </VStack>
-
-          <Button
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"flex-start"}
-            title="Sair"
-            onPress={handleOpenModal}
-            variant="link"
-            fontColor={THEME.colors.danger["500"]}
-            mt={"auto"}
-            rightIcon={
-              <Icon
-                as={
-                  <SignOut
-                    color={THEME.colors.danger["500"]}
-                    weight="bold"
-                    size={18}
+              <Button
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"flex-start"}
+                title="Sair"
+                onPress={handleOpenModal}
+                variant="link"
+                fontColor={THEME.colors.danger["500"]}
+                mt={"auto"}
+                rightIcon={
+                  <Icon
+                    as={
+                      <SignOut
+                        color={THEME.colors.danger["500"]}
+                        weight="bold"
+                        size={18}
+                      />
+                    }
                   />
                 }
               />
-            }
-          />
+            </>
+          ) : (
+            <VStack alignItems={"center"} flex={1}>
+              <LottieView
+                autoPlay
+                loop
+                style={{
+                  width: 500,
+                  height: 500,
+                }}
+                source={require("~/assets/animations/login.json")}
+              />
+              <Button
+                onPress={() => navigation.navigate("Login")}
+                title="Faça Login"
+                fontColor="white"
+              />
+            </VStack>
+          )}
         </ScreenContent>
       </Background>
 
@@ -143,9 +146,7 @@ export const SettingsScreen = ({
           <VStack space={2} mt={2}>
             <Button
               title="Sim, desejo sair."
-              onPress={() => {
-                console.log("saiu");
-              }}
+              onPress={() => handleSingOut()}
               fontColor={THEME.colors.white}
               bg={THEME.colors.danger["600"]}
             />

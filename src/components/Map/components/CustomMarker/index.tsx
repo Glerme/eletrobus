@@ -1,12 +1,13 @@
-import { Image, View } from "native-base";
 import { Marker } from "react-native-maps";
 import { scale } from "react-native-size-matters";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopProps } from "~/interfaces/BusStop.interface";
+
+import BusStop from "~/assets/svg/bus-stop.svg";
 
 type CustomMarkerProps = {
-  marker: BusStopInterface;
-  handleOpenModal: (data: BusStopInterface) => void;
+  marker: BusStopProps;
+  handleOpenModal: (data: BusStopProps) => void;
 };
 
 export const CustomMarker = ({
@@ -22,13 +23,7 @@ export const CustomMarker = ({
       onPress={() => handleOpenModal(marker)}
       tracksViewChanges
     >
-      <View w={50} h={50}>
-        <Image
-          source={require("~/assets/img/bus-stop.png")}
-          alt={"Pontos de ônibus"}
-          style={{ height: scale(40), width: scale(40) }}
-        />
-      </View>
+      <BusStop width={scale(40)} height={scale(40)} />
     </Marker>
   );
 };

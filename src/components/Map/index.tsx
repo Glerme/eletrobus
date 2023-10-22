@@ -7,7 +7,7 @@ import MapViewDirections from "react-native-maps-directions";
 
 import { MapInterface } from "~/interfaces/Map.interface";
 import { RoutesProps } from "~/interfaces/Routes.interface";
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopProps } from "~/interfaces/BusStop.interface";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 import { api } from "~/services/axios";
@@ -33,7 +33,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const { modalRef, handleOpenModal } = useModal();
 
   const [zoom, setZoom] = useState<number>(17);
-  const [dataPoint, setDataPoint] = useState<BusStopInterface | null>(null);
+  const [dataPoint, setDataPoint] = useState<BusStopProps | null>(null);
   const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
@@ -45,9 +45,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     requestLocationPermissions,
   } = useLocation();
 
-  const { user } = useAuth();
-
-  const openModal = (marker: BusStopInterface) => {
+  const openModal = (marker: BusStopProps) => {
     setDataPoint(marker);
     handleOpenModal();
   };
@@ -59,7 +57,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     });
   };
 
-  const onPressRoute = async (route: BusStopInterface) => {
+  const onPressRoute = async (route: BusStopProps) => {
     mapRef?.current?.animateCamera({
       center: { latitude: route.latitude, longitude: route.longitude },
       zoom: 20,

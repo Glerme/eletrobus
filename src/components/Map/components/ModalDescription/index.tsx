@@ -7,7 +7,7 @@ import { Modalize } from "react-native-modalize";
 import { useQuery } from "@tanstack/react-query";
 
 import { RoutesProps } from "~/interfaces/Routes.interface";
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
 
@@ -23,7 +23,7 @@ import { FavoriteButton } from "~/components/Form/FavoriteButton";
 import { THEME } from "~/styles/theme";
 
 interface ModalDescriptionProps {
-  point: BusStopInterface | null;
+  point: BusStopProps | null;
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
   handleOpenRoute: (route: RoutesProps) => void;
@@ -42,12 +42,10 @@ export const ModalDescription = ({
     setFavorite(!favorite);
   };
 
-  const { data, isLoading, isError, error } = useQuery<BusStopInterface>({
+  const { data, isLoading, isError, error } = useQuery<BusStopProps>({
     queryKey: ["routes-bus"],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface>(
-        `/bus-stop/${point?.id}`
-      );
+      const { data } = await api.get<BusStopProps>(`/bus-stop/${point?.id}`);
       return data;
     },
   });

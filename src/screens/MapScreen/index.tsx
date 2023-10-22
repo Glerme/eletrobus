@@ -1,6 +1,6 @@
 import { ActivityIndicator } from "react-native";
 
-import { Box } from "native-base";
+import { Box, Center } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
@@ -24,13 +24,15 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     isLoading,
     isError,
     error,
-  } = useQuery<BusStopInterface[]>({
+  } = useQuery<BusStopInterface>({
     queryKey: ["bus-stop"],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface[]>("/bus-stop");
+      const { data } = await api.get<BusStopInterface>("/bus-stop");
       return data;
     },
   });
+
+  console.log({ points });
 
   if (isLoading) {
     return (
@@ -40,7 +42,12 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
         alignItems={"center"}
         backgroundColor={"gray.400"}
       >
-        <ActivityIndicator size={"large"} color={THEME.colors.primary["900"]} />
+        <Center flex={1}>
+          <ActivityIndicator
+            size={"large"}
+            color={THEME.colors.primary["900"]}
+          />
+        </Center>
       </Box>
     );
   }
@@ -64,7 +71,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
         <Box flex={1}>
-          <Map markers={points} pointId={pointId} routeId={routeId} />
+          <Map markers={points.data} pointId={pointId} />
         </Box>
       </SafeAreaView>
     </>

@@ -1,13 +1,15 @@
 import { NavigationContainer } from "@react-navigation/native";
 import {
+  NativeStackNavigationOptions,
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 
 import { Host } from "react-native-portalize";
 
-import { DrawerNavigator } from "./drawer.routes";
+import { TabNavigator } from "./tab.routes";
 
+import { LoginScreen } from "~/screens/LoginScreen";
 import { ProfileScreen } from "~/screens/ProfileScreen";
 import { FavoritesScreen } from "~/screens/FavoritesScreen";
 import { PointDetailsScreen } from "~/screens/PointDetailsScreen";
@@ -25,6 +27,7 @@ export type RootStackParamList = {
   Settings: undefined;
   Map: { pointId?: string; routeId?: string };
   CouseDetails: { id: string };
+  Login: undefined;
 };
 
 // Tipagem das props de navegação
@@ -38,7 +41,22 @@ const stacks: {
   name: keyof RootStackParamList;
   component: React.ComponentType<any>;
   label: string;
+  options?: NativeStackNavigationOptions;
 }[] = [
+  {
+    name: "Login",
+    component: LoginScreen,
+    label: "Login",
+    options: {
+      statusBarStyle: "light",
+      statusBarColor: "#4d34dd",
+      headerBackButtonMenuEnabled: true,
+      headerTitle: "",
+      headerStyle: {
+        backgroundColor: "#4d34dd",
+      },
+    },
+  },
   {
     name: "PointDetails",
     component: PointDetailsScreen,
@@ -69,17 +87,13 @@ export const Routes = () => {
           <Stack.Navigator
             screenOptions={{
               headerShown: false,
-              statusBarStyle: "light",
             }}
-            initialRouteName="DrawerNavigator"
+            initialRouteName="TabNavigator"
           >
             <Stack.Screen
-              name="DrawerNavigator"
-              component={DrawerNavigator}
+              name="TabNavigator"
+              component={TabNavigator}
               options={{
-                headerStyle: {
-                  backgroundColor: "#0DAC86",
-                },
                 statusBarStyle: "light",
                 statusBarColor: "#0DAC86",
                 contentStyle: {
@@ -117,6 +131,7 @@ export const Routes = () => {
                   headerTitleStyle: {
                     fontWeight: "bold",
                   },
+                  ...stack.options,
                 }}
               />
             ))}
