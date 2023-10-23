@@ -45,6 +45,8 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     requestLocationPermissions,
   } = useLocation();
 
+  const { user } = useAuth();
+
   const openModal = (marker: BusStopProps) => {
     setDataPoint(marker);
     handleOpenModal();
@@ -80,6 +82,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     const { data } = await api.get<RoutesBusStopsInterface>(
       `/route/${route_id}`
     );
+
     if (location) {
       const busStop = data;
       busStop.bus_stops?.push({

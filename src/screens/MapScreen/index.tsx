@@ -71,7 +71,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
         <Box flex={1}>
-          <Map markers={points.data} pointId={pointId} />
+          <Map markers={points.data} pointId={pointId} routeId={routeId} />
         </Box>
       </SafeAreaView>
     </>
