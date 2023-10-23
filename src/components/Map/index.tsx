@@ -127,33 +127,26 @@ export const Map = ({ markers, pointId }: MapInterface) => {
             flexDir={"column"}
             p={2}
           >
-            {locationPermissionGranted ? (
+            <>
               <Alert
-                status="info"
-                text="Reinicie o App para que possamos buscar sua localização."
+                status="warning"
+                text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
               />
-            ) : (
-              <>
-                <Alert
-                  status="warning"
-                  text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
-                />
-                <Button
-                  mt={2}
-                  title="Permitir acesso à localização"
-                  fontColor="white"
-                  onPress={async () => {
-                    await Linking.openSettings()
-                      .then(() => {
-                        checkLocationPermission();
-                      })
-                      .catch((err) => {
-                        console.error(err);
-                      });
-                  }}
-                />
-              </>
-            )}
+              <Button
+                mt={2}
+                title="Permitir acesso à localização"
+                fontColor="white"
+                onPress={async () => {
+                  await Linking.openSettings()
+                    .then(() => {
+                      checkLocationPermission();
+                    })
+                    .catch((err) => {
+                      console.error(err);
+                    });
+                }}
+              />
+            </>
           </Flex>
         ) : location ? (
           <>
