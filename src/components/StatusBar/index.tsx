@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import {
   StatusBar as ExpoStatusBar,
   StatusBarProps as ExpoStatusBarProps,
@@ -11,7 +13,7 @@ interface StatusBarProps extends ExpoStatusBarProps {
   backgroundIos?: string;
 }
 
-export const StatusBar = ({ backgroundIos, ...rest }: StatusBarProps) => {
+export const StatusBar = memo(({ backgroundIos, ...rest }: StatusBarProps) => {
   return (
     <>
       <ExpoStatusBar
@@ -25,4 +27,4 @@ export const StatusBar = ({ backgroundIos, ...rest }: StatusBarProps) => {
       )}
     </>
   );
-};
+});

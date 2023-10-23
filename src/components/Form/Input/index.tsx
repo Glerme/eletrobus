@@ -9,7 +9,6 @@ export const Input: React.FC<InputProps> = ({ ...rest }) => {
     <NativeBaseInput
       size="md"
       borderWidth={1}
-      pl={3}
       borderColor={"gray.600"}
       fontSize="md"
       fontWeight={"semibold"}

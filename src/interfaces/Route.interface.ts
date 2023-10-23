@@ -1,5 +1,5 @@
 import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
-import { UserProps } from "./User.interface";
+import { UserGoogleProps } from "./User.interface";
 
 export interface RouteInterface {
   id: string;
@@ -32,7 +32,7 @@ interface Institution {
   points: Ponto[];
 }
 
-interface Driver extends UserProps {
+interface Driver extends UserGoogleProps {
   cpf: string;
   cnh: string;
 }

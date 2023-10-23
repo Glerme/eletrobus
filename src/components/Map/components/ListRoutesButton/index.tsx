@@ -21,7 +21,7 @@ import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { Modal } from "~/components/Modal";
 import { Input } from "~/components/Form/Input";
-import { ListItem } from "~/components/ListItem";
+import { ListBusStops } from "~/components/ListBusStops";
 import { Title } from "~/components/Layouts/Title";
 
 import { Container } from "./styles";
@@ -127,7 +127,7 @@ export const ListRoutesButton = ({ onPressRoute }: ListRoutesButtonProps) => {
               borderColor={"gray.400"}
               p={2}
               renderItem={({ item }: { item: BusStopProps }) => (
-                <ListItem
+                <ListBusStops
                   item={item}
                   onPress={() => {
                     onPressRoute(item);

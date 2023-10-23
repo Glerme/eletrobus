@@ -96,7 +96,7 @@ export const ModalDescription = ({
         </VStack>
 
         <VStack mt={1} space={1}>
-          {user?.driver ? (
+          {user?.user?.driver ? (
             <>
               <Button
                 title="Iniciar Corrida"

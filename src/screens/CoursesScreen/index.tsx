@@ -10,18 +10,17 @@ import { api } from "~/services/axios";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
-import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
+import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
 
 import { Alert } from "~/components/Alert";
 import { Input } from "~/components/Form/Input";
 import { StatusBar } from "~/components/StatusBar";
-import { ListBusStops } from "~/components/ListBusStops";
+import { ListCourses } from "~/components/ListCourses";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 import { Container } from "./styles";
-import { CourseInterface } from "~/interfaces/Course.interface";
 
 export interface ICity {
   id: number;
@@ -29,26 +28,18 @@ export interface ICity {
   favorite: boolean;
 }
 
-const courseMock: CourseInterface = {
-  data: [
-    {
-      route_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-      initial_hour: "2023-10-08T17:03:21.204Z",
-      final_hour: "2023-10-08T17:03:21.204Z",
-      vehicle_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-      route_name: "Rota 1",
-      user_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-    },
-  ],
-  hasNextPage: false,
-  hasPreviousPage: false,
-  totalPages: 1,
-};
+export interface IFilters {
+  kindRoute: "todos" | "municipal" | "intermunicipal";
+  cities: ICity[];
+  district: ICity[];
+  // runStarted: boolean;
+  time: Date;
+}
 
-export const PointsScreen = ({
+export const CoursesScreen = ({
   navigation,
   route,
-}: NavigationProps<"Points">) => {
+}: NavigationProps<"Courses">) => {
   const {
     data,
     fetchNextPage,
@@ -58,12 +49,12 @@ export const PointsScreen = ({
     isError,
     refetch,
   } = useInfiniteQuery(
-    ["bus-stop"],
+    ["courses"],
     ({ pageParam = 0 }) => {
       const pageSize = 10;
 
-      return api.get<BusStopInterface>(
-        `/bus-stop?page=${pageParam}&pageSize=${pageSize}`
+      return api.get<CourseInterface>(
+        `/course?page=${pageParam}&pageSize=${pageSize}`
       );
     },
     {
@@ -103,10 +94,8 @@ export const PointsScreen = ({
       </>
     );
   }
-
   return (
     <>
-      <StatusBar />
       <Background>
         <Container>
           <HStack space={1}>
@@ -128,7 +117,7 @@ export const PointsScreen = ({
               color={THEME.colors.gray["800"]}
               fontWeight={"600"}
             >
-              Listagem - pontos
+              Listagem - percursos
             </Text>
           </Box>
 
@@ -141,21 +130,21 @@ export const PointsScreen = ({
               refreshControl={
                 <RefreshControl onRefresh={refetch} refreshing={isFetching} />
               }
-              renderItem={({ item }: { item: BusStopProps }) => (
-                <ListBusStops
+              renderItem={({ item }: { item: CourseProps }) => (
+                <ListCourses
                   item={item}
                   onPress={() => {
-                    navigation.navigate("PointDetails", {
-                      id: `${item?.id}`,
+                    navigation.navigate("CouseDetails", {
+                      id: `${item?.vehicle_id}`,
                     });
                   }}
-                  key={item.id}
+                  key={item?.vehicle_id}
                 />
               )}
               ListEmptyComponent={() => (
                 <Alert
                   status="info"
-                  text="Atenção! Sem pontos cadastrados no momento!"
+                  text="Atenção! Sem Percursos cadastrados no momento!"
                 />
               )}
               onEndReached={handleLoadMore}
@@ -168,7 +157,7 @@ export const PointsScreen = ({
                 return (
                   <>
                     {[...Array(5).keys()].map((_, index) => (
-                      <ListBusStops isLoading key={index} />
+                      <ListCourses isLoading key={index} />
                     ))}
                   </>
                 );
