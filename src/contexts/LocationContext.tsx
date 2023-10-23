@@ -1,12 +1,13 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   LocationAccuracy,
   LocationObject,
   getCurrentPositionAsync,
   watchPositionAsync,
-  requestBackgroundPermissionsAsync,
   requestForegroundPermissionsAsync,
+  getBackgroundPermissionsAsync,
 } from "expo-location";
+import { Alert } from "react-native";
 
 interface LocationContextProps {
   location: LocationObject | null;
@@ -31,26 +32,23 @@ export const LocationContextProvider = ({
 }: LocationContextProviderProps) => {
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [foregroundPermission, setForegroundPermission] = useState<any>(null);
+  const [backgroundPermission, setBackgroundPermission] = useState<any>(null);
 
   const requestLocationPermissions = async () => {
-    const { granted } = await requestBackgroundPermissionsAsync();
+    const { granted } = await requestForegroundPermissionsAsync();
 
     if (granted) {
-      const { status } = await requestForegroundPermissionsAsync();
+      try {
+        const currentPosition = await getCurrentPositionAsync({
+          accuracy: LocationAccuracy.Highest,
+          timeInterval: 5000,
+        });
 
-      if (status === "granted") {
-        try {
-          const currentPosition = await getCurrentPositionAsync({
-            accuracy: LocationAccuracy.Highest,
-            timeInterval: 5000,
-          });
-
-          setLocation(currentPosition);
-        } catch (error) {
-          setLocationError("Falha ao buscar a localização.");
-        }
+        setLocation(currentPosition);
+      } catch (error) {
+        setLocationError("Falha ao buscar a localização.");
       }
-      setLocation(null);
       return;
     }
 
@@ -70,6 +68,29 @@ export const LocationContextProvider = ({
       }
     );
   };
+
+  const getLocation = async () => {
+    const { status } = await requestForegroundPermissionsAsync();
+    setForegroundPermission(status);
+
+    if (status === "granted") {
+      const backgroundStatus = await getBackgroundPermissionsAsync();
+      setBackgroundPermission(backgroundStatus.status);
+
+      if (backgroundStatus.status === "granted") {
+        const currentPosition = await getCurrentPositionAsync({
+          accuracy: LocationAccuracy.Highest,
+          timeInterval: 5000,
+        });
+
+        setLocation(currentPosition);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   return (
     <LocationContext.Provider

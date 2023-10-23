@@ -37,8 +37,8 @@ export const Map = ({ markers, pointId }: MapInterface) => {
   const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
-  // const [locationPermissionGranted, setLocationPermissionGranted] =
-  //   useState(false);
+  const [locationPermissionGranted, setLocationPermissionGranted] =
+    useState(false);
 
   const {
     location,
@@ -103,19 +103,6 @@ export const Map = ({ markers, pointId }: MapInterface) => {
     }
   }, [pointId]);
 
-  // const checkLocationPermission = async () => {
-  //   const { status } = await requestForegroundPermissionsAsync();
-  //   if (status === "granted") {
-  //     setLocationPermissionGranted(true);
-  //   } else {
-  //     setLocationPermissionGranted(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   checkLocationPermission();
-  // }, []);
-
   return (
     <>
       <Box flex={1}>
@@ -127,20 +114,27 @@ export const Map = ({ markers, pointId }: MapInterface) => {
             flexDir={"column"}
             p={2}
           >
-            <>
+            {locationPermissionGranted ? (
               <Alert
-                status="warning"
-                text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
+                status="info"
+                text="Reinicie o App para que possamos buscar sua localização."
               />
-              <Button
-                mt={2}
-                title="Permitir acesso à localização"
-                fontColor="white"
-                onPress={async () => {
-                  await Linking.openSettings();
-                }}
-              />
-            </>
+            ) : (
+              <>
+                <Alert
+                  status="warning"
+                  text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
+                />
+                <Button
+                  mt={2}
+                  title="Permitir acesso à localização"
+                  fontColor="white"
+                  onPress={async () => {
+                    await Linking.openSettings();
+                  }}
+                />
+              </>
+            )}
           </Flex>
         ) : location ? (
           <>
