@@ -4,9 +4,9 @@ import {
   LocationObject,
   getCurrentPositionAsync,
   watchPositionAsync,
+  requestBackgroundPermissionsAsync,
   requestForegroundPermissionsAsync,
 } from "expo-location";
-import { Alert } from "react-native";
 
 interface LocationContextProps {
   location: LocationObject | null;
@@ -33,19 +33,24 @@ export const LocationContextProvider = ({
   const [locationError, setLocationError] = useState<string | null>(null);
 
   const requestLocationPermissions = async () => {
-    const { granted } = await requestForegroundPermissionsAsync();
+    const { granted } = await requestBackgroundPermissionsAsync();
 
     if (granted) {
-      try {
-        const currentPosition = await getCurrentPositionAsync({
-          accuracy: LocationAccuracy.Highest,
-          timeInterval: 5000,
-        });
+      const { status } = await requestForegroundPermissionsAsync();
 
-        setLocation(currentPosition);
-      } catch (error) {
-        setLocationError("Falha ao buscar a localização.");
+      if (status === "granted") {
+        try {
+          const currentPosition = await getCurrentPositionAsync({
+            accuracy: LocationAccuracy.Highest,
+            timeInterval: 5000,
+          });
+
+          setLocation(currentPosition);
+        } catch (error) {
+          setLocationError("Falha ao buscar a localização.");
+        }
       }
+      setLocation(null);
       return;
     }
 

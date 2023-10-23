@@ -37,8 +37,8 @@ export const Map = ({ markers, pointId }: MapInterface) => {
   const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
-  const [locationPermissionGranted, setLocationPermissionGranted] =
-    useState(false);
+  // const [locationPermissionGranted, setLocationPermissionGranted] =
+  //   useState(false);
 
   const {
     location,
@@ -103,18 +103,18 @@ export const Map = ({ markers, pointId }: MapInterface) => {
     }
   }, [pointId]);
 
-  const checkLocationPermission = async () => {
-    const { status } = await requestForegroundPermissionsAsync();
-    if (status === "granted") {
-      setLocationPermissionGranted(true);
-    } else {
-      setLocationPermissionGranted(false);
-    }
-  };
+  // const checkLocationPermission = async () => {
+  //   const { status } = await requestForegroundPermissionsAsync();
+  //   if (status === "granted") {
+  //     setLocationPermissionGranted(true);
+  //   } else {
+  //     setLocationPermissionGranted(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    checkLocationPermission();
-  }, []);
+  // useEffect(() => {
+  //   checkLocationPermission();
+  // }, []);
 
   return (
     <>
@@ -137,13 +137,7 @@ export const Map = ({ markers, pointId }: MapInterface) => {
                 title="Permitir acesso à localização"
                 fontColor="white"
                 onPress={async () => {
-                  await Linking.openSettings()
-                    .then(() => {
-                      checkLocationPermission();
-                    })
-                    .catch((err) => {
-                      console.error(err);
-                    });
+                  await Linking.openSettings();
                 }}
               />
             </>
