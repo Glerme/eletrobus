@@ -1,13 +1,7 @@
-import { useEffect, useRef, useState } from "react";
 import { TouchableHighlight } from "react-native";
 
 import LottieView from "lottie-react-native";
 import { Icon, VStack, Text, HStack, Avatar } from "native-base";
-
-import {
-  requestForegroundPermissionsAsync,
-  hasServicesEnabledAsync,
-} from "expo-location";
 
 import { PencilSimple, SignOut, HardDrive } from "phosphor-react-native";
 
@@ -17,7 +11,6 @@ import { useModal } from "~/hooks/useModal";
 import { useAuth } from "~/contexts/AuthContext";
 
 import { Modal } from "~/components/Modal";
-import { Switch } from "~/components/Form/Switch";
 import { StatusBar } from "~/components/StatusBar";
 import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";

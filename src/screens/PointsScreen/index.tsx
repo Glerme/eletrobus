@@ -1,7 +1,6 @@
-import { useRef, useState } from "react";
 import { RefreshControl, TouchableHighlight } from "react-native";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { MagnifyingGlass } from "phosphor-react-native";
 import { Box, FlatList, HStack, Icon, Text, View } from "native-base";
 
@@ -9,19 +8,15 @@ import { NavigationProps } from "~/routes";
 
 import { api } from "~/services/axios";
 
-import { useAuth } from "~/contexts/AuthContext";
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
-import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
 import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { Alert } from "~/components/Alert";
 import { Input } from "~/components/Form/Input";
-import { ListItem } from "~/components/ListItem";
-import { Button } from "~/components/Form/Button";
 import { StatusBar } from "~/components/StatusBar";
-import { ListCourses } from "~/components/ListCourses";
+import { ListBusStops } from "~/components/ListBusStops";
 import { Background } from "~/components/Layouts/Background";
-import { AdvancedFilters } from "~/components/AdvancedFilters";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
@@ -45,51 +40,47 @@ export const PointsScreen = ({
   navigation,
   route,
 }: NavigationProps<"Points">) => {
-  const { user } = useAuth();
-  const pageRef = useRef(0);
+  const {
+    data,
+    fetchNextPage,
+    isFetching,
+    hasNextPage,
+    error,
+    isError,
+    refetch,
+  } = useInfiniteQuery(
+    ["bus-stop"],
+    ({ pageParam = 0 }) => {
+      const pageSize = 10;
 
-  const [courses, setCourses] = useState<CourseInterface | null>(null);
-  const [busStops, setBusStops] = useState<BusStopInterface | null>(null);
-
-  const { isError, error, refetch, isFetching } = useQuery({
-    queryKey: ["bus-stop", pageRef.current],
-    queryFn: async () => {
-      if (user?.driver) {
-        const { data } = await api.get<CourseInterface>(
-          `/course?page=${pageRef.current}&pageSize=10`
-        );
-
-        const oldData = courses?.data ?? [];
-
-        setCourses(() => ({
-          data: [...oldData, ...data.data],
-          hasNextPage: data.hasNextPage,
-          hasPreviousPage: data.hasPreviousPage,
-          totalPages: data.totalPages,
-        }));
-
-        return data;
-      } else {
-        const { data } = await api.get<BusStopInterface>(
-          `/bus-stop?page=${pageRef.current}&pageSize=2`
-        );
-
-        const oldData = busStops?.data ?? [];
-
-        setBusStops(() => ({
-          data: [...oldData, ...data.data],
-          hasNextPage: data.hasNextPage,
-          hasPreviousPage: data.hasPreviousPage,
-          totalPages: data.totalPages,
-        }));
-
-        return data;
-      }
+      return api.get<BusStopInterface>(
+        `/bus-stop?page=${pageParam}&pageSize=${pageSize}`
+      );
     },
-  });
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage = lastPage?.data?.hasNextPage
+          ? allPages.length + 1
+          : undefined;
+
+        return nextPage;
+      },
+      keepPreviousData: true,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      refetchOnMount: true,
+    }
+  );
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  };
 
   if (isError) {
-    console.error(error);
+    const axiosError = axiosErrorHandler(error);
+    console.error(axiosError);
 
     return (
       <>
@@ -128,62 +119,52 @@ export const PointsScreen = ({
               color={THEME.colors.gray["800"]}
               fontWeight={"600"}
             >
-              Listagem
+              Listagem - pontos
             </Text>
           </Box>
 
           <View flex={1}>
-            {user?.driver ? (
-              <FlatList
-                keyExtractor={(item) => `${item?.vehicle_id}`}
-                data={courses?.data}
-                refreshControl={
-                  <RefreshControl onRefresh={refetch} refreshing={isFetching} />
+            <FlatList
+              keyExtractor={(item, i) => `${i}`}
+              data={data?.pages?.flatMap((page) =>
+                page ? page?.data?.data : []
+              )}
+              refreshControl={
+                <RefreshControl onRefresh={refetch} refreshing={isFetching} />
+              }
+              renderItem={({ item }: { item: BusStopProps }) => (
+                <ListBusStops
+                  item={item}
+                  onPress={() => {
+                    navigation.navigate("PointDetails", {
+                      id: `${item?.id}`,
+                    });
+                  }}
+                  key={item.id}
+                />
+              )}
+              ListEmptyComponent={() => (
+                <Alert
+                  status="info"
+                  text="Atenção! Sem pontos cadastrados no momento!"
+                />
+              )}
+              onEndReached={handleLoadMore}
+              onEndReachedThreshold={0.1}
+              ListFooterComponent={() => {
+                if (!data?.pages?.flatMap((page) => page?.data?.hasNextPage)) {
+                  return <></>;
                 }
-                renderItem={({ item }: { item: CourseProps }) => (
-                  <ListCourses
-                    item={item}
-                    onPress={() => {
-                      navigation.navigate("CouseDetails", {
-                        id: `${item?.vehicle_id}`,
-                      });
-                    }}
-                    key={item?.vehicle_id}
-                  />
-                )}
-              />
-            ) : (
-              <FlatList
-                display={"flex"}
-                keyExtractor={(item) => `${item?.id}`}
-                data={busStops?.data}
-                refreshControl={
-                  <RefreshControl onRefresh={refetch} refreshing={isFetching} />
-                }
-                renderItem={({ item }: { item: BusStopProps }) => (
-                  <ListItem
-                    item={item}
-                    onPress={() => {
-                      navigation.navigate("PointDetails", {
-                        id: `${item?.id}`,
-                      });
-                    }}
-                    key={item.id}
-                  />
-                )}
-                ListEmptyComponent={() => (
-                  <Alert
-                    status="info"
-                    text="Atenção! Sem pontos cadastrados no momento!"
-                  />
-                )}
-                onEndReachedThreshold={0.5}
-                onEndReached={() => {
-                  pageRef.current += 1;
-                  refetch();
-                }}
-              />
-            )}
+
+                return (
+                  <>
+                    {[...Array(5).keys()].map((_, index) => (
+                      <ListBusStops isLoading key={index} />
+                    ))}
+                  </>
+                );
+              }}
+            />
           </View>
         </Container>
       </Background>

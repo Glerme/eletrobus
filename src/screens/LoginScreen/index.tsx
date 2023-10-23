@@ -1,8 +1,15 @@
 import { useState } from "react";
 
 import { Alert } from "react-native";
-import { Box, Center, Icon, VStack, View } from "native-base";
-import { Envelope, Key, User, ArrowLeft } from "phosphor-react-native";
+import { Box, Center, Icon, IconButton, VStack, View } from "native-base";
+import {
+  Envelope,
+  Key,
+  User,
+  ArrowLeft,
+  Eye,
+  EyeSlash,
+} from "phosphor-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { NavigationProps } from "~/routes";
@@ -10,20 +17,24 @@ import { NavigationProps } from "~/routes";
 import IconSvg from "~/assets/svg/icon.svg";
 import GoogleIcon from "~/assets/svg/googleIcon.svg";
 
+import { api } from "~/services/axios";
+
 import { useAuth } from "~/contexts/AuthContext";
 
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
-import { StatusBar } from "~/components/StatusBar";
+
 import { THEME } from "~/styles/theme";
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 export const LoginScreen = ({
   navigation,
   route,
 }: NavigationProps<"Login">) => {
   const [step, setStep] = useState(1);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const { handleGoogleLogin, user, signIn, loading } = useAuth();
+  const { handleGoogleLogin, signIn, loading } = useAuth();
 
   const [loginFields, setLoginFields] = useState({
     email: "",
@@ -41,15 +52,51 @@ export const LoginScreen = ({
       return Alert.alert("Entrar", "Informe seu email e senha");
     }
 
-    await signIn({
+    const user = await signIn({
       email: loginFields.email,
       password: loginFields.password,
     });
+
+    if (user) {
+      navigation.navigate("Home");
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const user = await handleGoogleLogin();
+    console.log("foi", user);
+    if (user) {
+      navigation.navigate("Home");
+    } else {
+      Alert.alert("Erro ao fazer login", "Tente novamente mais tarde");
+    }
   };
 
   const handleRegister = async () => {
-    if (!registerFields.email || !registerFields.password) {
+    if (
+      !registerFields.email ||
+      !registerFields.password ||
+      !registerFields.name
+    ) {
       return Alert.alert("Registrar", "Informe seu nome, email e senha ");
+    }
+    try {
+      const { status } = await api.post("/user", {
+        name: registerFields.name,
+        email: registerFields.email,
+        password: registerFields.password,
+      });
+
+      if (status) {
+        setStep(1);
+        return Alert.alert("Sucesso", "Usuário registrado com sucesso");
+      }
+    } catch (error) {
+      const errorMessage = axiosErrorHandler(error);
+
+      console.error(errorMessage);
+
+      Alert.alert("Erro ao fazer registro", errorMessage?.message);
     }
   };
 
@@ -72,7 +119,7 @@ export const LoginScreen = ({
                 <VStack space={2}>
                   <Input
                     placeholder="E-mail"
-                    InputLeftElement={<Icon as={<Envelope />} ml={4} />}
+                    InputLeftElement={<Icon as={<Envelope />} ml={2} />}
                     onChangeText={(text) =>
                       setLoginFields((state) => ({ ...state, email: text }))
                     }
@@ -81,10 +128,21 @@ export const LoginScreen = ({
 
                   <Input
                     placeholder="Senha"
-                    InputLeftElement={<Icon as={<Key />} ml={4} />}
-                    secureTextEntry
+                    InputLeftElement={<Icon as={<Key />} ml={2} />}
                     onChangeText={(text) =>
                       setLoginFields((state) => ({ ...state, password: text }))
+                    }
+                    secureTextEntry={showPassword}
+                    type={showPassword ? "text" : "password"}
+                    InputRightElement={
+                      <IconButton
+                        onPress={() => setShowPassword(!showPassword)}
+                        borderRadius={"full"}
+                        mr={2}
+                        p={2}
+                      >
+                        <Icon as={showPassword ? <Eye /> : <EyeSlash />} />
+                      </IconButton>
                     }
                   />
 
@@ -100,8 +158,8 @@ export const LoginScreen = ({
                   />
 
                   <Button
-                    title="Entrar com o google"
-                    onPress={handleGoogleLogin}
+                    title="Entrar com o Google"
+                    onPress={handleGoogleSignIn}
                     isLoading={loading}
                     background={"transparent"}
                     borderWidth={1}
@@ -132,7 +190,7 @@ export const LoginScreen = ({
 
                 <Input
                   placeholder="Nome"
-                  InputLeftElement={<Icon as={<User />} ml={4} />}
+                  InputLeftElement={<Icon as={<User />} ml={2} />}
                   onChangeText={(text) =>
                     setRegisterFields((state) => ({ ...state, name: text }))
                   }
@@ -141,7 +199,7 @@ export const LoginScreen = ({
 
                 <Input
                   placeholder="E-mail"
-                  InputLeftElement={<Icon as={<Envelope />} ml={4} />}
+                  InputLeftElement={<Icon as={<Envelope />} ml={2} />}
                   onChangeText={(text) =>
                     setRegisterFields((state) => ({ ...state, email: text }))
                   }
@@ -150,10 +208,21 @@ export const LoginScreen = ({
 
                 <Input
                   placeholder="Senha"
-                  InputLeftElement={<Icon as={<Key />} ml={4} />}
-                  secureTextEntry
+                  InputLeftElement={<Icon as={<Key />} ml={2} />}
                   onChangeText={(text) =>
                     setRegisterFields((state) => ({ ...state, password: text }))
+                  }
+                  secureTextEntry={showPassword}
+                  type={showPassword ? "text" : "password"}
+                  InputRightElement={
+                    <IconButton
+                      onPress={() => setShowPassword(!showPassword)}
+                      borderRadius={"full"}
+                      mr={2}
+                      p={2}
+                    >
+                      <Icon as={showPassword ? <Eye /> : <EyeSlash />} />
+                    </IconButton>
                   }
                 />
 

@@ -1,4 +1,4 @@
-export interface UserProps {
+export interface UserGoogleProps {
   email: string;
   family_name?: string;
   given_name?: string;
@@ -7,13 +7,21 @@ export interface UserProps {
   name: string;
   picture?: string | null;
   verified_email?: boolean;
-  favorite?: [] | null; //array de ponto e onibus
-  driver: Driver | null;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
-interface Driver {
-  cpf: string;
+export interface UserProps {
+  token: string;
+  user: {
+    id: string;
+    avatar: string;
+    email: string;
+    name: string;
+    driver: Driver | null;
+  };
+}
+
+export interface Driver {
+  id: string;
   cnh: string;
+  cpf: string;
 }
