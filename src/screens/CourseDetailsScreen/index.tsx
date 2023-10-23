@@ -37,8 +37,8 @@ import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
+import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
 
-function teste() {}
 export const CourseDetailsScreen = ({
   navigation,
   route,
@@ -47,24 +47,33 @@ export const CourseDetailsScreen = ({
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  const routeIdMock = "651327d4b937f4bb0215d6e8";
-  // const {
-  //   data: point,
-  //   isLoading,
-  //   isError,
-  //   error,
-  //   refetch,
-  //   isRefetching,
-  // } = useQuery<BusStopInterface>({
-  //   queryKey: ["course-details", route.params.id],
-  //   queryFn: async () => {
-  //     const { data } = await api.get<BusStopInterface>(
-  //       `/course/${route.params.id}`
-  //     );
+  const courseMock: CourseProps = {
+    route_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
+    initial_hour: "2023-10-08T17:03:21.204Z",
+    final_hour: "2023-10-08T17:03:21.204Z",
+    vehicle_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
+    route_name: "Rota 1",
+    user_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
+  };
 
-  //     return data;
-  //   },
-  // });
+  const routeIdMock = "651327d4b937f4bb0215d6e8";
+  const {
+    data: point,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+  } = useQuery<BusStopInterface>({
+    queryKey: ["course-details", route.params.id],
+    queryFn: async () => {
+      const { data } = await api.get<BusStopInterface>(
+        `/course/${route.params.id}`
+      );
+
+      return data;
+    },
+  });
 
   // if (isLoading) {
   //   return (
@@ -110,7 +119,7 @@ export const CourseDetailsScreen = ({
                   backgroundColor={true ? "#A7E179" : "#E17979"}
                 />
                 <Text fontSize="lg" fontWeight={"600"}>
-                  NOME
+                  {courseMock.route_name}
                 </Text>
               </HStack>
 
@@ -135,7 +144,6 @@ export const CourseDetailsScreen = ({
                 <Spacer />
                 <VStack space={1} alignItems="flex-end">
                   <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
-                  {/* <TypeRoute mt={1} tipo={"estudantes"} /> */}
                 </VStack>
               </HStack>
 
@@ -145,6 +153,18 @@ export const CourseDetailsScreen = ({
                 keyExtractor={(item) => `${item.id}`}
                 renderItem={({ item }) => <HourCard isToday={item.isToday} />}
               /> */}
+            </Box>
+            <Box mt={2}>
+              <Button
+                onPress={() =>
+                  navigation.navigate("Map", {
+                    routeId: routeIdMock,
+                  })
+                }
+                title="Ver rota de Ônibus"
+                fontColor={"white"}
+                disabled={isRefetching || isLoading}
+              />
             </Box>
           </ScrollViewContainer>
         </ScreenContent>
