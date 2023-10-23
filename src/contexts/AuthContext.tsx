@@ -84,8 +84,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             user: googleData?.data?.user,
           };
 
-          console.log("GOOGLE", JSON.stringify(parsedData, null, 2));
-
           await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
           await AsyncStorage.setItem(
             "@token",
@@ -122,8 +120,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         email,
         password,
       });
-
-      console.log(JSON.stringify(data, null, 2));
 
       const parsedData: UserProps = {
         token: data?.data?.token,
@@ -165,7 +161,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       const getUser = await AsyncStorage.getItem("@user");
 
       if (getUser) {
-        console.log("GET USER", JSON.stringify(getUser, null, 2));
         setUser(JSON.parse(getUser));
       }
     } catch (error) {

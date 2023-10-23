@@ -128,8 +128,6 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
     );
   }
 
-  console.log(JSON.stringify(user, null, 2));
-
   return (
     <>
       <StatusBar />
