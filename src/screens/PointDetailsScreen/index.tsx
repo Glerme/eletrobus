@@ -34,7 +34,7 @@ import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
-import { ListItem } from "~/components/ListItem";
+import { ListBusStops } from "~/components/ListItem";
 import { ListRoutes } from "~/components/ListRoutes";
 
 export const PointDetailsScreen = ({

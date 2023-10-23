@@ -23,7 +23,7 @@ import { api } from "~/services/axios";
 import { NavigationProps } from "~/routes";
 
 import { Alert } from "~/components/Alert";
-import { ListItem } from "~/components/ListItem";
+import { ListBusStops } from "~/components/ListItem";
 import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
 import { TypeRoute } from "~/components/TypeRoute";
