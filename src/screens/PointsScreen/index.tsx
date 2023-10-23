@@ -97,6 +97,7 @@ export const PointsScreen = ({
 
   return (
     <>
+      <StatusBar />
       <Background>
         <Container>
           <HStack space={1}>

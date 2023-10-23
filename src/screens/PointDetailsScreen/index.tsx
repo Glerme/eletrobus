@@ -32,10 +32,10 @@ import { FavoriteButton } from "~/components/Form/FavoriteButton";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
+import { ListBusStops } from "~/components/ListBusStops";
+import { ListRoutes } from "~/components/ListRoutes";
 
 import { THEME } from "~/styles/theme";
-import { ListBusStops } from "~/components/ListItem";
-import { ListRoutes } from "~/components/ListRoutes";
 
 export const PointDetailsScreen = ({
   navigation,

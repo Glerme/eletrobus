@@ -21,7 +21,7 @@ import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { Modal } from "~/components/Modal";
 import { Input } from "~/components/Form/Input";
-import { ListBusStops } from "~/components/ListItem";
+import { ListBusStops } from "~/components/ListBusStops";
 import { Title } from "~/components/Layouts/Title";
 
 import { Container } from "./styles";
