@@ -1,10 +1,11 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   LocationAccuracy,
   LocationObject,
   getCurrentPositionAsync,
   watchPositionAsync,
   requestForegroundPermissionsAsync,
+  getBackgroundPermissionsAsync,
 } from "expo-location";
 import { Alert } from "react-native";
 
@@ -31,6 +32,8 @@ export const LocationContextProvider = ({
 }: LocationContextProviderProps) => {
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [foregroundPermission, setForegroundPermission] = useState<any>(null);
+  const [backgroundPermission, setBackgroundPermission] = useState<any>(null);
 
   const requestLocationPermissions = async () => {
     const { granted } = await requestForegroundPermissionsAsync();
@@ -65,6 +68,29 @@ export const LocationContextProvider = ({
       }
     );
   };
+
+  const getLocation = async () => {
+    const { status } = await requestForegroundPermissionsAsync();
+    setForegroundPermission(status);
+
+    if (status === "granted") {
+      const backgroundStatus = await getBackgroundPermissionsAsync();
+      setBackgroundPermission(backgroundStatus.status);
+
+      if (backgroundStatus.status === "granted") {
+        const currentPosition = await getCurrentPositionAsync({
+          accuracy: LocationAccuracy.Highest,
+          timeInterval: 5000,
+        });
+
+        setLocation(currentPosition);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   return (
     <LocationContext.Provider
