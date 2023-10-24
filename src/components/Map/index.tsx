@@ -106,7 +106,7 @@ export const Map = ({ markers, pointId }: MapInterface) => {
   return (
     <>
       <Box flex={1}>
-        {locationError ? (
+        {locationError && !location ? (
           <Flex
             flex={1}
             justifyContent={"center"}
@@ -114,95 +114,76 @@ export const Map = ({ markers, pointId }: MapInterface) => {
             flexDir={"column"}
             p={2}
           >
-            {locationPermissionGranted ? (
-              <Alert
-                status="info"
-                text="Reinicie o App para que possamos buscar sua localização."
-              />
-            ) : (
-              <>
-                <Alert
-                  status="warning"
-                  text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
-                />
-                <Button
-                  mt={2}
-                  title="Permitir acesso à localização"
-                  fontColor="white"
-                  onPress={async () => {
-                    await Linking.openSettings();
-                  }}
-                />
-              </>
-            )}
-          </Flex>
-        ) : location ? (
-          <>
-            {busStops && <BusRouteSelected busRoute={busStops} />}
-            <ZoomButtons onZoomPress={onZoomPress} />
-            <ListRoutesButton onPressRoute={onPressRoute} />
-            <MyLocationButton getCurrentPosition={getCurrentPosition} />
-            <MapView
-              ref={mapRef}
-              provider={PROVIDER_GOOGLE}
-              style={{
-                ...StyleSheet.absoluteFillObject,
-                width: "120%",
-                height: "120%",
-              }}
-              region={{
-                longitudeDelta: 0.005,
-                latitudeDelta: 0.005,
-                latitude: location?.coords?.latitude,
-                longitude: location?.coords?.longitude,
-              }}
-              showsUserLocation={true}
-              showsMyLocationButton={false}
-              scrollEnabled
-              zoomEnabled
-              zoomControlEnabled={false}
-            >
-              {markers?.map((marker, i) => (
-                <CustomMarker
-                  key={i}
-                  marker={marker}
-                  handleOpenModal={openModal}
-                />
-              ))}
-
-              {busStops &&
-                busStops?.bus_stops?.map((stop, index) => {
-                  if (index < busStops?.bus_stops?.length - 1) {
-                    const origin = stop;
-                    const destination = busStops?.bus_stops[index + 1];
-
-                    return (
-                      <MapViewDirections
-                        origin={origin}
-                        destination={destination}
-                        apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
-                        strokeWidth={5}
-                        strokeColor="blue"
-                        key={index}
-                        mode="TRANSIT"
-                      />
-                    );
-                  }
-                })}
-            </MapView>
-          </>
-        ) : (
-          <Box
-            flex={1}
-            justifyContent={"center"}
-            alignItems={"center"}
-            backgroundColor={"gray.400"}
-          >
-            <ActivityIndicator
-              size={"large"}
-              color={THEME.colors.primary["900"]}
+            <Alert
+              status="warning"
+              text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
             />
-          </Box>
+            <Button
+              mt={2}
+              title="Permitir acesso à localização"
+              fontColor="white"
+              onPress={async () => {
+                await Linking.openSettings();
+              }}
+            />
+          </Flex>
+        ) : (
+          location && (
+            <>
+              {busStops && <BusRouteSelected busRoute={busStops} />}
+              <ZoomButtons onZoomPress={onZoomPress} />
+              <ListRoutesButton onPressRoute={onPressRoute} />
+              <MyLocationButton getCurrentPosition={getCurrentPosition} />
+              <MapView
+                ref={mapRef}
+                provider={PROVIDER_GOOGLE}
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                  width: "120%",
+                  height: "120%",
+                }}
+                region={{
+                  longitudeDelta: 0.005,
+                  latitudeDelta: 0.005,
+                  latitude: location?.coords?.latitude,
+                  longitude: location?.coords?.longitude,
+                }}
+                showsUserLocation={true}
+                showsMyLocationButton={false}
+                scrollEnabled
+                zoomEnabled
+                zoomControlEnabled={false}
+              >
+                {markers?.map((marker, i) => (
+                  <CustomMarker
+                    key={i}
+                    marker={marker}
+                    handleOpenModal={openModal}
+                  />
+                ))}
+
+                {busStops &&
+                  busStops?.bus_stops?.map((stop, index) => {
+                    if (index < busStops?.bus_stops?.length - 1) {
+                      const origin = stop;
+                      const destination = busStops?.bus_stops[index + 1];
+
+                      return (
+                        <MapViewDirections
+                          origin={origin}
+                          destination={destination}
+                          apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
+                          strokeWidth={5}
+                          strokeColor="blue"
+                          key={index}
+                          mode="TRANSIT"
+                        />
+                      );
+                    }
+                  })}
+              </MapView>
+            </>
+          )
         )}
       </Box>
 
