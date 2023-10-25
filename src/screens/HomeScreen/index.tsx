@@ -58,8 +58,8 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   const busStopsQuery = useQuery({
     queryKey: ["busStops-home", user?.token],
     queryFn: async () => {
-      const { data } = await api.get("/bus-stop/home");
-      return data;
+      // const { data } = await api.get("/bus-stop/home");
+      return [];
     },
     initialData: [],
     placeholderData: [],
@@ -67,8 +67,8 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   const coursesQuery = useQuery({
     queryKey: ["courses-home", user?.token],
     queryFn: async () => {
-      const { data } = await api.get("/course/home");
-      return data;
+      // const { data } = await api.get("/course/home");
+      return [];
     },
     initialData: [],
     placeholderData: [],

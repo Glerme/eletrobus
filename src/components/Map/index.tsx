@@ -38,6 +38,8 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
+  const [isRunning, setIsRunning] = useState(false);
+
   const [locationPermissionGranted, setLocationPermissionGranted] =
     useState(false);
 
@@ -55,7 +57,10 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     handleOpenModal();
   };
 
-  const getCurrentPosition = (zoom: number = 17) => {
+  const getCurrentPosition = async (zoom: number = 17) => {
+    if (!location?.coords) {
+      await getActualCurrentPosition();
+    }
     mapRef.current?.animateCamera({
       center: location?.coords,
       zoom: zoom,
@@ -81,6 +86,18 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     });
   };
 
+  const getRouteById = async (route_id: string) => {
+    try {
+      const { data } = await api.get<RoutesBusStopsInterface>(
+        `/route/${route_id}`
+      );
+      return data;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  };
+
   const handleOpenBus = async (route_id: string, location?: any) => {
     const { data } = await api.get<RoutesBusStopsInterface>(
       `/route/${route_id}`
@@ -102,7 +119,23 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
 
   useEffect(() => {
     (async () => await requestLocationPermissions())();
-    (async () => await getActualCurrentPosition())();
+
+    setInterval(async () => {
+      if (isRunning && busStops) {
+        await getActualCurrentPosition();
+        setBusStops((busStops) => {
+          if (!busStops) return null;
+          const position = busStops.bus_stops.length - 1;
+          const newBusStops = [...busStops.bus_stops];
+          newBusStops[position] = {
+            bus_stop_id: "0",
+            latitude: location?.coords?.latitude ?? 0,
+            longitude: location?.coords?.longitude ?? 0,
+          };
+          return { ...busStops, bus_stops: newBusStops };
+        });
+      }
+    }, 5000);
   }, []);
 
   useEffect(() => {
@@ -117,10 +150,22 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     }
   }, [pointId]);
 
+  useEffect(() => {
+    (async () => {
+      if (!routeId) return;
+      if (!busStops) {
+        setIsRunning(false);
+        setBusStops(await getRouteById(routeId));
+      } else {
+        setIsRunning(true);
+      }
+    })();
+  }, [routeId, location?.coords]);
+
   return (
     <>
       <Box flex={1}>
-        {locationError && !location ? (
+        {locationError && !location?.coords ? (
           <Flex
             flex={1}
             justifyContent={"center"}
@@ -142,7 +187,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
             />
           </Flex>
         ) : (
-          location && (
+          location?.coords && (
             <>
               {busStops && <BusRouteSelected busRoute={busStops} />}
               <ZoomButtons onZoomPress={onZoomPress} />
@@ -189,6 +234,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
                           apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
                           strokeWidth={5}
                           strokeColor="blue"
+                          optimizeWaypoints={true}
                           key={index}
                           mode="TRANSIT"
                         />
