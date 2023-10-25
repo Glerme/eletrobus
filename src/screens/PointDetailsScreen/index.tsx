@@ -16,7 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { api } from "~/services/axios";
 
@@ -36,6 +36,7 @@ import { ListBusStops } from "~/components/ListBusStops";
 import { ListRoutes } from "~/components/ListRoutes";
 
 import { THEME } from "~/styles/theme";
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 export const PointDetailsScreen = ({
   navigation,
@@ -43,24 +44,45 @@ export const PointDetailsScreen = ({
 }: NavigationProps<"PointDetails">) => {
   const { user } = useAuth();
 
+  console.log({ user });
+
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  const {
-    data: point,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isRefetching,
-  } = useQuery<BusStopInterface>({
-    queryKey: ["point-bus-details"],
-    queryFn: async () => {
-      const { data } = await api.get<BusStopInterface>(
-        `/bus-stop/${route.params.id}`
-      );
-      return data;
-    },
-  });
+  const { data, isLoading, isError, error, refetch, isRefetching } =
+    useQuery<BusStopProps>({
+      queryKey: ["point-bus-details"],
+      queryFn: async () => {
+        const { data } = await api.get<BusStopProps>(
+          `/bus-stop/${route.params.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
+          }
+        );
+
+        return data;
+      },
+    });
+
+  const handleFavorite = async () => {
+    try {
+      console.log(user?.token);
+      console.log("params", route.params.id);
+
+      const { data } = await api.post(`/route/${route.params.id}/favorite`, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+
+      console.log({ data });
+    } catch (err) {
+      const axiosError = axiosErrorHandler(err);
+
+      console.log({ axiosError });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -89,6 +111,8 @@ export const PointDetailsScreen = ({
     );
   }
 
+  console.log(user?.user);
+
   return (
     <Background>
       <ScreenContent>
@@ -97,7 +121,7 @@ export const PointDetailsScreen = ({
             <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
           }
         >
-          <HStack alignItems={"center"} space={2}>
+          <HStack alignItems={"center"} space={2} mb={2}>
             <HStack space={2} alignItems="center">
               <View
                 width={4}
@@ -106,29 +130,32 @@ export const PointDetailsScreen = ({
                 backgroundColor={true ? "#A7E179" : "#E17979"}
               />
               <Text fontSize="lg" fontWeight={"600"}>
-                {point?.name}
+                {data?.name}
               </Text>
             </HStack>
 
             <Spacer />
 
-            <FavoriteButton
-              favorite={favorite}
-              handlePress={() => setFavorite(!favorite)}
-            />
+            {user && (
+              <FavoriteButton
+                // favorite={user?.user.favorite?.bus_stops?.includes(data?.id)}
+                favorite={false}
+                handlePress={handleFavorite}
+              />
+            )}
           </HStack>
 
           <Box w={"full"}>
             <Image
               source={
-                point?.images
-                  ? { uri: point?.images[0] ?? point.images[1] }
+                data?.images
+                  ? { uri: data?.images[0] ?? data.images[1] }
                   : require("~/assets/img/not-found.png")
               }
               w={"full"}
               h="56"
               borderRadius={"md"}
-              alt={point?.name}
+              alt={data?.name}
             />
           </Box>
           {/* <Box>
@@ -164,7 +191,7 @@ export const PointDetailsScreen = ({
               </Text>
             </HStack>
             <Text fontSize={"sm"} color={"gray.700"}>
-              {point?.description}
+              {data?.description}
             </Text>
           </VStack>
 
@@ -176,7 +203,7 @@ export const PointDetailsScreen = ({
               </Text>
             </HStack>
 
-            {point?.rotas.map((rota) => (
+            {data?.rotas?.map((rota) => (
               <ListRoutes
                 key={rota.route_id}
                 route={rota}
@@ -189,7 +216,7 @@ export const PointDetailsScreen = ({
             <Button
               onPress={() =>
                 navigation.navigate("Map", {
-                  pointId: point?.id,
+                  pointId: data?.id,
                 })
               }
               title="Ver Ponto de Ônibus"
