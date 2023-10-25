@@ -21,7 +21,6 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 import { Container } from "./styles";
-import { CourseInterface } from "~/interfaces/Course.interface";
 
 export interface ICity {
   id: number;

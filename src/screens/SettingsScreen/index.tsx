@@ -74,14 +74,11 @@ export const SettingsScreen = ({
                   fontColor="white"
                 />
 
-                <Avatar
-                  source={{
-                    uri: user?.picture,
-                  }}
-                />
+                {console.log(user?.user)}
+                <Avatar source={user?.user?.avatar} />
 
-                <Text>{user?.name}</Text>
-                <Text>{user?.email}</Text>
+                <Text>{user?.user?.name}</Text>
+                <Text>{user?.user?.driver?.cpf}</Text>
               </VStack>
 
               <Button

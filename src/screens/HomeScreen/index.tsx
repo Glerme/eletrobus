@@ -5,9 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { RefreshControl } from "react-native-gesture-handler";
 import {
   Box,
-  Button,
   Center,
   HStack,
+  Icon,
   ScrollView,
   Text,
   VStack,
@@ -25,12 +25,13 @@ import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 import { api } from "~/services/axios";
 
 import { Alert } from "~/components/Alert";
+import { Button } from "~/components/Form/Button";
 import { StatusBar } from "~/components/StatusBar";
 import { CoursesCards } from "./components/CoursesCards";
 import { BusStopsCards } from "./components/BusStopsCards";
 import { FavoritesCards } from "./components/FavoritesCards";
 import { Background } from "~/components/Layouts/Background";
-import { ListRouteCards } from "~/components/ListRouteCards";
+import { ListHomeCards } from "~/components/ListHomeCards";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
@@ -158,14 +159,11 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                   colorScheme="primary"
                   bg={THEME.colors.primary["500"]}
                   onPress={() => navigation.navigate("Points" as any)}
-                >
-                  <HStack space={1} alignItems={"center"}>
-                    <MagnifyingGlass size={20} color="white" />
-                    <Text fontSize={"sm"} fontWeight={"500"} color={"white"}>
-                      Iniciar rota
-                    </Text>
-                  </HStack>
-                </Button>
+                  title="Iniciar rota"
+                  leftIcon={
+                    <Icon as={<MagnifyingGlass size={20} color="white" />} />
+                  }
+                />
 
                 <Button
                   h={12}
@@ -173,19 +171,21 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                   colorScheme="secondary"
                   bg={THEME.colors.secondary["500"]}
                   onPress={() => navigation.navigate("Points" as any)}
-                >
-                  <HStack space={1} alignItems={"center"}>
-                    <MagnifyingGlass size={20} color="white" />
-                    <Text fontSize={"sm"} fontWeight={"500"} color={"white"}>
-                      Buscar rotas
-                    </Text>
-                  </HStack>
-                </Button>
+                  leftIcon={
+                    <Icon as={<MagnifyingGlass size={20} color="white" />} />
+                  }
+                  title="Buscar rotas"
+                />
               </VStack>
             </ScrollView>
           ) : (
             <ScrollView>
-              <ListRouteCards
+              <Button
+                title="favoritos"
+                onPress={() => navigation.navigate("Favorites")}
+              />
+
+              <ListHomeCards
                 description="Pontos de ônibus"
                 data={busStopsQuery.data}
                 cardComponent={BusStopsCards}
@@ -196,7 +196,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                 }
               />
 
-              <ListRouteCards
+              <ListHomeCards
                 description="Percursos"
                 data={coursesQuery.data}
                 cardComponent={CoursesCards}
@@ -210,7 +210,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
               />
 
               {user?.token && (
-                <ListRouteCards
+                <ListHomeCards
                   description="Favoritos"
                   data={favoritesQuery?.data}
                   cardComponent={FavoritesCards}
