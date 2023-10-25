@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { ActivityIndicator, RefreshControl } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  Alert as RNAlert,
+} from "react-native";
 
 import {
   Box,
@@ -16,35 +20,31 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
+import { BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { api } from "~/services/axios";
+
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
+
+import { FavoriteBusStopInterface } from "~/interfaces/FavoriteBusStop.interface";
 
 import { NavigationProps } from "~/routes";
 
 import { Alert } from "~/components/Alert";
-import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
-import { TypeRoute } from "~/components/TypeRoute";
+import { ListRoutes } from "~/components/ListRoutes";
 import { Background } from "~/components/Layouts/Background";
-import { StatusInfo } from "~/components/BusStatus/StatusInfo";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
-import { ListBusStops } from "~/components/ListBusStops";
-import { ListRoutes } from "~/components/ListRoutes";
 
 import { THEME } from "~/styles/theme";
-import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 export const PointDetailsScreen = ({
   navigation,
   route,
 }: NavigationProps<"PointDetails">) => {
   const { user } = useAuth();
-
-  console.log({ user });
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
@@ -53,36 +53,67 @@ export const PointDetailsScreen = ({
       queryKey: ["point-bus-details"],
       queryFn: async () => {
         const { data } = await api.get<BusStopProps>(
-          `/bus-stop/${route.params.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user?.token}`,
-            },
-          }
+          `/bus-stop/${route.params.id}`
         );
 
         return data;
       },
     });
 
-  const handleFavorite = async () => {
+  const { data: favorites } = useQuery({
+    queryKey: ["favorites", user?.user?.id, "bus-stop"],
+    queryFn: async () => {
+      if (user) {
+        const { data } = await api.get<FavoriteBusStopInterface>(
+          `/user/favorite-route`
+        );
+        return data?.data;
+      } else {
+        return [];
+      }
+    },
+    initialData: [],
+    placeholderData: [],
+  });
+
+  const handleFavorite = async (fav: boolean) => {
     try {
-      console.log(user?.token);
-      console.log("params", route.params.id);
+      if (!fav) {
+        const { status } = await api.post(
+          `/bus-stop/${route.params.id}/favorite`
+        );
 
-      const { data } = await api.post(`/route/${route.params.id}/favorite`, {
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
+        if (status === 200) {
+          setFavorite(true);
+        }
+      } else {
+        const { status } = await api.delete(
+          `/bus-stop/${route.params.id}/favorite`
+        );
 
-      console.log({ data });
+        if (status) {
+          setFavorite(false);
+        }
+      }
     } catch (err) {
       const axiosError = axiosErrorHandler(err);
 
+      RNAlert.alert("Erro ao favoritar", axiosError.message);
       console.log({ axiosError });
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      const favoritePoint = favorites?.filter(
+        (fav) => fav?.bus_stop_id === route.params.id
+      );
+
+      if (favoritePoint?.length > 0) {
+        setFavorite(true);
+      }
+    }
+  }, [user?.user?.id, favorites]);
 
   if (isLoading) {
     return (
@@ -111,8 +142,6 @@ export const PointDetailsScreen = ({
     );
   }
 
-  console.log(user?.user);
-
   return (
     <Background>
       <ScreenContent>
@@ -138,9 +167,8 @@ export const PointDetailsScreen = ({
 
             {user && (
               <FavoriteButton
-                // favorite={user?.user.favorite?.bus_stops?.includes(data?.id)}
-                favorite={false}
-                handlePress={handleFavorite}
+                favorite={favorite}
+                handlePress={() => handleFavorite(favorite)}
               />
             )}
           </HStack>

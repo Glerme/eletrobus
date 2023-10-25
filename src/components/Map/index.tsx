@@ -38,8 +38,6 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
-  const [locationPermissionGranted, setLocationPermissionGranted] =
-    useState(false);
 
   const {
     location,
@@ -47,8 +45,6 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     getActualCurrentPosition,
     requestLocationPermissions,
   } = useLocation();
-
-  const { user } = useAuth();
 
   const openModal = (marker: BusStopProps) => {
     setDataPoint(marker);

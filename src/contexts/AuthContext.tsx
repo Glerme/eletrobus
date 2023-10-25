@@ -7,7 +7,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
-import { UserGoogleProps, UserProps } from "~/interfaces/User.interface";
+import {
+  UserGoogleProps,
+  UserInterface,
+  UserProps,
+} from "~/interfaces/User.interface";
 
 import { api } from "~/services/axios";
 
@@ -83,6 +87,11 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             token: googleData?.data?.token,
             user: googleData?.data?.user,
           };
+
+          api.interceptors.request.use((config) => {
+            config.headers.Authorization = `Bearer ${parsedData?.token}`;
+            return config;
+          });
 
           await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
           await AsyncStorage.setItem(
