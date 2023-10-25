@@ -37,6 +37,7 @@ import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
+import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
 
 export const CourseDetailsScreen = ({
   navigation,
@@ -46,23 +47,23 @@ export const CourseDetailsScreen = ({
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  // const {
-  //   data: point,
-  //   isLoading,
-  //   isError,
-  //   error,
-  //   refetch,
-  //   isRefetching,
-  // } = useQuery<BusStopInterface>({
-  //   queryKey: ["course-details", route.params.id],
-  //   queryFn: async () => {
-  //     const { data } = await api.get<BusStopInterface>(
-  //       `/course/${route.params.id}`
-  //     );
+  const {
+    data: point,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+  } = useQuery<BusStopInterface>({
+    queryKey: ["course-details", route.params.id],
+    queryFn: async () => {
+      const { data } = await api.get<BusStopInterface>(
+        `/course/${route.params.id}`
+      );
 
-  //     return data;
-  //   },
-  // });
+      return data;
+    },
+  });
 
   // if (isLoading) {
   //   return (
@@ -108,7 +109,7 @@ export const CourseDetailsScreen = ({
                   backgroundColor={true ? "#A7E179" : "#E17979"}
                 />
                 <Text fontSize="lg" fontWeight={"600"}>
-                  NOME
+                  {/* {courseMock.route_name} */}
                 </Text>
               </HStack>
 
@@ -133,7 +134,6 @@ export const CourseDetailsScreen = ({
                 <Spacer />
                 <VStack space={1} alignItems="flex-end">
                   <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
-                  {/* <TypeRoute mt={1} tipo={"estudantes"} /> */}
                 </VStack>
               </HStack>
 
@@ -143,6 +143,18 @@ export const CourseDetailsScreen = ({
                 keyExtractor={(item) => `${item.id}`}
                 renderItem={({ item }) => <HourCard isToday={item.isToday} />}
               /> */}
+            </Box>
+            <Box mt={2}>
+              <Button
+                onPress={() =>
+                  navigation.navigate("Map", {
+                    routeId: "a",
+                  })
+                }
+                title="Ver rota de Ônibus"
+                fontColor={"white"}
+                disabled={isRefetching || isLoading}
+              />
             </Box>
           </ScrollViewContainer>
         </ScreenContent>

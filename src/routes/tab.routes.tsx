@@ -13,6 +13,7 @@ import { PointsScreen } from "~/screens/PointsScreen";
 import { SettingsScreen } from "~/screens/SettingsScreen";
 
 import { THEME } from "~/styles/theme";
+import { CoursesScreen } from "~/screens/CoursesScreen";
 
 const Tabs = createBottomTabNavigator();
 
@@ -84,7 +85,7 @@ export const TabNavigator = ({}) => {
         <>
           <Tabs.Screen
             name={"Courses"}
-            component={PointsScreen as any}
+            component={CoursesScreen as any}
             options={{
               headerStyle: {
                 backgroundColor: "#0DAC86",

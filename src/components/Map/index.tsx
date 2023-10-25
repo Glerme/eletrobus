@@ -27,8 +27,9 @@ import { ModalDescription } from "./components/ModalDescription";
 import { BusRouteSelected } from "./components/BusRouteSelected";
 
 import { THEME } from "~/styles/theme";
+import { useAuth } from "~/contexts/AuthContext";
 
-export const Map = ({ markers, pointId }: MapInterface) => {
+export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
 
   const { modalRef, handleOpenModal } = useModal();
@@ -47,15 +48,17 @@ export const Map = ({ markers, pointId }: MapInterface) => {
     requestLocationPermissions,
   } = useLocation();
 
+  const { user } = useAuth();
+
   const openModal = (marker: BusStopProps) => {
     setDataPoint(marker);
     handleOpenModal();
   };
 
-  const getCurrentPosition = () => {
+  const getCurrentPosition = (zoom: number = 17) => {
     mapRef.current?.animateCamera({
       center: location?.coords,
-      zoom: 17,
+      zoom: zoom,
     });
   };
 
@@ -78,10 +81,21 @@ export const Map = ({ markers, pointId }: MapInterface) => {
     });
   };
 
-  const handleOpenBus = async (route: RoutesProps) => {
+  const handleOpenBus = async (route_id: string, location?: any) => {
     const { data } = await api.get<RoutesBusStopsInterface>(
-      `/route/${route.route_id}`
+      `/route/${route_id}`
     );
+
+    if (location) {
+      const busStop = data;
+      busStop.bus_stops?.push({
+        bus_stop_id: "0",
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
+      setBusStops(busStop);
+      return;
+    }
 
     setBusStops(data);
   };
@@ -192,7 +206,7 @@ export const Map = ({ markers, pointId }: MapInterface) => {
           point={dataPoint}
           forwardedRef={modalRef}
           onClose={() => setDataPoint(null)}
-          handleOpenRoute={handleOpenBus}
+          handleOpenRoute={({ route_id }) => handleOpenBus(route_id)}
         />
       )}
     </>

@@ -121,6 +121,11 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         password,
       });
 
+      api.interceptors.request.use((config) => {
+        config.headers.Authorization = `Bearer ${data?.data?.token}`;
+        return config;
+      });
+
       const parsedData: UserProps = {
         token: data?.data?.token,
         user: data?.data?.user,

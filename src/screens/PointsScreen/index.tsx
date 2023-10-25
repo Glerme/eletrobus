@@ -21,19 +21,12 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 import { Container } from "./styles";
+import { CourseInterface } from "~/interfaces/Course.interface";
 
 export interface ICity {
   id: number;
   name: string;
   favorite: boolean;
-}
-
-export interface IFilters {
-  kindRoute: "todos" | "municipal" | "intermunicipal";
-  cities: ICity[];
-  district: ICity[];
-  // runStarted: boolean;
-  time: Date;
 }
 
 export const PointsScreen = ({

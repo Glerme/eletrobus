@@ -26,7 +26,7 @@ export type RootStackParamList = {
   Points: undefined;
   Courses: undefined;
   Settings: undefined;
-  Map: { pointId?: string };
+  Map: { pointId?: string; routeId?: string };
   CouseDetails: { id: string };
   Login: undefined;
 };

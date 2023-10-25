@@ -21,20 +21,8 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 import { Container } from "./styles";
-
-export interface ICity {
-  id: number;
-  name: string;
-  favorite: boolean;
-}
-
-export interface IFilters {
-  kindRoute: "todos" | "municipal" | "intermunicipal";
-  cities: ICity[];
-  district: ICity[];
-  // runStarted: boolean;
-  time: Date;
-}
+import { useAuth } from "~/contexts/AuthContext";
+import { useEffect } from "react";
 
 export const CoursesScreen = ({
   navigation,
@@ -49,12 +37,12 @@ export const CoursesScreen = ({
     isError,
     refetch,
   } = useInfiniteQuery(
-    ["courses"],
+    ["route"],
     ({ pageParam = 0 }) => {
-      const pageSize = 10;
+      const pageSize = 100;
 
       return api.get<CourseInterface>(
-        `/course?page=${pageParam}&pageSize=${pageSize}`
+        `/route?page=${pageParam}&pageSize=${pageSize}`
       );
     },
     {
@@ -124,23 +112,27 @@ export const CoursesScreen = ({
           <View flex={1}>
             <FlatList
               keyExtractor={(item, i) => `${i}`}
-              data={data?.pages?.flatMap((page) =>
-                page ? page?.data?.data : []
-              )}
+              data={data?.pages?.flatMap((page) => {
+                console.log(page.data);
+                return page ? page?.data?.data : [];
+              })}
               refreshControl={
                 <RefreshControl onRefresh={refetch} refreshing={isFetching} />
               }
-              renderItem={({ item }: { item: CourseProps }) => (
-                <ListCourses
-                  item={item}
-                  onPress={() => {
-                    navigation.navigate("CouseDetails", {
-                      id: `${item?.vehicle_id}`,
-                    });
-                  }}
-                  key={item?.vehicle_id}
-                />
-              )}
+              renderItem={({ item }: { item: CourseProps }) => {
+                console.log(item);
+                return (
+                  <ListCourses
+                    item={item}
+                    onPress={() => {
+                      navigation.navigate("CouseDetails", {
+                        id: `${item?.vehicle_id}`,
+                      });
+                    }}
+                    key={item?.vehicle_id}
+                  />
+                );
+              }}
               ListEmptyComponent={() => (
                 <Alert
                   status="info"
