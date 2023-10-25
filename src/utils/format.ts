@@ -5,7 +5,7 @@ export const formatDate = (date: Date) => {
   return format(date, "dd/MM/yyyy");
 };
 
-export const formatDatetime = (date: Date) => {
+export const formatDatetime = (date?: Date) => {
   if (!date) return "-";
   return format(date, "dd/MM/yyyy HH:mm:ss");
 };

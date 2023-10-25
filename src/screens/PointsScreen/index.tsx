@@ -29,22 +29,6 @@ export interface ICity {
   favorite: boolean;
 }
 
-const courseMock: CourseInterface = {
-  data: [
-    {
-      route_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-      initial_hour: "2023-10-08T17:03:21.204Z",
-      final_hour: "2023-10-08T17:03:21.204Z",
-      vehicle_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-      route_name: "Rota 1",
-      user_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-    },
-  ],
-  hasNextPage: false,
-  hasPreviousPage: false,
-  totalPages: 1,
-};
-
 export const PointsScreen = ({
   navigation,
   route,

@@ -47,16 +47,6 @@ export const CourseDetailsScreen = ({
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  const courseMock: CourseProps = {
-    route_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-    initial_hour: "2023-10-08T17:03:21.204Z",
-    final_hour: "2023-10-08T17:03:21.204Z",
-    vehicle_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-    route_name: "Rota 1",
-    user_id: "ea17daf1-6de0-4f46-b0e7-4ee9207a1af6",
-  };
-
-  const routeIdMock = "651327d4b937f4bb0215d6e8";
   const {
     data: point,
     isLoading,
@@ -119,7 +109,7 @@ export const CourseDetailsScreen = ({
                   backgroundColor={true ? "#A7E179" : "#E17979"}
                 />
                 <Text fontSize="lg" fontWeight={"600"}>
-                  {courseMock.route_name}
+                  {/* {courseMock.route_name} */}
                 </Text>
               </HStack>
 
@@ -158,7 +148,7 @@ export const CourseDetailsScreen = ({
               <Button
                 onPress={() =>
                   navigation.navigate("Map", {
-                    routeId: routeIdMock,
+                    routeId: "a",
                   })
                 }
                 title="Ver rota de Ônibus"

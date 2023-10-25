@@ -64,12 +64,8 @@ export const ListCourses = memo(
             </HStack>
 
             <HStack alignItems="center" space="1">
-              <Text>
-                Initial: {formatDatetime(new Date(item?.initial_hour ?? ""))}
-              </Text>
-              <Text>
-                Final: {formatDatetime(new Date(item?.final_hour ?? ""))}
-              </Text>
+              <Text>Initial: </Text>
+              <Text>Final:</Text>
             </HStack>
           </HStack>
         </Box>
