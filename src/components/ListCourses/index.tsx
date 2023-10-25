@@ -59,13 +59,13 @@ export const ListCourses = memo(
           <HStack py="2" justifyContent={"space-between"}>
             <HStack space={4} alignItems={"center"}>
               <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
-                {item?.route_name}
+                {item?.route.name}
               </Text>
             </HStack>
 
             <HStack alignItems="center" space="1">
-              <Text>Initial: </Text>
-              <Text>Final:</Text>
+              <Text>Initial: {item?.initial_hour} </Text>
+              <Text>Final: {item?.final_hour}</Text>
             </HStack>
           </HStack>
         </Box>

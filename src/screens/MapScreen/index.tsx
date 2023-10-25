@@ -27,7 +27,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   } = useQuery<BusStopInterface>({
     queryKey: ["bus-stop"],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface>("/bus-stop");
+      const { data } = await api.get<BusStopInterface>("/bus-stop?");
       return data;
     },
   });

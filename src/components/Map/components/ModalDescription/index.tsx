@@ -23,7 +23,7 @@ import { FavoriteButton } from "~/components/Form/FavoriteButton";
 import { THEME } from "~/styles/theme";
 
 interface ModalDescriptionProps {
-  point: BusStopProps | null;
+  point: BusStopPropsMap | null;
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
   handleOpenRoute: (route: RoutesProps) => void;

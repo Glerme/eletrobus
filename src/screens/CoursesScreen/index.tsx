@@ -37,12 +37,12 @@ export const CoursesScreen = ({
     isError,
     refetch,
   } = useInfiniteQuery(
-    ["route"],
+    ["course"],
     ({ pageParam = 0 }) => {
       const pageSize = 100;
 
       return api.get<CourseInterface>(
-        `/route?page=${pageParam}&pageSize=${pageSize}`
+        `/course/my?page=${pageParam}&pageSize=${pageSize}`
       );
     },
     {
@@ -119,20 +119,17 @@ export const CoursesScreen = ({
               refreshControl={
                 <RefreshControl onRefresh={refetch} refreshing={isFetching} />
               }
-              renderItem={({ item }: { item: CourseProps }) => {
-                console.log(item);
-                return (
-                  <ListCourses
-                    item={item}
-                    onPress={() => {
-                      navigation.navigate("CouseDetails", {
-                        id: `${item?.vehicle_id}`,
-                      });
-                    }}
-                    key={item?.vehicle_id}
-                  />
-                );
-              }}
+              renderItem={({ item }: { item: CourseProps }) => (
+                <ListCourses
+                  item={item}
+                  onPress={() => {
+                    navigation.navigate("Map", {
+                      routeId: `${item?.route.id}`,
+                    });
+                  }}
+                  key={item?.route.id}
+                />
+              )}
               ListEmptyComponent={() => (
                 <Alert
                   status="info"
