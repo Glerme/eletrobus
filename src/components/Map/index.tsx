@@ -172,7 +172,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
                   />
                 ))}
 
-                {busStops &&
+                {/* {busStops &&
                   busStops?.bus_stops?.map((stop, index) => {
                     if (index < busStops?.bus_stops?.length - 1) {
                       const origin = stop;
@@ -190,7 +190,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
                         />
                       );
                     }
-                  })}
+                  })} */}
               </MapView>
             </>
           )

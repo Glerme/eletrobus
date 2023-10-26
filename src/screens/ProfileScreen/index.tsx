@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Platform } from "react-native";
 
 import { Box, Text, View } from "native-base";
@@ -20,7 +21,23 @@ export const ProfileScreen = ({
   navigation,
   route,
 }: NavigationProps<"Profile">) => {
-  const { user, handleGoogleLogin } = useAuth();
+  const { user } = useAuth();
+
+  const [fields, setFields] = useState({
+    name: "",
+    email: "",
+    password: "",
+    newPassword: "",
+  });
+
+  useEffect(() => {
+    setFields({
+      name: user?.user?.name ?? "",
+      email: user?.user?.email ?? "",
+      password: "",
+      newPassword: "",
+    });
+  }, [user]);
 
   return (
     <>
@@ -30,10 +47,10 @@ export const ProfileScreen = ({
         <ScreenContent>
           <Title>Profile Screen</Title>
 
-          {user ? (
+          {user && (
             <>
               <Box mt={5} mb={5}>
-                <ImagePicker user={user} />
+                <ImagePicker user={user?.user} />
               </Box>
 
               <KeyboardAwareScrollView
@@ -43,38 +60,37 @@ export const ProfileScreen = ({
                 enableAutomaticScroll={Platform.OS === "ios"}
               >
                 <View>
-                  <Input placeholder="Nome" mb={2} />
+                  <Input
+                    placeholder="Nome"
+                    mb={2}
+                    onChangeText={(text) =>
+                      setFields({ ...fields, name: text })
+                    }
+                    value={fields.name}
+                  />
                   <Input
                     placeholder="Email"
                     keyboardType="email-address"
                     mb={2}
+                    onChangeText={(text) =>
+                      setFields({ ...fields, email: text })
+                    }
+                    value={fields.email}
                   />
 
                   <Input placeholder="Senha" secureTextEntry={true} mb={2} />
 
                   <Input placeholder="Nova Senha" secureTextEntry={true} />
                 </View>
+
+                <Button
+                  title="Salvar"
+                  onPress={() => console.log("salvar")}
+                  fontColor="white"
+                  mt={2}
+                />
               </KeyboardAwareScrollView>
-
-              <Button
-                title="Salvar"
-                onPress={() => console.log("salvar")}
-                fontColor="white"
-                h={12}
-                mb={2}
-                mx={2}
-              />
             </>
-          ) : (
-            <Box mt={5} mb={5}>
-              <Text>Você precisa estar logado para acessar essa página!</Text>
-
-              <Button
-                title="Logar com Google"
-                onPress={handleGoogleLogin}
-                fontColor="white"
-              />
-            </Box>
           )}
         </ScreenContent>
       </Background>
