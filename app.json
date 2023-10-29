@@ -3,7 +3,7 @@
     "name": "eletrobus",
     "slug": "EletroBus",
     "scheme": "eletrobus",
-    "owner": "glerme",
+    // "owner": "glerme",
     // "currentFullName": "@glerme/EletroBus",
     // "originalFullName": "@glerme/EletroBus",
     "version": "1.0.0",

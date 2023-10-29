@@ -18,6 +18,7 @@ import { THEME } from "~/styles/theme";
 export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
   const routeId = route.params?.routeId ?? "";
+  console.log(route.params, "route");
 
   const {
     data: points,
@@ -28,7 +29,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     queryKey: ["bus-stop"],
     queryFn: async () => {
       const { data } = await api.get<BusStopInterface>(
-        "/bus-stop?page=0&pageSize=1"
+        "/bus-stop?page=0&pageSize=40"
       );
       return data;
     },

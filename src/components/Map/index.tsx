@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
-import MapView from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { requestForegroundPermissionsAsync } from "expo-location";
 
@@ -28,6 +28,7 @@ import { BusRouteSelected } from "./components/BusRouteSelected";
 
 import { THEME } from "~/styles/theme";
 import { useAuth } from "~/contexts/AuthContext";
+import { RouteButton } from "./components/RouteButton";
 
 export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
@@ -58,11 +59,12 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   };
 
   const getCurrentPosition = async (zoom: number = 17) => {
-    if (!location?.coords) {
-      await getActualCurrentPosition();
-    }
+    if (!location) return;
     mapRef.current?.animateCamera({
-      center: location?.coords,
+      center: {
+        latitude: location?.coords.latitude,
+        longitude: location?.coords.longitude,
+      },
       zoom: zoom,
     });
   };
@@ -120,22 +122,22 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   useEffect(() => {
     (async () => await requestLocationPermissions())();
 
-    setInterval(async () => {
-      if (isRunning && busStops) {
-        await getActualCurrentPosition();
-        setBusStops((busStops) => {
-          if (!busStops) return null;
-          const position = busStops.bus_stops.length - 1;
-          const newBusStops = [...busStops.bus_stops];
-          newBusStops[position] = {
-            bus_stop_id: "0",
-            latitude: location?.coords?.latitude ?? 0,
-            longitude: location?.coords?.longitude ?? 0,
-          };
-          return { ...busStops, bus_stops: newBusStops };
-        });
-      }
-    }, 5000);
+    // setInterval(async () => {
+    //   if (isRunning && busStops) {
+    //     await getActualCurrentPosition();
+    //     setBusStops((busStops) => {
+    //       if (!busStops) return null;
+    //       const position = busStops.bus_stops.length - 1;
+    //       const newBusStops = [...busStops.bus_stops];
+    //       newBusStops[position] = {
+    //         bus_stop_id: "0",
+    //         latitude: location?.coords?.latitude ?? 0,
+    //         longitude: location?.coords?.longitude ?? 0,
+    //       };
+    //       return { ...busStops, bus_stops: newBusStops };
+    //     });
+    //   }
+    // }, 5000);
   }, []);
 
   useEffect(() => {
@@ -150,23 +152,22 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     }
   }, [pointId]);
 
-  const checkLocationPermission = async () => {
-    const { status } = await requestForegroundPermissionsAsync();
-    if (status === "granted") {
-      setLocationPermissionGranted(true);
-    } else {
-      setLocationPermissionGranted(false);
-    }
-  };
-
   useEffect(() => {
-    checkLocationPermission();
-  }, []);
+    (async () => {
+      if (!routeId) return;
+      if (!busStops) {
+        setIsRunning(false);
+        setBusStops(await getRouteById(routeId));
+      } else {
+        setIsRunning(true);
+      }
+    })();
+  }, [routeId]);
 
   return (
     <>
       <Box flex={1}>
-        {locationError ? (
+        {locationError && !location?.coords ? (
           <Flex
             flex={1}
             justifyContent={"center"}
@@ -174,101 +175,79 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
             flexDir={"column"}
             p={2}
           >
-            {locationPermissionGranted ? (
-              <Alert
-                status="info"
-                text="Reinicie o App para que possamos buscar sua localização."
-              />
-            ) : (
-              <>
-                <Alert
-                  status="warning"
-                  text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
-                />
-                <Button
-                  mt={2}
-                  title="Permitir acesso à localização"
-                  fontColor="white"
-                  onPress={async () => {
-                    await Linking.openSettings()
-                      .then(() => {
-                        checkLocationPermission();
-                      })
-                      .catch((err) => {
-                        console.error(err);
-                      });
-                  }}
-                />
-              </>
-            )}
-          </Flex>
-        ) : location ? (
-          <>
-            {busStops && <BusRouteSelected busRoute={busStops} />}
-            <ZoomButtons onZoomPress={onZoomPress} />
-            <ListRoutesButton onPressRoute={onPressRoute} />
-            <MyLocationButton getCurrentPosition={getCurrentPosition} />
-            <MapView
-              ref={mapRef}
-              style={{
-                ...StyleSheet.absoluteFillObject,
-                width: "120%",
-                height: "120%",
-              }}
-              region={{
-                longitudeDelta: 0.005,
-                latitudeDelta: 0.005,
-                latitude: location?.coords?.latitude,
-                longitude: location?.coords?.longitude,
-              }}
-              showsUserLocation={true}
-              showsMyLocationButton={false}
-              scrollEnabled
-              zoomEnabled
-              zoomControlEnabled={false}
-            >
-              {markers?.map((marker, i) => (
-                <CustomMarker
-                  key={i}
-                  marker={marker}
-                  handleOpenModal={openModal}
-                />
-              ))}
-
-              {busStops &&
-                busStops?.bus_stops?.map((stop, index) => {
-                  if (index < busStops?.bus_stops?.length - 1) {
-                    const origin = stop;
-
-                    const destination = busStops?.bus_stops[index + 1];
-
-                    return (
-                      <MapViewDirections
-                        origin={origin}
-                        destination={destination}
-                        apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
-                        strokeWidth={5}
-                        strokeColor="blue"
-                        key={index}
-                        mode="TRANSIT"
-                      />
-                    );
-                  }
-                })}
-            </MapView>
-          </>
-        ) : (
-          <Box
-            flex={1}
-            justifyContent={"center"}
-            alignItems={"center"}
-            backgroundColor={"gray.400"}
-          >
-            <ActivityIndicator
-              size={"large"}
-              color={THEME.colors.primary["900"]}
+            <Alert
+              status="warning"
+              text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
             />
-          </Box>
+            <Button
+              mt={2}
+              title="Permitir acesso à localização"
+              fontColor="white"
+              onPress={async () => {
+                await Linking.openSettings();
+              }}
+            />
+          </Flex>
+        ) : (
+          location?.coords && (
+            <>
+              {/* {busStops && <BusRouteSelected busRoute={busStops} />} */}
+              {busStops && <RouteButton busRoute={busStops} />}
+              <ZoomButtons onZoomPress={onZoomPress} />
+              <ListRoutesButton onPressRoute={onPressRoute} />
+              <MyLocationButton getCurrentPosition={getCurrentPosition} />
+              <MapView
+                ref={mapRef}
+                provider={PROVIDER_GOOGLE}
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                  width: "120%",
+                  height: "120%",
+                }}
+                region={{
+                  longitudeDelta: 0.005,
+                  latitudeDelta: 0.005,
+                  latitude: location?.coords?.latitude,
+                  longitude: location?.coords?.longitude,
+                }}
+                showsUserLocation={true}
+                showsMyLocationButton={false}
+                scrollEnabled
+                zoomEnabled
+                zoomControlEnabled={false}
+              >
+                {markers?.map((marker, i) => (
+                  <CustomMarker
+                    key={marker.id}
+                    marker={marker}
+                    handleOpenModal={openModal}
+                  />
+                ))}
+
+                {busStops &&
+                  busStops?.bus_stops?.map((stop, index) => {
+                    if (index < busStops?.bus_stops?.length - 1) {
+                      const origin = stop;
+                      const destination = busStops?.bus_stops[index + 1];
+
+                      return (
+                        <></>
+                        // <MapViewDirections
+                        //   origin={origin}
+                        //   destination={destination}
+                        //   apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
+                        //   strokeWidth={5}
+                        //   strokeColor="blue"
+                        //   optimizeWaypoints={true}
+                        //   key={index}
+                        //   mode="TRANSIT"
+                        // />
+                      );
+                    }
+                  })}
+              </MapView>
+            </>
+          )
         )}
       </Box>
 
