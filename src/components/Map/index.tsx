@@ -29,7 +29,19 @@ import { BusRouteSelected } from "./components/BusRouteSelected";
 import { THEME } from "~/styles/theme";
 import { useAuth } from "~/contexts/AuthContext";
 import { RouteButton } from "./components/RouteButton";
-import { useFocusEffect } from "@react-navigation/native";
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
+import { StartRunButton } from "./components/StartRunButton";
+import { StateButton } from "./components/StateButton";
+import { FinalizeButton } from "./components/FinalizeButton";
+
+interface Params {
+  routeId?: string;
+  pointId?: string;
+}
 
 export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
@@ -45,7 +57,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
 
   const [locationPermissionGranted, setLocationPermissionGranted] =
     useState(false);
-
+  const navigation = useNavigation();
   const {
     location,
     locationError,
@@ -142,6 +154,31 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     // }, 5000);
   }, []);
 
+  const cleanParams = () => {
+    const newStack: any = navigation.dispatch((state) => {
+      // Copie o estado atual
+      const routes = state.routes.slice();
+
+      // Encontre a rota atual
+      const currentRoute = routes[routes.length - 1];
+      const params: Params = currentRoute.params;
+      // Remova o parâmetro 'paramToRemove' da rota atual
+      if (params && params.routeId) {
+        delete params.routeId;
+      }
+      if (params && params.pointId) {
+        delete params.pointId;
+      }
+
+      return CommonActions.reset({
+        ...state,
+        routes,
+        index: routes.length - 1, // Define o índice para a última rota
+      });
+    });
+    navigation.dispatch(newStack);
+  };
+
   useEffect(() => {
     if (pointId) {
       const point = markers?.find((marker) => marker.id === pointId) ?? false;
@@ -167,7 +204,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   return (
     <>
       <Box flex={1}>
-        {locationError && !location?.coords ? (
+        {(locationError && !location?.coords) || false ? (
           <Flex
             flex={1}
             justifyContent={"center"}
@@ -191,9 +228,28 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
         ) : (
           location?.coords && (
             <>
-              {/* {busStops && <BusRouteSelected busRoute={busStops} />} */}
-
-              <RouteButton busRoute={busStops} setBusRoute={setBusStops} />
+              <RouteButton
+                cleanParams={cleanParams}
+                busRoute={busStops}
+                setBusRoute={setBusStops}
+                user={user}
+              />
+              {/* {user?.user.driver && busStops ? ( */}
+              <>
+                <StartRunButton
+                  setIsRunning={setIsRunning}
+                  isRunning={isRunning}
+                />
+                {isRunning && (
+                  <>
+                    <StateButton />
+                    <FinalizeButton />
+                  </>
+                )}
+              </>
+              {/* ) : ( */}
+              {/* <></> */}
+              {/* )} */}
 
               <ZoomButtons onZoomPress={onZoomPress} />
               <ListRoutesButton onPressRoute={onPressRoute} />
