@@ -10,7 +10,12 @@ export const Container = styled(VStack)`
   z-index: 1;
 `;
 
-export const TextItem = styled.TouchableOpacity`
+interface TextItemProps {
+  isRounded: boolean;
+}
+
+export const TextItem = styled.TouchableOpacity<TextItemProps>`
+  border-radius: ${(props) => (props.isRounded ? "4px" : "0px")};
   padding: 8px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;

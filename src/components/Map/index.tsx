@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
@@ -29,6 +29,7 @@ import { BusRouteSelected } from "./components/BusRouteSelected";
 import { THEME } from "~/styles/theme";
 import { useAuth } from "~/contexts/AuthContext";
 import { RouteButton } from "./components/RouteButton";
+import { useFocusEffect } from "@react-navigation/native";
 
 export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
@@ -39,6 +40,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
+
   const [isRunning, setIsRunning] = useState(false);
 
   const [locationPermissionGranted, setLocationPermissionGranted] =
@@ -152,17 +154,15 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     }
   }, [pointId]);
 
-  useEffect(() => {
-    (async () => {
-      if (!routeId) return;
-      if (!busStops) {
-        setIsRunning(false);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        if (!routeId) return;
         setBusStops(await getRouteById(routeId));
-      } else {
-        setIsRunning(true);
-      }
-    })();
-  }, [routeId]);
+      })();
+      return () => {};
+    }, [])
+  );
 
   return (
     <>
@@ -192,7 +192,9 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
           location?.coords && (
             <>
               {/* {busStops && <BusRouteSelected busRoute={busStops} />} */}
-              {busStops && <RouteButton busRoute={busStops} />}
+
+              <RouteButton busRoute={busStops} setBusRoute={setBusStops} />
+
               <ZoomButtons onZoomPress={onZoomPress} />
               <ListRoutesButton onPressRoute={onPressRoute} />
               <MyLocationButton getCurrentPosition={getCurrentPosition} />
