@@ -16,6 +16,8 @@ export const StateButton = ({ busRoute, setBusRoute }: any) => {
         alignItems={"center"}
         backgroundColor="white"
         borderRadius={4}
+        borderWidth={1}
+        borderColor={"gray.400"}
         padding={2}
       >
         <Text lineHeight={15}>Estado</Text>

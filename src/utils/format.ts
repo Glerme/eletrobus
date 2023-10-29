@@ -17,6 +17,10 @@ export const formatHoursMinutes = (date?: Date) => {
   if (!date) return "-";
   return format(date, "HH:mm").replace(":", "h");
 };
+export const formatHoursMinutesSeconds = (date?: Date) => {
+  if (!date) return "-";
+  return format(date, "hh:mm:ss").replace(":", "h");
+};
 
 export const formatSecounds = (sec: number) => {
   const hrs = Math.floor(sec / 3600);

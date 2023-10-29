@@ -10,9 +10,8 @@ export const Container = styled(VStack)`
   z-index: 1;
 `;
 
-export const TextItem = styled.TouchableOpacity`
+export const TextFinalize = styled.TouchableOpacity`
   padding: 8px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  background-color: #5a42e7;
+  border-radius: 4px;
+  background-color: #ff4c4c;
 `;

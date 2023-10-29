@@ -107,6 +107,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
       const { data } = await api.get<RoutesBusStopsInterface>(
         `/route/${route_id}`
       );
+
       return data;
     } catch (e) {
       console.error(e);
@@ -191,15 +192,13 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     }
   }, [pointId]);
 
-  useFocusEffect(
-    useCallback(() => {
-      (async () => {
-        if (!routeId) return;
-        setBusStops(await getRouteById(routeId));
-      })();
-      return () => {};
-    }, [])
-  );
+  useEffect(() => {
+    (async () => {
+      if (!routeId) return;
+      setBusStops(await getRouteById(routeId));
+      console.log("sim");
+    })();
+  }, [routeId]);
 
   return (
     <>
@@ -234,22 +233,27 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
                 setBusRoute={setBusStops}
                 user={user}
               />
-              {/* {user?.user.driver && busStops ? ( */}
-              <>
-                <StartRunButton
-                  setIsRunning={setIsRunning}
-                  isRunning={isRunning}
-                />
-                {isRunning && (
-                  <>
-                    <StateButton />
-                    <FinalizeButton />
-                  </>
-                )}
-              </>
-              {/* ) : ( */}
-              {/* <></> */}
-              {/* )} */}
+              {user?.user.driver && busStops ? (
+                <>
+                  <StartRunButton
+                    setIsRunning={setIsRunning}
+                    isRunning={isRunning}
+                    busRoute={busStops}
+                  />
+                  {isRunning && (
+                    <>
+                      <StateButton />
+                      <FinalizeButton
+                        cleanParams={cleanParams}
+                        setBusRoute={setBusStops}
+                        setIsRunning={setIsRunning}
+                      />
+                    </>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
 
               <ZoomButtons onZoomPress={onZoomPress} />
               <ListRoutesButton onPressRoute={onPressRoute} />
