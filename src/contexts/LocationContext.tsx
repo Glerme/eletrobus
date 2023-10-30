@@ -6,7 +6,6 @@ import {
   watchPositionAsync,
   requestForegroundPermissionsAsync,
 } from "expo-location";
-import { Alert } from "react-native";
 
 interface LocationContextProps {
   location: LocationObject | null;
