@@ -1,8 +1,9 @@
-import { RefreshControl, TouchableHighlight } from "react-native";
+import { useState } from "react";
+import { RefreshControl } from "react-native";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { MagnifyingGlass } from "phosphor-react-native";
-import { Box, FlatList, HStack, Icon, Text, View } from "native-base";
+import { Box, FlatList, Icon, Text } from "native-base";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
@@ -32,6 +33,8 @@ export const PointsScreen = ({
   navigation,
   route,
 }: NavigationProps<"Points">) => {
+  const [queryString, setQueryString] = useState<string>("");
+
   const {
     data,
     fetchNextPage,
@@ -41,12 +44,12 @@ export const PointsScreen = ({
     isError,
     refetch,
   } = useInfiniteQuery(
-    ["bus-stop"],
+    ["bus-stop", queryString],
     ({ pageParam = 0 }) => {
       const pageSize = 10;
 
       return api.get<BusStopInterface>(
-        `/bus-stop?page=${pageParam}&pageSize=${pageSize}`
+        `/bus-stop?page=${pageParam}&pageSize=${pageSize}&search=${queryString}`
       );
     },
     {
@@ -92,18 +95,14 @@ export const PointsScreen = ({
       <StatusBar />
       <Background>
         <Container>
-          <HStack space={1}>
-            <View flex={1} alignItems={"center"}>
-              <Input
-                placeholder="Pesquisar"
-                InputRightElement={
-                  <TouchableHighlight onPress={() => console.log("filters")}>
-                    <Icon as={<MagnifyingGlass />} mr={2} />
-                  </TouchableHighlight>
-                }
-              />
-            </View>
-          </HStack>
+          <Input
+            placeholder="Pesquisar"
+            InputRightElement={<Icon as={<MagnifyingGlass />} mr={2} />}
+            onChangeText={(text) => {
+              setQueryString(text);
+            }}
+            value={queryString}
+          />
 
           <Box mt={6} mb={2}>
             <Text
@@ -113,9 +112,6 @@ export const PointsScreen = ({
             >
               Listagem - pontos
             </Text>
-          </Box>
-
-          <View flex={1}>
             <FlatList
               keyExtractor={(item, i) => `${i}`}
               data={data?.pages?.flatMap((page) =>
@@ -144,7 +140,7 @@ export const PointsScreen = ({
               onEndReached={handleLoadMore}
               onEndReachedThreshold={0.1}
               ListFooterComponent={() => {
-                if (!data?.pages?.flatMap((page) => page?.data?.hasNextPage)) {
+                if (!hasNextPage) {
                   return <></>;
                 }
 
@@ -157,7 +153,7 @@ export const PointsScreen = ({
                 );
               }}
             />
-          </View>
+          </Box>
         </Container>
       </Background>
     </>

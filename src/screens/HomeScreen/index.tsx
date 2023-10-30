@@ -26,12 +26,14 @@ import { api } from "~/services/axios";
 
 import { Alert } from "~/components/Alert";
 import { Button } from "~/components/Form/Button";
+import { Avatar } from "~/components/Form/Avatar";
 import { StatusBar } from "~/components/StatusBar";
 import { CoursesCards } from "./components/CoursesCards";
 import { BusStopsCards } from "./components/BusStopsCards";
 import { FavoritesCards } from "./components/FavoritesCards";
 import { Background } from "~/components/Layouts/Background";
 import { ListHomeCards } from "~/components/ListHomeCards";
+import { ListFavorites } from "~/components/ListFavorites";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
@@ -39,41 +41,25 @@ import { THEME } from "~/styles/theme";
 export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   const { user } = useAuth();
 
-  const favoritesQuery = useQuery({
-    queryKey: ["favorites-home", user?.token],
-    queryFn: async () => {
-      if (user?.token) {
-        const { data } = await api.get<any[]>("/user/favorite-route", {
-          headers: {
-            authorization: `Bearer ${user?.token}`,
-          },
-        });
-        return data;
-      }
+  // const busStopsQuery = useQuery({
+  //   queryKey: ["busStops-home", user?.token],
+  //   queryFn: async () => {
+  //     const { data } = await api.get("/bus-stop/");
+  //     return data;
+  //   },
+  //   initialData: [],
+  //   placeholderData: [],
+  // });
 
-      return [];
-    },
-    initialData: [],
-    placeholderData: [],
-  });
-  const busStopsQuery = useQuery({
-    queryKey: ["busStops-home", user?.token],
-    queryFn: async () => {
-      const { data } = await api.get("/bus-stop/");
-      return data;
-    },
-    initialData: [],
-    placeholderData: [],
-  });
-  const coursesQuery = useQuery({
-    queryKey: ["courses-home", user?.token],
-    queryFn: async () => {
-      const { data } = await api.get("/course/");
-      return data;
-    },
-    initialData: [],
-    placeholderData: [],
-  });
+  // const coursesQuery = useQuery({
+  //   queryKey: ["courses-home", user?.token],
+  //   queryFn: async () => {
+  //     const { data } = await api.get("/course/");
+  //     return data;
+  //   },
+  //   initialData: [],
+  //   placeholderData: [],
+  // });
 
   const refetchQueries = useMultipleQueryRefetch();
 
@@ -81,58 +67,80 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
     refetchQueries(["favorites-home", "busStops-home", "courses-home"]);
   };
 
-  if (
-    favoritesQuery.isLoading ||
-    busStopsQuery.isLoading ||
-    coursesQuery.isLoading
-  ) {
-    return (
-      <Background>
-        <ScreenContent>
-          <Center flex={1}>
-            <ActivityIndicator
-              size={"large"}
-              color={THEME.colors.primary["900"]}
-            />
-          </Center>
-        </ScreenContent>
-      </Background>
-    );
-  }
+  // if (busStopsQuery.isLoading || coursesQuery.isLoading) {
+  //   return (
+  //     <Background>
+  //       <ScreenContent>
+  //         <Center flex={1}>
+  //           <ActivityIndicator
+  //             size={"large"}
+  //             color={THEME.colors.primary["900"]}
+  //           />
+  //         </Center>
+  //       </ScreenContent>
+  //     </Background>
+  //   );
+  // }
 
-  if (favoritesQuery.error || busStopsQuery.error || coursesQuery.error) {
-    const errorMessage = axiosErrorHandler(
-      favoritesQuery.error || busStopsQuery.error || coursesQuery.error
-    );
+  // if (busStopsQuery.error || coursesQuery.error) {
+  //   const errorMessage = axiosErrorHandler(
+  //     busStopsQuery.error || coursesQuery.error
+  //   );
 
-    console.error(errorMessage);
+  //   console.error(errorMessage);
 
-    return (
-      <Background>
-        <ScreenContent>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                onRefresh={handleUpdateData}
-                refreshing={
-                  favoritesQuery.isRefetching ||
-                  busStopsQuery.isRefetching ||
-                  coursesQuery.isRefetching
-                }
-              />
-            }
-          >
-            <Alert status="error" />
-          </ScrollView>
-        </ScreenContent>
-      </Background>
-    );
-  }
+  //   return (
+  //     <Background>
+  //       <ScreenContent>
+  //         <ScrollView
+  //           refreshControl={
+  //             <RefreshControl
+  //               onRefresh={handleUpdateData}
+  //               refreshing={
+  //                 busStopsQuery.isRefetching || coursesQuery.isRefetching
+  //               }
+  //             />
+  //           }
+  //         >
+  //           <Alert status="error" />
+  //         </ScrollView>
+  //       </ScreenContent>
+  //     </Background>
+  //   );
+  // }
 
   return (
     <>
       <StatusBar />
       <Background>
+        {user?.user ? (
+          <HStack alignItems="center" space={2} mx={1} p={1}>
+            <Avatar
+              bg="blue.500"
+              size="md"
+              source={{
+                uri: user?.user?.avatar,
+              }}
+            />
+            <VStack>
+              <Text fontSize="sm" fontWeight="bold" color={"white"}>
+                Seja bem vindo(a)!
+              </Text>
+              <Text fontSize="xl" fontWeight="bold" color={"white"}>
+                {user?.user?.name}
+              </Text>
+            </VStack>
+          </HStack>
+        ) : (
+          <HStack alignItems="center" space={2} mx={1} p={1}>
+            <VStack>
+              <Text fontSize="xl" fontWeight="bold" color={"white"}>
+                Seja bem vindo(a)!
+              </Text>
+            </VStack>
+          </HStack>
+        )}
+
         <ScreenContent>
           {user?.user?.driver ? (
             <ScrollView>
@@ -180,49 +188,34 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
             </ScrollView>
           ) : (
             <ScrollView>
-              <Button
-                title="favoritos"
-                onPress={() => navigation.navigate("Favorites")}
-              />
+              <VStack flex={1}>
+                <Center ml={"20"}>
+                  <LottieView
+                    autoPlay
+                    loop={false}
+                    style={{
+                      width: 300,
+                      height: 300,
+                    }}
+                    source={require("~/assets/animations/home.json")}
+                  />
+                </Center>
 
-              <ListHomeCards
-                description="Pontos de ônibus"
-                data={busStopsQuery.data}
-                cardComponent={BusStopsCards}
-                onPressCard={(item) =>
-                  navigation.navigate("PointDetails", {
-                    id: `${item?.id}`,
-                  })
-                }
-              />
+                {/* {user?.token && (
+                  <ListHomeCards
+                    description="Favoritos"
+                    data={user?.user?.favorite_bus_stop}
+                    cardComponent={ListFavorites}
+                    onPressCard={(item) =>
+                      navigation.navigate("PointDetails", {
+                        id: `${item?.id}`,
+                      })
+                    }
+                  />
+                )} */}
 
-              <ListHomeCards
-                description="Percursos"
-                data={coursesQuery.data}
-                cardComponent={CoursesCards}
-                onPressCard={(item) =>
-                  // navigation.navigate("PointDetails", {
-                  //   id: `${item?.id}`,
-                  // })
-
-                  console.log(item)
-                }
-              />
-
-              {user?.token && (
-                <ListHomeCards
-                  description="Favoritos"
-                  data={favoritesQuery?.data}
-                  cardComponent={FavoritesCards}
-                  onPressCard={(item) =>
-                    navigation.navigate("PointDetails", {
-                      id: `${item?.id}`,
-                    })
-                  }
-                />
-              )}
-
-              <Text>{JSON.stringify(user, null, 2)}</Text>
+                <Text>{JSON.stringify(user, null, 2)}</Text>
+              </VStack>
             </ScrollView>
           )}
         </ScreenContent>

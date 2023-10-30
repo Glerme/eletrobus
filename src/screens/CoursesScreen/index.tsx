@@ -1,8 +1,9 @@
-import { RefreshControl, TouchableHighlight } from "react-native";
+import { useState } from "react";
+import { RefreshControl } from "react-native";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { MagnifyingGlass } from "phosphor-react-native";
-import { Box, FlatList, HStack, Icon, Text, View } from "native-base";
+import { Box, FlatList, Icon, Text } from "native-base";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
@@ -21,13 +22,13 @@ import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
 import { Container } from "./styles";
-import { useAuth } from "~/contexts/AuthContext";
-import { useEffect } from "react";
 
 export const CoursesScreen = ({
   navigation,
   route,
 }: NavigationProps<"Courses">) => {
+  const [queryString, setQueryString] = useState<string>("");
+
   const {
     data,
     fetchNextPage,
@@ -37,12 +38,12 @@ export const CoursesScreen = ({
     isError,
     refetch,
   } = useInfiniteQuery(
-    ["route"],
+    ["route", queryString],
     ({ pageParam = 0 }) => {
-      const pageSize = 100;
+      const pageSize = 10;
 
       return api.get<CourseInterface>(
-        `/route?page=${pageParam}&pageSize=${pageSize}`
+        `/route?page=${pageParam}&pageSize=${pageSize}&search=${queryString}`
       );
     },
     {
@@ -86,18 +87,14 @@ export const CoursesScreen = ({
     <>
       <Background>
         <Container>
-          <HStack space={1}>
-            <View flex={1} alignItems={"center"}>
-              <Input
-                placeholder="Pesquisar"
-                InputRightElement={
-                  <TouchableHighlight onPress={() => console.log("filters")}>
-                    <Icon as={<MagnifyingGlass />} mr={2} />
-                  </TouchableHighlight>
-                }
-              />
-            </View>
-          </HStack>
+          <Input
+            placeholder="Pesquisar"
+            InputRightElement={<Icon as={<MagnifyingGlass />} mr={2} />}
+            onChangeText={(text) => {
+              setQueryString(text);
+            }}
+            value={queryString}
+          />
 
           <Box mt={6} mb={2}>
             <Text
@@ -107,13 +104,10 @@ export const CoursesScreen = ({
             >
               Listagem - percursos
             </Text>
-          </Box>
 
-          <View flex={1}>
             <FlatList
               keyExtractor={(item, i) => `${i}`}
               data={data?.pages?.flatMap((page) => {
-                console.log(page.data);
                 return page ? page?.data?.data : [];
               })}
               refreshControl={
@@ -142,7 +136,7 @@ export const CoursesScreen = ({
               onEndReached={handleLoadMore}
               onEndReachedThreshold={0.1}
               ListFooterComponent={() => {
-                if (!data?.pages?.flatMap((page) => page?.data?.hasNextPage)) {
+                if (!hasNextPage) {
                   return <></>;
                 }
 
@@ -155,7 +149,7 @@ export const CoursesScreen = ({
                 );
               }}
             />
-          </View>
+          </Box>
         </Container>
       </Background>
     </>

@@ -28,26 +28,26 @@ export const FavoritesScreen = ({
 
   const { data, fetchNextPage, isFetching, hasNextPage, refetch } =
     useInfiniteQuery(
-      ["favorites"],
+      ["favorites", user?.token, route.key],
       ({ pageParam = 0 }) => {
         const pageSize = 10;
 
         return api.get<FavoriteBusStopInterface>(
-          `/user/favorite-route?page=${pageParam}&pageSize=${pageSize}`
+          `/user/favorite/bus-stop?page=${pageParam}&pageSize=${pageSize}&orderAsc=desc`
         );
       },
       {
         getNextPageParam: (lastPage, allPages) => {
           const nextPage = lastPage?.data?.hasNextPage
-            ? allPages.length + 1
+            ? allPages?.length + 1
             : undefined;
 
           return nextPage;
         },
         keepPreviousData: true,
-        refetchOnWindowFocus: true,
-        refetchOnReconnect: true,
-        refetchOnMount: true,
+        refetchOnWindowFocus: "always",
+        refetchOnReconnect: "always",
+        refetchOnMount: "always",
       }
     );
 
@@ -89,7 +89,6 @@ export const FavoritesScreen = ({
               <ListFavorites
                 item={item}
                 onPress={() => {
-                  console.log(item);
                   navigation.navigate("PointDetails", {
                     id: `${item?.bus_stop_id}`,
                   });
@@ -100,13 +99,13 @@ export const FavoritesScreen = ({
             ListEmptyComponent={() => (
               <Alert
                 status="info"
-                text="Atenção! Sem pontos cadastrados no momento!"
+                text="Atenção! Sem pontos de ônibus favoritados no momento!"
               />
             )}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.1}
             ListFooterComponent={() => {
-              if (!data?.pages?.flatMap((page) => page?.data?.hasNextPage)) {
+              if (!hasNextPage) {
                 return <></>;
               }
 

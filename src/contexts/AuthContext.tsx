@@ -220,8 +220,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     try {
       setLoading(true);
 
-      console.log("UPDATE", updatedUser);
-
       const parsedData: UserProps = {
         token: user?.token ?? "",
         user: updatedUser?.data,

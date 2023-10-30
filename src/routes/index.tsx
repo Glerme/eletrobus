@@ -11,7 +11,6 @@ import { TabNavigator } from "./tab.routes";
 
 import { LoginScreen } from "~/screens/LoginScreen";
 import { ProfileScreen } from "~/screens/ProfileScreen";
-import { FavoritesScreen } from "~/screens/FavoritesScreen";
 import { PointDetailsScreen } from "~/screens/PointDetailsScreen";
 import { CourseDetailsScreen } from "~/screens/CourseDetailsScreen";
 
@@ -62,11 +61,6 @@ const stacks: {
     name: "PointDetails",
     component: PointDetailsScreen,
     label: "Detalhes do ponto",
-  },
-  {
-    name: "Favorites",
-    component: FavoritesScreen,
-    label: "Favoritos",
   },
   {
     name: "Profile",

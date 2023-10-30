@@ -65,7 +65,7 @@ export const PointDetailsScreen = ({
     queryFn: async () => {
       if (user) {
         const { data } = await api.get<FavoriteBusStopInterface>(
-          `/user/favorite-route`
+          `/user/favorite/bus-stop`
         );
         return data?.data;
       } else {
@@ -99,7 +99,6 @@ export const PointDetailsScreen = ({
       const axiosError = axiosErrorHandler(err);
 
       RNAlert.alert("Erro ao favoritar", axiosError.message);
-      console.log({ axiosError });
     }
   };
 

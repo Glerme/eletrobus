@@ -1,5 +1,8 @@
 export interface FavoriteBusStopInterface {
   data: FavoriteBusStopProps[];
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 export interface FavoriteBusStopProps {

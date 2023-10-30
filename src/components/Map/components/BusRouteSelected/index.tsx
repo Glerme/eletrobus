@@ -8,8 +8,6 @@ interface BusRouteSelectedInterface {
 }
 
 export const BusRouteSelected = ({ busRoute }: BusRouteSelectedInterface) => {
-  console.log(busRoute);
-
   return (
     <Container>
       <NBAlert colorScheme={"success"}>

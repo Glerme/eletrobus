@@ -34,8 +34,6 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     },
   });
 
-  console.log({ points });
-
   if (isLoading) {
     return (
       <Box

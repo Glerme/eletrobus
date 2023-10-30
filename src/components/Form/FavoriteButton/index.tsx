@@ -15,8 +15,6 @@ export const FavoriteButton = ({
   disabled,
   size = 22,
 }: FavoriteButtonProps) => {
-  console.log("favorite", favorite);
-
   return (
     <Pressable zIndex={1} onPress={handlePress} disabled={disabled}>
       {({ isPressed }: any) => {

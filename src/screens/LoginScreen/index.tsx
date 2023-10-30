@@ -71,7 +71,6 @@ export const LoginScreen = ({
 
   const handleGoogleSignIn = async () => {
     const user = await handleGoogleLogin();
-    console.log("foi", user);
     if (user) {
       navigation.navigate("Home");
     } else {
@@ -175,7 +174,10 @@ export const LoginScreen = ({
                         mr={2}
                         p={2}
                       >
-                        <Icon as={showPassword ? <Eye /> : <EyeSlash />} />
+                        <Icon
+                          as={showPassword ? <Eye /> : <EyeSlash />}
+                          mr={2}
+                        />
                       </IconButton>
                     }
                   />
