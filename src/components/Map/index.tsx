@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { requestForegroundPermissionsAsync } from "expo-location";
 
@@ -113,10 +113,23 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     }
   }, [pointId]);
 
+  const checkLocationPermission = async () => {
+    const { status } = await requestForegroundPermissionsAsync();
+    if (status === "granted") {
+      setLocationPermissionGranted(true);
+    } else {
+      setLocationPermissionGranted(false);
+    }
+  };
+
+  useEffect(() => {
+    checkLocationPermission();
+  }, []);
+
   return (
     <>
       <Box flex={1}>
-        {locationError && !location ? (
+        {locationError ? (
           <Flex
             flex={1}
             justifyContent={"center"}
@@ -124,19 +137,89 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
             flexDir={"column"}
             p={2}
           >
-            <Alert
-              status="warning"
-              text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
-            />
-            <Button
-              mt={2}
-              title="Permitir acesso à localização"
-              fontColor="white"
-              onPress={async () => {
-                await Linking.openSettings();
-              }}
-            />
+            {locationPermissionGranted ? (
+              <Alert
+                status="info"
+                text="Reinicie o App para que possamos buscar sua localização."
+              />
+            ) : (
+              <>
+                <Alert
+                  status="warning"
+                  text="Atenção! Permita acesso a sua localização para que possamos te mostrar os pontos de ônibus mais próximos de você."
+                />
+                <Button
+                  mt={2}
+                  title="Permitir acesso à localização"
+                  fontColor="white"
+                  onPress={async () => {
+                    await Linking.openSettings()
+                      .then(() => {
+                        checkLocationPermission();
+                      })
+                      .catch((err) => {
+                        console.error(err);
+                      });
+                  }}
+                />
+              </>
+            )}
           </Flex>
+        ) : location ? (
+          <>
+            {busStops && <BusRouteSelected busRoute={busStops} />}
+            <ZoomButtons onZoomPress={onZoomPress} />
+            <ListRoutesButton onPressRoute={onPressRoute} />
+            <MyLocationButton getCurrentPosition={getCurrentPosition} />
+            <MapView
+              ref={mapRef}
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                width: "120%",
+                height: "120%",
+              }}
+              region={{
+                longitudeDelta: 0.005,
+                latitudeDelta: 0.005,
+                latitude: location?.coords?.latitude,
+                longitude: location?.coords?.longitude,
+              }}
+              showsUserLocation={true}
+              showsMyLocationButton={false}
+              scrollEnabled
+              zoomEnabled
+              zoomControlEnabled={false}
+            >
+              {markers?.map((marker, i) => (
+                <CustomMarker
+                  key={i}
+                  marker={marker}
+                  handleOpenModal={openModal}
+                />
+              ))}
+
+              {busStops &&
+                busStops?.bus_stops?.map((stop, index) => {
+                  if (index < busStops?.bus_stops?.length - 1) {
+                    const origin = stop;
+
+                    const destination = busStops?.bus_stops[index + 1];
+
+                    return (
+                      <MapViewDirections
+                        origin={origin}
+                        destination={destination}
+                        apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
+                        strokeWidth={5}
+                        strokeColor="blue"
+                        key={index}
+                        mode="TRANSIT"
+                      />
+                    );
+                  }
+                })}
+            </MapView>
+          </>
         ) : (
           location && (
             <>

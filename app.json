@@ -3,7 +3,7 @@
     "name": "eletrobus",
     "slug": "EletroBus",
     "scheme": "eletrobus",
-    // "owner": "glerme",
+    "owner": "glerme",
     // "currentFullName": "@glerme/EletroBus",
     // "originalFullName": "@glerme/EletroBus",
     "version": "1.0.0",
@@ -40,7 +40,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#4D34DD"
       },
       "package": "com.glerme.eletrobus",
@@ -48,12 +48,7 @@
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION"
-      ],
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyDPNbKtosDMNj4MS3HIGCeRsjlUlO1F_W0"
-        }
-      }
+      ]
     },
     "extra": {
       "eas": {
