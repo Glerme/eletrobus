@@ -2,6 +2,7 @@ import "react-native-gesture-handler";
 
 import { NativeBaseProvider } from "native-base";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 import { useFonts } from "expo-font";
 
@@ -44,6 +45,7 @@ export default function App() {
         <NativeBaseProvider theme={THEME}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             {fontsLoaded ? <Routes /> : <Loading />}
+            <Toast position="top" topOffset={20} />
           </GestureHandlerRootView>
         </NativeBaseProvider>
       </SafeAreaProvider>

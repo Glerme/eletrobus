@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Alert } from "react-native";
+import Toast from "react-native-toast-message";
 import { Box, Center, Icon, IconButton, VStack, View } from "native-base";
 import {
   Envelope,
@@ -49,7 +50,13 @@ export const LoginScreen = ({
 
   const handleSignIn = async () => {
     if (!loginFields.email || !loginFields.password) {
-      return Alert.alert("Entrar", "Informe seu email e senha");
+      Toast.show({
+        type: "warning",
+        text1: "Atenção",
+        text2: "Informe seu email e senha",
+      });
+
+      return;
     }
 
     const user = await signIn({
@@ -68,7 +75,11 @@ export const LoginScreen = ({
     if (user) {
       navigation.navigate("Home");
     } else {
-      Alert.alert("Erro ao fazer login", "Tente novamente mais tarde");
+      Toast.show({
+        type: "error",
+        text1: "Erro ao fazer login",
+        text2: "Tente novamente mais tarde",
+      });
     }
   };
 
@@ -78,7 +89,13 @@ export const LoginScreen = ({
       !registerFields.password ||
       !registerFields.name
     ) {
-      return Alert.alert("Registrar", "Informe seu nome, email e senha ");
+      Toast.show({
+        type: "warning",
+        text1: "Atenção",
+        text2: "Informe seu nome, email e senha",
+      });
+
+      return;
     }
     try {
       const { status } = await api.post("/user", {
@@ -89,14 +106,25 @@ export const LoginScreen = ({
 
       if (status) {
         setStep(1);
-        return Alert.alert("Sucesso", "Usuário registrado com sucesso");
+
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Usuário registrado com sucesso",
+        });
+
+        return;
       }
     } catch (error) {
       const errorMessage = axiosErrorHandler(error);
 
       console.error(errorMessage);
 
-      Alert.alert("Erro ao fazer registro", errorMessage?.message);
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Erro ao fazer registro",
+      });
     }
   };
 

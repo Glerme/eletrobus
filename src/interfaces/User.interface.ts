@@ -41,3 +41,7 @@ export interface FavoriteRoutes {
   id: string;
   name: string;
 }
+
+export interface MyQueryInterface {
+  data: UserInterface;
+}
