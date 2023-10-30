@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
-import MapView from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { requestForegroundPermissionsAsync } from "expo-location";
 
@@ -179,6 +179,7 @@ export const Map = ({ markers, pointId }: MapInterface) => {
               scrollEnabled
               zoomEnabled
               zoomControlEnabled={false}
+              provider={PROVIDER_GOOGLE}
             >
               {markers?.map((marker, i) => (
                 <CustomMarker
