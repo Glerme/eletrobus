@@ -156,28 +156,29 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   }, []);
 
   const cleanParams = () => {
-    const newStack: any = navigation.dispatch((state) => {
-      // Copie o estado atual
-      const routes = state.routes.slice();
+    navigation.dispatch((state) => {
+      const map = state.routes.find((route) => route.name === "Map");
 
-      // Encontre a rota atual
-      const currentRoute = routes[routes.length - 1];
-      const params: Params = currentRoute.params;
+      const newRoutes = state.routes.map((route) => {
+        if (route.name === "Map") {
+          return {
+            ...route,
+            params: {
+              routeId: undefined,
+              pointId: undefined,
+            },
+          };
+        }
+        return route;
+      });
+
       // Remova o parâmetro 'paramToRemove' da rota atual
-      if (params && params.routeId) {
-        delete params.routeId;
-      }
-      if (params && params.pointId) {
-        delete params.pointId;
-      }
 
       return CommonActions.reset({
         ...state,
-        routes,
-        index: routes.length - 1, // Define o índice para a última rota
+        routes: newRoutes,
       });
     });
-    navigation.dispatch(newStack);
   };
 
   useEffect(() => {
