@@ -1,45 +1,38 @@
 import { useState, useEffect, useRef } from "react";
 
+import { Box } from "native-base";
+import Toast from "react-native-toast-message";
+import * as FileSystem from "expo-file-system";
 import { Modalize } from "react-native-modalize";
-import { Box, Skeleton, VStack } from "native-base";
 import * as ExpoImagePicker from "expo-image-picker";
 
-import { useQuery } from "@tanstack/react-query";
+import { MyQueryInterface } from "~/interfaces/User.interface";
 
-import { UserGoogleProps } from "~/interfaces/User.interface";
+import { useAuth } from "~/contexts/AuthContext";
 
 import { api } from "~/services/axios";
+
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
 
-interface ImagePickerProps {
-  user: UserGoogleProps | null;
-}
+export const ImagePicker = () => {
+  const { updateUser, user } = useAuth();
 
-export const ImagePicker = ({ user }: ImagePickerProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const modalRef = useRef<Modalize>(null);
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["getPhoto"],
-    queryFn: async () => {
-      if (!user) return "";
-
-      const { data } = await api.get(
-        `/users/${user?.given_name === "Guilherme" ? "glerme" : "thiag-o"}`
-      );
-
-      return data?.avatar_url;
-    },
-  });
 
   useEffect(() => {
     (async () => {
       const { status } =
         await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        alert("Permissão para acessar a galeria foi negada!");
+        Toast.show({
+          type: "warning",
+          text1: "Atenção",
+          text2: "Ative a permissão para acessar a galeria",
+        });
       }
     })();
   }, []);
@@ -53,13 +46,61 @@ export const ImagePicker = ({ user }: ImagePickerProps) => {
         aspect: [4, 3],
         quality: 1,
       });
-      if (!result.canceled) {
-        setSelectedImage(result?.assets[0]?.uri);
-      }
 
-      // FAZER A REQUEST NOVAMENTE PARA ATUALIZAR A IMAGEM
+      if (!result.canceled) {
+        if (result?.assets[0]?.uri) {
+          try {
+            const formData = new FormData();
+
+            const blob = await FileSystem.readAsStringAsync(
+              result?.assets[0]?.uri,
+              {
+                encoding: FileSystem.EncodingType.Base64,
+              }
+            );
+
+            const blobData = `data:image/jpg;base64,${blob}`;
+
+            formData?.append("avatar", blobData);
+
+            const { status } = await api.put("/user", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Accept: "application/json",
+              },
+            });
+
+            if (status === 200) {
+              const { data } = await api.get<MyQueryInterface>("/user/my");
+
+              updateUser(data);
+
+              Toast.show({
+                type: "success",
+                text1: "Sucesso",
+                text2: "Usuário atualizado com sucesso",
+              });
+
+              setSelectedImage(result?.assets[0]?.uri);
+            }
+          } catch (error) {
+            const err = axiosErrorHandler(error);
+            console.error(err);
+
+            Toast.show({
+              type: "error",
+              text1: "Erro",
+              text2: "Ocorreu um erro ao atualizar o usuário",
+            });
+          }
+        }
+      }
     } else {
-      alert("Permissão para acessar a câmera foi negada!");
+      Toast.show({
+        type: "warning",
+        text1: "Atenção",
+        text2: "Ative a permissão para acessar a galeria",
+      });
     }
   };
 
@@ -73,13 +114,61 @@ export const ImagePicker = ({ user }: ImagePickerProps) => {
         aspect: [4, 3],
         quality: 1,
       });
-      if (!result.canceled) {
-        setSelectedImage(result?.assets[0]?.uri);
-      }
 
-      // FAZER A REQUEST NOVAMENTE PARA ATUALIZAR A IMAGEM
+      if (!result.canceled) {
+        if (result?.assets[0]?.uri) {
+          try {
+            const formData = new FormData();
+
+            const blob = await FileSystem.readAsStringAsync(
+              result?.assets[0]?.uri,
+              {
+                encoding: FileSystem.EncodingType.Base64,
+              }
+            );
+
+            const blobData = `data:image/jpg;base64,${blob}`;
+
+            formData?.append("avatar", blobData);
+
+            const { status } = await api.put("/user", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Accept: "application/json",
+              },
+            });
+
+            if (status === 200) {
+              const { data } = await api.get<MyQueryInterface>("/user/my");
+
+              updateUser(data);
+
+              Toast.show({
+                type: "success",
+                text1: "Sucesso",
+                text2: "Usuário atualizado com sucesso",
+              });
+
+              setSelectedImage(result?.assets[0]?.uri);
+            }
+          } catch (error) {
+            const err = axiosErrorHandler(error);
+            console.error(err);
+
+            Toast.show({
+              type: "error",
+              text1: "Erro",
+              text2: "Ocorreu um erro ao atualizar o usuário",
+            });
+          }
+        }
+      }
     } else {
-      alert("Permissão para acessar a galeria foi negada!");
+      Toast.show({
+        type: "warning",
+        text1: "Atenção",
+        text2: "Ative a permissão para acessar a galeria",
+      });
     }
   };
 
@@ -87,27 +176,17 @@ export const ImagePicker = ({ user }: ImagePickerProps) => {
     modalRef?.current?.open();
   };
 
-  if (isLoading) {
-    return (
-      <Box w={"100%"} display={"flex"} alignItems={"center"}>
-        <VStack space="5">
-          <Skeleton
-            borderWidth={1}
-            borderColor="primary.50"
-            endColor="primary.50"
-            size="130px"
-            rounded="full"
-          />
-        </VStack>
-      </Box>
+  useEffect(() => {
+    setSelectedImage(
+      user?.user?.avatar ?? require("~/assets/img/avatar-not-found.png")
     );
-  }
+  }, [user?.user?.avatar]);
 
   if (!user) {
     return (
       <Box w={"100%"} display={"flex"} alignItems={"center"}>
         <ButtonOpenModal
-          avatarUrl={require("~/assets/img/user-profile-light.png")}
+          avatarUrl={require("~/assets/img/avatar-not-found.png")}
           handleOpenModal={handleOpenModal}
         />
       </Box>
@@ -116,7 +195,14 @@ export const ImagePicker = ({ user }: ImagePickerProps) => {
 
   return (
     <>
-      <ButtonOpenModal avatarUrl={data} handleOpenModal={handleOpenModal} />
+      <ButtonOpenModal
+        avatarUrl={
+          selectedImage
+            ? { uri: selectedImage }
+            : require("~/assets/img/avatar-not-found.png")
+        }
+        handleOpenModal={handleOpenModal}
+      />
 
       <ModalPicker
         openCamera={openCamera}

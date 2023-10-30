@@ -1,54 +1,62 @@
-import { Box, FlatList, Text } from "native-base";
+import { RefreshControl } from "react-native";
+import { Center, FlatList, Text, View } from "native-base";
 
-import { Title } from "~/components/Layouts/Title";
-import { RouteCard } from "~/components/RouteCard";
-import { Background } from "~/components/Layouts/Background";
-import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
-import { ScreenContent } from "~/components/Layouts/ScreenContent";
+import LottieView from "lottie-react-native";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-import CorridasSalvasSvg from "~/assets/corridas-salvas.svg";
+import { useAuth } from "~/contexts/AuthContext";
 
 import { NavigationProps } from "~/routes";
 
-import { THEME } from "~/styles/theme";
+import {
+  FavoriteBusStopInterface,
+  FavoriteBusStopProps,
+} from "~/interfaces/FavoriteBusStop.interface";
 
-const mockedData: any[] = [
-  {
-    id: 1,
-    name: "Unip/Unesp",
-    favorite: true,
-    saida: new Date(),
-    chegada: new Date(),
-    statusCorrida: EStatusType.EM_MOVIMENTO,
-    tipo: "estudantes",
-    trafegando: true,
-  },
-  {
-    id: 2,
-    name: "Shopping Center",
-    favorite: false,
-    saida: new Date("2023-07-25T14:00:00"),
-    chegada: new Date("2023-07-25T15:30:00"),
-    statusCorrida: EStatusType.EM_MOVIMENTO,
-    tipo: "todos",
-    trafegando: true,
-  },
-  {
-    id: 3,
-    name: "Parque Municipal",
-    favorite: true,
-    saida: new Date("2023-07-26T11:00:00"),
-    chegada: new Date("2023-07-26T13:00:00"),
-    statusCorrida: EStatusType.EM_MOVIMENTO,
-    tipo: "todos",
-    trafegando: true,
-  },
-];
+import { api } from "~/services/axios";
+
+import { Alert } from "~/components/Alert";
+import { ListFavorites } from "~/components/ListFavorites";
+import { Background } from "~/components/Layouts/Background";
+import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 export const FavoritesScreen = ({
   navigation,
   route,
 }: NavigationProps<"Favorites">) => {
+  const { user } = useAuth();
+
+  const { data, fetchNextPage, isFetching, hasNextPage, refetch } =
+    useInfiniteQuery(
+      ["favorites"],
+      ({ pageParam = 0 }) => {
+        const pageSize = 10;
+
+        return api.get<FavoriteBusStopInterface>(
+          `/user/favorite-route?page=${pageParam}&pageSize=${pageSize}`
+        );
+      },
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const nextPage = lastPage?.data?.hasNextPage
+            ? allPages.length + 1
+            : undefined;
+
+          return nextPage;
+        },
+        keepPreviousData: true,
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
+        refetchOnMount: true,
+      }
+    );
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  };
+
   return (
     <Background>
       <ScreenContent>
@@ -56,34 +64,62 @@ export const FavoritesScreen = ({
           Favoritos
         </Text>
 
-        <FlatList
-          mt={3}
-          w={"full"}
-          style={{ alignSelf: "flex-start" }}
-          contentContainerStyle={{ alignSelf: "center", width: "100%" }}
-          showsVerticalScrollIndicator={false}
-          data={mockedData}
-          ListEmptyComponent={
-            <Box flex={1} alignItems={"center"} display={"flex"} mt={4}>
-              <CorridasSalvasSvg />
-              <Box display={"flex"} alignItems={"center"} mt={2}>
-                <Text textAlign={"center"} color={THEME.colors.gray["900"]}>
-                  No momento sem corridas salvas
-                </Text>
-              </Box>
-            </Box>
-          }
-          keyExtractor={(item) => `${item.id}`}
-          renderItem={({ item }) => (
-            <RouteCard
-              route={item}
-              onPressCard={() =>
-                navigation.navigate("PointDetails", { id: "123" })
+        <Center>
+          <LottieView
+            autoPlay
+            loop
+            style={{
+              width: 200,
+              height: 200,
+            }}
+            source={require("~/assets/animations/favorites.json")}
+          />
+        </Center>
+
+        <View flex={1}>
+          <FlatList
+            keyExtractor={(item, i) => `${i}`}
+            data={data?.pages?.flatMap((page) =>
+              page ? page?.data?.data : []
+            )}
+            refreshControl={
+              <RefreshControl onRefresh={refetch} refreshing={isFetching} />
+            }
+            renderItem={({ item }: { item: FavoriteBusStopProps }) => (
+              <ListFavorites
+                item={item}
+                onPress={() => {
+                  console.log(item);
+                  navigation.navigate("PointDetails", {
+                    id: `${item?.bus_stop_id}`,
+                  });
+                }}
+                key={item.id}
+              />
+            )}
+            ListEmptyComponent={() => (
+              <Alert
+                status="info"
+                text="Atenção! Sem pontos cadastrados no momento!"
+              />
+            )}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={() => {
+              if (!data?.pages?.flatMap((page) => page?.data?.hasNextPage)) {
+                return <></>;
               }
-              w={"full"}
-            />
-          )}
-        />
+
+              return (
+                <>
+                  {[...Array(5).keys()].map((_, index) => (
+                    <ListFavorites isLoading key={index} />
+                  ))}
+                </>
+              );
+            }}
+          />
+        </View>
       </ScreenContent>
     </Background>
   );

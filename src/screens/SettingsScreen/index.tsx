@@ -1,7 +1,7 @@
 import { TouchableHighlight } from "react-native";
 
 import LottieView from "lottie-react-native";
-import { Icon, VStack, Text, HStack, Avatar } from "native-base";
+import { Icon, VStack, Text, HStack } from "native-base";
 
 import { PencilSimple, SignOut, HardDrive } from "phosphor-react-native";
 
@@ -18,6 +18,7 @@ import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
+import { Avatar } from "~/components/Form/Avatar";
 
 export const SettingsScreen = ({
   navigation,
@@ -74,14 +75,16 @@ export const SettingsScreen = ({
                   fontColor="white"
                 />
 
-                <Avatar
-                  source={{
-                    uri: user?.picture,
-                  }}
-                />
+                {console.log(user?.user)}
+                {/* <Avatar
+                  // source={{
+                  //   uri: user?.user?.avatar,
+                  // }}
+                  source={user?.user?.avatar}
+                /> */}
 
-                <Text>{user?.name}</Text>
-                <Text>{user?.email}</Text>
+                <Text>{user?.user?.name}</Text>
+                <Text>{user?.user?.driver?.cpf}</Text>
               </VStack>
 
               <Button

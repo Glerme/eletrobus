@@ -11,17 +11,37 @@ export interface UserGoogleProps {
 
 export interface UserProps {
   token: string;
-  user: {
-    id: string;
-    avatar: string;
-    email: string;
-    name: string;
-    driver: Driver | null;
-  };
+  user: UserInterface;
+}
+
+export interface UserInterface {
+  id: string;
+  avatar: string;
+  email: string;
+  name: string;
+  driver: Driver | null;
+  favorite_bus_stop: FavoriteBusStops[];
+  favorite_route: FavoriteRoutes[];
 }
 
 export interface Driver {
   id: string;
   cnh: string;
   cpf: string;
+}
+
+export interface FavoriteBusStops {
+  description: string;
+  id: string;
+  name: string;
+  images: string[];
+}
+
+export interface FavoriteRoutes {
+  id: string;
+  name: string;
+}
+
+export interface MyQueryInterface {
+  data: UserInterface;
 }

@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { ActivityIndicator, RefreshControl } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  Alert as RNAlert,
+} from "react-native";
 
 import {
   Box,
@@ -16,24 +20,23 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { api } from "~/services/axios";
+
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
+
+import { FavoriteBusStopInterface } from "~/interfaces/FavoriteBusStop.interface";
 
 import { NavigationProps } from "~/routes";
 
 import { Alert } from "~/components/Alert";
-import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
-import { TypeRoute } from "~/components/TypeRoute";
+import { ListRoutes } from "~/components/ListRoutes";
 import { Background } from "~/components/Layouts/Background";
-import { StatusInfo } from "~/components/BusStatus/StatusInfo";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
-import { ListBusStops } from "~/components/ListBusStops";
-import { ListRoutes } from "~/components/ListRoutes";
 
 import { THEME } from "~/styles/theme";
 
@@ -45,22 +48,72 @@ export const PointDetailsScreen = ({
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  const {
-    data: point,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isRefetching,
-  } = useQuery<BusStopInterface>({
-    queryKey: ["point-bus-details"],
+  const { data, isLoading, isError, error, refetch, isRefetching } =
+    useQuery<BusStopProps>({
+      queryKey: ["point-bus-details"],
+      queryFn: async () => {
+        const { data } = await api.get<BusStopProps>(
+          `/bus-stop/${route.params.id}`
+        );
+
+        return data;
+      },
+    });
+
+  const { data: favorites } = useQuery({
+    queryKey: ["favorites", user?.user?.id, "bus-stop"],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface>(
-        `/bus-stop/${route.params.id}`
-      );
-      return data;
+      if (user) {
+        const { data } = await api.get<FavoriteBusStopInterface>(
+          `/user/favorite-route`
+        );
+        return data?.data;
+      } else {
+        return [];
+      }
     },
+    initialData: [],
+    placeholderData: [],
   });
+
+  const handleFavorite = async (fav: boolean) => {
+    try {
+      if (!fav) {
+        const { status } = await api.post(
+          `/bus-stop/${route.params.id}/favorite`
+        );
+
+        if (status === 200) {
+          setFavorite(true);
+        }
+      } else {
+        const { status } = await api.delete(
+          `/bus-stop/${route.params.id}/favorite`
+        );
+
+        if (status) {
+          setFavorite(false);
+        }
+      }
+    } catch (err) {
+      const axiosError = axiosErrorHandler(err);
+
+      RNAlert.alert("Erro ao favoritar", axiosError.message);
+      console.log({ axiosError });
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      const favoritePoint = favorites?.filter(
+        (fav) => fav?.bus_stop_id === route.params.id
+      );
+
+      if (favoritePoint?.length > 0) {
+        setFavorite(true);
+      }
+    }
+  }, [user?.user?.id, favorites]);
 
   if (isLoading) {
     return (
@@ -97,7 +150,7 @@ export const PointDetailsScreen = ({
             <RefreshControl onRefresh={refetch} refreshing={isRefetching} />
           }
         >
-          <HStack alignItems={"center"} space={2}>
+          <HStack alignItems={"center"} space={2} mb={2}>
             <HStack space={2} alignItems="center">
               <View
                 width={4}
@@ -106,29 +159,31 @@ export const PointDetailsScreen = ({
                 backgroundColor={true ? "#A7E179" : "#E17979"}
               />
               <Text fontSize="lg" fontWeight={"600"}>
-                {point?.name}
+                {data?.name}
               </Text>
             </HStack>
 
             <Spacer />
 
-            <FavoriteButton
-              favorite={favorite}
-              handlePress={() => setFavorite(!favorite)}
-            />
+            {user && (
+              <FavoriteButton
+                favorite={favorite}
+                handlePress={() => handleFavorite(favorite)}
+              />
+            )}
           </HStack>
 
           <Box w={"full"}>
             <Image
               source={
-                point?.images
-                  ? { uri: point?.images[0] ?? point.images[1] }
+                data?.images
+                  ? { uri: data?.images[0] ?? data.images[1] }
                   : require("~/assets/img/not-found.png")
               }
               w={"full"}
               h="56"
               borderRadius={"md"}
-              alt={point?.name}
+              alt={data?.name}
             />
           </Box>
           {/* <Box>
@@ -164,7 +219,7 @@ export const PointDetailsScreen = ({
               </Text>
             </HStack>
             <Text fontSize={"sm"} color={"gray.700"}>
-              {point?.description}
+              {data?.description}
             </Text>
           </VStack>
 
@@ -176,7 +231,7 @@ export const PointDetailsScreen = ({
               </Text>
             </HStack>
 
-            {point?.rotas.map((rota) => (
+            {data?.rotas?.map((rota) => (
               <ListRoutes
                 key={rota.route_id}
                 route={rota}
@@ -189,7 +244,7 @@ export const PointDetailsScreen = ({
             <Button
               onPress={() =>
                 navigation.navigate("Map", {
-                  pointId: point?.id,
+                  pointId: data?.id,
                 })
               }
               title="Ver Ponto de Ônibus"

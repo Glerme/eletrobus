@@ -1,10 +1,17 @@
-import { Platform } from "react-native";
+import { useEffect, useState } from "react";
+import { Alert, Platform } from "react-native";
 
-import { Box, Text, View } from "native-base";
-
+import { Box, View } from "native-base";
+import Toast from "react-native-toast-message";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useAuth } from "~/contexts/AuthContext";
+
+import { api } from "~/services/axios";
+
+import { MyQueryInterface } from "~/interfaces/User.interface";
+
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 import { NavigationProps } from "~/routes";
 
@@ -20,7 +27,46 @@ export const ProfileScreen = ({
   navigation,
   route,
 }: NavigationProps<"Profile">) => {
-  const { user, handleGoogleLogin } = useAuth();
+  const { user, updateUser } = useAuth();
+
+  const [fields, setFields] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    setFields({
+      name: user?.user?.name ?? "",
+      email: user?.user?.email ?? "",
+      password: "",
+    });
+  }, [user]);
+
+  const handleSubmit = async () => {
+    try {
+      const { status } = await api.put(`/user`, {
+        name: fields?.name ?? undefined,
+        email: fields?.email ?? undefined,
+        password: fields?.password ? fields?.password : undefined,
+      });
+
+      if (status === 200) {
+        const { data } = await api.get<MyQueryInterface>("/user/my");
+
+        updateUser(data);
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: "Erro ao atualizar usuário",
+        });
+      }
+    } catch (error) {
+      const err = axiosErrorHandler(error);
+      console.error(err);
+    }
+  };
 
   return (
     <>
@@ -30,10 +76,10 @@ export const ProfileScreen = ({
         <ScreenContent>
           <Title>Profile Screen</Title>
 
-          {user ? (
+          {user && (
             <>
               <Box mt={5} mb={5}>
-                <ImagePicker user={user} />
+                <ImagePicker />
               </Box>
 
               <KeyboardAwareScrollView
@@ -43,38 +89,43 @@ export const ProfileScreen = ({
                 enableAutomaticScroll={Platform.OS === "ios"}
               >
                 <View>
-                  <Input placeholder="Nome" mb={2} />
+                  <Input
+                    placeholder="Nome"
+                    mb={2}
+                    onChangeText={(text) =>
+                      setFields({ ...fields, name: text })
+                    }
+                    value={fields.name}
+                  />
                   <Input
                     placeholder="Email"
                     keyboardType="email-address"
                     mb={2}
+                    onChangeText={(text) =>
+                      setFields({ ...fields, email: text })
+                    }
+                    value={fields.email}
                   />
 
-                  <Input placeholder="Senha" secureTextEntry={true} mb={2} />
-
-                  <Input placeholder="Nova Senha" secureTextEntry={true} />
+                  <Input
+                    placeholder="Senha"
+                    secureTextEntry={true}
+                    mb={2}
+                    onChangeText={(text) =>
+                      setFields({ ...fields, password: text })
+                    }
+                    value={fields.password}
+                  />
                 </View>
+
+                <Button
+                  title="Salvar"
+                  onPress={handleSubmit}
+                  fontColor="white"
+                  mt={2}
+                />
               </KeyboardAwareScrollView>
-
-              <Button
-                title="Salvar"
-                onPress={() => console.log("salvar")}
-                fontColor="white"
-                h={12}
-                mb={2}
-                mx={2}
-              />
             </>
-          ) : (
-            <Box mt={5} mb={5}>
-              <Text>Você precisa estar logado para acessar essa página!</Text>
-
-              <Button
-                title="Logar com Google"
-                onPress={handleGoogleLogin}
-                fontColor="white"
-              />
-            </Box>
           )}
         </ScreenContent>
       </Background>

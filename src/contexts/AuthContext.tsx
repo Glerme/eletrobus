@@ -2,12 +2,17 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 import axios from "axios";
+import Toast from "react-native-toast-message";
 import * as AuthSession from "expo-auth-session";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
-import { UserGoogleProps, UserProps } from "~/interfaces/User.interface";
+import {
+  MyQueryInterface,
+  UserGoogleProps,
+  UserProps,
+} from "~/interfaces/User.interface";
 
 import { api } from "~/services/axios";
 
@@ -24,6 +29,7 @@ interface AuthContextProps {
   loading: boolean;
   handleGoogleLogin: () => Promise<UserProps | null>;
   loadUser: () => Promise<void>;
+  updateUser: (user: MyQueryInterface) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -37,6 +43,7 @@ export const AuthContext = createContext<AuthContextProps>({
     return null;
   },
   loadUser: async () => {},
+  updateUser: async () => {},
 });
 
 interface AuthResponse {
@@ -84,6 +91,11 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             user: googleData?.data?.user,
           };
 
+          api.interceptors.request.use((config) => {
+            config.headers.Authorization = `Bearer ${parsedData?.token}`;
+            return config;
+          });
+
           await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
           await AsyncStorage.setItem(
             "@token",
@@ -91,6 +103,11 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           );
 
           setUser(parsedData);
+
+          Toast.show({
+            type: "success",
+            text1: "Login feito com sucesso",
+          });
           return parsedData;
         }
       }
@@ -99,7 +116,12 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       const errorMessage = axiosErrorHandler(error);
 
       console.error(errorMessage);
-      Alert.alert("Erro ao fazer login com o Google:", errorMessage?.message);
+
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Erro ao fazer login com o Google",
+      });
       return null;
     } finally {
       setLoading(false);
@@ -135,6 +157,12 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       await AsyncStorage.setItem("@token", JSON.stringify(parsedData.token));
 
       setUser(parsedData);
+
+      Toast.show({
+        type: "success",
+        text1: "Login feito com sucesso",
+      });
+
       return data;
     } catch (error) {
       setUser(null);
@@ -142,6 +170,13 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
       console.error(errorMessage);
       Alert.alert("Erro ao fazer login", errorMessage?.message);
+
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Erro ao fazer login",
+      });
+
       return null;
     } finally {
       setLoading(false);
@@ -153,6 +188,11 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       setUser(null);
       await AsyncStorage.removeItem("@user");
       await AsyncStorage.removeItem("@token");
+
+      Toast.show({
+        type: "success",
+        text1: "Deslogado com sucesso!",
+      });
     } catch (error) {
       setUser(null);
       console.error(error);
@@ -176,6 +216,40 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   };
 
+  const updateUser = async (updatedUser: MyQueryInterface) => {
+    try {
+      setLoading(true);
+
+      console.log("UPDATE", updatedUser);
+
+      const parsedData: UserProps = {
+        token: user?.token ?? "",
+        user: updatedUser?.data,
+      };
+
+      await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
+
+      setUser(parsedData);
+
+      Toast.show({
+        type: "success",
+        text1: "Sucesso",
+        text2: "Usuário atualizado com sucesso",
+      });
+    } catch (error) {
+      setUser(null);
+      console.error(error);
+
+      Toast.show({
+        type: "success",
+        text1: "Sucesso",
+        text2: "Usuário atualizado com sucesso",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadUser();
   }, []);
@@ -189,6 +263,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         signOut,
         handleGoogleLogin,
         loadUser,
+        updateUser,
       }}
     >
       {children}
