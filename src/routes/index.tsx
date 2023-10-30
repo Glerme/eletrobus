@@ -20,7 +20,7 @@ import { Contexts } from "./contexts.routes";
 // Tipagem das telas e parâmetros
 export type RootStackParamList = {
   Home: undefined;
-  Profile: { userId: string };
+  Profile: undefined;
   PointDetails: { id: string };
   Favorites: undefined;
   Points: undefined;

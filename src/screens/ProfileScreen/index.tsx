@@ -74,7 +74,7 @@ export const ProfileScreen = ({
 
       <Background>
         <ScreenContent>
-          <Title>Profile Screen</Title>
+          <Title>Perfil</Title>
 
           {user && (
             <>

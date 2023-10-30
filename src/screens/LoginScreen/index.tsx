@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import Toast from "react-native-toast-message";
 import { Box, Center, Icon, IconButton, VStack, View } from "native-base";
 import {
@@ -137,7 +137,13 @@ export const LoginScreen = ({
         alignItems={"center"}
         justifyContent={"center"}
       >
-        <KeyboardAwareScrollView enableOnAndroid style={{ borderRadius: 8 }}>
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          style={{ borderRadius: 8 }}
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          scrollEnabled={true}
+          enableAutomaticScroll={Platform.OS === "ios"}
+        >
           <Box bg="white" p={5} borderRadius={"md"}>
             {step === 1 && (
               <VStack space={2} justifyItems={"center"}>

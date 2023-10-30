@@ -1,9 +1,9 @@
 import { TouchableHighlight } from "react-native";
 
 import LottieView from "lottie-react-native";
-import { Icon, VStack, Text, HStack } from "native-base";
+import { Icon, VStack, Text, HStack, Divider } from "native-base";
 
-import { PencilSimple, SignOut, HardDrive } from "phosphor-react-native";
+import { PencilSimple, SignOut } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
@@ -18,13 +18,12 @@ import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
-import { Avatar } from "~/components/Form/Avatar";
 
 export const SettingsScreen = ({
   navigation,
   route,
 }: NavigationProps<"Settings">) => {
-  const { handleGoogleLogin, user, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   const { handleCloseModal, handleOpenModal, modalRef } = useModal();
 
@@ -47,44 +46,35 @@ export const SettingsScreen = ({
             Configurações
           </Text>
 
-          {user ? (
+          {user?.user ? (
             <>
-              <VStack space={2} alignItems={"baseline"} mt={2}>
+              <VStack alignItems={"center"}>
+                <LottieView
+                  autoPlay
+                  loop
+                  style={{
+                    width: 300,
+                    height: 300,
+                  }}
+                  source={require("~/assets/animations/settings.json")}
+                />
+              </VStack>
+
+              <Divider bg={"gray.500"} thickness={1} />
+
+              <VStack space={2} alignItems={"baseline"} mt={4} w={"100%"}>
                 <TouchableHighlight
-                  onPress={() =>
-                    navigation.navigate("Profile", { userId: "123" })
-                  }
+                  onPress={() => navigation.navigate("Profile")}
                   underlayColor={THEME.colors.gray["200"]}
+                  style={{
+                    width: "100%",
+                  }}
                 >
-                  <HStack space={2} alignItems={"center"}>
+                  <HStack space={2} alignItems={"center"} p={2} w={"full"}>
                     <PencilSimple color={THEME.colors.gray["800"]} size={16} />
                     <Text color={THEME.colors.gray["800"]}>Editar Perfil</Text>
                   </HStack>
                 </TouchableHighlight>
-
-                <TouchableHighlight underlayColor={THEME.colors.gray["200"]}>
-                  <HStack space={2} alignItems={"center"}>
-                    <HardDrive color={THEME.colors.gray["800"]} size={16} />
-                    <Text color={THEME.colors.gray["800"]}>Sou Motorista</Text>
-                  </HStack>
-                </TouchableHighlight>
-
-                <Button
-                  onPress={handleGoogleLogin}
-                  title="Sou motorista"
-                  fontColor="white"
-                />
-
-                {console.log(user?.user)}
-                {/* <Avatar
-                  // source={{
-                  //   uri: user?.user?.avatar,
-                  // }}
-                  source={user?.user?.avatar}
-                /> */}
-
-                <Text>{user?.user?.name}</Text>
-                <Text>{user?.user?.driver?.cpf}</Text>
               </VStack>
 
               <Button
@@ -96,6 +86,8 @@ export const SettingsScreen = ({
                 variant="link"
                 fontColor={THEME.colors.danger["500"]}
                 mt={"auto"}
+                borderTopColor={THEME.colors.error["500"]}
+                borderTopWidth={1}
                 rightIcon={
                   <Icon
                     as={
