@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import { Box } from "native-base";
 import Toast from "react-native-toast-message";
-import * as FileSystem from "expo-file-system";
-import { Modalize } from "react-native-modalize";
 import * as ExpoImagePicker from "expo-image-picker";
 
 import { MyQueryInterface } from "~/interfaces/User.interface";
@@ -11,6 +9,8 @@ import { MyQueryInterface } from "~/interfaces/User.interface";
 import { useAuth } from "~/contexts/AuthContext";
 
 import { api } from "~/services/axios";
+
+import { useModal } from "~/hooks/useModal";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
@@ -21,7 +21,8 @@ export const ImagePicker = () => {
   const { updateUser, user } = useAuth();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const modalRef = useRef<Modalize>(null);
+  const [loading, setLoading] = useState(false);
+  const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
   useEffect(() => {
     (async () => {
@@ -40,6 +41,7 @@ export const ImagePicker = () => {
   const openCamera = async () => {
     const { status } = await ExpoImagePicker.requestCameraPermissionsAsync();
     if (status === "granted") {
+      setLoading(true);
       const result = await ExpoImagePicker.launchCameraAsync({
         mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -48,52 +50,50 @@ export const ImagePicker = () => {
       });
 
       if (!result.canceled) {
-        if (result?.assets[0]?.uri) {
-          try {
-            const formData = new FormData();
+        try {
+          const formData: any = new FormData();
 
-            const blob = await FileSystem.readAsStringAsync(
-              result?.assets[0]?.uri,
-              {
-                encoding: FileSystem.EncodingType.Base64,
-              }
-            );
+          formData.append("avatar", {
+            type: "image/jpeg",
+            name: "avatar.jpg",
+            uri: result?.assets[0]?.uri,
+          });
 
-            const blobData = `data:image/jpg;base64,${blob}`;
+          const { status } = await api.put("/user", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Accept: "application/json",
+            },
+          });
 
-            formData?.append("avatar", blobData);
+          if (status === 200) {
+            const { data } = await api.get<MyQueryInterface>("/user/my");
 
-            const { status } = await api.put("/user", formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Accept: "application/json",
-              },
-            });
-
-            if (status === 200) {
-              const { data } = await api.get<MyQueryInterface>("/user/my");
-
-              updateUser(data);
-
-              Toast.show({
-                type: "success",
-                text1: "Sucesso",
-                text2: "Usuário atualizado com sucesso",
-              });
-
-              setSelectedImage(result?.assets[0]?.uri);
-            }
-          } catch (error) {
-            const err = axiosErrorHandler(error);
-            console.error(err);
+            updateUser(data);
 
             Toast.show({
-              type: "error",
-              text1: "Erro",
-              text2: "Ocorreu um erro ao atualizar o usuário",
+              type: "success",
+              text1: "Sucesso",
+              text2: "Usuário atualizado com sucesso",
             });
+
+            setSelectedImage(data?.data?.avatar);
           }
+        } catch (error) {
+          const err = axiosErrorHandler(error);
+          console.error(err);
+
+          Toast.show({
+            type: "error",
+            text1: "Erro",
+            text2: "Ocorreu um erro ao atualizar o usuário",
+          });
+        } finally {
+          setLoading(false);
+          handleCloseModal();
         }
+      } else {
+        setLoading(false);
       }
     } else {
       Toast.show({
@@ -101,85 +101,69 @@ export const ImagePicker = () => {
         text1: "Atenção",
         text2: "Ative a permissão para acessar a galeria",
       });
+
+      handleCloseModal();
+      setLoading(false);
     }
   };
 
   const openGallery = async () => {
-    const { status } =
-      await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status === "granted") {
-      const result = await ExpoImagePicker.launchImageLibraryAsync({
-        mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
+    setLoading(true);
 
-      if (!result.canceled) {
-        if (result?.assets[0]?.uri) {
-          try {
-            const formData = new FormData();
+    const result = await ExpoImagePicker.launchImageLibraryAsync({
+      mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-            const blob = await FileSystem.readAsStringAsync(
-              result?.assets[0]?.uri,
-              {
-                encoding: FileSystem.EncodingType.Base64,
-              }
-            );
+    if (!result.canceled) {
+      try {
+        const formData: any = new FormData();
 
-            const blobData = `data:image/jpg;base64,${blob}`;
+        formData.append("avatar", {
+          type: "image/jpeg",
+          name: "avatar.jpg",
+          uri: result?.assets[0]?.uri,
+        });
 
-            formData?.append("avatar", blobData);
+        const { data } = await api.put("/user", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+          },
+        });
 
-            const { status } = await api.put("/user", formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Accept: "application/json",
-              },
-            });
+        updateUser(data);
 
-            if (status === 200) {
-              const { data } = await api.get<MyQueryInterface>("/user/my");
+        setSelectedImage(data?.data?.avatar);
 
-              updateUser(data);
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Usuário atualizado com sucesso",
+        });
+      } catch (error) {
+        const err = axiosErrorHandler(error);
+        console.error(err);
 
-              Toast.show({
-                type: "success",
-                text1: "Sucesso",
-                text2: "Usuário atualizado com sucesso",
-              });
-
-              setSelectedImage(result?.assets[0]?.uri);
-            }
-          } catch (error) {
-            const err = axiosErrorHandler(error);
-            console.error(err);
-
-            Toast.show({
-              type: "error",
-              text1: "Erro",
-              text2: "Ocorreu um erro ao atualizar o usuário",
-            });
-          }
-        }
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: "Ocorreu um erro ao atualizar o usuário",
+        });
+      } finally {
+        handleCloseModal();
+        setLoading(false);
       }
     } else {
-      Toast.show({
-        type: "warning",
-        text1: "Atenção",
-        text2: "Ative a permissão para acessar a galeria",
-      });
+      handleCloseModal();
+      setLoading(false);
     }
   };
 
-  const handleOpenModal = () => {
-    modalRef?.current?.open();
-  };
-
   useEffect(() => {
-    setSelectedImage(
-      user?.user?.avatar ?? require("~/assets/img/avatar-not-found.png")
-    );
+    setSelectedImage(user?.user?.avatar ?? "");
   }, [user?.user?.avatar]);
 
   if (!user) {
@@ -202,6 +186,7 @@ export const ImagePicker = () => {
             : require("~/assets/img/avatar-not-found.png")
         }
         handleOpenModal={handleOpenModal}
+        isLoading={loading}
       />
 
       <ModalPicker
