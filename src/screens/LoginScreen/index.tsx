@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 import Toast from "react-native-toast-message";
 import { Box, Center, Icon, IconButton, VStack, View } from "native-base";
 import {
@@ -25,7 +25,6 @@ import { useAuth } from "~/contexts/AuthContext";
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
 
-import { THEME } from "~/styles/theme";
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 export const LoginScreen = ({
@@ -33,7 +32,7 @@ export const LoginScreen = ({
   route,
 }: NavigationProps<"Login">) => {
   const [step, setStep] = useState(1);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
 
   const { handleGoogleLogin, signIn, loading } = useAuth();
 

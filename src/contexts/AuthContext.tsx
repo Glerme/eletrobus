@@ -222,7 +222,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
       const parsedData: UserProps = {
         token: user?.token ?? "",
-        user: updatedUser?.data,
+        user: {
+          ...user?.user,
+          ...updatedUser?.data,
+        },
       };
 
       await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
