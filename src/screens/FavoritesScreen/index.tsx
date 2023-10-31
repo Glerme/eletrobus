@@ -24,13 +24,25 @@ export const FavoritesScreen = ({
   navigation,
   route,
 }: NavigationProps<"Favorites">) => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const { data, fetchNextPage, isFetching, hasNextPage, refetch } =
     useInfiniteQuery(
       ["favorites", user?.token, route.key],
       ({ pageParam = 0 }) => {
         const pageSize = 10;
+
+        api.interceptors.response.use(
+          (response) => {
+            return response;
+          },
+          async (error) => {
+            if (error.response.status === 401) {
+              await signOut();
+            }
+            return Promise.reject(error);
+          }
+        );
 
         return api.get<FavoriteBusStopInterface>(
           `/user/favorite/bus-stop?page=${pageParam}&pageSize=${pageSize}&orderAsc=desc`
@@ -45,9 +57,9 @@ export const FavoritesScreen = ({
           return nextPage;
         },
         keepPreviousData: true,
-        refetchOnWindowFocus: "always",
-        refetchOnReconnect: "always",
-        refetchOnMount: "always",
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
+        refetchOnMount: true,
       }
     );
 
