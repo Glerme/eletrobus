@@ -18,7 +18,7 @@ import { useAuth } from "~/contexts/AuthContext";
 
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { NavigationProps } from "~/routes";
 

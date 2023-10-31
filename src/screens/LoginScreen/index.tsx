@@ -18,7 +18,7 @@ import { NavigationProps } from "~/routes";
 import IconSvg from "~/assets/svg/icon.svg";
 import GoogleIcon from "~/assets/svg/googleIcon.svg";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { useAuth } from "~/contexts/AuthContext";
 

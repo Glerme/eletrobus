@@ -8,7 +8,7 @@ import { MyQueryInterface } from "~/interfaces/User.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { useModal } from "~/hooks/useModal";
 

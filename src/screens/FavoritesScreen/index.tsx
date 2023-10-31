@@ -13,7 +13,7 @@ import {
   FavoriteBusStopProps,
 } from "~/interfaces/FavoriteBusStop.interface";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { Alert } from "~/components/Alert";
 import { ListFavorites } from "~/components/ListFavorites";

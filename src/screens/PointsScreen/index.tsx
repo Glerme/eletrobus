@@ -7,7 +7,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
@@ -104,11 +104,12 @@ export const PointsScreen = ({
             value={queryString}
           />
 
-          <Box mt={6} mb={2}>
+          <Box mt={6} flex={1}>
             <Text
               fontSize={"md"}
               color={THEME.colors.gray["800"]}
               fontWeight={"600"}
+              mb={1}
             >
               Listagem - pontos
             </Text>

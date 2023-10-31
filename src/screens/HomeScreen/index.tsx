@@ -22,7 +22,7 @@ import { useAuth } from "~/contexts/AuthContext";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { Alert } from "~/components/Alert";
 import { Button } from "~/components/Form/Button";

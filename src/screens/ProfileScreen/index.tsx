@@ -7,7 +7,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { MyQueryInterface } from "~/interfaces/User.interface";
 

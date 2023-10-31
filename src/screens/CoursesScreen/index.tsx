@@ -7,7 +7,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 

@@ -14,7 +14,7 @@ import {
   UserProps,
 } from "~/interfaces/User.interface";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 interface AuthContextProps {
   user: UserProps | null;
@@ -96,6 +96,18 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             return config;
           });
 
+          api.interceptors.response.use(
+            (response) => {
+              return response;
+            },
+            async (error) => {
+              if (error.response.status === 401) {
+                await signOut();
+              }
+              return Promise.reject(error);
+            }
+          );
+
           await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
           await AsyncStorage.setItem(
             "@token",
@@ -148,6 +160,18 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         return config;
       });
 
+      api.interceptors.response.use(
+        (response) => {
+          return response;
+        },
+        async (error) => {
+          if (error.response.status === 401) {
+            await signOut();
+          }
+          return Promise.reject(error);
+        }
+      );
+
       const parsedData: UserProps = {
         token: data?.data?.token,
         user: data?.data?.user,
@@ -155,6 +179,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
       await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
       await AsyncStorage.setItem("@token", JSON.stringify(parsedData.token));
+
+      //REFRESH TOKEN
+      // await AsyncStorage.setItem("@refreshToken", params.refresh_token);e
 
       setUser(parsedData);
 
@@ -189,6 +216,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       await AsyncStorage.removeItem("@user");
       await AsyncStorage.removeItem("@token");
 
+      // await AsyncStorage.removeItem("@refreshToken");
       Toast.show({
         type: "success",
         text1: "Deslogado com sucesso!",
@@ -204,6 +232,17 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       setLoading(true);
 
       const getUser = await AsyncStorage.getItem("@user");
+      // const accessToken = await AsyncStorage.getItem("@token");
+
+      // if (accessToken) {
+      //   const isAccessTokenExpired = isTokenExpired(accessToken); // Implement isTokenExpired() to check expiry
+      //   if (isAccessTokenExpired) {
+      //     const newAccessToken = await refreshToken();
+      //     if (newAccessToken) {
+      //       // Update the user and other relevant data
+      //     }
+      //   }
+      // }
 
       if (getUser) {
         setUser(JSON.parse(getUser));
@@ -251,8 +290,20 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   };
 
+  const t = async () => {
+    try {
+      const getUser = await AsyncStorage.getItem("@user");
+
+      if (getUser) {
+        loadUser();
+      }
+    } catch (error) {
+      setUser(null);
+    }
+  };
+
   useEffect(() => {
-    loadUser();
+    (async () => await t())();
   }, []);
 
   return (

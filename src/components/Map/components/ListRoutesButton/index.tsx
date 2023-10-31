@@ -15,7 +15,7 @@ import { MagnifyingGlass, List } from "phosphor-react-native";
 
 import { useModal } from "~/hooks/useModal";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { BusStopInterface, BusStopProps } from "~/interfaces/BusStop.interface";
 

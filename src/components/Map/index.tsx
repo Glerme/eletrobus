@@ -11,7 +11,7 @@ import { RoutesProps } from "~/interfaces/Routes.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { useModal } from "~/hooks/useModal";
 

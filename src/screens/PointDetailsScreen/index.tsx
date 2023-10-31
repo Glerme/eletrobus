@@ -22,7 +22,7 @@ import { useAuth } from "~/contexts/AuthContext";
 
 import { BusStopProps } from "~/interfaces/BusStop.interface";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
