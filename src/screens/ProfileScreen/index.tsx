@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Alert, Platform } from "react-native";
 
-import { Box, View } from "native-base";
 import Toast from "react-native-toast-message";
+import { Box, Icon, IconButton, View } from "native-base";
+import { Envelope, Eye, EyeSlash, Key, User } from "phosphor-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useAuth } from "~/contexts/AuthContext";
@@ -28,6 +29,7 @@ export const ProfileScreen = ({
   route,
 }: NavigationProps<"Profile">) => {
   const { user, updateUser } = useAuth();
+  const [showPassword, setShowPassword] = useState(true);
 
   const [fields, setFields] = useState({
     name: "",
@@ -65,6 +67,12 @@ export const ProfileScreen = ({
     } catch (error) {
       const err = axiosErrorHandler(error);
       console.error(err);
+
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Erro ao atualizar usuário",
+      });
     }
   };
 
@@ -95,11 +103,13 @@ export const ProfileScreen = ({
                     onChangeText={(text) =>
                       setFields({ ...fields, name: text })
                     }
+                    InputLeftElement={<Icon as={<User />} ml={2} />}
                     value={fields.name}
                   />
                   <Input
                     placeholder="Email"
                     keyboardType="email-address"
+                    InputLeftElement={<Icon as={<Envelope />} ml={2} />}
                     mb={2}
                     onChangeText={(text) =>
                       setFields({ ...fields, email: text })
@@ -109,12 +119,25 @@ export const ProfileScreen = ({
 
                   <Input
                     placeholder="Senha"
-                    secureTextEntry={true}
-                    mb={2}
+                    InputLeftElement={<Icon as={<Key />} ml={2} />}
                     onChangeText={(text) =>
                       setFields({ ...fields, password: text })
                     }
-                    value={fields.password}
+                    secureTextEntry={showPassword}
+                    type={showPassword ? "text" : "password"}
+                    InputRightElement={
+                      <IconButton
+                        onPress={() => setShowPassword(!showPassword)}
+                        borderRadius={"full"}
+                        mr={2}
+                        p={2}
+                      >
+                        <Icon
+                          as={showPassword ? <Eye /> : <EyeSlash />}
+                          mr={2}
+                        />
+                      </IconButton>
+                    }
                   />
                 </View>
 
