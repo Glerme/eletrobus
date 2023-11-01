@@ -1,12 +1,16 @@
-import { Platform, TouchableNativeFeedback } from "react-native";
-
-import { Plus, Minus, X } from "phosphor-react-native";
-import { Container, TextItem } from "./styles";
-import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
-import { Box, HStack, Pressable, Text } from "native-base";
 import React from "react";
-import { CommonActions, useNavigation } from "@react-navigation/native";
+
+import { X } from "phosphor-react-native";
+import { HStack, Pressable, Text } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 import { UserProps } from "~/interfaces/User.interface";
+import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
+
+import { RootStackParamList } from "~/routes";
+
+import { Container, TextItem } from "./styles";
 
 interface ZoomButtonsProps {
   onZoomPress: (type: "in" | "out") => void;
@@ -25,7 +29,10 @@ export const RouteButton = ({
   user,
   setBusRoute,
 }: BusRouteSelectedInterface) => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootStackParamList, "Map", undefined>
+    >();
 
   const navigationToCourses = () => {
     if (user?.user.driver) navigation.navigate("Courses");

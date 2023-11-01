@@ -1,7 +1,9 @@
-import { IconButton, VStack } from "native-base";
+import { VStack } from "native-base";
 import styled from "styled-components/native";
 
-// import styled from "styled-components";
+interface TextItemProps {
+  isRounded: boolean;
+}
 
 export const Container = styled(VStack)`
   position: absolute;
@@ -9,10 +11,6 @@ export const Container = styled(VStack)`
   left: 10px;
   z-index: 1;
 `;
-
-interface TextItemProps {
-  isRounded: boolean;
-}
 
 export const TextItem = styled.TouchableOpacity<TextItemProps>`
   border-radius: ${(props) => (props.isRounded ? "4px" : "0px")};

@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StyleSheet, Linking } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
+import { List } from "phosphor-react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
-import { requestForegroundPermissionsAsync } from "expo-location";
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { MapInterface } from "~/interfaces/Map.interface";
-import { RoutesProps } from "~/interfaces/Routes.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
@@ -15,28 +16,24 @@ import api from "~/services/axios";
 
 import { useModal } from "~/hooks/useModal";
 
+import { useAuth } from "~/contexts/AuthContext";
 import { useLocation } from "~/contexts/LocationContext";
+
+import { RootStackParamList } from "~/routes";
 
 import { Alert } from "../Alert";
 import { Button } from "../Form/Button";
 import { ZoomButtons } from "./components/ZoomButtons";
+import { RouteButton } from "./components/RouteButton";
+import { StateButton } from "./components/StateButton";
 import { CustomMarker } from "./components/CustomMarker";
+import { StartRunButton } from "./components/StartRunButton";
+import { FinalizeButton } from "./components/FinalizeButton";
 import { MyLocationButton } from "./components/MyLocationButton";
-import { ListRoutesButton } from "./components/ListRoutesButton";
 import { ModalDescription } from "./components/ModalDescription";
 import { BusRouteSelected } from "./components/BusRouteSelected";
 
-import { THEME } from "~/styles/theme";
-import { useAuth } from "~/contexts/AuthContext";
-import { RouteButton } from "./components/RouteButton";
-import {
-  CommonActions,
-  useFocusEffect,
-  useNavigation,
-} from "@react-navigation/native";
-import { StartRunButton } from "./components/StartRunButton";
-import { StateButton } from "./components/StateButton";
-import { FinalizeButton } from "./components/FinalizeButton";
+import { ListRoutes } from "./styles";
 
 interface Params {
   routeId?: string;
@@ -55,9 +52,10 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
 
   const [isRunning, setIsRunning] = useState(false);
 
-  const [locationPermissionGranted, setLocationPermissionGranted] =
-    useState(false);
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<
+      NativeStackNavigationProp<RootStackParamList, "Map", undefined>
+    >();
   const {
     location,
     locationError,
@@ -181,6 +179,11 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     });
   };
 
+  const navigationToCourses = () => {
+    if (user?.user.driver) navigation.navigate("Courses");
+    else navigation.navigate("Points");
+  };
+
   useEffect(() => {
     if (pointId) {
       const point = markers?.find((marker) => marker.id === pointId) ?? false;
@@ -257,8 +260,13 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
               )}
 
               <ZoomButtons onZoomPress={onZoomPress} />
-              <ListRoutesButton onPressRoute={onPressRoute} />
+
+              <ListRoutes onPress={navigationToCourses}>
+                <List size={24} color={"#fff"} />
+              </ListRoutes>
+
               <MyLocationButton getCurrentPosition={getCurrentPosition} />
+
               <MapView
                 ref={mapRef}
                 provider={PROVIDER_GOOGLE}

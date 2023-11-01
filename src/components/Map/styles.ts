@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const Container = styled.TouchableOpacity`
+export const ListRoutes = styled.TouchableOpacity`
   background-color: #5a42e7;
   position: absolute;
   bottom: 80px;
