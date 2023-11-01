@@ -36,6 +36,9 @@
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": ["location", "fetch"]
+      },
+      "config": {
+        "googleMapsApiKey": "AIzaSyDPNbKtosDMNj4MS3HIGCeRsjlUlO1F_W0"
       }
     },
     "android": {
@@ -48,7 +51,13 @@
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION"
-      ]
+      ],
+      "softwareKeyboardLayoutMode": "pan",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDPNbKtosDMNj4MS3HIGCeRsjlUlO1F_W0"
+        }
+      }
     },
     "extra": {
       "eas": {

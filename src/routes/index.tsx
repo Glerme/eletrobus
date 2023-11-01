@@ -11,7 +11,6 @@ import { TabNavigator } from "./tab.routes";
 
 import { LoginScreen } from "~/screens/LoginScreen";
 import { ProfileScreen } from "~/screens/ProfileScreen";
-import { FavoritesScreen } from "~/screens/FavoritesScreen";
 import { PointDetailsScreen } from "~/screens/PointDetailsScreen";
 import { CourseDetailsScreen } from "~/screens/CourseDetailsScreen";
 
@@ -20,7 +19,7 @@ import { Contexts } from "./contexts.routes";
 // Tipagem das telas e parâmetros
 export type RootStackParamList = {
   Home: undefined;
-  Profile: { userId: string };
+  Profile: undefined;
   PointDetails: { id: string };
   Favorites: undefined;
   Points: undefined;
@@ -62,11 +61,6 @@ const stacks: {
     name: "PointDetails",
     component: PointDetailsScreen,
     label: "Detalhes do ponto",
-  },
-  {
-    name: "Favorites",
-    component: FavoritesScreen,
-    label: "Favoritos",
   },
   {
     name: "Profile",

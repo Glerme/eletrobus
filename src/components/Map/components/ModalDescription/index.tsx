@@ -11,7 +11,7 @@ import { BusStopProps } from "~/interfaces/BusStop.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { Modal } from "~/components/Modal";
 import { Alert } from "~/components/Alert";

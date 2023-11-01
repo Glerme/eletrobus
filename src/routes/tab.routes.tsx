@@ -3,7 +3,14 @@ import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { House, Gear, MapPinLine, Path, List } from "phosphor-react-native";
+import {
+  House,
+  Gear,
+  MapPinLine,
+  Path,
+  List,
+  Star,
+} from "phosphor-react-native";
 
 import { useAuth } from "~/contexts/AuthContext";
 
@@ -14,6 +21,7 @@ import { SettingsScreen } from "~/screens/SettingsScreen";
 
 import { THEME } from "~/styles/theme";
 import { CoursesScreen } from "~/screens/CoursesScreen";
+import { FavoritesScreen } from "~/screens/FavoritesScreen";
 
 const Tabs = createBottomTabNavigator();
 
@@ -64,6 +72,39 @@ export const TabNavigator = ({}) => {
           ),
         }}
       />
+
+      {user?.user && (
+        <Tabs.Screen
+          name={"Favorites"}
+          component={FavoritesScreen as any}
+          options={{
+            headerStyle: {
+              backgroundColor: "#0DAC86",
+              borderWidth: 0,
+              elevation: 0,
+            },
+            headerTintColor: THEME.colors.white,
+            headerLeft: () => {
+              return (
+                <TouchableOpacity
+                  onPress={() => navigation.openDrawer() as any}
+                  style={{ marginLeft: 15 }}
+                >
+                  <List size={24} color={THEME.colors.white} />
+                </TouchableOpacity>
+              );
+            },
+            tabBarLabel: "Favoritos",
+            tabBarIcon: ({ color, size, focused }) => (
+              <Star
+                color={color}
+                size={size}
+                weight={focused ? "fill" : "regular"}
+              />
+            ),
+          }}
+        />
+      )}
 
       <Tabs.Screen
         name={"Map"}

@@ -7,7 +7,7 @@ interface ListRouteCardsProps {
   onPressCard: (item: any) => void;
 }
 
-export const ListRouteCards = ({
+export const ListHomeCards = ({
   data,
   description,
   cardComponent: CardComponent,

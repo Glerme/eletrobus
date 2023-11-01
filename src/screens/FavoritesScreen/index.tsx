@@ -1,90 +1,128 @@
-import { Box, FlatList, Text } from "native-base";
+import { RefreshControl } from "react-native";
+import { Center, FlatList, Text, View } from "native-base";
 
-import { Title } from "~/components/Layouts/Title";
-import { RouteCard } from "~/components/RouteCard";
-import { Background } from "~/components/Layouts/Background";
-import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
-import { ScreenContent } from "~/components/Layouts/ScreenContent";
+import LottieView from "lottie-react-native";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-import CorridasSalvasSvg from "~/assets/corridas-salvas.svg";
+import { useAuth } from "~/contexts/AuthContext";
 
 import { NavigationProps } from "~/routes";
 
-import { THEME } from "~/styles/theme";
+import {
+  FavoriteBusStopInterface,
+  FavoriteBusStopProps,
+} from "~/interfaces/FavoriteBusStop.interface";
 
-const mockedData: any[] = [
-  {
-    id: 1,
-    name: "Unip/Unesp",
-    favorite: true,
-    saida: new Date(),
-    chegada: new Date(),
-    statusCorrida: EStatusType.EM_MOVIMENTO,
-    tipo: "estudantes",
-    trafegando: true,
-  },
-  {
-    id: 2,
-    name: "Shopping Center",
-    favorite: false,
-    saida: new Date("2023-07-25T14:00:00"),
-    chegada: new Date("2023-07-25T15:30:00"),
-    statusCorrida: EStatusType.EM_MOVIMENTO,
-    tipo: "todos",
-    trafegando: true,
-  },
-  {
-    id: 3,
-    name: "Parque Municipal",
-    favorite: true,
-    saida: new Date("2023-07-26T11:00:00"),
-    chegada: new Date("2023-07-26T13:00:00"),
-    statusCorrida: EStatusType.EM_MOVIMENTO,
-    tipo: "todos",
-    trafegando: true,
-  },
-];
+import api, { setSignOutFunction } from "~/services/axios";
+
+import { Alert } from "~/components/Alert";
+import { StatusBar } from "~/components/StatusBar";
+import { ListFavorites } from "~/components/ListFavorites";
+import { Background } from "~/components/Layouts/Background";
+import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 export const FavoritesScreen = ({
   navigation,
   route,
 }: NavigationProps<"Favorites">) => {
-  return (
-    <Background>
-      <ScreenContent>
-        <Text fontSize={"lg"} fontWeight={"600"}>
-          Favoritos
-        </Text>
+  const { user, getRefreshToken } = useAuth();
 
-        <FlatList
-          mt={3}
-          w={"full"}
-          style={{ alignSelf: "flex-start" }}
-          contentContainerStyle={{ alignSelf: "center", width: "100%" }}
-          showsVerticalScrollIndicator={false}
-          data={mockedData}
-          ListEmptyComponent={
-            <Box flex={1} alignItems={"center"} display={"flex"} mt={4}>
-              <CorridasSalvasSvg />
-              <Box display={"flex"} alignItems={"center"} mt={2}>
-                <Text textAlign={"center"} color={THEME.colors.gray["900"]}>
-                  No momento sem corridas salvas
-                </Text>
-              </Box>
-            </Box>
-          }
-          keyExtractor={(item) => `${item.id}`}
-          renderItem={({ item }) => (
-            <RouteCard
-              route={item}
-              onPressCard={() =>
-                navigation.navigate("PointDetails", { id: "123" })
-              }
-              w={"full"}
+  const { data, fetchNextPage, isFetching, hasNextPage, refetch } =
+    useInfiniteQuery(
+      ["favorites", user, route.key],
+      ({ pageParam = 0 }) => {
+        const pageSize = 10;
+
+        setSignOutFunction(getRefreshToken);
+
+        return api.get<FavoriteBusStopInterface>(
+          `/user/favorite/bus-stop?page=${pageParam}&pageSize=${pageSize}&orderAsc=desc`
+        );
+      },
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          const nextPage = lastPage?.data?.hasNextPage
+            ? allPages?.length + 1
+            : undefined;
+
+          return nextPage;
+        },
+        keepPreviousData: true,
+      }
+    );
+
+  const handleLoadMore = () => {
+    if (hasNextPage && !isFetching) {
+      fetchNextPage();
+    }
+  };
+
+  return (
+    <>
+      <StatusBar />
+      <Background>
+        <ScreenContent>
+          <Text fontSize={"lg"} fontWeight={"600"}>
+            Favoritos
+          </Text>
+
+          <Center>
+            <LottieView
+              autoPlay
+              loop
+              style={{
+                width: 200,
+                height: 200,
+              }}
+              source={require("~/assets/animations/favorites.json")}
             />
-          )}
-        />
-      </ScreenContent>
-    </Background>
+          </Center>
+
+          <View flex={1}>
+            <FlatList
+              keyExtractor={(item, i) => `${i}`}
+              data={data?.pages?.flatMap((page) =>
+                page ? page?.data?.data : []
+              )}
+              refreshControl={
+                <RefreshControl onRefresh={refetch} refreshing={isFetching} />
+              }
+              renderItem={({ item }: { item: FavoriteBusStopProps }) => (
+                <ListFavorites
+                  item={item}
+                  onPress={() => {
+                    navigation.navigate("PointDetails", {
+                      id: `${item?.bus_stop_id}`,
+                    });
+                  }}
+                  key={item.id}
+                />
+              )}
+              ListEmptyComponent={() => (
+                <Alert
+                  status="info"
+                  text="Atenção! Sem pontos de ônibus favoritados no momento!"
+                />
+              )}
+              onEndReached={handleLoadMore}
+              onEndReachedThreshold={0.1}
+              ListFooterComponent={() => {
+                if (!hasNextPage) {
+                  return <></>;
+                }
+
+                return (
+                  <>
+                    {[...Array(5).keys()].map((_, index) => (
+                      <ListFavorites isLoading key={index} />
+                    ))}
+                  </>
+                );
+              }}
+            />
+          </View>
+        </ScreenContent>
+      </Background>
+    </>
   );
 };

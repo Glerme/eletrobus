@@ -2,6 +2,7 @@ import "react-native-gesture-handler";
 
 import { NativeBaseProvider } from "native-base";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 
 import { useFonts } from "expo-font";
 
@@ -25,7 +26,16 @@ import { Loading } from "~/components/Loading";
 
 import { THEME } from "./src/styles/theme";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    mutations: {
+      retry: 3,
+    },
+    queries: {
+      retry: 3,
+    },
+  },
+});
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -44,6 +54,7 @@ export default function App() {
         <NativeBaseProvider theme={THEME}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             {fontsLoaded ? <Routes /> : <Loading />}
+            <Toast position="bottom" bottomOffset={50} />
           </GestureHandlerRootView>
         </NativeBaseProvider>
       </SafeAreaProvider>

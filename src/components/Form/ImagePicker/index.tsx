@@ -1,36 +1,57 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
-import { Modalize } from "react-native-modalize";
-import { Box, Skeleton, VStack } from "native-base";
+import { Box } from "native-base";
+import Toast from "react-native-toast-message";
+import { useMutation } from "@tanstack/react-query";
 import * as ExpoImagePicker from "expo-image-picker";
 
-import { useQuery } from "@tanstack/react-query";
+import { MyQueryInterface } from "~/interfaces/User.interface";
 
-import { UserGoogleProps } from "~/interfaces/User.interface";
+import { useAuth } from "~/contexts/AuthContext";
 
-import { api } from "~/services/axios";
+import { updateAvatarService } from "~/services/updateAvatarService";
+import api, { setSignOutFunction } from "~/services/axios";
+
+import { useModal } from "~/hooks/useModal";
 
 import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
 
-interface ImagePickerProps {
-  user: UserGoogleProps | null;
-}
+export const ImagePicker = () => {
+  const { updateUser, user, getRefreshToken } = useAuth();
 
-export const ImagePicker = ({ user }: ImagePickerProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const modalRef = useRef<Modalize>(null);
+  const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["getPhoto"],
-    queryFn: async () => {
-      if (!user) return "";
+  const { mutate, isLoading } = useMutation(updateAvatarService, {
+    onMutate: async () => {
+      setSignOutFunction(getRefreshToken);
+    },
+    onSuccess: async (updatedUser) => {
+      if (updatedUser) {
+        const { data } = await api.get<MyQueryInterface>("/user/my");
 
-      const { data } = await api.get(
-        `/users/${user?.given_name === "Guilherme" ? "glerme" : "thiag-o"}`
-      );
+        updateUser(data);
 
-      return data?.avatar_url;
+        setSelectedImage(data?.data?.avatar);
+
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Usuário atualizado com sucesso",
+        });
+      }
+    },
+    onError: (error: any) => {
+      if (error?.response?.status === 401) {
+        setSignOutFunction(getRefreshToken);
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: `Ocorreu um erro: ${error?.response?.data?.message}`,
+        });
+      }
     },
   });
 
@@ -39,7 +60,11 @@ export const ImagePicker = ({ user }: ImagePickerProps) => {
       const { status } =
         await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
-        alert("Permissão para acessar a galeria foi negada!");
+        Toast.show({
+          type: "info",
+          text1: "Atenção",
+          text2: "Ative a permissão para acessar a galeria",
+        });
       }
     })();
   }, []);
@@ -53,61 +78,69 @@ export const ImagePicker = ({ user }: ImagePickerProps) => {
         aspect: [4, 3],
         quality: 1,
       });
-      if (!result.canceled) {
-        setSelectedImage(result?.assets[0]?.uri);
-      }
 
-      // FAZER A REQUEST NOVAMENTE PARA ATUALIZAR A IMAGEM
+      if (!result.canceled) {
+        const formData: any = new FormData();
+
+        formData.append("avatar", {
+          type: "image/jpeg",
+          name: "avatar.jpg",
+          uri: result?.assets[0]?.uri,
+        });
+
+        mutate(formData);
+        handleCloseModal();
+      }
     } else {
-      alert("Permissão para acessar a câmera foi negada!");
+      Toast.show({
+        type: "info",
+        text1: "Atenção",
+        text2: "Ative a permissão para acessar a câmera",
+      });
+
+      handleCloseModal();
     }
   };
 
   const openGallery = async () => {
-    const { status } =
-      await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status === "granted") {
-      const result = await ExpoImagePicker.launchImageLibraryAsync({
-        mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.canceled) {
-        setSelectedImage(result?.assets[0]?.uri);
-      }
+    const result = await ExpoImagePicker.launchImageLibraryAsync({
+      mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-      // FAZER A REQUEST NOVAMENTE PARA ATUALIZAR A IMAGEM
+    if (!result.canceled) {
+      const formData: any = new FormData();
+
+      formData.append("avatar", {
+        type: "image/jpeg",
+        name: "avatar.jpg",
+        uri: result?.assets[0]?.uri,
+      });
+
+      mutate(formData);
+      handleCloseModal();
     } else {
-      alert("Permissão para acessar a galeria foi negada!");
+      Toast.show({
+        type: "info",
+        text1: "Atenção",
+        text2: "Ative a permissão para acessar a galeria",
+      });
+
+      handleCloseModal();
     }
   };
 
-  const handleOpenModal = () => {
-    modalRef?.current?.open();
-  };
-
-  if (isLoading) {
-    return (
-      <Box w={"100%"} display={"flex"} alignItems={"center"}>
-        <VStack space="5">
-          <Skeleton
-            borderWidth={1}
-            borderColor="primary.50"
-            endColor="primary.50"
-            size="130px"
-            rounded="full"
-          />
-        </VStack>
-      </Box>
-    );
-  }
+  useEffect(() => {
+    setSelectedImage(user?.user?.avatar ?? "");
+  }, [user?.user?.avatar]);
 
   if (!user) {
     return (
       <Box w={"100%"} display={"flex"} alignItems={"center"}>
         <ButtonOpenModal
-          avatarUrl={require("~/assets/img/user-profile-light.png")}
+          avatarUrl={require("~/assets/img/avatar-not-found.png")}
           handleOpenModal={handleOpenModal}
         />
       </Box>
@@ -116,7 +149,15 @@ export const ImagePicker = ({ user }: ImagePickerProps) => {
 
   return (
     <>
-      <ButtonOpenModal avatarUrl={data} handleOpenModal={handleOpenModal} />
+      <ButtonOpenModal
+        avatarUrl={
+          selectedImage
+            ? { uri: selectedImage }
+            : require("~/assets/img/avatar-not-found.png")
+        }
+        handleOpenModal={handleOpenModal}
+        isLoading={isLoading}
+      />
 
       <ModalPicker
         openCamera={openCamera}

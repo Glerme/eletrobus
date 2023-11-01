@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { Alert } from "react-native";
+import { Platform } from "react-native";
+import Toast from "react-native-toast-message";
 import { Box, Center, Icon, IconButton, VStack, View } from "native-base";
 import {
   Envelope,
@@ -17,22 +18,22 @@ import { NavigationProps } from "~/routes";
 import IconSvg from "~/assets/svg/icon.svg";
 import GoogleIcon from "~/assets/svg/googleIcon.svg";
 
-import { api } from "~/services/axios";
+import api from "~/services/axios";
 
 import { useAuth } from "~/contexts/AuthContext";
 
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
 
-import { THEME } from "~/styles/theme";
-import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
+import { useMutation } from "@tanstack/react-query";
+import { createUserService } from "~/services/createUserService";
 
 export const LoginScreen = ({
   navigation,
   route,
 }: NavigationProps<"Login">) => {
   const [step, setStep] = useState(1);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
 
   const { handleGoogleLogin, signIn, loading } = useAuth();
 
@@ -47,9 +48,36 @@ export const LoginScreen = ({
     password: "",
   });
 
+  const { mutate, isLoading } = useMutation(createUserService, {
+    onSuccess: async (createdUser) => {
+      if (createdUser?.status === 200) {
+        setStep(1);
+
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Usuário atualizado com sucesso",
+        });
+      }
+    },
+    onError: (error: any) => {
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: `Ocorreu um erro: ${error?.response?.data?.message}`,
+      });
+    },
+  });
+
   const handleSignIn = async () => {
     if (!loginFields.email || !loginFields.password) {
-      return Alert.alert("Entrar", "Informe seu email e senha");
+      Toast.show({
+        type: "info",
+        text1: "Atenção",
+        text2: "Informe seu email e senha",
+      });
+
+      return;
     }
 
     const user = await signIn({
@@ -64,11 +92,14 @@ export const LoginScreen = ({
 
   const handleGoogleSignIn = async () => {
     const user = await handleGoogleLogin();
-    console.log("foi", user);
     if (user) {
       navigation.navigate("Home");
     } else {
-      Alert.alert("Erro ao fazer login", "Tente novamente mais tarde");
+      Toast.show({
+        type: "error",
+        text1: "Erro ao fazer login",
+        text2: "Tente novamente mais tarde",
+      });
     }
   };
 
@@ -78,26 +109,16 @@ export const LoginScreen = ({
       !registerFields.password ||
       !registerFields.name
     ) {
-      return Alert.alert("Registrar", "Informe seu nome, email e senha ");
-    }
-    try {
-      const { status } = await api.post("/user", {
-        name: registerFields.name,
-        email: registerFields.email,
-        password: registerFields.password,
+      Toast.show({
+        type: "info",
+        text1: "Atenção",
+        text2: "Informe seu nome, email e senha",
       });
 
-      if (status) {
-        setStep(1);
-        return Alert.alert("Sucesso", "Usuário registrado com sucesso");
-      }
-    } catch (error) {
-      const errorMessage = axiosErrorHandler(error);
-
-      console.error(errorMessage);
-
-      Alert.alert("Erro ao fazer registro", errorMessage?.message);
+      return;
     }
+
+    mutate(registerFields);
   };
 
   return (
@@ -109,7 +130,13 @@ export const LoginScreen = ({
         alignItems={"center"}
         justifyContent={"center"}
       >
-        <KeyboardAwareScrollView enableOnAndroid style={{ borderRadius: 8 }}>
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          style={{ borderRadius: 8 }}
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          scrollEnabled={true}
+          enableAutomaticScroll={Platform.OS === "ios"}
+        >
           <Box bg="white" p={5} borderRadius={"md"}>
             {step === 1 && (
               <VStack space={2} justifyItems={"center"}>
@@ -141,7 +168,10 @@ export const LoginScreen = ({
                         mr={2}
                         p={2}
                       >
-                        <Icon as={showPassword ? <Eye /> : <EyeSlash />} />
+                        <Icon
+                          as={showPassword ? <Eye /> : <EyeSlash />}
+                          mr={2}
+                        />
                       </IconButton>
                     }
                   />
@@ -160,7 +190,7 @@ export const LoginScreen = ({
                   <Button
                     title="Entrar com o Google"
                     onPress={handleGoogleSignIn}
-                    isLoading={loading}
+                    isLoading={loading || isLoading}
                     background={"transparent"}
                     borderWidth={1}
                     borderColor={"red.400"}
@@ -172,7 +202,7 @@ export const LoginScreen = ({
                     <Button
                       title="Registre-se"
                       onPress={() => setStep(2)}
-                      isLoading={loading}
+                      isLoading={loading || isLoading}
                       variant={"link"}
                       borderColor={"primary.400"}
                       fontColor={"primary.400"}
@@ -229,7 +259,7 @@ export const LoginScreen = ({
                 <Button
                   title="Registrar"
                   onPress={handleRegister}
-                  isLoading={loading}
+                  isLoading={loading || isLoading}
                   background={"primary.400"}
                   fontColor="white"
                   _pressed={{
@@ -242,7 +272,7 @@ export const LoginScreen = ({
                   title="Logar"
                   variant={"link"}
                   leftIcon={<Icon as={<ArrowLeft color="#4d34dd" />} />}
-                  isLoading={loading}
+                  isLoading={loading || isLoading}
                   borderColor={"primary.400"}
                   fontColor={"primary.400"}
                 />

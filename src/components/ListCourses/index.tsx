@@ -9,8 +9,6 @@ import { Box, HStack, Skeleton, Text } from "native-base";
 
 import { CourseProps } from "~/interfaces/Course.interface";
 
-import { formatDatetime } from "~/utils/format";
-
 interface ListCoursesProps extends TouchableNativeFeedbackProps {
   item?: CourseProps;
   onPress?: () => void;
