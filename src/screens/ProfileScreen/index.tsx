@@ -9,9 +9,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import api from "~/services/axios";
-
-import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
+import api, { setSignOutFunction } from "~/services/axios";
 
 import { MyQueryInterface } from "~/interfaces/User.interface";
 
@@ -19,7 +17,6 @@ import { NavigationProps } from "~/routes";
 
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
-import { StatusBar } from "~/components/StatusBar";
 import { Title } from "~/components/Layouts/Title";
 import { ImagePicker } from "~/components/Form/ImagePicker";
 import { Background } from "~/components/Layouts/Background";
@@ -45,7 +42,7 @@ export const ProfileScreen = ({
   navigation,
   route,
 }: NavigationProps<"Profile">) => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, getRefreshToken } = useAuth();
   const [showPassword, setShowPassword] = useState(true);
   const [fields, setFields] = useState<ProfileFields>({
     name: "",
@@ -54,6 +51,9 @@ export const ProfileScreen = ({
   });
 
   const { mutate, isLoading } = useMutation(updateUserQuery, {
+    onMutate: async () => {
+      setSignOutFunction(getRefreshToken);
+    },
     onSuccess: async (updatedUser) => {
       if (updatedUser) {
         const { data } = await api.get<MyQueryInterface>("/user/my");
@@ -66,16 +66,11 @@ export const ProfileScreen = ({
         });
       }
     },
-    onError: (error) => {
-      const axiosError = axiosErrorHandler(error);
-
-      Toast.show({
-        type: "error",
-        text1: "Erro",
-        text2: `Erro ao atualizar usuário: ${axiosError?.message}`,
-      });
+    onError: (error: any) => {
+      if (error?.response?.status === 401) {
+        setSignOutFunction(getRefreshToken);
+      }
     },
-    retry: 3,
   });
 
   useEffect(() => {
@@ -92,8 +87,6 @@ export const ProfileScreen = ({
 
   return (
     <>
-      <StatusBar />
-
       <Background>
         <ScreenContent>
           <Title>Perfil</Title>

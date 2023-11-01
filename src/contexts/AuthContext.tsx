@@ -189,7 +189,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       const errorMessage = axiosErrorHandler(error);
 
       console.error(errorMessage);
-      Alert.alert("Erro ao fazer login", errorMessage?.message);
 
       Toast.show({
         type: "error",
@@ -221,22 +220,15 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   };
 
   const loadUser = async () => {
+    console.log("loadUser");
+
     try {
-      // setLoading(true);
-      // const getUser = await AsyncStorage.getItem("@user");
-      // // const accessToken = await AsyncStorage.getItem("@token");
-      // // if (accessToken) {
-      // //   const isAccessTokenExpired = isTokenExpired(accessToken); // Implement isTokenExpired() to check expiry
-      // //   if (isAccessTokenExpired) {
-      // //     const newAccessToken = await refreshToken();
-      // //     if (newAccessToken) {
-      // //       // Update the user and other relevant data
-      // //     }
-      // //   }
-      // // }
-      // if (getUser) {
-      //   setUser(JSON.parse(getUser));
-      // }
+      setLoading(true);
+      const getUser = await AsyncStorage.getItem("@user");
+
+      if (getUser) {
+        setUser(JSON.parse(getUser));
+      }
     } catch (error) {
       setUser(null);
       console.error(error);
@@ -287,19 +279,22 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         refresh_token: user?.refresh_token,
       });
 
-      console.log("REFRESH TOKEN", data);
-
       if (data) {
         api.defaults.headers.common["Authorization"] = `Bearer ${data?.token}`;
 
         await AsyncStorage.setItem("@token", JSON.stringify(data.token));
-
         setUser((state) => state && { ...state, token: data?.token });
+
+        Alert.alert("Token atualizado com sucesso");
       }
     } catch (error) {
       signOut();
     }
   };
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   return (
     <AuthContext.Provider

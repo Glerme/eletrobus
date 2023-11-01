@@ -2,27 +2,62 @@ import { useState, useEffect } from "react";
 
 import { Box } from "native-base";
 import Toast from "react-native-toast-message";
+import { useMutation } from "@tanstack/react-query";
 import * as ExpoImagePicker from "expo-image-picker";
 
 import { MyQueryInterface } from "~/interfaces/User.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import api from "~/services/axios";
+import api, { setSignOutFunction } from "~/services/axios";
 
 import { useModal } from "~/hooks/useModal";
-
-import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
 
+const updateAvatar = async (formData: any) => {
+  const { data } = await api.put("/user", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+    },
+  });
+
+  return data;
+};
+
 export const ImagePicker = () => {
-  const { updateUser, user } = useAuth();
+  const { updateUser, user, getRefreshToken } = useAuth();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
+
+  const { mutate, isLoading } = useMutation(updateAvatar, {
+    onMutate: async () => {
+      setSignOutFunction(getRefreshToken);
+    },
+    onSuccess: async (updatedUser) => {
+      if (updatedUser) {
+        const { data } = await api.get<MyQueryInterface>("/user/my");
+
+        updateUser(data);
+
+        setSelectedImage(data?.data?.avatar);
+
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Usuário atualizado com sucesso",
+        });
+      }
+    },
+    onError: (error: any) => {
+      if (error?.response?.status === 401) {
+        setSignOutFunction(getRefreshToken);
+      }
+    },
+  });
 
   useEffect(() => {
     (async () => {
@@ -41,7 +76,6 @@ export const ImagePicker = () => {
   const openCamera = async () => {
     const { status } = await ExpoImagePicker.requestCameraPermissionsAsync();
     if (status === "granted") {
-      setLoading(true);
       const result = await ExpoImagePicker.launchCameraAsync({
         mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -50,75 +84,6 @@ export const ImagePicker = () => {
       });
 
       if (!result.canceled) {
-        try {
-          const formData: any = new FormData();
-
-          formData.append("avatar", {
-            type: "image/jpeg",
-            name: "avatar.jpg",
-            uri: result?.assets[0]?.uri,
-          });
-
-          const { status } = await api.put("/user", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Accept: "application/json",
-            },
-          });
-
-          if (status === 200) {
-            const { data } = await api.get<MyQueryInterface>("/user/my");
-
-            updateUser(data);
-
-            Toast.show({
-              type: "success",
-              text1: "Sucesso",
-              text2: "Usuário atualizado com sucesso",
-            });
-
-            setSelectedImage(data?.data?.avatar);
-          }
-        } catch (error) {
-          const err = axiosErrorHandler(error);
-          console.error(err);
-
-          Toast.show({
-            type: "error",
-            text1: "Erro",
-            text2: "Ocorreu um erro ao atualizar o usuário",
-          });
-        } finally {
-          setLoading(false);
-          handleCloseModal();
-        }
-      } else {
-        setLoading(false);
-      }
-    } else {
-      Toast.show({
-        type: "warning",
-        text1: "Atenção",
-        text2: "Ative a permissão para acessar a galeria",
-      });
-
-      handleCloseModal();
-      setLoading(false);
-    }
-  };
-
-  const openGallery = async () => {
-    setLoading(true);
-
-    const result = await ExpoImagePicker.launchImageLibraryAsync({
-      mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      try {
         const formData: any = new FormData();
 
         formData.append("avatar", {
@@ -127,38 +92,47 @@ export const ImagePicker = () => {
           uri: result?.assets[0]?.uri,
         });
 
-        const { data } = await api.put("/user", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Accept: "application/json",
-          },
-        });
-
-        updateUser(data);
-
-        setSelectedImage(data?.data?.avatar);
-
-        Toast.show({
-          type: "success",
-          text1: "Sucesso",
-          text2: "Usuário atualizado com sucesso",
-        });
-      } catch (error) {
-        const err = axiosErrorHandler(error);
-        console.error(err);
-
-        Toast.show({
-          type: "error",
-          text1: "Erro",
-          text2: "Ocorreu um erro ao atualizar o usuário",
-        });
-      } finally {
+        mutate(formData);
         handleCloseModal();
-        setLoading(false);
       }
     } else {
+      Toast.show({
+        type: "warning",
+        text1: "Atenção",
+        text2: "Ative a permissão para acessar a câmera",
+      });
+
       handleCloseModal();
-      setLoading(false);
+    }
+  };
+
+  const openGallery = async () => {
+    const result = await ExpoImagePicker.launchImageLibraryAsync({
+      mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const formData: any = new FormData();
+
+      formData.append("avatar", {
+        type: "image/jpeg",
+        name: "avatar.jpg",
+        uri: result?.assets[0]?.uri,
+      });
+
+      mutate(formData);
+      handleCloseModal();
+    } else {
+      Toast.show({
+        type: "warning",
+        text1: "Atenção",
+        text2: "Ative a permissão para acessar a galeria",
+      });
+
+      handleCloseModal();
     }
   };
 
@@ -186,7 +160,7 @@ export const ImagePicker = () => {
             : require("~/assets/img/avatar-not-found.png")
         }
         handleOpenModal={handleOpenModal}
-        isLoading={loading}
+        isLoading={isLoading}
       />
 
       <ModalPicker

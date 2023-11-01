@@ -15,11 +15,11 @@ api.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error) => {
+  (error) => {
     if (error.response && error.response.status === 401) {
-      console.log(error.response.status);
-
-      return await refreshFunction();
+      return refreshFunction().then(() => {
+        console.log("REFRESHED");
+      });
     } else {
       return Promise.reject(error);
     }

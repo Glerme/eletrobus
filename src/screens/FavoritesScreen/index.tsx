@@ -19,6 +19,7 @@ import { Alert } from "~/components/Alert";
 import { ListFavorites } from "~/components/ListFavorites";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
+import { StatusBar } from "~/components/StatusBar";
 
 export const FavoritesScreen = ({
   navigation,
@@ -28,7 +29,7 @@ export const FavoritesScreen = ({
 
   const { data, fetchNextPage, isFetching, hasNextPage, refetch } =
     useInfiniteQuery(
-      ["favorites", user?.token, route.key],
+      ["favorites", user, route.key],
       ({ pageParam = 0 }) => {
         const pageSize = 10;
 
@@ -50,7 +51,6 @@ export const FavoritesScreen = ({
         refetchOnWindowFocus: true,
         refetchOnReconnect: true,
         refetchOnMount: true,
-        retry: 3,
       }
     );
 
@@ -61,68 +61,71 @@ export const FavoritesScreen = ({
   };
 
   return (
-    <Background>
-      <ScreenContent>
-        <Text fontSize={"lg"} fontWeight={"600"}>
-          Favoritos
-        </Text>
+    <>
+      <StatusBar />
+      <Background>
+        <ScreenContent>
+          <Text fontSize={"lg"} fontWeight={"600"}>
+            Favoritos
+          </Text>
 
-        <Center>
-          <LottieView
-            autoPlay
-            loop
-            style={{
-              width: 200,
-              height: 200,
-            }}
-            source={require("~/assets/animations/favorites.json")}
-          />
-        </Center>
+          <Center>
+            <LottieView
+              autoPlay
+              loop
+              style={{
+                width: 200,
+                height: 200,
+              }}
+              source={require("~/assets/animations/favorites.json")}
+            />
+          </Center>
 
-        <View flex={1}>
-          <FlatList
-            keyExtractor={(item, i) => `${i}`}
-            data={data?.pages?.flatMap((page) =>
-              page ? page?.data?.data : []
-            )}
-            refreshControl={
-              <RefreshControl onRefresh={refetch} refreshing={isFetching} />
-            }
-            renderItem={({ item }: { item: FavoriteBusStopProps }) => (
-              <ListFavorites
-                item={item}
-                onPress={() => {
-                  navigation.navigate("PointDetails", {
-                    id: `${item?.bus_stop_id}`,
-                  });
-                }}
-                key={item.id}
-              />
-            )}
-            ListEmptyComponent={() => (
-              <Alert
-                status="info"
-                text="Atenção! Sem pontos de ônibus favoritados no momento!"
-              />
-            )}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.1}
-            ListFooterComponent={() => {
-              if (!hasNextPage) {
-                return <></>;
+          <View flex={1}>
+            <FlatList
+              keyExtractor={(item, i) => `${i}`}
+              data={data?.pages?.flatMap((page) =>
+                page ? page?.data?.data : []
+              )}
+              refreshControl={
+                <RefreshControl onRefresh={refetch} refreshing={isFetching} />
               }
+              renderItem={({ item }: { item: FavoriteBusStopProps }) => (
+                <ListFavorites
+                  item={item}
+                  onPress={() => {
+                    navigation.navigate("PointDetails", {
+                      id: `${item?.bus_stop_id}`,
+                    });
+                  }}
+                  key={item.id}
+                />
+              )}
+              ListEmptyComponent={() => (
+                <Alert
+                  status="info"
+                  text="Atenção! Sem pontos de ônibus favoritados no momento!"
+                />
+              )}
+              onEndReached={handleLoadMore}
+              onEndReachedThreshold={0.1}
+              ListFooterComponent={() => {
+                if (!hasNextPage) {
+                  return <></>;
+                }
 
-              return (
-                <>
-                  {[...Array(5).keys()].map((_, index) => (
-                    <ListFavorites isLoading key={index} />
-                  ))}
-                </>
-              );
-            }}
-          />
-        </View>
-      </ScreenContent>
-    </Background>
+                return (
+                  <>
+                    {[...Array(5).keys()].map((_, index) => (
+                      <ListFavorites isLoading key={index} />
+                    ))}
+                  </>
+                );
+              }}
+            />
+          </View>
+        </ScreenContent>
+      </Background>
+    </>
   );
 };
