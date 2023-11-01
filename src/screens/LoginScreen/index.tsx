@@ -25,7 +25,8 @@ import { useAuth } from "~/contexts/AuthContext";
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
 
-import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
+import { useMutation } from "@tanstack/react-query";
+import { createUserService } from "~/services/createUserService";
 
 export const LoginScreen = ({
   navigation,
@@ -47,10 +48,31 @@ export const LoginScreen = ({
     password: "",
   });
 
+  const { mutate, isLoading } = useMutation(createUserService, {
+    onSuccess: async (createdUser) => {
+      if (createdUser?.status === 200) {
+        setStep(1);
+
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Usuário atualizado com sucesso",
+        });
+      }
+    },
+    onError: (error: any) => {
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: `Ocorreu um erro: ${error?.response?.data?.message}`,
+      });
+    },
+  });
+
   const handleSignIn = async () => {
     if (!loginFields.email || !loginFields.password) {
       Toast.show({
-        type: "warning",
+        type: "info",
         text1: "Atenção",
         text2: "Informe seu email e senha",
       });
@@ -88,42 +110,15 @@ export const LoginScreen = ({
       !registerFields.name
     ) {
       Toast.show({
-        type: "warning",
+        type: "info",
         text1: "Atenção",
         text2: "Informe seu nome, email e senha",
       });
 
       return;
     }
-    try {
-      const { status } = await api.post("/user", {
-        name: registerFields.name,
-        email: registerFields.email,
-        password: registerFields.password,
-      });
 
-      if (status) {
-        setStep(1);
-
-        Toast.show({
-          type: "success",
-          text1: "Sucesso",
-          text2: "Usuário registrado com sucesso",
-        });
-
-        return;
-      }
-    } catch (error) {
-      const errorMessage = axiosErrorHandler(error);
-
-      console.error(errorMessage);
-
-      Toast.show({
-        type: "error",
-        text1: "Erro",
-        text2: "Erro ao fazer registro",
-      });
-    }
+    mutate(registerFields);
   };
 
   return (
@@ -195,7 +190,7 @@ export const LoginScreen = ({
                   <Button
                     title="Entrar com o Google"
                     onPress={handleGoogleSignIn}
-                    isLoading={loading}
+                    isLoading={loading || isLoading}
                     background={"transparent"}
                     borderWidth={1}
                     borderColor={"red.400"}
@@ -207,7 +202,7 @@ export const LoginScreen = ({
                     <Button
                       title="Registre-se"
                       onPress={() => setStep(2)}
-                      isLoading={loading}
+                      isLoading={loading || isLoading}
                       variant={"link"}
                       borderColor={"primary.400"}
                       fontColor={"primary.400"}
@@ -264,7 +259,7 @@ export const LoginScreen = ({
                 <Button
                   title="Registrar"
                   onPress={handleRegister}
-                  isLoading={loading}
+                  isLoading={loading || isLoading}
                   background={"primary.400"}
                   fontColor="white"
                   _pressed={{
@@ -277,7 +272,7 @@ export const LoginScreen = ({
                   title="Logar"
                   variant={"link"}
                   leftIcon={<Icon as={<ArrowLeft color="#4d34dd" />} />}
-                  isLoading={loading}
+                  isLoading={loading || isLoading}
                   borderColor={"primary.400"}
                   fontColor={"primary.400"}
                 />

@@ -28,7 +28,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     queryKey: ["bus-stop"],
     queryFn: async () => {
       const { data } = await api.get<BusStopInterface>(
-        "/bus-stop?page=0&pageSize=10"
+        "/bus-stop/by-position?latitude=-22.371273&longitude=-48.7737459&range=300"
       );
       return data;
     },

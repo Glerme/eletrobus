@@ -16,10 +16,10 @@ import {
 import api, { setSignOutFunction } from "~/services/axios";
 
 import { Alert } from "~/components/Alert";
+import { StatusBar } from "~/components/StatusBar";
 import { ListFavorites } from "~/components/ListFavorites";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { StatusBar } from "~/components/StatusBar";
 
 export const FavoritesScreen = ({
   navigation,
@@ -48,9 +48,6 @@ export const FavoritesScreen = ({
           return nextPage;
         },
         keepPreviousData: true,
-        refetchOnWindowFocus: true,
-        refetchOnReconnect: true,
-        refetchOnMount: true,
       }
     );
 

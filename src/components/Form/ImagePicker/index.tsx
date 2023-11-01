@@ -9,6 +9,7 @@ import { MyQueryInterface } from "~/interfaces/User.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
 
+import { updateAvatarService } from "~/services/updateAvatarService";
 import api, { setSignOutFunction } from "~/services/axios";
 
 import { useModal } from "~/hooks/useModal";
@@ -16,24 +17,13 @@ import { useModal } from "~/hooks/useModal";
 import { ModalPicker } from "./components/ModalPicker";
 import { ButtonOpenModal } from "./components/ButtonOpenModal";
 
-const updateAvatar = async (formData: any) => {
-  const { data } = await api.put("/user", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Accept: "application/json",
-    },
-  });
-
-  return data;
-};
-
 export const ImagePicker = () => {
   const { updateUser, user, getRefreshToken } = useAuth();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
-  const { mutate, isLoading } = useMutation(updateAvatar, {
+  const { mutate, isLoading } = useMutation(updateAvatarService, {
     onMutate: async () => {
       setSignOutFunction(getRefreshToken);
     },
@@ -55,6 +45,12 @@ export const ImagePicker = () => {
     onError: (error: any) => {
       if (error?.response?.status === 401) {
         setSignOutFunction(getRefreshToken);
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: `Ocorreu um erro: ${error?.response?.data?.message}`,
+        });
       }
     },
   });
@@ -65,7 +61,7 @@ export const ImagePicker = () => {
         await ExpoImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
         Toast.show({
-          type: "warning",
+          type: "info",
           text1: "Atenção",
           text2: "Ative a permissão para acessar a galeria",
         });
@@ -97,7 +93,7 @@ export const ImagePicker = () => {
       }
     } else {
       Toast.show({
-        type: "warning",
+        type: "info",
         text1: "Atenção",
         text2: "Ative a permissão para acessar a câmera",
       });
@@ -127,7 +123,7 @@ export const ImagePicker = () => {
       handleCloseModal();
     } else {
       Toast.show({
-        type: "warning",
+        type: "info",
         text1: "Atenção",
         text2: "Ative a permissão para acessar a galeria",
       });

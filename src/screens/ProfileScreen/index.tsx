@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useAuth } from "~/contexts/AuthContext";
 
 import api, { setSignOutFunction } from "~/services/axios";
+import { updateUserService } from "~/services/updateUserService";
 
 import { MyQueryInterface } from "~/interfaces/User.interface";
 
@@ -28,16 +29,6 @@ interface ProfileFields {
   password?: string;
 }
 
-const updateUserQuery = async (fields: ProfileFields) => {
-  const { data } = await api.put(`/user`, {
-    name: fields?.name ?? undefined,
-    email: fields?.email ?? undefined,
-    password: fields?.password ? fields?.password : undefined,
-  });
-
-  return data;
-};
-
 export const ProfileScreen = ({
   navigation,
   route,
@@ -50,7 +41,7 @@ export const ProfileScreen = ({
     password: "",
   });
 
-  const { mutate, isLoading } = useMutation(updateUserQuery, {
+  const { mutate, isLoading } = useMutation(updateUserService, {
     onMutate: async () => {
       setSignOutFunction(getRefreshToken);
     },
@@ -69,6 +60,12 @@ export const ProfileScreen = ({
     onError: (error: any) => {
       if (error?.response?.status === 401) {
         setSignOutFunction(getRefreshToken);
+      } else {
+        Toast.show({
+          type: "error",
+          text1: "Erro",
+          text2: `Ocorreu um erro: ${error?.response?.data?.message}`,
+        });
       }
     },
   });
