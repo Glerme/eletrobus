@@ -9,4 +9,24 @@ const api = axios.create({
   },
 });
 
+let signOutFunction: () => Promise<void>;
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    if (error.response && error.response.status === 401) {
+      console.log(error.response.status);
+
+      await signOutFunction();
+    }
+    return;
+  }
+);
+
+export const setSignOutFunction = (func: any) => {
+  signOutFunction = func;
+};
+
 export default api;

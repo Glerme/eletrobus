@@ -13,7 +13,7 @@ import {
   FavoriteBusStopProps,
 } from "~/interfaces/FavoriteBusStop.interface";
 
-import api from "~/services/axios";
+import api, { setSignOutFunction } from "~/services/axios";
 
 import { Alert } from "~/components/Alert";
 import { ListFavorites } from "~/components/ListFavorites";
@@ -24,7 +24,7 @@ export const FavoritesScreen = ({
   navigation,
   route,
 }: NavigationProps<"Favorites">) => {
-  const { user } = useAuth();
+  const { user, getRefreshToken, signOut } = useAuth();
 
   const { data, fetchNextPage, isFetching, hasNextPage, refetch } =
     useInfiniteQuery(
@@ -32,10 +32,14 @@ export const FavoritesScreen = ({
       ({ pageParam = 0 }) => {
         const pageSize = 10;
 
+        //! ADICIONAR EM TODOS OS REQUEST Q PRECISA DO USUARIO
+        setSignOutFunction(getRefreshToken);
+
         return api.get<FavoriteBusStopInterface>(
           `/user/favorite/bus-stop?page=${pageParam}&pageSize=${pageSize}&orderAsc=desc`
         );
       },
+
       {
         getNextPageParam: (lastPage, allPages) => {
           const nextPage = lastPage?.data?.hasNextPage

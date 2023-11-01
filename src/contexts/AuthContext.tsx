@@ -30,6 +30,7 @@ interface AuthContextProps {
   handleGoogleLogin: () => Promise<UserProps | null>;
   loadUser: () => Promise<void>;
   updateUser: (user: MyQueryInterface) => Promise<void>;
+  getRefreshToken: () => void;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -44,6 +45,7 @@ export const AuthContext = createContext<AuthContextProps>({
   },
   loadUser: async () => {},
   updateUser: async () => {},
+  getRefreshToken: () => {},
 });
 
 interface AuthResponse {
@@ -89,6 +91,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           const parsedData: UserProps = {
             token: googleData?.data?.token,
             user: googleData?.data?.user,
+            refresh_token: googleData?.data?.refresh_token,
           };
 
           api.interceptors.request.use((config) => {
@@ -160,28 +163,18 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         return config;
       });
 
-      api.interceptors.response.use(
-        (response) => {
-          return response;
-        },
-        async (error) => {
-          if (error.response.status === 401) {
-            await signOut();
-          }
-          return Promise.reject(error);
-        }
-      );
-
       const parsedData: UserProps = {
         token: data?.data?.token,
         user: data?.data?.user,
+        refresh_token: data?.data?.refresh_token,
       };
 
-      await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
+      await AsyncStorage.setItem("@user", JSON.stringify(parsedData?.user));
       await AsyncStorage.setItem("@token", JSON.stringify(parsedData.token));
-
-      //REFRESH TOKEN
-      // await AsyncStorage.setItem("@refreshToken", params.refresh_token);e
+      await AsyncStorage.setItem(
+        "@refresh_token",
+        JSON.stringify(parsedData.refresh_token)
+      );
 
       setUser(parsedData);
 
@@ -215,8 +208,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       setUser(null);
       await AsyncStorage.removeItem("@user");
       await AsyncStorage.removeItem("@token");
+      await AsyncStorage.removeItem("@refreshToken");
 
-      // await AsyncStorage.removeItem("@refreshToken");
       Toast.show({
         type: "success",
         text1: "Deslogado com sucesso!",
@@ -229,24 +222,21 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
   const loadUser = async () => {
     try {
-      setLoading(true);
-
-      const getUser = await AsyncStorage.getItem("@user");
-      // const accessToken = await AsyncStorage.getItem("@token");
-
-      // if (accessToken) {
-      //   const isAccessTokenExpired = isTokenExpired(accessToken); // Implement isTokenExpired() to check expiry
-      //   if (isAccessTokenExpired) {
-      //     const newAccessToken = await refreshToken();
-      //     if (newAccessToken) {
-      //       // Update the user and other relevant data
-      //     }
-      //   }
+      // setLoading(true);
+      // const getUser = await AsyncStorage.getItem("@user");
+      // // const accessToken = await AsyncStorage.getItem("@token");
+      // // if (accessToken) {
+      // //   const isAccessTokenExpired = isTokenExpired(accessToken); // Implement isTokenExpired() to check expiry
+      // //   if (isAccessTokenExpired) {
+      // //     const newAccessToken = await refreshToken();
+      // //     if (newAccessToken) {
+      // //       // Update the user and other relevant data
+      // //     }
+      // //   }
+      // // }
+      // if (getUser) {
+      //   setUser(JSON.parse(getUser));
       // }
-
-      if (getUser) {
-        setUser(JSON.parse(getUser));
-      }
     } catch (error) {
       setUser(null);
       console.error(error);
@@ -265,6 +255,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           ...user?.user,
           ...updatedUser?.data,
         },
+        refresh_token: user?.refresh_token ?? "",
       };
 
       await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
@@ -290,21 +281,23 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   };
 
-  const t = async () => {
+  const getRefreshToken = async () => {
     try {
-      const getUser = await AsyncStorage.getItem("@user");
+      const { data } = await api.post("/user/session/refresh", {
+        refresh_token: user?.refresh_token,
+      });
 
-      if (getUser) {
-        loadUser();
+      if (data) {
+        api.defaults.headers.common["Authorization"] = `Bearer ${data?.token}`;
+
+        await AsyncStorage.setItem("@token", JSON.stringify(data.token));
+
+        setUser((state) => state && { ...state, token: data?.token });
       }
     } catch (error) {
-      setUser(null);
+      signOut();
     }
   };
-
-  useEffect(() => {
-    (async () => await t())();
-  }, []);
 
   return (
     <AuthContext.Provider
@@ -316,6 +309,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         handleGoogleLogin,
         loadUser,
         updateUser,
+        getRefreshToken,
       }}
     >
       {children}
