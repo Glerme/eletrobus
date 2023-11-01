@@ -38,6 +38,7 @@ import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
 import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
+import { RouteInterface } from "~/interfaces/Route.interface";
 
 export const CourseDetailsScreen = ({
   navigation,
@@ -54,11 +55,11 @@ export const CourseDetailsScreen = ({
     error,
     refetch,
     isRefetching,
-  } = useQuery<BusStopInterface>({
-    queryKey: ["course-details", route.params.id],
+  } = useQuery<RouteInterface>({
+    queryKey: ["route", route.params.id],
     queryFn: async () => {
-      const { data } = await api.get<BusStopInterface>(
-        `/course/${route.params.id}`
+      const { data } = await api.get<RouteInterface>(
+        `/route/${route.params.id}`
       );
 
       return data;

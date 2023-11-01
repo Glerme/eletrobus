@@ -18,6 +18,7 @@ import { THEME } from "~/styles/theme";
 export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
   const routeId = route.params?.routeId ?? "";
+  console.log(route.params, "route");
 
   const {
     data: points,

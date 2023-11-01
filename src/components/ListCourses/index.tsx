@@ -17,6 +17,7 @@ interface ListCoursesProps extends TouchableNativeFeedbackProps {
 
 export const ListCourses = memo(
   ({ item, onPress, isLoading, ...rest }: ListCoursesProps) => {
+    console.log(item);
     return isLoading ? (
       <TouchableNativeFeedback disabled {...rest}>
         <Box
@@ -57,13 +58,13 @@ export const ListCourses = memo(
           <HStack py="2" justifyContent={"space-between"}>
             <HStack space={4} alignItems={"center"}>
               <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
-                {item?.route_name}
+                {item?.route.name}
               </Text>
             </HStack>
 
             <HStack alignItems="center" space="1">
-              <Text>Initial: </Text>
-              <Text>Final:</Text>
+              <Text>Initial: {item?.initial_hour} </Text>
+              <Text>Final: {item?.final_hour}</Text>
             </HStack>
           </HStack>
         </Box>

@@ -6,10 +6,30 @@ export interface CourseInterface {
 }
 
 export interface CourseProps {
-  user_id: string;
-  vehicle_id: string;
-  route_id: string;
-  initial_hour: string;
+  driver: Driver;
   final_hour: string;
-  route_name: string;
+  initial_hour: string;
+  institution: Institution;
+  name: string;
+  route: Route;
+  vehicle: Vehicle;
+}
+
+export interface Driver {
+  avatar: any;
+  name: string;
+}
+
+export interface Institution {
+  avatar: any;
+  name: string;
+}
+
+export interface Route {
+  id: string;
+  name: string;
+}
+
+export interface Vehicle {
+  plate: string;
 }
