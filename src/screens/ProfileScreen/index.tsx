@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import Toast from "react-native-toast-message";
+import { useMutation } from "@tanstack/react-query";
 import { Box, Icon, IconButton, View } from "native-base";
 import { Envelope, Eye, EyeSlash, Key, User } from "phosphor-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -10,9 +11,9 @@ import { useAuth } from "~/contexts/AuthContext";
 
 import api from "~/services/axios";
 
-import { MyQueryInterface } from "~/interfaces/User.interface";
-
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
+
+import { MyQueryInterface } from "~/interfaces/User.interface";
 
 import { NavigationProps } from "~/routes";
 
@@ -24,17 +25,57 @@ import { ImagePicker } from "~/components/Form/ImagePicker";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
+interface ProfileFields {
+  name: string;
+  email: string;
+  password?: string;
+}
+
+const updateUserQuery = async (fields: ProfileFields) => {
+  const { data } = await api.put(`/user`, {
+    name: fields?.name ?? undefined,
+    email: fields?.email ?? undefined,
+    password: fields?.password ? fields?.password : undefined,
+  });
+
+  return data;
+};
+
 export const ProfileScreen = ({
   navigation,
   route,
 }: NavigationProps<"Profile">) => {
   const { user, updateUser } = useAuth();
   const [showPassword, setShowPassword] = useState(true);
-
-  const [fields, setFields] = useState({
+  const [fields, setFields] = useState<ProfileFields>({
     name: "",
     email: "",
     password: "",
+  });
+
+  const { mutate, isLoading } = useMutation(updateUserQuery, {
+    onSuccess: async (updatedUser) => {
+      if (updatedUser) {
+        const { data } = await api.get<MyQueryInterface>("/user/my");
+        updateUser(data);
+
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Usuário atualizado com sucesso",
+        });
+      }
+    },
+    onError: (error) => {
+      const axiosError = axiosErrorHandler(error);
+
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: `Erro ao atualizar usuário: ${axiosError?.message}`,
+      });
+    },
+    retry: 3,
   });
 
   useEffect(() => {
@@ -46,34 +87,7 @@ export const ProfileScreen = ({
   }, [user]);
 
   const handleSubmit = async () => {
-    try {
-      const { status } = await api.put(`/user`, {
-        name: fields?.name ?? undefined,
-        email: fields?.email ?? undefined,
-        password: fields?.password ? fields?.password : undefined,
-      });
-
-      if (status === 200) {
-        const { data } = await api.get<MyQueryInterface>("/user/my");
-
-        updateUser(data);
-      } else {
-        Toast.show({
-          type: "error",
-          text1: "Erro",
-          text2: "Erro ao atualizar usuário",
-        });
-      }
-    } catch (error) {
-      const err = axiosErrorHandler(error);
-      console.error(err);
-
-      Toast.show({
-        type: "error",
-        text1: "Erro",
-        text2: "Erro ao atualizar usuário",
-      });
-    }
+    mutate(fields);
   };
 
   return (
@@ -146,6 +160,7 @@ export const ProfileScreen = ({
                   onPress={handleSubmit}
                   fontColor="white"
                   mt={2}
+                  isLoading={isLoading}
                 />
               </KeyboardAwareScrollView>
             </>
