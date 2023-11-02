@@ -110,9 +110,13 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
             <Avatar
               bg="blue.500"
               size="md"
-              source={{
-                uri: user?.user?.avatar,
-              }}
+              source={
+                user?.user?.avatar
+                  ? {
+                      uri: user?.user?.avatar,
+                    }
+                  : require("~/assets/img/avatar-not-found.png")
+              }
             />
             <VStack>
               <Text fontSize="sm" fontWeight="bold" color={"white"}>

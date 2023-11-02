@@ -7,7 +7,7 @@ interface ParamsProps {
   getRefreshToken: () => void;
 }
 
-export const getUserFavoritesService = async ({
+export const getUserFavoritesBusStopsService = async ({
   pageParam,
   getRefreshToken,
 }: ParamsProps) => {

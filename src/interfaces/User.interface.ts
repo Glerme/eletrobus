@@ -11,7 +11,7 @@ export interface UserGoogleProps {
 
 export interface UserProps {
   token: string;
-  refresh_token: string;
+  refresh_token: string | null;
   user: UserInterface;
 }
 

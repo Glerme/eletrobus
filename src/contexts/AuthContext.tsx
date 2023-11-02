@@ -111,10 +111,14 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             }
           );
 
-          await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
+          await AsyncStorage.setItem("@user", JSON.stringify(parsedData?.user));
           await AsyncStorage.setItem(
             "@token",
             JSON.stringify(parsedData.token)
+          );
+          await AsyncStorage.setItem(
+            "@refresh_token",
+            JSON.stringify(parsedData.refresh_token)
           );
 
           setUser(parsedData);
@@ -220,14 +224,20 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   };
 
   const loadUser = async () => {
-    console.log("loadUser");
-
     try {
       setLoading(true);
       const getUser = await AsyncStorage.getItem("@user");
+      const getToken = await AsyncStorage.getItem("@token");
+      const getRefreshToken = await AsyncStorage.getItem("@refresh_token");
 
-      if (getUser) {
-        setUser(JSON.parse(getUser));
+      if (getUser && getToken && getRefreshToken) {
+        const parsedUser = {
+          user: JSON.parse(getUser),
+          token: JSON.parse(getToken),
+          refresh_token: JSON.parse(getRefreshToken),
+        };
+
+        setUser(parsedUser);
       }
     } catch (error) {
       setUser(null);
