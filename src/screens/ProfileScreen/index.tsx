@@ -10,7 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useAuth } from "~/contexts/AuthContext";
 
 import api, { setSignOutFunction } from "~/services/axios";
-import { updateUserService } from "~/services/updateUserService";
+import { updateUserService } from "~/services/ProfileServices/updateUserService";
 
 import { MyQueryInterface } from "~/interfaces/User.interface";
 

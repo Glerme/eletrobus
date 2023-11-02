@@ -1,4 +1,4 @@
-import api from "./axios";
+import api from "../axios";
 
 export const updateAvatarService = async (formData: any) => {
   const { data } = await api.put("/user", formData, {

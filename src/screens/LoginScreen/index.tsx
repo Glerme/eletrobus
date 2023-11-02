@@ -11,6 +11,7 @@ import {
   Eye,
   EyeSlash,
 } from "phosphor-react-native";
+import { useMutation } from "@tanstack/react-query";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { NavigationProps } from "~/routes";
@@ -18,15 +19,12 @@ import { NavigationProps } from "~/routes";
 import IconSvg from "~/assets/svg/icon.svg";
 import GoogleIcon from "~/assets/svg/googleIcon.svg";
 
-import api from "~/services/axios";
+import { createUserService } from "~/services/LoginServices/createUserService";
 
 import { useAuth } from "~/contexts/AuthContext";
 
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
-
-import { useMutation } from "@tanstack/react-query";
-import { createUserService } from "~/services/createUserService";
 
 export const LoginScreen = ({
   navigation,

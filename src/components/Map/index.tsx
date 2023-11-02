@@ -32,8 +32,7 @@ import { FinalizeButton } from "./components/FinalizeButton";
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ModalDescription } from "./components/ModalDescription";
 import { BusRouteSelected } from "./components/BusRouteSelected";
-
-import { ListRoutes } from "./styles";
+import { ListRoutesButton } from "./components/ListRoutesButton";
 
 interface Params {
   routeId?: string;
@@ -70,21 +69,14 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     handleOpenModal();
   };
 
-  const getCurrentPosition = async (zoom: number = 17) => {
+  const getCurrentPosition = async () => {
     if (!location) return;
-    mapRef.current?.animateCamera({
+    mapRef?.current?.animateCamera({
       center: {
         latitude: location?.coords.latitude,
         longitude: location?.coords.longitude,
       },
       zoom: zoom,
-    });
-  };
-
-  const onPressRoute = async (route: BusStopProps) => {
-    mapRef?.current?.animateCamera({
-      center: { latitude: route.latitude, longitude: route.longitude },
-      zoom: 20,
     });
   };
 
@@ -207,7 +199,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   return (
     <>
       <Box flex={1}>
-        {(locationError && !location?.coords) || false ? (
+        {locationError && !location?.coords ? (
           <Flex
             flex={1}
             justifyContent={"center"}
@@ -229,7 +221,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
             />
           </Flex>
         ) : (
-          location?.coords && (
+          location && (
             <>
               <RouteButton
                 cleanParams={cleanParams}
@@ -260,11 +252,7 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
               )}
 
               <ZoomButtons onZoomPress={onZoomPress} />
-
-              <ListRoutes onPress={navigationToCourses}>
-                <List size={24} color={"#fff"} />
-              </ListRoutes>
-
+              <ListRoutesButton onPressRoute={navigationToCourses} />
               <MyLocationButton getCurrentPosition={getCurrentPosition} />
 
               <MapView

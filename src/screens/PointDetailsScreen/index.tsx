@@ -23,10 +23,10 @@ import { useAuth } from "~/contexts/AuthContext";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
 
 import api from "~/services/axios";
+import { getFavoritesService } from "~/services/PointDetailsServices/getFavoritesService";
+import { getByIdBusStopService } from "~/services/PointDetailsServices/getByIdBusStopService";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
-
-import { FavoriteBusStopInterface } from "~/interfaces/FavoriteBusStop.interface";
 
 import { NavigationProps } from "~/routes";
 
@@ -51,27 +51,12 @@ export const PointDetailsScreen = ({
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useQuery<BusStopProps>({
       queryKey: ["point-bus-details"],
-      queryFn: async () => {
-        const { data } = await api.get<BusStopProps>(
-          `/bus-stop/${route.params.id}`
-        );
-
-        return data;
-      },
+      queryFn: () => getByIdBusStopService(route.params.id),
     });
 
   const { data: favorites } = useQuery({
-    queryKey: ["favorites", user?.user?.id, "bus-stop"],
-    queryFn: async () => {
-      if (user) {
-        const { data } = await api.get<FavoriteBusStopInterface>(
-          `/user/favorite/bus-stop`
-        );
-        return data?.data;
-      } else {
-        return [];
-      }
-    },
+    queryKey: ["favorites", user?.user?.id, "point-bus-details"],
+    queryFn: () => getFavoritesService(user),
     initialData: [],
     placeholderData: [],
   });

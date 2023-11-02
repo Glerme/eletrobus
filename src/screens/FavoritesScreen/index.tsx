@@ -8,12 +8,9 @@ import { useAuth } from "~/contexts/AuthContext";
 
 import { NavigationProps } from "~/routes";
 
-import {
-  FavoriteBusStopInterface,
-  FavoriteBusStopProps,
-} from "~/interfaces/FavoriteBusStop.interface";
+import { FavoriteBusStopProps } from "~/interfaces/FavoriteBusStop.interface";
 
-import api, { setSignOutFunction } from "~/services/axios";
+import { getUserFavoritesService } from "~/services/FavoritesServices/getUserFavoritesService";
 
 import { Alert } from "~/components/Alert";
 import { StatusBar } from "~/components/StatusBar";
@@ -30,15 +27,9 @@ export const FavoritesScreen = ({
   const { data, fetchNextPage, isFetching, hasNextPage, refetch } =
     useInfiniteQuery(
       ["favorites", user, route.key],
-      ({ pageParam = 0 }) => {
-        const pageSize = 10;
+      ({ pageParam = 0 }) =>
+        getUserFavoritesService({ getRefreshToken, pageParam }),
 
-        setSignOutFunction(getRefreshToken);
-
-        return api.get<FavoriteBusStopInterface>(
-          `/user/favorite/bus-stop?page=${pageParam}&pageSize=${pageSize}&orderAsc=desc`
-        );
-      },
       {
         getNextPageParam: (lastPage, allPages) => {
           const nextPage = lastPage?.data?.hasNextPage

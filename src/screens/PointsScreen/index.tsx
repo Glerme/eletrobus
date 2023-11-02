@@ -7,7 +7,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
-import api from "~/services/axios";
+import { getBusStopsService } from "~/services/PointsScreenServices/getBusStopsService";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
@@ -45,13 +45,7 @@ export const PointsScreen = ({
     refetch,
   } = useInfiniteQuery(
     ["bus-stop", queryString],
-    ({ pageParam = 0 }) => {
-      const pageSize = 10;
-
-      return api.get<BusStopInterface>(
-        `/bus-stop?page=${pageParam}&pageSize=${pageSize}&search=${queryString}`
-      );
-    },
+    ({ pageParam = 0 }) => getBusStopsService({ pageParam, queryString }),
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = lastPage?.data?.hasNextPage

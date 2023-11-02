@@ -1,4 +1,4 @@
-import api from "./axios";
+import api from "../axios";
 
 interface ProfileFields {
   name: string;

@@ -9,7 +9,7 @@ import { MyQueryInterface } from "~/interfaces/User.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { updateAvatarService } from "~/services/updateAvatarService";
+import { updateAvatarService } from "~/services/ProfileServices/updateAvatarService";
 import api, { setSignOutFunction } from "~/services/axios";
 
 import { useModal } from "~/hooks/useModal";

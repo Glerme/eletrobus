@@ -16,8 +16,6 @@ import { MagnifyingGlass } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
-import { useMultipleQueryRefetch } from "~/hooks/useMultipleQueryRefetch";
-
 import { useAuth } from "~/contexts/AuthContext";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
@@ -60,12 +58,6 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   //   initialData: [],
   //   placeholderData: [],
   // });
-
-  const refetchQueries = useMultipleQueryRefetch();
-
-  const handleUpdateData = async () => {
-    refetchQueries(["favorites-home", "busStops-home", "courses-home"]);
-  };
 
   // if (busStopsQuery.isLoading || coursesQuery.isLoading) {
   //   return (

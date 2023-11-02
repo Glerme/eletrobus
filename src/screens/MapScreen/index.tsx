@@ -5,9 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
-import api from "~/services/axios";
-
 import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { getBusStopsByPositionService } from "~/services/MapServices/getBusStopsByPositionService";
 
 import { Map } from "~/components/Map";
 import { Alert } from "~/components/Alert";
@@ -27,12 +26,11 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     error,
   } = useQuery<BusStopInterface>({
     queryKey: ["bus-stop"],
-    queryFn: async () => {
-      const { data } = await api.get<BusStopInterface>(
-        "/bus-stop/by-position?latitude=-22.371273&longitude=-48.7737459&range=5000"
-      );
-      return data;
-    },
+    queryFn: async () =>
+      getBusStopsByPositionService({
+        latitude: -23.55052,
+        longitude: -46.633308,
+      }),
   });
 
   if (isLoading) {

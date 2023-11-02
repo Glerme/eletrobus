@@ -7,11 +7,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
-import api from "~/services/axios";
+import { getCoursesService } from "~/services/CoursesServices/getCoursesService";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
-import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
+import { CourseProps } from "~/interfaces/Course.interface";
 
 import { Alert } from "~/components/Alert";
 import { Input } from "~/components/Form/Input";
@@ -39,13 +39,7 @@ export const CoursesScreen = ({
     refetch,
   } = useInfiniteQuery(
     ["course", queryString],
-    ({ pageParam = 0 }) => {
-      const pageSize = 10;
-
-      return api.get<CourseInterface>(
-        `/course/my?page=${pageParam}&pageSize=${pageSize}&search=${queryString}`
-      );
-    },
+    ({ pageParam = 0 }) => getCoursesService({ pageParam, queryString }),
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = lastPage?.data?.hasNextPage
