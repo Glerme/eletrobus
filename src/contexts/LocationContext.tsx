@@ -55,9 +55,9 @@ export const LocationContextProvider = ({
   const getActualCurrentPosition = async () => {
     watchPositionAsync(
       {
-        accuracy: LocationAccuracy.Highest,
-        timeInterval: 5000,
-        distanceInterval: 10,
+        accuracy: LocationAccuracy.BestForNavigation,
+        timeInterval: 10000,
+        distanceInterval: 200,
       },
       (response) => {
         setLocation(response);

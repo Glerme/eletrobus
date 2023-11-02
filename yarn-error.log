@@ -1,29 +1,30 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js
+  /usr/bin/node /usr/bin/yarn add -D @types/react-native-maps-super-cluster
 
 PATH: 
-  C:\Users\thiago.mansano\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\thiago.mansano\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.18.10-hotspot\bin;C:\Program Files\OpenJDK\jdk-11.0.16.8-hotspot\bin;C:\Program Files\Python310\Scripts;C:\Program Files\Python310;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\Microsoft SQL Server\150\Tools\Binn;C:\Program Files\Git\cmd;C:\Program Files\dotnet;C:\Program Files\Azure Data Studio\bin;C:\Users\rodrigo.maganha\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn;C:\lua;C:\Program Files\LOVE;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn;C:\Program Files\Microsoft\jdk-11.0.18.10-hotspot\bin;C:\Users\thiago.mansano\AppData\Local\Android\Sdk\tools;C:\Users\thiago.mansano\AppData\Local\Android\Sdk\platform-tools;C:\Program Files\Gradle\gradle-6.7.1\bin;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\chocolatey\bin;C:\Users\thiago.mansano\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn;C:\Program Files\Microsoft SQL Server\160\Tools\Binn;C:\Program Files\Microsoft SQL Server\160\DTS\Binn;C:\Users\thiago.mansano\AppData\Local\Microsoft\WindowsApps;C:\Users\thiago.mansano\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\thiago.mansano\AppData\Local\Programs\Hyper\resources\bin;C:\Users\thiago.mansano\.dotnet\tools;C:\tools\dart-sdk\bin;C:\Users\thiago.mansano\AppData\Roaming\Pub\Cache\bin;C:\ngrok;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/gui/Android/Sdk/emulator:/home/gui/Android/Sdk/tools:/home/gui/Android/Sdk/tools/bin:/home/gui/Android/Sdk/platform-tools:/home/gui/android-studio/bin:/home/gui/Android/Sdk/emulator:/home/gui/Android/Sdk/tools:/home/gui/Android/Sdk/tools/bin:/home/gui/Android/Sdk/platform-tools:/home/gui/android-studio/bin
 
 Yarn version: 
   1.22.19
 
 Node version: 
-  16.14.2
+  16.20.2
 
 Platform: 
-  win32 x64
+  linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/phosphor-react-native/-/phosphor-react-native-1.1.2.tgz: ESOCKETTIMEDOUT
-      at ClientRequest.<anonymous> (C:\Users\thiago.mansano\AppData\Roaming\nvm\v16.14.2\node_modules\yarn\lib\cli.js:141517:19)
-      at Object.onceWrapper (node:events:645:28)
-      at ClientRequest.emit (node:events:526:28)
-      at TLSSocket.emitRequestTimeout (node:_http_client:758:9)
-      at Object.onceWrapper (node:events:645:28)
-      at TLSSocket.emit (node:events:538:35)
-      at TLSSocket.Socket._onTimeout (node:net:501:8)
-      at listOnTimeout (node:internal/timers:559:17)
-      at processTimers (node:internal/timers:502:7)
+  Error: https://registry.yarnpkg.com/@types%2freact-native-maps-super-cluster: Not found
+      at Request.params.callback [as _callback] (/usr/lib/node_modules/yarn/lib/cli.js:66145:18)
+      at Request.self.callback (/usr/lib/node_modules/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1358:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
 
 npm manifest: 
   {
@@ -74,6 +75,7 @@ npm manifest:
       "react-native-keyboard-aware-scroll-view": "^0.9.5",
       "react-native-maps": "1.3.2",
       "react-native-maps-directions": "^1.9.0",
+      "react-native-maps-super-cluster": "^1.6.0",
       "react-native-modalize": "^2.1.1",
       "react-native-portalize": "^1.0.7",
       "react-native-reanimated": "~2.14.4",
@@ -1883,6 +1885,18 @@ Lockfile:
     dependencies:
       "@jridgewell/resolve-uri" "^3.1.0"
       "@jridgewell/sourcemap-codec" "^1.4.14"
+  
+  "@mapbox/geo-viewport@^0.4.0":
+    version "0.4.1"
+    resolved "https://registry.yarnpkg.com/@mapbox/geo-viewport/-/geo-viewport-0.4.1.tgz#a184c0b161975858a2e855a1e333e66af342964b"
+    integrity sha512-5g6eM3EOSl7+0p0VY+vHWEYjUlNzof936VKHTi/NuJVABjbYe8D2NAVJ0qt5C9Np4glUlhKFepgAgQ0OEybrjQ==
+    dependencies:
+      "@mapbox/sphericalmercator" "~1.1.0"
+  
+  "@mapbox/sphericalmercator@~1.1.0":
+    version "1.1.0"
+    resolved "https://registry.yarnpkg.com/@mapbox/sphericalmercator/-/sphericalmercator-1.1.0.tgz#f3b1af042620716a1289fc41e1e97f610823aefe"
+    integrity sha512-pEsfZyG4OMThlfFQbCte4gegvHUjxXCjz0KZ4Xk8NdOYTQBLflj6U8PL05RPAiuRAMAQNUUKJuL6qYZ5Y4kAWA==
   
   "@nodelib/fs.scandir@2.1.5":
     version "2.1.5"
@@ -5834,6 +5848,11 @@ Lockfile:
     optionalDependencies:
       graceful-fs "^4.1.6"
   
+  kdbush@^3.0.0:
+    version "3.0.0"
+    resolved "https://registry.yarnpkg.com/kdbush/-/kdbush-3.0.0.tgz#f8484794d47004cc2d85ed3a79353dbe0abc2bf0"
+    integrity sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==
+  
   keyv@^4.0.0:
     version "4.5.4"
     resolved "https://registry.yarnpkg.com/keyv/-/keyv-4.5.4.tgz#a879a99e29452f942439f2a405e3af8b31d4de93"
@@ -7341,6 +7360,14 @@ Lockfile:
       lodash.isequal "^4.5.0"
       prop-types "^15.6.0"
   
+  react-native-maps-super-cluster@^1.6.0:
+    version "1.6.0"
+    resolved "https://registry.yarnpkg.com/react-native-maps-super-cluster/-/react-native-maps-super-cluster-1.6.0.tgz#ccee4d8815fd90de6eeacbfc413dff4e04fe82ae"
+    integrity sha512-Ncu5hN8VBuXjMeStBK7WBDnb9fGCetx4WP0V69Tw4by4ByI2YZXyhvIqAFabK3ss6uR/hh++bCSuLIXOHRxdKw==
+    dependencies:
+      "@mapbox/geo-viewport" "^0.4.0"
+      supercluster "^6.0.2"
+  
   react-native-maps@1.3.2:
     version "1.3.2"
     resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-1.3.2.tgz#8e30bfd9d934de02827253e5cde6c08a04f6356c"
@@ -8149,6 +8176,13 @@ Lockfile:
     version "9.2.1"
     resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-9.2.1.tgz#77efb84309c9ca489527a4e749f287e6bdd52afd"
     integrity sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw==
+  
+  supercluster@^6.0.2:
+    version "6.0.2"
+    resolved "https://registry.yarnpkg.com/supercluster/-/supercluster-6.0.2.tgz#aa2eaae185ef97872f388c683ec29f6991721ee3"
+    integrity sha512-aa0v2HURjBTOpbcknilcfxGDuArM8khklKSmZ/T8ZXL0BuRwb5aRw95lz+2bmWpFvCXDX/+FzqHxmg0TIaJErw==
+    dependencies:
+      kdbush "^3.0.0"
   
   supports-color@^5.3.0, supports-color@^5.5.0:
     version "5.5.0"

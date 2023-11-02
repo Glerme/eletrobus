@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
-import { List } from "phosphor-react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+
+import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -34,12 +34,17 @@ import { ModalDescription } from "./components/ModalDescription";
 import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 
+import { useQuery } from "@tanstack/react-query";
+import { getBusStopsByPositionService } from "~/services/MapServices/getBusStopsByPositionService";
+import { THEME } from "~/styles/theme";
+import { LocationObject } from "expo-location";
+
 interface Params {
   routeId?: string;
   pointId?: string;
 }
 
-export const Map = ({ markers, pointId, routeId }: MapInterface) => {
+export const Map = memo(({ pointId, routeId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
 
   const { modalRef, handleOpenModal } = useModal();
@@ -48,107 +53,145 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
   const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
-
   const [isRunning, setIsRunning] = useState(false);
+  const [visibleMarkers, setVisibleMarkers] = useState<any[]>([]);
+  const [region, setRegion] = useState<Region>();
 
   const navigation =
     useNavigation<
       NativeStackNavigationProp<RootStackParamList, "Map", undefined>
     >();
-  const {
-    location,
-    locationError,
-    getActualCurrentPosition,
-    requestLocationPermissions,
-  } = useLocation();
+
+  const { location, locationError, getActualCurrentPosition } = useLocation();
 
   const { user } = useAuth();
 
-  const openModal = (marker: BusStopProps) => {
-    setDataPoint(marker);
-    handleOpenModal();
-  };
+  const { data: markers, isError } = useQuery<BusStopProps[]>({
+    queryKey: ["bus-stop", location],
+    queryFn: async () =>
+      getBusStopsByPositionService({
+        latitude: location?.coords?.latitude ?? 0,
+        longitude: location?.coords?.longitude ?? 0,
+      }),
+    initialData: [],
+    placeholderData: [],
+  });
 
-  const getCurrentPosition = async () => {
+  const openModal = useCallback(
+    (marker: BusStopProps) => {
+      setDataPoint(marker);
+      handleOpenModal();
+    },
+    [handleOpenModal]
+  );
+
+  const getCurrentPosition = useCallback(async () => {
     if (!location) return;
-    mapRef?.current?.animateCamera({
+    await getActualCurrentPosition();
+    mapRef.current?.animateCamera({
       center: {
-        latitude: location?.coords.latitude,
-        longitude: location?.coords.longitude,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
       },
       zoom: zoom,
     });
-  };
+  }, [location, zoom]);
 
-  const onZoomPress = (type: "in" | "out") => {
-    let currentZoom = type === "in" ? zoom + 1 : zoom - 1;
+  const onZoomPress = useCallback(
+    (type: "in" | "out") => {
+      let currentZoom = type === "in" ? zoom + 1 : zoom - 1;
+      if (zoom < 0 && currentZoom < 0) currentZoom = 0;
+      setZoom(currentZoom);
+      mapRef.current?.animateCamera({
+        zoom: currentZoom,
+      });
+    },
+    [zoom]
+  );
 
-    if (zoom < 0 && currentZoom < 0) currentZoom = 0;
-
-    setZoom(currentZoom);
-
-    mapRef?.current?.animateCamera({
-      zoom: currentZoom,
-    });
-  };
-
-  const getRouteById = async (route_id: string) => {
+  const getRouteById = useCallback(async (route_id: string) => {
     try {
       const { data } = await api.get<RoutesBusStopsInterface>(
         `/route/${route_id}`
       );
-
       return data;
     } catch (e) {
       console.error(e);
       return null;
     }
-  };
-
-  const handleOpenBus = async (route_id: string, location?: any) => {
-    const { data } = await api.get<RoutesBusStopsInterface>(
-      `/route/${route_id}`
-    );
-
-    if (location) {
-      const busStop = data;
-      busStop.bus_stops?.push({
-        bus_stop_id: "0",
-        latitude: location.latitude,
-        longitude: location.longitude,
-      });
-      setBusStops(busStop);
-      return;
-    }
-
-    setBusStops(data);
-  };
-
-  useEffect(() => {
-    (async () => await requestLocationPermissions())();
-
-    // setInterval(async () => {
-    //   if (isRunning && busStops) {
-    //     await getActualCurrentPosition();
-    //     setBusStops((busStops) => {
-    //       if (!busStops) return null;
-    //       const position = busStops.bus_stops.length - 1;
-    //       const newBusStops = [...busStops.bus_stops];
-    //       newBusStops[position] = {
-    //         bus_stop_id: "0",
-    //         latitude: location?.coords?.latitude ?? 0,
-    //         longitude: location?.coords?.longitude ?? 0,
-    //       };
-    //       return { ...busStops, bus_stops: newBusStops };
-    //     });
-    //   }
-    // }, 5000);
   }, []);
 
-  const cleanParams = () => {
+  const handleOpenBus = useCallback(
+    async (route_id: string, location?: any) => {
+      const { data } = await api.get<RoutesBusStopsInterface>(
+        `/route/${route_id}`
+      );
+
+      if (location) {
+        const busStop = data;
+        busStop.bus_stops?.push({
+          bus_stop_id: "0",
+          latitude: location.latitude,
+          longitude: location.longitude,
+        });
+        setBusStops(busStop);
+        return;
+      }
+
+      setBusStops(data);
+    },
+    []
+  );
+
+  const handleRegionChange = useCallback(
+    (region: Region) => {
+      const markersInVisibleArea = markers?.filter(
+        ({ latitude, longitude }) => {
+          return (
+            latitude >= region.latitude - region.latitudeDelta / 2 &&
+            latitude <= region.latitude + region.latitudeDelta / 2 &&
+            longitude >= region.longitude - region.longitudeDelta / 2 &&
+            longitude <= region.longitude + region.longitudeDelta / 2
+          );
+        }
+      );
+
+      if (markersInVisibleArea.length > 0) {
+        let maxLat = -90;
+        let minLat = 90;
+        let maxLng = -180;
+        let minLng = 180;
+
+        markersInVisibleArea.forEach((marker) => {
+          maxLat = Math.max(maxLat, marker.latitude);
+          minLat = Math.min(minLat, marker.latitude);
+          maxLng = Math.max(maxLng, marker.longitude);
+          minLng = Math.min(minLng, marker.longitude);
+        });
+
+        const latitude = (maxLat + minLat) / 2;
+        const longitude = (maxLng + minLng) / 2;
+        const latitudeDelta = maxLat - minLat + 0.02; // Ajuste para mostrar todos os marcadores
+        const longitudeDelta = maxLng - minLng + 0.02; // Ajuste para mostrar todos os marcadores
+
+        setRegion({
+          latitude,
+          longitude,
+          latitudeDelta,
+          longitudeDelta,
+        });
+      }
+
+      console.log("markersInVisibleArea", markersInVisibleArea.length);
+
+      setVisibleMarkers(markersInVisibleArea);
+    },
+    [markers]
+  );
+
+  const cleanParams = useCallback(() => {
     navigation.dispatch((state) => {
       const map = state.routes.find((route) => route.name === "Map");
-
       const newRoutes = state.routes.map((route) => {
         if (route.name === "Map") {
           return {
@@ -162,31 +205,36 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
         return route;
       });
 
-      // Remova o parâmetro 'paramToRemove' da rota atual
-
       return CommonActions.reset({
         ...state,
         routes: newRoutes,
       });
     });
-  };
+  }, [navigation]);
 
-  const navigationToCourses = () => {
+  const navigationToCourses = useCallback(() => {
     if (user?.user.driver) navigation.navigate("Courses");
     else navigation.navigate("Points");
-  };
+  }, [user, navigation]);
 
-  useEffect(() => {
-    if (pointId) {
-      const point = markers?.find((marker) => marker.id === pointId) ?? false;
-      if (point) {
-        mapRef?.current?.animateCamera({
-          center: { latitude: point?.latitude, longitude: point.longitude },
-          zoom: 20,
-        });
-      }
-    }
-  }, [pointId]);
+  // useEffect(() => {
+  //   setInterval(async () => {
+  //     if (isRunning && busStops) {
+  //       await getActualCurrentPosition();
+  //       setBusStops((busStops) => {
+  //         if (!busStops) return null;
+  //         const position = busStops.bus_stops.length - 1;
+  //         const newBusStops = [...busStops.bus_stops];
+  //         newBusStops[position] = {
+  //           bus_stop_id: "0",
+  //           latitude: location?.coords?.latitude ?? 0,
+  //           longitude: location?.coords?.longitude ?? 0,
+  //         };
+  //         return { ...busStops, bus_stops: newBusStops };
+  //       });
+  //     }
+  //   }, 5000);
+  // }, []);
 
   useEffect(() => {
     (async () => {
@@ -196,10 +244,26 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
     })();
   }, [routeId]);
 
+  useEffect(() => {
+    if (pointId) {
+      const point = markers?.find((marker) => marker.id === pointId) ?? false;
+      if (point) {
+        mapRef.current?.animateCamera({
+          center: { latitude: point.latitude, longitude: point.longitude },
+          zoom: 20,
+        });
+      }
+    }
+  }, [pointId, markers]);
+
+  useEffect(() => {
+    getActualCurrentPosition();
+  }, []);
+
   return (
     <>
       <Box flex={1}>
-        {locationError && !location?.coords ? (
+        {locationError && !location?.coords && isError ? (
           <Flex
             flex={1}
             justifyContent={"center"}
@@ -269,13 +333,15 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
                   latitude: location?.coords?.latitude,
                   longitude: location?.coords?.longitude,
                 }}
+                onRegionChangeComplete={handleRegionChange}
+                initialRegion={region}
                 showsUserLocation={true}
                 showsMyLocationButton={false}
                 scrollEnabled
                 zoomEnabled
                 zoomControlEnabled={false}
               >
-                {markers?.map((marker, i) => (
+                {visibleMarkers?.map((marker, i) => (
                   <CustomMarker
                     key={marker.id}
                     marker={marker}
@@ -320,4 +386,4 @@ export const Map = ({ markers, pointId, routeId }: MapInterface) => {
       )}
     </>
   );
-};
+});
