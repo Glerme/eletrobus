@@ -15,6 +15,8 @@ import {
 } from "~/interfaces/User.interface";
 
 import api from "~/services/axios";
+import { FavoriteBusStopInterface } from "~/interfaces/FavoriteBusStop.interface";
+import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
 
 interface AuthContextProps {
   user: UserProps | null;
@@ -31,6 +33,7 @@ interface AuthContextProps {
   loadUser: () => Promise<void>;
   updateUser: (user: MyQueryInterface) => Promise<void>;
   getRefreshToken: () => void;
+  updateUserFavorites: (user: MyQueryInterface) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
@@ -46,6 +49,7 @@ export const AuthContext = createContext<AuthContextProps>({
   loadUser: async () => {},
   updateUser: async () => {},
   getRefreshToken: () => {},
+  updateUserFavorites: async () => {},
 });
 
 interface AuthResponse {
@@ -283,6 +287,59 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   };
 
+  const updateUserFavorites = async (updatedUser: MyQueryInterface) => {
+    try {
+      setLoading(true);
+
+      let favorites = [];
+
+      if (user?.user?.driver) {
+        const { data } = await api.get<CourseInterface>(
+          `/user/favorite/courses?orderAsc=desc`
+        );
+
+        favorites = data?.data;
+      } else {
+        const { data } = await api.get<FavoriteBusStopInterface>(
+          `/user/favorite/bus-stop?orderAsc=desc`
+        );
+        favorites = data?.data;
+      }
+
+      console.log({ favorites });
+
+      const parsedData: UserProps = {
+        token: user?.token ?? "",
+        user: {
+          ...user?.user,
+          ...updatedUser?.data,
+        },
+        refresh_token: user?.refresh_token ?? "",
+      };
+
+      await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
+
+      setUser(parsedData);
+
+      Toast.show({
+        type: "success",
+        text1: "Sucesso",
+        text2: "Favoritos atualizados com sucesso",
+      });
+    } catch (error) {
+      setUser(null);
+      console.error(error);
+
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: "Ocorreu um erro ao atualizar os favoritos",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getRefreshToken = async () => {
     try {
       const { data } = await api.post("/user/session/refresh", {
@@ -316,6 +373,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         handleGoogleLogin,
         loadUser,
         updateUser,
+        updateUserFavorites,
         getRefreshToken,
       }}
     >

@@ -3,6 +3,7 @@ import { StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
 
+import { useQuery } from "@tanstack/react-query";
 import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { CommonActions, useNavigation } from "@react-navigation/native";
@@ -13,6 +14,7 @@ import { BusStopProps } from "~/interfaces/BusStop.interface";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 import api from "~/services/axios";
+import { getBusStopsByPositionService } from "~/services/MapServices/getBusStopsByPositionService";
 
 import { useModal } from "~/hooks/useModal";
 
@@ -33,11 +35,6 @@ import { MyLocationButton } from "./components/MyLocationButton";
 import { ModalDescription } from "./components/ModalDescription";
 import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
-
-import { useQuery } from "@tanstack/react-query";
-import { getBusStopsByPositionService } from "~/services/MapServices/getBusStopsByPositionService";
-import { THEME } from "~/styles/theme";
-import { LocationObject } from "expo-location";
 
 interface Params {
   routeId?: string;
