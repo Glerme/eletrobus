@@ -1,6 +1,6 @@
 import api from "../axios";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
+import { BusStopProps } from "~/interfaces/BusStop.interface";
 
 interface PositionProps {
   latitude: number;
@@ -9,8 +9,13 @@ interface PositionProps {
 }
 
 export const getBusStopsByPositionService = async (position: PositionProps) => {
-  const { data } = await api.get<BusStopInterface>(
-    "/bus-stop/by-position?latitude=-22.371273&longitude=-48.7737459&range=5000"
+  console.log("MUDOU O COORDS", position);
+
+  const { data } = await api.get<BusStopProps[]>(
+    `/bus-stop/by-position?latitude=${position.latitude}&longitude=${
+      position.longitude
+    }&range=${position?.range ?? 60000}`
   );
+
   return data;
 };

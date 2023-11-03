@@ -7,6 +7,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
+import { useAuth } from "~/contexts/AuthContext";
+
 import { getCoursesService } from "~/services/CoursesServices/getCoursesService";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
@@ -27,6 +29,7 @@ export const CoursesScreen = ({
   navigation,
   route,
 }: NavigationProps<"Courses">) => {
+  const { getRefreshToken } = useAuth();
   const [queryString, setQueryString] = useState<string>("");
 
   const {
@@ -39,7 +42,8 @@ export const CoursesScreen = ({
     refetch,
   } = useInfiniteQuery(
     ["course", queryString],
-    ({ pageParam = 0 }) => getCoursesService({ pageParam, queryString }),
+    ({ pageParam = 0 }) =>
+      getCoursesService({ pageParam, queryString, getRefreshToken }),
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = lastPage?.data?.hasNextPage

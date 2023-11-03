@@ -1,76 +1,30 @@
-import { ActivityIndicator } from "react-native";
+import { useEffect } from "react";
 
-import { Box, Center } from "native-base";
-import { useQuery } from "@tanstack/react-query";
+import { Box } from "native-base";
 
 import { NavigationProps } from "~/routes";
 
-import { BusStopInterface } from "~/interfaces/BusStop.interface";
-import { getBusStopsByPositionService } from "~/services/MapServices/getBusStopsByPositionService";
+import { useLocation } from "~/contexts/LocationContext";
 
 import { Map } from "~/components/Map";
-import { Alert } from "~/components/Alert";
 import { SafeAreaView } from "~/components/Layouts/SafeAreaView";
-
-import { THEME } from "~/styles/theme";
 
 export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
   const routeId = route.params?.routeId ?? "";
-  console.log(route.params, "route");
+  // console.log(route.params, "route");
 
-  const {
-    data: points,
-    isLoading,
-    isError,
-    error,
-  } = useQuery<BusStopInterface>({
-    queryKey: ["bus-stop"],
-    queryFn: async () =>
-      getBusStopsByPositionService({
-        latitude: -23.55052,
-        longitude: -46.633308,
-      }),
-  });
+  const { requestLocationPermissions } = useLocation();
 
-  if (isLoading) {
-    return (
-      <Box
-        flex={1}
-        justifyContent={"center"}
-        alignItems={"center"}
-        backgroundColor={"gray.400"}
-      >
-        <Center flex={1}>
-          <ActivityIndicator
-            size={"large"}
-            color={THEME.colors.primary["900"]}
-          />
-        </Center>
-      </Box>
-    );
-  }
-
-  if (isError) {
-    console.error(error);
-
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
-        <Box>
-          <Alert status="error" />
-        </Box>
-        <Box flex={1}>
-          <Map markers={[]} />
-        </Box>
-      </SafeAreaView>
-    );
-  }
+  useEffect(() => {
+    (async () => await requestLocationPermissions())();
+  }, []);
 
   return (
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
         <Box flex={1}>
-          <Map markers={points.data} pointId={pointId} routeId={routeId} />
+          <Map pointId={pointId} routeId={routeId} />
         </Box>
       </SafeAreaView>
     </>
