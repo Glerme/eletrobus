@@ -13,10 +13,10 @@ import {
   UserGoogleProps,
   UserProps,
 } from "~/interfaces/User.interface";
+import { CourseInterface } from "~/interfaces/Course.interface";
+import { FavoriteBusStopInterface } from "~/interfaces/FavoriteBusStop.interface";
 
 import api from "~/services/axios";
-import { FavoriteBusStopInterface } from "~/interfaces/FavoriteBusStop.interface";
-import { CourseInterface, CourseProps } from "~/interfaces/Course.interface";
 
 interface AuthContextProps {
   user: UserProps | null;

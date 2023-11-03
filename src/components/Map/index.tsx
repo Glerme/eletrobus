@@ -2,7 +2,6 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
-
 import { useQuery } from "@tanstack/react-query";
 import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
