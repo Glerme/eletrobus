@@ -65,39 +65,41 @@ export const CourseDetailsScreen = ({
       queryKey: ["route", route.params.id],
       queryFn: async () => {
         const { data } = await api.get<CourseDataProps>(
-          `/course/${route.params.id}`
+          `/route/${route.params.id}`
         );
 
         return data;
       },
     });
 
-  // if (isLoading) {
-  //   return (
-  //     <Background>
-  //       <ScreenContent>
-  //         <Center flex={1}>
-  //           <ActivityIndicator
-  //             size={"large"}
-  //             color={THEME.colors.primary["900"]}
-  //           />
-  //         </Center>
-  //       </ScreenContent>
-  //     </Background>
-  //   );
-  // }
+  console.log({ data });
 
-  // if (isError) {
-  //   console.error(error);
+  if (isLoading) {
+    return (
+      <Background>
+        <ScreenContent>
+          <Center flex={1}>
+            <ActivityIndicator
+              size={"large"}
+              color={THEME.colors.primary["900"]}
+            />
+          </Center>
+        </ScreenContent>
+      </Background>
+    );
+  }
 
-  //   return (
-  //     <Background>
-  //       <ScreenContent>
-  //         <Alert status="error" />
-  //       </ScreenContent>
-  //     </Background>
-  //   );
-  // }
+  if (isError) {
+    console.error(error);
+
+    return (
+      <Background>
+        <ScreenContent>
+          <Alert status="error" />
+        </ScreenContent>
+      </Background>
+    );
+  }
 
   return (
     <>

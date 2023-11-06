@@ -59,6 +59,8 @@ export const CoursesScreen = ({
     }
   );
 
+  console.log("AQI");
+
   const handleLoadMore = () => {
     if (hasNextPage && !isFetching) {
       fetchNextPage();
