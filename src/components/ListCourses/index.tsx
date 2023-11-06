@@ -17,7 +17,6 @@ interface ListCoursesProps extends TouchableNativeFeedbackProps {
 
 export const ListCourses = memo(
   ({ item, onPress, isLoading, ...rest }: ListCoursesProps) => {
-    console.log(item);
     return isLoading ? (
       <TouchableNativeFeedback disabled {...rest}>
         <Box

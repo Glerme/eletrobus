@@ -127,7 +127,6 @@ export const PointDetailsScreen = ({
     );
   }
 
-  console.log(JSON.stringify(data?.routes, null, 2));
   return (
     <Background>
       <ScreenContent>
@@ -167,30 +166,6 @@ export const PointDetailsScreen = ({
               alt={data?.name}
             />
           </Box>
-          {/* <Box>
-              <HStack alignItems={"flex-start"} mb={2}>
-                <VStack space={1}>
-                  <Text fontWeight={500} fontSize="sm">
-                    Saida: 10h
-                  </Text>
-                  <Text fontWeight={500} fontSize="sm">
-                    Chegada: 23h
-                  </Text>
-                </VStack>
-                <Spacer />
-                <VStack space={1} alignItems="flex-end">
-                  <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
-                  <TypeRoute mt={1} tipo={"estudantes"} />
-                </VStack>
-              </HStack>
-
-              <FlatList
-                data={mockedData}
-                horizontal
-                keyExtractor={(item) => `${item.id}`}
-                renderItem={({ item }) => <HourCard isToday={item.isToday} />}
-              />
-            </Box> */}
 
           <VStack mt={2}>
             <HStack alignItems={"center"} mt={2} space={2}>
