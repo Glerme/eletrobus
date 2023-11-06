@@ -61,11 +61,6 @@ export const ListCourses = memo(
                 {item?.route.name}
               </Text>
             </HStack>
-
-            <HStack alignItems="center" space="1">
-              <Text>Initial: {item?.initial_hour} </Text>
-              <Text>Final: {item?.final_hour}</Text>
-            </HStack>
           </HStack>
         </Box>
       </TouchableNativeFeedback>

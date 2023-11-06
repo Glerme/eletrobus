@@ -22,14 +22,14 @@ export const ListRoutes = ({ route, onPress, ...rest }: ListRoutesProps) => {
         _dark={{
           borderColor: "muted.50",
         }}
-        borderColor="muted.200"
+        borderColor="primary.200"
         py="2"
         px="2"
       >
         <HStack py="2" justifyContent={"space-between"}>
           <HStack space={4} alignItems={"center"}>
             <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
-              {route?.route_name ?? "Rota não encontrada"}
+              {route?.name ?? "Rota não encontrada"}
             </Text>
           </HStack>
         </HStack>

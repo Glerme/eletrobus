@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ActivityIndicator, RefreshControl } from "react-native";
 
 import {
   Box,
@@ -103,12 +102,7 @@ export const CourseDetailsScreen = ({
           >
             <HStack alignItems={"center"} space={2}>
               <HStack space={2} alignItems="center">
-                <View
-                  width={4}
-                  height={4}
-                  borderRadius={50}
-                  backgroundColor={true ? "#A7E179" : "#E17979"}
-                />
+                <Path color="#46B99E" weight="duotone" />
                 <Text fontSize="lg" fontWeight={"600"}>
                   {/* {courseMock.route_name} */}
                 </Text>

@@ -115,8 +115,8 @@ export const CoursesScreen = ({
                 <ListCourses
                   item={item}
                   onPress={() => {
-                    navigation.navigate("Map", {
-                      routeId: `${item?.route.id}`,
+                    navigation.navigate("CouseDetails", {
+                      id: `${item?.route.id}`,
                     });
                   }}
                   key={item?.route.id}

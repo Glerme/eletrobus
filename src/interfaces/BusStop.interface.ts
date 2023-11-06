@@ -14,7 +14,7 @@ export interface BusStopProps {
   latitude: number;
   longitude: number;
   images: string[];
-  rotas: RoutesProps[];
+  routes: RoutesProps[];
   favorito?: boolean;
   description?: string;
 }

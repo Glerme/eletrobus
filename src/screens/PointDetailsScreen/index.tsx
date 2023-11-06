@@ -8,6 +8,7 @@ import {
 import {
   Box,
   Center,
+  Divider,
   HStack,
   Image,
   Spacer,
@@ -15,7 +16,7 @@ import {
   VStack,
   View,
 } from "native-base";
-import { Info, Path } from "phosphor-react-native";
+import { Info, Path, MapPin } from "phosphor-react-native";
 import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "~/contexts/AuthContext";
@@ -126,6 +127,7 @@ export const PointDetailsScreen = ({
     );
   }
 
+  console.log(JSON.stringify(data?.routes, null, 2));
   return (
     <Background>
       <ScreenContent>
@@ -136,12 +138,7 @@ export const PointDetailsScreen = ({
         >
           <HStack alignItems={"center"} space={2} mb={2}>
             <HStack space={2} alignItems="center">
-              <View
-                width={4}
-                height={4}
-                borderRadius={50}
-                backgroundColor={true ? "#A7E179" : "#E17979"}
-              />
+              <MapPin color="#46B99E" weight="duotone" />
               <Text fontSize="lg" fontWeight={"600"}>
                 {data?.name}
               </Text>
@@ -195,7 +192,7 @@ export const PointDetailsScreen = ({
               />
             </Box> */}
 
-          <VStack>
+          <VStack mt={2}>
             <HStack alignItems={"center"} mt={2} space={2}>
               <Info size={18} color="#4d34dd" weight="duotone" />
               <Text fontSize={"sm"} fontWeight={"600"}>
@@ -207,35 +204,41 @@ export const PointDetailsScreen = ({
             </Text>
           </VStack>
 
-          <VStack>
-            <HStack alignItems={"center"} mt={2} space={2}>
+          <Divider mt={4} mb={4} bg={"gray.300"} />
+
+          <VStack space={2}>
+            <HStack alignItems={"center"} space={2}>
               <Path size={18} color="#46B99E" weight="duotone" />
               <Text fontSize={"sm"} fontWeight={"600"}>
                 Rotas
               </Text>
             </HStack>
 
-            {data?.rotas?.map((rota) => (
+            {data?.routes?.map((route, i) => (
               <ListRoutes
-                key={rota.route_id}
-                route={rota}
-                onPress={() => alert(JSON.stringify(rota, null, 2))}
+                key={i}
+                route={route}
+                onPress={() => alert(JSON.stringify(route, null, 2))}
               />
             ))}
+
+            <Box mt={"25%"}>
+              <Button
+                onPress={() =>
+                  navigation.navigate("Map", {
+                    pointId: data?.id,
+                  })
+                }
+                title="Ver Ponto de Ônibus"
+                fontColor={"white"}
+                disabled={isRefetching || isLoading}
+              />
+            </Box>
           </VStack>
 
-          <Box mt={2}>
-            <Button
-              onPress={() =>
-                navigation.navigate("Map", {
-                  pointId: data?.id,
-                })
-              }
-              title="Ver Ponto de Ônibus"
-              fontColor={"white"}
-              disabled={isRefetching || isLoading}
-            />
-          </Box>
+          {/* <Box mt={""}>
+           
+          </Box> */}
         </ScrollViewContainer>
       </ScreenContent>
     </Background>

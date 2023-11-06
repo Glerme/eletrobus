@@ -377,7 +377,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
           point={dataPoint}
           forwardedRef={modalRef}
           onClose={() => setDataPoint(null)}
-          handleOpenRoute={({ route_id }) => handleOpenBus(route_id)}
+          handleOpenRoute={({ id }) => handleOpenBus(id)}
         />
       )}
     </>

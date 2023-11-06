@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
 
 import Toast from "react-native-toast-message";
 import { Modalize } from "react-native-modalize";
@@ -8,11 +7,11 @@ import { Box, HStack, Image, Spacer, VStack } from "native-base";
 
 import { RoutesProps } from "~/interfaces/Routes.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
+import { MyQueryInterface } from "~/interfaces/User.interface";
 
 import { useAuth } from "~/contexts/AuthContext";
 
 import api from "~/services/axios";
-import { getBusStopById } from "~/services/MapServices/getBusStopById";
 import { getFavoritesModalService } from "~/services/MapServices/getFavoritesModalService";
 
 import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
@@ -23,9 +22,6 @@ import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
 import { ListRoutes } from "~/components/ListRoutes";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
-
-import { THEME } from "~/styles/theme";
-import { MyQueryInterface } from "~/interfaces/User.interface";
 
 interface FavoriteBusStopProps {
   id: string;
@@ -60,12 +56,7 @@ export const ModalDescription = ({
   handleOpenRoute,
 }: ModalDescriptionProps) => {
   const { user, updateUser, getRefreshToken } = useAuth();
-  const [favorite, setFavorite] = useState(point?.favorito ?? false);
-
-  const { data, isLoading, isError } = useQuery<BusStopProps>({
-    queryKey: ["routes-bus"],
-    queryFn: async () => getBusStopById(point?.id),
-  });
+  const [favorite, setFavorite] = useState(false);
 
   const { data: favorites } = useQuery({
     queryKey: ["favorites", user?.user?.id, point],
@@ -129,11 +120,12 @@ export const ModalDescription = ({
           </Title>
 
           <Spacer />
-
-          <FavoriteButton
-            favorite={favorite}
-            handlePress={() => handleFavorite(favorite)}
-          />
+          {user?.user && (
+            <FavoriteButton
+              favorite={favorite}
+              handlePress={() => handleFavorite(favorite)}
+            />
+          )}
         </HStack>
 
         <Box
@@ -145,8 +137,7 @@ export const ModalDescription = ({
         >
           <Image
             source={
-              //!MUDAR  point?.images
-              false
+              point?.images
                 ? { uri: point?.images[0] ?? point?.images[1] }
                 : require("~/assets/img/not-found.png")
             }
@@ -172,21 +163,10 @@ export const ModalDescription = ({
             </>
           ) : (
             <>
-              {isLoading ? (
-                <Box flex={1} justifyContent={"center"} alignItems={"center"}>
-                  <ActivityIndicator
-                    size={"large"}
-                    color={THEME.colors.primary["900"]}
-                  />
-                </Box>
-              ) : isError ? (
-                <Box>
-                  <Alert status="error" />
-                </Box>
-              ) : data?.rotas?.length > 0 ? (
-                data?.rotas?.map((route) => (
+              {point?.routes?.length > 0 ? (
+                point?.routes?.map((route, i) => (
                   <ListRoutes
-                    key={route.route_id}
+                    key={i}
                     route={route}
                     onPress={() => handleOpenRoute(route)}
                   />
