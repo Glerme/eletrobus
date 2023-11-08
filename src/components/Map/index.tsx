@@ -280,6 +280,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
           location && (
             <>
               <RouteButton
+                isRunning={isRunning}
                 cleanParams={cleanParams}
                 busRoute={busStops}
                 setBusRoute={setBusStops}

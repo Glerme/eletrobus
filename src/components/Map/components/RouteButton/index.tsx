@@ -21,9 +21,11 @@ interface BusRouteSelectedInterface {
   cleanParams: () => void;
   user: UserProps | null;
   setBusRoute: React.Dispatch<RoutesBusStopsInterface | null>;
+  isRunning: boolean;
 }
 
 export const RouteButton = ({
+  isRunning,
   busRoute,
   cleanParams,
   user,
@@ -63,12 +65,13 @@ export const RouteButton = ({
           >
             <Text lineHeight={15}>{busRoute.name}</Text>
             <Pressable
+              disabled={isRunning}
               onPress={() => {
                 setBusRoute(null);
                 cleanParams();
               }}
             >
-              <X size={14} color="#080808" />
+              {!isRunning && <X size={14} color="#080808" />}
             </Pressable>
           </HStack>
         )}
