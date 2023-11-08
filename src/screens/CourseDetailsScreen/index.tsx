@@ -172,7 +172,7 @@ export const CourseDetailsScreen = ({
               <Button
                 onPress={() =>
                   navigation.navigate("Map", {
-                    routeId: "a",
+                    routeId: data.id,
                   })
                 }
                 title="Ver rota de Ônibus"

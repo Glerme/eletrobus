@@ -34,6 +34,7 @@ import { MyLocationButton } from "./components/MyLocationButton";
 import { ModalDescription } from "./components/ModalDescription";
 import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
+import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
 
 interface Params {
   routeId?: string;
@@ -52,6 +53,8 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
   );
   const [isRunning, setIsRunning] = useState(false);
   const [visibleMarkers, setVisibleMarkers] = useState<any[]>([]);
+
+  const [intervalRun, setIntervalRun] = useState<any>(null);
   const [region, setRegion] = useState<Region>({
     longitude: 0,
     latitude: 0,
@@ -217,30 +220,40 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
     else navigation.navigate("Points");
   }, [user, navigation]);
 
-  // useEffect(() => {
-  //   setInterval(async () => {
-  //     if (isRunning && busStops) {
-  //       await getActualCurrentPosition();
-  //       setBusStops((busStops) => {
-  //         if (!busStops) return null;
-  //         const position = busStops.bus_stops.length - 1;
-  //         const newBusStops = [...busStops.bus_stops];
-  //         newBusStops[position] = {
-  //           bus_stop_id: "0",
-  //           latitude: location?.coords?.latitude ?? 0,
-  //           longitude: location?.coords?.longitude ?? 0,
-  //         };
-  //         return { ...busStops, bus_stops: newBusStops };
-  //       });
-  //     }
-  //   }, 5000);
-  // }, []);
+  useEffect(() => {
+    if (isRunning && routeId) {
+      setIntervalRun(
+        setInterval(async () => {
+          await getActualCurrentPosition();
+          await postCurrentPositionId({
+            id: routeId,
+
+            latitude: location?.coords?.latitude ?? 0,
+            longitude: location?.coords?.longitude ?? 0,
+          });
+
+          setBusStops((busStops) => {
+            if (!busStops) return null;
+            const position = busStops.bus_stops.length - 1;
+            const newBusStops = [...busStops.bus_stops];
+            newBusStops[position] = {
+              bus_stop_id: "0",
+              latitude: location?.coords?.latitude ?? 0,
+              longitude: location?.coords?.longitude ?? 0,
+            };
+            return { ...busStops, bus_stops: newBusStops };
+          });
+        }, 5000)
+      );
+    } else {
+      clearInterval(intervalRun);
+    }
+  }, [isRunning]);
 
   useEffect(() => {
     (async () => {
       if (!routeId) return;
       setBusStops(await getRouteById(routeId));
-      console.log("sim");
     })();
   }, [routeId]);
 
@@ -292,6 +305,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
           location && (
             <>
               <RouteButton
+                isRunning={isRunning}
                 cleanParams={cleanParams}
                 busRoute={busStops}
                 setBusRoute={setBusStops}
