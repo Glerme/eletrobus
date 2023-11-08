@@ -14,7 +14,6 @@ import {
   Spacer,
   Text,
   VStack,
-  View,
 } from "native-base";
 import { Info, Path, MapPin } from "phosphor-react-native";
 import { useQuery } from "@tanstack/react-query";
@@ -197,7 +196,7 @@ export const PointDetailsScreen = ({
               />
             ))}
 
-            <Box mt={"25%"}>
+            <Box mt={"25%"} mb={2}>
               <Button
                 onPress={() =>
                   navigation.navigate("Map", {
@@ -210,10 +209,6 @@ export const PointDetailsScreen = ({
               />
             </Box>
           </VStack>
-
-          {/* <Box mt={""}>
-           
-          </Box> */}
         </ScrollViewContainer>
       </ScreenContent>
     </Background>

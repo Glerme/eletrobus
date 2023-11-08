@@ -39,68 +39,6 @@ import { THEME } from "~/styles/theme";
 export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
   const { user } = useAuth();
 
-  // const busStopsQuery = useQuery({
-  //   queryKey: ["busStops-home", user?.token],
-  //   queryFn: async () => {
-  //     const { data } = await api.get("/bus-stop/");
-  //     return data;
-  //   },
-  //   initialData: [],
-  //   placeholderData: [],
-  // });
-
-  // const coursesQuery = useQuery({
-  //   queryKey: ["courses-home", user?.token],
-  //   queryFn: async () => {
-  //     const { data } = await api.get("/course/");
-  //     return data;
-  //   },
-  //   initialData: [],
-  //   placeholderData: [],
-  // });
-
-  // if (busStopsQuery.isLoading || coursesQuery.isLoading) {
-  //   return (
-  //     <Background>
-  //       <ScreenContent>
-  //         <Center flex={1}>
-  //           <ActivityIndicator
-  //             size={"large"}
-  //             color={THEME.colors.primary["900"]}
-  //           />
-  //         </Center>
-  //       </ScreenContent>
-  //     </Background>
-  //   );
-  // }
-
-  // if (busStopsQuery.error || coursesQuery.error) {
-  //   const errorMessage = axiosErrorHandler(
-  //     busStopsQuery.error || coursesQuery.error
-  //   );
-
-  //   console.error(errorMessage);
-
-  //   return (
-  //     <Background>
-  //       <ScreenContent>
-  //         <ScrollView
-  //           refreshControl={
-  //             <RefreshControl
-  //               onRefresh={handleUpdateData}
-  //               refreshing={
-  //                 busStopsQuery.isRefetching || coursesQuery.isRefetching
-  //               }
-  //             />
-  //           }
-  //         >
-  //           <Alert status="error" />
-  //         </ScrollView>
-  //       </ScreenContent>
-  //     </Background>
-  //   );
-  // }
-
   return (
     <>
       <StatusBar />

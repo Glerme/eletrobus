@@ -3,7 +3,7 @@ import { StyleSheet, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
 import { useQuery } from "@tanstack/react-query";
-import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Region, Polyline } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -13,7 +13,7 @@ import { BusStopProps } from "~/interfaces/BusStop.interface";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 import api from "~/services/axios";
-import { getBusStopsByPositionService } from "~/services/MapServices/getBusStopsByPositionService";
+import { getAllBusStopsService } from "~/services/MapServices/getAllBusStopsService";
 
 import { useModal } from "~/hooks/useModal";
 
@@ -64,11 +64,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
 
   const { data: markers, isError } = useQuery<BusStopProps[]>({
     queryKey: ["bus-stop", location],
-    queryFn: async () =>
-      getBusStopsByPositionService({
-        latitude: location?.coords?.latitude ?? 0,
-        longitude: location?.coords?.longitude ?? 0,
-      }),
+    queryFn: async () => getAllBusStopsService(),
     initialData: [],
     placeholderData: [],
   });
@@ -346,6 +342,25 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
                 ))}
 
                 {busStops &&
+                  busStops.bus_stops.map((stop, index) => {
+                    if (index < busStops.bus_stops.length - 1) {
+                      const origin = stop;
+                      const destination = busStops.bus_stops[index + 1];
+
+                      const routeCoordinates = [origin, destination];
+
+                      return (
+                        <Polyline
+                          coordinates={routeCoordinates}
+                          strokeWidth={3}
+                          strokeColor="blue"
+                          key={index}
+                        />
+                      );
+                    }
+                  })}
+
+                {/* {busStops &&
                   busStops?.bus_stops?.map((stop, index) => {
                     if (index < busStops?.bus_stops?.length - 1) {
                       const origin = stop;
@@ -365,7 +380,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
                         // />
                       );
                     }
-                  })}
+                  })} */}
               </MapView>
             </>
           )

@@ -51,7 +51,7 @@ export const SettingsScreen = ({
               <VStack alignItems={"center"}>
                 <LottieView
                   autoPlay
-                  loop
+                  loop={false}
                   style={{
                     width: 300,
                     height: 300,
@@ -105,7 +105,7 @@ export const SettingsScreen = ({
             <VStack alignItems={"center"} flex={1}>
               <LottieView
                 autoPlay
-                loop
+                loop={false}
                 style={{
                   width: 500,
                   height: 500,
