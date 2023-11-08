@@ -1,8 +1,4 @@
-import { ActivityIndicator } from "react-native";
-
 import LottieView from "lottie-react-native";
-import { useQuery } from "@tanstack/react-query";
-import { RefreshControl } from "react-native-gesture-handler";
 import {
   Box,
   Center,
@@ -12,26 +8,16 @@ import {
   Text,
   VStack,
 } from "native-base";
-import { MagnifyingGlass } from "phosphor-react-native";
+import { MapPinLine, Path, Star } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
 import { useAuth } from "~/contexts/AuthContext";
 
-import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
-
-import api from "~/services/axios";
-
-import { Alert } from "~/components/Alert";
 import { Button } from "~/components/Form/Button";
 import { Avatar } from "~/components/Form/Avatar";
 import { StatusBar } from "~/components/StatusBar";
-import { CoursesCards } from "./components/CoursesCards";
-import { BusStopsCards } from "./components/BusStopsCards";
-import { FavoritesCards } from "./components/FavoritesCards";
 import { Background } from "~/components/Layouts/Background";
-import { ListHomeCards } from "~/components/ListHomeCards";
-import { ListFavorites } from "~/components/ListFavorites";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
 import { THEME } from "~/styles/theme";
@@ -100,10 +86,15 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                   w={"full"}
                   colorScheme="primary"
                   bg={THEME.colors.primary["500"]}
-                  onPress={() => navigation.navigate("Points" as any)}
-                  title="Iniciar rota"
+                  onPress={() =>
+                    navigation.navigate("Map", {
+                      pointId: undefined,
+                      routeId: undefined,
+                    })
+                  }
+                  title="Mapa"
                   leftIcon={
-                    <Icon as={<MagnifyingGlass size={20} color="white" />} />
+                    <Icon as={<MapPinLine size={20} color="white" />} />
                   }
                 />
 
@@ -112,11 +103,10 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                   w={"full"}
                   colorScheme="secondary"
                   bg={THEME.colors.secondary["500"]}
-                  onPress={() => navigation.navigate("Points" as any)}
-                  leftIcon={
-                    <Icon as={<MagnifyingGlass size={20} color="white" />} />
-                  }
-                  title="Buscar rotas"
+                  onPress={() => navigation.navigate("Courses")}
+                  leftIcon={<Icon as={<Path size={20} color="white" />} />}
+                  fontColor="white"
+                  title="Percursos"
                 />
               </VStack>
             </ScrollView>
@@ -135,20 +125,49 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                   />
                 </Center>
 
-                {/* {user?.token && (
-                  <ListHomeCards
-                    description="Favoritos"
-                    data={user?.user?.favorite_bus_stop}
-                    cardComponent={ListFavorites}
-                    onPressCard={(item) =>
-                      navigation.navigate("PointDetails", {
-                        id: `${item?.id}`,
+                <VStack alignItems="center" mb="3" mt="2" space={2}>
+                  <Button
+                    h={12}
+                    w={"full"}
+                    colorScheme="primary"
+                    bg={THEME.colors.primary["500"]}
+                    onPress={() =>
+                      navigation.navigate("Map", {
+                        pointId: undefined,
+                        routeId: undefined,
                       })
                     }
+                    title="Mapa"
+                    fontColor="white"
+                    leftIcon={
+                      <Icon as={<MapPinLine size={20} color="white" />} />
+                    }
                   />
-                )} */}
 
-                <Text>{JSON.stringify(user, null, 2)}</Text>
+                  <Button
+                    h={12}
+                    w={"full"}
+                    colorScheme="secondary"
+                    bg={THEME.colors.secondary["500"]}
+                    onPress={() => navigation.navigate("Points")}
+                    leftIcon={<Icon as={<Path size={20} color="white" />} />}
+                    title="Pontos"
+                    fontColor="white"
+                  />
+
+                  {user?.user && (
+                    <Button
+                      h={12}
+                      w={"full"}
+                      colorScheme="secondary"
+                      bg={THEME.colors.secondary["500"]}
+                      onPress={() => navigation.navigate("Favorites")}
+                      leftIcon={<Icon as={<Star size={20} color="white" />} />}
+                      title="Buscar rotas"
+                      fontColor="white"
+                    />
+                  )}
+                </VStack>
               </VStack>
             </ScrollView>
           )}
