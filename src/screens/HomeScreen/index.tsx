@@ -96,6 +96,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                   leftIcon={
                     <Icon as={<MapPinLine size={20} color="white" />} />
                   }
+                  fontColor="white"
                 />
 
                 <Button
