@@ -216,18 +216,12 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
       setIntervalRun(
         setInterval(async () => {
           await getActualCurrentPosition();
-          postCurrentPositionId({
+          await postCurrentPositionId({
             id: routeId,
 
             latitude: location?.coords?.latitude ?? 0,
             longitude: location?.coords?.longitude ?? 0,
-          })
-            .then((res) => {
-              console.log(res);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+          });
 
           setBusStops((busStops) => {
             if (!busStops) return null;
