@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, Linking } from "react-native";
+import { StyleSheet, Linking, ActivityIndicator } from "react-native";
 
-import { Box, Flex } from "native-base";
+import { Box, Flex, ScrollView } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 import MapView, { PROVIDER_GOOGLE, Region, Polyline } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
@@ -42,6 +42,7 @@ interface Params {
 
 export const Map = memo(({ pointId, routeId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
+  const { location, locationError, getActualCurrentPosition } = useLocation();
 
   const { modalRef, handleOpenModal } = useModal();
   const [zoom, setZoom] = useState<number>(17);
@@ -51,18 +52,25 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
   );
   const [isRunning, setIsRunning] = useState(false);
   const [visibleMarkers, setVisibleMarkers] = useState<any[]>([]);
-  const [region, setRegion] = useState<Region>();
+  const [region, setRegion] = useState<Region>({
+    longitude: 0,
+    latitude: 0,
+    longitudeDelta: 0.005,
+    latitudeDelta: 0.005,
+  });
 
   const navigation =
     useNavigation<
       NativeStackNavigationProp<RootStackParamList, "Map", undefined>
     >();
 
-  const { location, locationError, getActualCurrentPosition } = useLocation();
-
   const { user } = useAuth();
 
-  const { data: markers, isError } = useQuery<BusStopProps[]>({
+  const {
+    data: markers,
+    isError,
+    isLoading,
+  } = useQuery<BusStopProps[]>({
     queryKey: ["bus-stop", location],
     queryFn: async () => getAllBusStopsService(),
     initialData: [],
@@ -255,7 +263,11 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
   return (
     <>
       <Box flex={1}>
-        {locationError && !location?.coords && isError ? (
+        {isLoading ? (
+          <Box flex={1} justifyContent={"center"}>
+            <ActivityIndicator color={"white"} size={100} />
+          </Box>
+        ) : locationError && !location?.coords && isError ? (
           <Flex
             flex={1}
             justifyContent={"center"}
