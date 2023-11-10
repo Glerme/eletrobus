@@ -352,7 +352,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         await AsyncStorage.setItem("@token", JSON.stringify(data.token));
         setUser((state) => state && { ...state, token: data?.token });
 
-        Alert.alert("Token atualizado com sucesso");
+        // Alert.alert("Token atualizado com sucesso");
       }
     } catch (error) {
       signOut();
