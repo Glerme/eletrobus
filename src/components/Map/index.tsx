@@ -249,7 +249,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
   };
 
   useEffect(() => {
-    if (user?.user.driver) {
+    if (isRunning) {
       getPositionAndIncrementInCourse();
       setIntervalRun(
         setInterval(() => {
@@ -259,7 +259,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
     } else {
       clearInterval(intervalRun);
     }
-  }, [routeId, isRunning]);
+  }, [isRunning]);
 
   useEffect(() => {
     (async () => {
