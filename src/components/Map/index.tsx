@@ -223,18 +223,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
     else navigation.navigate("Points");
   }, [user, navigation]);
 
-  const getPositionAndIncrementInCourse = async () => {
-    if (!routeId) return;
-    await getActualCurrentPosition();
-    if (isRunning) {
-      await postCurrentPositionId({
-        id: routeId,
-
-        latitude: location?.coords?.latitude ?? 0,
-        longitude: location?.coords?.longitude ?? 0,
-      });
-    }
-
+  const incrementPositionInCourse = () => {
     setBusStops((busStops) => {
       if (!busStops) return null;
       const position = busStops.bus_stops.length - 1;
@@ -246,6 +235,20 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
       };
       return { ...busStops, bus_stops: newBusStops };
     });
+  };
+
+  const getPositionAndIncrementInCourse = async () => {
+    if (!routeId) return;
+    await getActualCurrentPosition();
+
+    await postCurrentPositionId({
+      id: routeId,
+
+      latitude: location?.coords?.latitude ?? 0,
+      longitude: location?.coords?.longitude ?? 0,
+    });
+
+    incrementPositionInCourse();
   };
 
   useEffect(() => {
@@ -265,6 +268,10 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
     (async () => {
       if (!routeId) return;
       setBusStops(await getRouteById(routeId));
+
+      if (user?.user.driver) {
+        incrementPositionInCourse();
+      }
     })();
   }, [routeId]);
 
