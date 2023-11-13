@@ -2,7 +2,7 @@ import axios from "axios";
 // import { EXPO_PUBLIC_API_URL } from "@env";
 
 const api = axios.create({
-  baseURL: "https://tcc-v6n1.onrender.com/",
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
