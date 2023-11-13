@@ -17,7 +17,7 @@ import { useModal } from "~/hooks/useModal";
 import { Title } from "~/components/Layouts/Title";
 import { Modal } from "~/components/Modal";
 import { THEME } from "~/styles/theme";
-import { formatHoursMinutesSeconds } from "~/utils/format";
+import { formatTemp } from "~/utils/format";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
@@ -56,7 +56,7 @@ export const StartRunButton = ({
           borderColor={"gray.400"}
           padding={2}
         >
-          <Text lineHeight={15}>Corrida iniciada: {time}s</Text>
+          <Text lineHeight={15}>Corrida iniciada: {formatTemp(time)}</Text>
         </HStack>
       </Container>
     );

@@ -22,6 +22,24 @@ export const formatHoursMinutesSeconds = (date?: Date) => {
   return format(date, "hh:mm:ss").replace(":", "h");
 };
 
+export const formatTemp = (seconds: number) => {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secondsRest = seconds % 60;
+
+  if (hours > 0) {
+    if (minutes > 0) {
+      return `${hours}h ${minutes}m ${secondsRest}s`;
+    } else {
+      return `${hours}h ${secondsRest}s`;
+    }
+  } else if (minutes > 0) {
+    return `${minutes}m ${secondsRest}s`;
+  } else {
+    return `${secondsRest}s`;
+  }
+};
+
 export const formatSecounds = (sec: number) => {
   const hrs = Math.floor(sec / 3600);
   const min = Math.floor((sec % 3600) / 60);

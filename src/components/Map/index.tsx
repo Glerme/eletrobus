@@ -26,7 +26,7 @@ import { Alert } from "../Alert";
 import { Button } from "../Form/Button";
 import { ZoomButtons } from "./components/ZoomButtons";
 import { RouteButton } from "./components/RouteButton";
-import { StateButton } from "./components/StateButton";
+import { StatusButton } from "./components/StatusButton";
 import { CustomMarker } from "./components/CustomMarker";
 import { StartRunButton } from "./components/StartRunButton";
 import { FinalizeButton } from "./components/FinalizeButton";
@@ -35,6 +35,7 @@ import { ModalDescription } from "./components/ModalDescription";
 import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
+import { IStatus } from "~/interfaces/Status.interface";
 
 interface Params {
   routeId?: string;
@@ -61,6 +62,8 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
     longitudeDelta: 0.005,
     latitudeDelta: 0.005,
   });
+
+  const [statusActive, setStatusActive] = useState<IStatus>();
 
   const navigation =
     useNavigation<
@@ -220,29 +223,40 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
     else navigation.navigate("Points");
   }, [user, navigation]);
 
+  const incrementPositionInCourse = () => {
+    setBusStops((busStops) => {
+      if (!busStops) return null;
+      const position = busStops.bus_stops.length - 1;
+      const newBusStops = [...busStops.bus_stops];
+      newBusStops[position] = {
+        bus_stop_id: "0",
+        latitude: location?.coords?.latitude ?? 0,
+        longitude: location?.coords?.longitude ?? 0,
+      };
+      return { ...busStops, bus_stops: newBusStops };
+    });
+  };
+
+  const getPositionAndIncrementInCourse = async () => {
+    if (!routeId) return;
+    await getActualCurrentPosition();
+
+    await postCurrentPositionId({
+      id: routeId,
+
+      latitude: location?.coords?.latitude ?? 0,
+      longitude: location?.coords?.longitude ?? 0,
+    });
+
+    incrementPositionInCourse();
+  };
+
   useEffect(() => {
-    if (isRunning && routeId) {
+    if (isRunning) {
+      getPositionAndIncrementInCourse();
       setIntervalRun(
-        setInterval(async () => {
-          await getActualCurrentPosition();
-          await postCurrentPositionId({
-            id: routeId,
-
-            latitude: location?.coords?.latitude ?? 0,
-            longitude: location?.coords?.longitude ?? 0,
-          });
-
-          setBusStops((busStops) => {
-            if (!busStops) return null;
-            const position = busStops.bus_stops.length - 1;
-            const newBusStops = [...busStops.bus_stops];
-            newBusStops[position] = {
-              bus_stop_id: "0",
-              latitude: location?.coords?.latitude ?? 0,
-              longitude: location?.coords?.longitude ?? 0,
-            };
-            return { ...busStops, bus_stops: newBusStops };
-          });
+        setInterval(() => {
+          getPositionAndIncrementInCourse();
         }, 5000)
       );
     } else {
@@ -254,6 +268,10 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
     (async () => {
       if (!routeId) return;
       setBusStops(await getRouteById(routeId));
+
+      if (user?.user.driver) {
+        incrementPositionInCourse();
+      }
     })();
   }, [routeId]);
 
@@ -320,7 +338,11 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
                   />
                   {isRunning && (
                     <>
-                      <StateButton />
+                      <StatusButton
+                        statusActive={statusActive}
+                        setStatusActive={setStatusActive}
+                        busRoute={busStops}
+                      />
                       <FinalizeButton
                         cleanParams={cleanParams}
                         setBusRoute={setBusStops}

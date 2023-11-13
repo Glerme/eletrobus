@@ -12,7 +12,7 @@ export const postCurrentPositionId = async ({
   latitude,
   longitude,
 }: ParamsProps) => {
-  console.log(id, latitude, longitude);
+  console.log("mostrando a posição: ", id, latitude, longitude);
   return api.post(`course/current-position/${id}`, {
     latitude: `${latitude}`,
     longitude: `${longitude}`,
