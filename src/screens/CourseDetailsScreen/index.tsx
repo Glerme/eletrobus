@@ -42,6 +42,7 @@ interface CourseDataProps {
         id: string;
         latitude: number;
         longitude: number;
+        name: string;
       };
       bus_stop_id: string;
       latitude: number;
@@ -137,7 +138,7 @@ export const CourseDetailsScreen = ({
               </HStack>
               {data?.bus_stops?.map((busStop) => (
                 <Text fontSize={"sm"} color={"gray.700"}>
-                  {busStop?.bus_stop_id}
+                  {busStop?.bus_stop?.name}
                 </Text>
               ))}
             </VStack>
