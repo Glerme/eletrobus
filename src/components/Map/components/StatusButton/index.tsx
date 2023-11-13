@@ -89,18 +89,15 @@ export const StatusButton = ({
           <Modal.CloseButton />
           <Modal.Header>Selecione o estado da corrida</Modal.Header>
           <Modal.Body height={400}>
-            <FlatList
-              data={data}
-              renderItem={({ item }) => (
-                <ListStatusItem
-                  onPress={async () => {
-                    await changeStatus(item);
-                    setShowModal(false);
-                  }}
-                  item={item}
-                />
-              )}
-            />
+            {data.map((item) => (
+              <ListStatusItem
+                onPress={async () => {
+                  await changeStatus(item);
+                  setShowModal(false);
+                }}
+                item={item}
+              />
+            ))}
           </Modal.Body>
           <Modal.Footer></Modal.Footer>
         </Modal.Content>

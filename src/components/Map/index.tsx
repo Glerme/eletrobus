@@ -226,21 +226,25 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
   const incrementPositionInCourse = () => {
     setBusStops((busStops) => {
       if (!busStops) return null;
-      const position = busStops.bus_stops.length - 1;
+
       const newBusStops = [...busStops.bus_stops];
-      newBusStops[position] = {
+
+      const positionDriver = {
         bus_stop_id: "0",
         latitude: location?.coords?.latitude ?? 0,
         longitude: location?.coords?.longitude ?? 0,
       };
+
+      newBusStops.unshift(positionDriver);
+
       return { ...busStops, bus_stops: newBusStops };
     });
   };
+  console.log("busStops", busStops);
 
   const getPositionAndIncrementInCourse = async () => {
     if (!routeId) return;
-    await getActualCurrentPosition();
-
+    // await getCurrentPosition();
     await postCurrentPositionId({
       id: routeId,
 
@@ -281,7 +285,7 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
       if (point) {
         mapRef.current?.animateCamera({
           center: { latitude: point.latitude, longitude: point.longitude },
-          zoom: 20,
+          // zoom: 20,
         });
       }
     }
