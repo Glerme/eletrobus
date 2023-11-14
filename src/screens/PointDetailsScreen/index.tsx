@@ -192,7 +192,11 @@ export const PointDetailsScreen = ({
               <ListRoutes
                 key={i}
                 route={route}
-                onPress={() => alert(JSON.stringify(route, null, 2))}
+                onPress={() =>
+                  navigation.navigate("Map", {
+                    routeId: route.id,
+                  })
+                }
               />
             ))}
 
