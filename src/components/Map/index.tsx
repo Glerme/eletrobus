@@ -42,7 +42,8 @@ interface Params {
   pointId?: string;
 }
 
-export const Map = memo(({ pointId, routeId }: MapInterface) => {
+export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
+  console.log("courseId: ", courseId);
   const mapRef = useRef<MapView>(null);
   const { location, locationError, getActualCurrentPosition } = useLocation();
 
@@ -340,9 +341,10 @@ export const Map = memo(({ pointId, routeId }: MapInterface) => {
                     isRunning={isRunning}
                     busRoute={busStops}
                   />
-                  {isRunning && (
+                  {isRunning && courseId && (
                     <>
                       <StatusButton
+                        courseId={courseId}
                         statusActive={statusActive}
                         setStatusActive={setStatusActive}
                         busRoute={busStops}

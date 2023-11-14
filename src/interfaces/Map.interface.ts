@@ -5,6 +5,8 @@ export interface MapInterface {
   // location: LocationObject | null;
   // locationError: string | null;
   // markers: BusStopProps[];
+
+  courseId?: string;
   pointId?: string;
   routeId?: string;
 }

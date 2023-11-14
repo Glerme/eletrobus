@@ -13,6 +13,7 @@ export interface CourseProps {
   name: string;
   route: Route;
   vehicle: Vehicle;
+  id: string;
 }
 
 export interface Driver {

@@ -118,7 +118,8 @@ export const CoursesScreen = ({
                   item={item}
                   onPress={() => {
                     navigation.navigate("CouseDetails", {
-                      id: `${item?.route.id}`,
+                      routeId: `${item?.route.id}`,
+                      courseId: `${item?.id}`,
                     });
                   }}
                   key={item?.route.id}

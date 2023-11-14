@@ -59,14 +59,12 @@ export const CourseDetailsScreen = ({
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  console.log("id", route.params.id);
-
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useQuery<CourseDataProps>({
-      queryKey: ["route", route.params.id],
+      queryKey: ["route", route.params.routeId],
       queryFn: async () => {
         const { data } = await api.get<CourseDataProps>(
-          `/route/${route.params.id}`
+          `/route/${route.params.routeId}`
         );
 
         return data;
@@ -174,6 +172,7 @@ export const CourseDetailsScreen = ({
                 onPress={() =>
                   navigation.navigate("Map", {
                     routeId: data.id,
+                    courseId: route.params.courseId,
                   })
                 }
                 title="Ver rota de Ônibus"

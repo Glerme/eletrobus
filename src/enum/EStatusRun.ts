@@ -1,6 +1,6 @@
 export enum EStatusRun {
-  EmCorrida = "Em Corrida",
-  Parado = "Parado",
+  EmCorrida = "EM CORRIDA",
+  Parado = "PARADO",
 
-  Incapacitado = "Incapacitado",
+  Incapacitado = "INCAPACITADO",
 }

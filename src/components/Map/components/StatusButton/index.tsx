@@ -17,8 +17,10 @@ interface StatusButtonProps {
   setStatusActive: Dispatch<IStatus>;
   statusActive: IStatus | undefined;
   busRoute: RoutesBusStopsInterface | null;
+  courseId: string;
 }
 export const StatusButton = ({
+  courseId,
   statusActive,
   setStatusActive,
   busRoute,
@@ -39,7 +41,8 @@ export const StatusButton = ({
   const changeStatus = async (status: IStatus) => {
     if (!busRoute || !statusActive) return;
     try {
-      await postChangeStatusCourse(busRoute.id, status.id);
+      console.log("STATUS: ", courseId);
+      await postChangeStatusCourse(courseId, status.id);
       setStatusActive(status);
     } catch (e) {
       console.log(e);
