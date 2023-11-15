@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActivityIndicator, RefreshControl } from "react-native";
 
 import { Info, Path } from "phosphor-react-native";
@@ -16,6 +16,10 @@ import {
 import { useAuth } from "~/contexts/AuthContext";
 
 import api from "~/services/axios";
+import { getCoursesDetailsService } from "~/services/CoursesDetailsServices/getCoursesService";
+import { getCoursesFavoritesService } from "~/services/CoursesDetailsServices/getCoursesFavoritesService";
+
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 import { NavigationProps } from "~/routes";
 
@@ -32,24 +36,7 @@ import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
-
-interface CourseDataProps {
-  id: string;
-  name: string;
-  bus_stops: [
-    {
-      bus_stop: {
-        id: string;
-        latitude: number;
-        longitude: number;
-        name: string;
-      };
-      bus_stop_id: string;
-      latitude: number;
-      longitude: number;
-    }
-  ];
-}
+import Toast from "react-native-toast-message";
 
 export const CourseDetailsScreen = ({
   navigation,
@@ -59,21 +46,61 @@ export const CourseDetailsScreen = ({
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
-  console.log(route.params.routeId);
+  const { data, isLoading, isError, error, refetch, isRefetching } = useQuery({
+    queryKey: ["route", route.params.routeId],
+    queryFn: () => getCoursesDetailsService(route.params.routeId),
+  });
 
-  const { data, isLoading, isError, error, refetch, isRefetching } =
-    useQuery<CourseDataProps>({
-      queryKey: ["route", route.params.routeId],
-      queryFn: async () => {
-        const { data } = await api.get<CourseDataProps>(
-          `/route/${route.params.routeId}`
+  const { data: favorites } = useQuery({
+    queryKey: ["favorites", user?.user?.id, "route", route.params.routeId],
+    queryFn: () => getCoursesFavoritesService(),
+    initialData: [],
+    placeholderData: [],
+  });
+
+  const handleFavorite = async (fav: boolean) => {
+    try {
+      if (!fav) {
+        const { status } = await api.post(
+          `/route/${route.params.routeId}/favorite`
         );
 
-        return data;
-      },
-    });
+        if (status === 200) {
+          setFavorite(true);
+        }
+      } else {
+        const { status } = await api.delete(
+          `/route/${route.params.routeId}/favorite`
+        );
 
-  console.log({ data });
+        if (status) {
+          setFavorite(false);
+        }
+      }
+    } catch (err) {
+      const axiosError = axiosErrorHandler(err);
+
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: `Ocorreu um erro: ${axiosError.message}`,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      const favoritePoint = favorites?.filter(
+        (fav) => fav?.route_id === route.params.routeId
+      );
+
+      console.log(favoritePoint);
+
+      if (favoritePoint?.length > 0) {
+        setFavorite(true);
+      }
+    }
+  }, [user?.user?.id, favorites]);
 
   if (isLoading) {
     return (
@@ -123,10 +150,10 @@ export const CourseDetailsScreen = ({
 
               <Spacer />
 
-              {/* <FavoriteButton
+              <FavoriteButton
                 favorite={favorite}
-                handlePress={() => setFavorite(!favorite)}
-              /> */}
+                handlePress={() => handleFavorite(favorite)}
+              />
             </HStack>
 
             <VStack mt={2}>

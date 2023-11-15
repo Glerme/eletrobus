@@ -16,6 +16,24 @@ export interface CourseProps {
   id: string;
 }
 
+export interface CourseDataProps {
+  id: string;
+  name: string;
+  bus_stops: [
+    {
+      bus_stop: {
+        id: string;
+        latitude: number;
+        longitude: number;
+        name: string;
+      };
+      bus_stop_id: string;
+      latitude: number;
+      longitude: number;
+    }
+  ];
+}
+
 export interface Driver {
   avatar: any;
   name: string;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RefreshControl } from "react-native";
+import { RefreshControl, Alert as RNAlert } from "react-native";
 
 import { MagnifyingGlass } from "phosphor-react-native";
 import { Box, FlatList, Icon, Text } from "native-base";
@@ -118,7 +118,7 @@ export const CoursesScreen = ({
                   item={item}
                   onPress={() => {
                     navigation.navigate("CourseDetails", {
-                      routeId: `${item?.route.id}`,
+                      routeId: `${item?.route?.id}`,
                       courseId: `${item?.id}`,
                     });
                   }}
