@@ -19,9 +19,5 @@ export interface BusStopClass {
   description: string;
   latitude: number;
   longitude: number;
-  image_bus_stop: ImageBusStop[];
-}
-
-export interface ImageBusStop {
-  image: string;
+  images: string[];
 }

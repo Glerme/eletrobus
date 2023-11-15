@@ -57,9 +57,14 @@ export const ListFavorites = memo(
         >
           <HStack space={4} alignItems={"center"}>
             <Avatar
-              source={{
-                uri: item?.bus_stop?.image_bus_stop[0]?.image ?? "",
-              }}
+              source={
+                item?.bus_stop?.images
+                  ? {
+                      uri:
+                        item?.bus_stop?.images[0] ?? item?.bus_stop?.images[1],
+                    }
+                  : require("~/assets/img/not-found.png")
+              }
               size={"md"}
             />
 
