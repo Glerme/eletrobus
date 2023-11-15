@@ -110,6 +110,7 @@ export const PointsScreen = ({
               Listagem - pontos
             </Text>
             <FlatList
+              flex={1}
               keyExtractor={(item, i) => `${i}`}
               data={data?.pages?.flatMap((page) =>
                 page ? page?.data?.data : []
