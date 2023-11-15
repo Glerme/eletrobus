@@ -8,10 +8,6 @@ import {
 import { Avatar, Box, HStack, Skeleton, Text } from "native-base";
 
 import { BusStopProps } from "~/interfaces/BusStop.interface";
-import { RouteInterface } from "~/interfaces/Route.interface";
-
-import { StatusInfo } from "../BusStatus/StatusInfo";
-import { FavoriteButton } from "../Form/FavoriteButton";
 
 interface ListBusStopsProps extends TouchableNativeFeedbackProps {
   item?: BusStopProps;
@@ -67,23 +63,10 @@ export const ListBusStops = memo(
                 size={"md"}
               />
 
-              {/* <FavoriteButton
-                favorite={item.favorite}
-                handlePress={() => {}}
-                size={14}
-                disabled
-              /> */}
-
               <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
                 {item?.name}
               </Text>
             </HStack>
-
-            {/* {item?.status && (
-            <HStack alignItems="center" space="1">
-              <StatusInfo statusCorrida={item.status} />
-            </HStack>
-          )} */}
           </HStack>
         </Box>
       </TouchableNativeFeedback>

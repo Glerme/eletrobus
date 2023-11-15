@@ -45,6 +45,7 @@ export const CourseDetailsScreen = ({
   const { user } = useAuth();
 
   const [favorite, setFavorite] = useState<boolean>(false);
+  const [favoriteLoading, setFavoriteLoading] = useState<boolean>(false);
 
   const { data, isLoading, isError, error, refetch, isRefetching } = useQuery({
     queryKey: ["route", route.params.routeId],
@@ -60,6 +61,7 @@ export const CourseDetailsScreen = ({
 
   const handleFavorite = async (fav: boolean) => {
     try {
+      setFavoriteLoading(true);
       if (!fav) {
         const { status } = await api.post(
           `/route/${route.params.routeId}/favorite`
@@ -73,7 +75,7 @@ export const CourseDetailsScreen = ({
           `/route/${route.params.routeId}/favorite`
         );
 
-        if (status) {
+        if (status === 200) {
           setFavorite(false);
         }
       }
@@ -85,6 +87,8 @@ export const CourseDetailsScreen = ({
         text1: "Erro",
         text2: `Ocorreu um erro: ${axiosError.message}`,
       });
+    } finally {
+      setFavoriteLoading(false);
     }
   };
 
@@ -93,8 +97,6 @@ export const CourseDetailsScreen = ({
       const favoritePoint = favorites?.filter(
         (fav) => fav?.route_id === route.params.routeId
       );
-
-      console.log(favoritePoint);
 
       if (favoritePoint?.length > 0) {
         setFavorite(true);
@@ -153,6 +155,7 @@ export const CourseDetailsScreen = ({
               <FavoriteButton
                 favorite={favorite}
                 handlePress={() => handleFavorite(favorite)}
+                isLoading={favoriteLoading}
               />
             </HStack>
 

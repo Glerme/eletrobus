@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Linking, ActivityIndicator } from "react-native";
 
-import { Box, Flex, ScrollView } from "native-base";
+import { Box, Flex } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 import MapView, { PROVIDER_GOOGLE, Region, Polyline } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
@@ -36,12 +36,6 @@ import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
 import { IStatus } from "~/interfaces/Status.interface";
-import { EStatusRun } from "~/enum/EStatusRun";
-
-interface Params {
-  routeId?: string;
-  pointId?: string;
-}
 
 export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
@@ -283,7 +277,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
       if (point) {
         mapRef.current?.animateCamera({
           center: { latitude: point.latitude, longitude: point.longitude },
-          // zoom: 20,
         });
       }
     }
