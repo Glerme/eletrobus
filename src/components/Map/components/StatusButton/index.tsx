@@ -27,10 +27,6 @@ interface StatusButtonProps {
   cleanParams: () => void;
 }
 
-const statusDefault = {
-  id: "65527025f21e3c58f53acc92",
-  status: EStatusRun.EmCorrida,
-};
 export const StatusButton = ({
   courseId,
   statusActive,
@@ -46,7 +42,7 @@ export const StatusButton = ({
   const { data, isLoading } = useQuery({
     queryKey: ["status"],
     queryFn: async () => {
-      setStatusActive(statusDefault);
+      setStatusActive(EStatusRun.EmCorrida);
       const data = await getAllStatusService();
       return data;
     },
@@ -56,7 +52,7 @@ export const StatusButton = ({
 
   const fnStatement = () => {
     setIsRunning(false);
-    setStatusActive(statusDefault);
+    setStatusActive(EStatusRun.EmCorrida);
     setBusRoute(null);
     cleanParams();
   };
@@ -66,14 +62,16 @@ export const StatusButton = ({
     try {
       await postChangeStatusCourse(courseId, status.id);
       if (
-        status.status === EStatusRun.Finalizado ||
-        status.status === EStatusRun.Incapacitado
+        status.status === EStatusRun.Finalizado.status ||
+        status.status === EStatusRun.Incapacitado.status
       ) {
         handleOpenModal();
+        setShowModal(false);
         return;
       }
 
       setStatusActive(status);
+      setShowModal(false);
     } catch (e) {
       console.error("Erro ao mudar o status da corrida");
     }
@@ -102,7 +100,7 @@ export const StatusButton = ({
               height={2}
               width={4}
               backgroundColor={
-                statusActive && `${getColorFromState(statusActive?.status)}`
+                statusActive && `${getColorFromState(statusActive)}`
               }
             ></Box>
             {isLoading ? (
@@ -126,7 +124,6 @@ export const StatusButton = ({
                 key={item.id}
                 onPress={async () => {
                   await changeStatus(item);
-                  setShowModal(false);
                 }}
                 item={item}
               />

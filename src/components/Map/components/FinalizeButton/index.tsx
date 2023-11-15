@@ -20,10 +20,6 @@ interface finalizeInterface {
   courseId: string;
 }
 
-const statusFinalizado = {
-  id: "6553ad9d174ce2ff6999efc1",
-  status: EStatusRun.Finalizado,
-};
 export const FinalizeButton = ({
   setIsRunning,
   setBusRoute,
@@ -34,7 +30,7 @@ export const FinalizeButton = ({
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
   const fnStatement = async () => {
-    await postChangeStatusCourse(courseId, statusFinalizado.id);
+    await postChangeStatusCourse(courseId, EStatusRun.Finalizado.id);
     setIsRunning(false);
     setBusRoute(null);
     cleanParams();

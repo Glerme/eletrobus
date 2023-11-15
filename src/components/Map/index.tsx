@@ -331,14 +331,15 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                 setBusRoute={setBusStops}
                 user={user}
               />
-              {user?.user.driver && busStops ? (
+              {user?.user.driver && busStops && courseId ? (
                 <>
                   <StartRunButton
+                    courseId={courseId}
                     setIsRunning={setIsRunning}
                     isRunning={isRunning}
                     busRoute={busStops}
                   />
-                  {isRunning && courseId && (
+                  {isRunning && (
                     <>
                       <StatusButton
                         setIsRunning={setIsRunning}

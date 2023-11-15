@@ -19,22 +19,27 @@ import { Modal } from "~/components/Modal";
 import { THEME } from "~/styles/theme";
 import { formatTemp } from "~/utils/format";
 import { ModalStatement } from "~/components/ModalStatement";
+import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
+import { EStatusRun } from "~/enum/EStatusRun";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
   isRunning: boolean;
   busRoute: RoutesBusStopsInterface | null;
+  courseId: string;
 }
 export const StartRunButton = ({
   setIsRunning,
   isRunning,
   busRoute,
+  courseId,
 }: runningInterface) => {
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
   const [intervalRef, setIntervalRef] = useState<any>(null);
   const [time, setTime] = useState<number>(0);
 
-  const fnStatement = () => {
+  const fnStatement = async () => {
+    await postChangeStatusCourse(courseId, EStatusRun.EmCorrida.id);
     setIsRunning(true);
   };
 
