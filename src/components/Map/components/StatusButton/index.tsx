@@ -12,40 +12,67 @@ import { useQuery } from "@tanstack/react-query";
 import { ListStatusItem } from "../ListStatusItem";
 import { IStatus } from "~/interfaces/Status.interface";
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
+import { useModal } from "~/hooks/useModal";
+import { ModalStatement } from "~/components/ModalStatement";
 
 interface StatusButtonProps {
   setStatusActive: Dispatch<IStatus>;
   statusActive: IStatus | undefined;
   busRoute: RoutesBusStopsInterface | null;
+
+  setBusRoute: Dispatch<RoutesBusStopsInterface | null>;
+
+  setIsRunning: Dispatch<boolean>;
   courseId: string;
+  cleanParams: () => void;
 }
+
 export const StatusButton = ({
   courseId,
   statusActive,
   setStatusActive,
+  setIsRunning,
+  cleanParams,
+  setBusRoute,
   busRoute,
 }: StatusButtonProps) => {
   const [showModal, setShowModal] = useState(false);
+  const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
   const { data, isLoading } = useQuery({
     queryKey: ["status"],
     queryFn: async () => {
+      setStatusActive(EStatusRun.EmCorrida);
       const data = await getAllStatusService();
-      setStatusActive(data[0]);
       return data;
     },
     initialData: [],
     placeholderData: [],
   });
 
+  const fnStatement = () => {
+    setIsRunning(false);
+    setStatusActive(EStatusRun.EmCorrida);
+    setBusRoute(null);
+    cleanParams();
+  };
+
   const changeStatus = async (status: IStatus) => {
     if (!busRoute || !statusActive) return;
     try {
-      console.log("STATUS: ", courseId);
       await postChangeStatusCourse(courseId, status.id);
+      if (
+        status.status === EStatusRun.Finalizado.status ||
+        status.status === EStatusRun.Incapacitado.status
+      ) {
+        handleOpenModal();
+        setShowModal(false);
+        return;
+      }
+
       setStatusActive(status);
+      setShowModal(false);
     } catch (e) {
-      console.log(e);
       console.error("Erro ao mudar o status da corrida");
     }
   };
@@ -73,7 +100,7 @@ export const StatusButton = ({
               height={2}
               width={4}
               backgroundColor={
-                statusActive && `${getColorFromState(statusActive?.status)}`
+                statusActive && `${getColorFromState(statusActive)}`
               }
             ></Box>
             {isLoading ? (
@@ -94,9 +121,9 @@ export const StatusButton = ({
           <Modal.Body height={400}>
             {data.map((item) => (
               <ListStatusItem
+                key={item.id}
                 onPress={async () => {
                   await changeStatus(item);
-                  setShowModal(false);
                 }}
                 item={item}
               />
@@ -105,6 +132,13 @@ export const StatusButton = ({
           <Modal.Footer></Modal.Footer>
         </Modal.Content>
       </Modal>
+      <ModalStatement
+        title="Finalizar percurso"
+        description="A corrida será finalizada, deseja continuar?"
+        modalRef={modalRef}
+        handleCloseModal={handleCloseModal}
+        fnStatement={fnStatement}
+      />
     </>
   );
 };

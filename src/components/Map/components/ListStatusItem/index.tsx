@@ -19,7 +19,6 @@ interface IListStatusItem extends TouchableNativeFeedbackProps {
 
 export const ListStatusItem = memo(
   ({ item, onPress, isLoading, ...rest }: IListStatusItem) => {
-    console.log("item", item);
     return isLoading ? (
       <TouchableNativeFeedback disabled {...rest}>
         <Box
@@ -63,7 +62,7 @@ export const ListStatusItem = memo(
                 <Box
                   height={2}
                   width={4}
-                  backgroundColor={`${getColorFromState(item.status)}`}
+                  backgroundColor={`${getColorFromState(item)}`}
                 ></Box>
                 <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
                   {item.status}

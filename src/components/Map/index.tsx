@@ -36,6 +36,7 @@ import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
 import { IStatus } from "~/interfaces/Status.interface";
+import { EStatusRun } from "~/enum/EStatusRun";
 
 interface Params {
   routeId?: string;
@@ -43,7 +44,6 @@ interface Params {
 }
 
 export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
-  console.log("courseId: ", courseId);
   const mapRef = useRef<MapView>(null);
   const { location, locationError, getActualCurrentPosition } = useLocation();
 
@@ -189,8 +189,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
         });
       }
 
-      console.log("markersInVisibleArea", markersInVisibleArea.length);
-
       setVisibleMarkers(markersInVisibleArea);
     },
     [markers]
@@ -198,7 +196,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
 
   const cleanParams = useCallback(() => {
     navigation.dispatch((state) => {
-      const map = state.routes.find((route) => route.name === "Map");
       const newRoutes = state.routes.map((route) => {
         if (route.name === "Map") {
           return {
@@ -206,6 +203,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
             params: {
               routeId: undefined,
               pointId: undefined,
+              courseId: undefined,
             },
           };
         }
@@ -241,7 +239,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
       return { ...busStops, bus_stops: newBusStops };
     });
   };
-  console.log("busStops", busStops);
 
   const getPositionAndIncrementInCourse = async () => {
     if (!routeId) return;
@@ -334,22 +331,27 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                 setBusRoute={setBusStops}
                 user={user}
               />
-              {user?.user.driver && busStops ? (
+              {user?.user.driver && busStops && courseId ? (
                 <>
                   <StartRunButton
+                    courseId={courseId}
                     setIsRunning={setIsRunning}
                     isRunning={isRunning}
                     busRoute={busStops}
                   />
-                  {isRunning && courseId && (
+                  {isRunning && (
                     <>
                       <StatusButton
+                        setIsRunning={setIsRunning}
                         courseId={courseId}
                         statusActive={statusActive}
+                        cleanParams={cleanParams}
                         setStatusActive={setStatusActive}
                         busRoute={busStops}
+                        setBusRoute={setBusStops}
                       />
                       <FinalizeButton
+                        courseId={courseId}
                         cleanParams={cleanParams}
                         setBusRoute={setBusStops}
                         setIsRunning={setIsRunning}
