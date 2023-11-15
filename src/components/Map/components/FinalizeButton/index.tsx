@@ -12,12 +12,14 @@ import { useModal } from "~/hooks/useModal";
 import { ModalStatement } from "~/components/ModalStatement";
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 import { EStatusRun } from "~/enum/EStatusRun";
+import { IStatus } from "~/interfaces/Status.interface";
 
 interface finalizeInterface {
   setBusRoute: Dispatch<RoutesBusStopsInterface | null>;
   setIsRunning: Dispatch<boolean>;
   cleanParams: () => void;
   courseId: string;
+  allStatus: IStatus[] | null;
 }
 
 export const FinalizeButton = ({
@@ -25,15 +27,25 @@ export const FinalizeButton = ({
   setBusRoute,
   cleanParams,
   courseId,
+  allStatus,
 }: finalizeInterface) => {
   const [time, setTime] = useState<number>(0);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
   const fnStatement = async () => {
-    await postChangeStatusCourse(courseId, EStatusRun.Finalizado.id);
-    setIsRunning(false);
-    setBusRoute(null);
-    cleanParams();
+    try {
+      if (!allStatus) return;
+      const statusFinalizado = allStatus.find(
+        (status) => status.status === EStatusRun.Finalizado
+      );
+      if (!statusFinalizado) return;
+      await postChangeStatusCourse(courseId, statusFinalizado.id);
+      setIsRunning(false);
+      setBusRoute(null);
+      cleanParams();
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <>

@@ -62,7 +62,7 @@ export const ListStatusItem = memo(
                 <Box
                   height={2}
                   width={4}
-                  backgroundColor={`${getColorFromState(item)}`}
+                  backgroundColor={`${getColorFromState(item.status)}`}
                 ></Box>
                 <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
                   {item.status}

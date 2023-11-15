@@ -6,12 +6,19 @@ export interface IStatusRun {
   Incapacitado: IStatus;
   Finalizado: IStatus;
 }
-export const EStatusRun: IStatusRun = {
-  EmCorrida: { status: "EM CORRIDA", id: "65527025f21e3c58f53acc92" },
 
-  Parado: { status: "PARADO", id: "65527101f21e3c58f53acc93" },
+export enum EStatusRun {
+  EmCorrida = "EM CORRIDA",
+  Parado = "PARADO",
+  Incapacitado = "INCAPACITADO",
+  Finalizado = "FINALIZADO",
+}
+// export const EStatusRun: IStatusRun = {
+//   EmCorrida: { status: "EM CORRIDA", id: "65527025f21e3c58f53acc92" },
 
-  Incapacitado: { status: "INCAPACITADO", id: "65527111f21e3c58f53acc94" },
+//   Parado: { status: "PARADO", id: "65527101f21e3c58f53acc93" },
 
-  Finalizado: { status: "FINALIZADO", id: "6552711ef21e3c58f53acc95" },
-};
+//   Incapacitado: { status: "INCAPACITADO", id: "65527111f21e3c58f53acc94" },
+
+//   Finalizado: { status: "FINALIZADO", id: "6553ad9d174ce2ff6999efc1" },
+// };

@@ -1,13 +1,13 @@
 import { EStatusRun } from "~/enum/EStatusRun";
 import { IStatus } from "~/interfaces/Status.interface";
 
-export function getColorFromState(state: IStatus) {
-  switch (state.status) {
-    case EStatusRun.EmCorrida.status:
+export function getColorFromState(state: EStatusRun) {
+  switch (state) {
+    case EStatusRun.EmCorrida:
       return "#06CB56";
-    case EStatusRun.Parado.status:
+    case EStatusRun.Parado:
       return "#AFAFAF";
-    case EStatusRun.Incapacitado.status:
+    case EStatusRun.Incapacitado:
       return "#FE454B";
     default:
       return "#000000";

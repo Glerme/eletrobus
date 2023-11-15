@@ -4,7 +4,7 @@ import { Plus, Minus, X } from "phosphor-react-native";
 import { Container, TextItem } from "./styles";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 import { Box, FlatList, HStack, Modal, Pressable, Text } from "native-base";
-import { Dispatch, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { EStatusRun } from "~/enum/EStatusRun";
 import { getColorFromState } from "~/utils/getColorFromState";
 import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
@@ -16,7 +16,7 @@ import { useModal } from "~/hooks/useModal";
 import { ModalStatement } from "~/components/ModalStatement";
 
 interface StatusButtonProps {
-  setStatusActive: Dispatch<IStatus>;
+  setStatusActive: Dispatch<IStatus | undefined>;
   statusActive: IStatus | undefined;
   busRoute: RoutesBusStopsInterface | null;
 
@@ -25,6 +25,7 @@ interface StatusButtonProps {
   setIsRunning: Dispatch<boolean>;
   courseId: string;
   cleanParams: () => void;
+  allStatus: IStatus[] | null;
 }
 
 export const StatusButton = ({
@@ -35,14 +36,21 @@ export const StatusButton = ({
   cleanParams,
   setBusRoute,
   busRoute,
+  allStatus,
 }: StatusButtonProps) => {
   const [showModal, setShowModal] = useState(false);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
 
+  const getStatusCorrida = () => {
+    const status = allStatus?.find(
+      (status) => status.status === EStatusRun.EmCorrida
+    );
+    return status;
+  };
   const { data, isLoading } = useQuery({
     queryKey: ["status"],
     queryFn: async () => {
-      setStatusActive(EStatusRun.EmCorrida);
+      if (getStatusCorrida()) setStatusActive(getStatusCorrida());
       const data = await getAllStatusService();
       return data;
     },
@@ -50,9 +58,11 @@ export const StatusButton = ({
     placeholderData: [],
   });
 
+  useEffect(() => {});
+
   const fnStatement = () => {
     setIsRunning(false);
-    setStatusActive(EStatusRun.EmCorrida);
+    if (getStatusCorrida()) setStatusActive(getStatusCorrida());
     setBusRoute(null);
     cleanParams();
   };
@@ -62,8 +72,8 @@ export const StatusButton = ({
     try {
       await postChangeStatusCourse(courseId, status.id);
       if (
-        status.status === EStatusRun.Finalizado.status ||
-        status.status === EStatusRun.Incapacitado.status
+        status.status === EStatusRun.Finalizado ||
+        status.status === EStatusRun.Incapacitado
       ) {
         handleOpenModal();
         setShowModal(false);
@@ -100,7 +110,7 @@ export const StatusButton = ({
               height={2}
               width={4}
               backgroundColor={
-                statusActive && `${getColorFromState(statusActive)}`
+                statusActive && `${getColorFromState(statusActive.status)}`
               }
             ></Box>
             {isLoading ? (
@@ -119,7 +129,7 @@ export const StatusButton = ({
           <Modal.CloseButton />
           <Modal.Header>Selecione o estado da corrida</Modal.Header>
           <Modal.Body height={400}>
-            {data.map((item) => (
+            {data?.map((item) => (
               <ListStatusItem
                 key={item.id}
                 onPress={async () => {

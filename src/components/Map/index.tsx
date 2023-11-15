@@ -41,6 +41,7 @@ import {
   ICurrentPosition,
 } from "~/services/CoursesServices/getCurrentPositionId";
 import { CustomMarkerBus } from "./components/CustomMarkerBus";
+import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
 
 export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
@@ -49,6 +50,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   const { modalRef, handleOpenModal } = useModal();
   const [zoom, setZoom] = useState<number>(17);
   const [dataPoint, setDataPoint] = useState<BusStopProps | null>(null);
+  const [allStatus, setAllStatus] = useState<IStatus[] | null>(null);
   const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
     null
   );
@@ -244,6 +246,11 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   };
 
   useEffect(() => {
+    (async () => {
+      setAllStatus(await getAllStatusService());
+    })();
+  });
+  useEffect(() => {
     if (isRunning && user?.user.driver) {
       getPositionAndIncrementInCourse();
       setIntervalRun(
@@ -332,6 +339,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
               {user?.user.driver && busStops && courseId ? (
                 <>
                   <StartRunButton
+                    allStatus={allStatus}
                     courseId={courseId}
                     setIsRunning={setIsRunning}
                     isRunning={isRunning}
@@ -340,6 +348,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                   {isRunning && (
                     <>
                       <StatusButton
+                        allStatus={allStatus}
                         setIsRunning={setIsRunning}
                         courseId={courseId}
                         statusActive={statusActive}
@@ -349,6 +358,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                         setBusRoute={setBusStops}
                       />
                       <FinalizeButton
+                        allStatus={allStatus}
                         courseId={courseId}
                         cleanParams={cleanParams}
                         setBusRoute={setBusStops}

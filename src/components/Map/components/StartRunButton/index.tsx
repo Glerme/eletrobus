@@ -22,26 +22,38 @@ import { ModalStatement } from "~/components/ModalStatement";
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 import { EStatusRun } from "~/enum/EStatusRun";
 import Toast from "react-native-toast-message";
+import { IStatus } from "~/interfaces/Status.interface";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
   isRunning: boolean;
   busRoute: RoutesBusStopsInterface | null;
   courseId: string;
+
+  allStatus: IStatus[] | null;
 }
 export const StartRunButton = ({
   setIsRunning,
   isRunning,
   busRoute,
   courseId,
+  allStatus,
 }: runningInterface) => {
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
   const [intervalRef, setIntervalRef] = useState<any>(null);
   const [time, setTime] = useState<number>(0);
-
+  const getStatusCorrida = () => {
+    const status = allStatus?.find(
+      (status) => status.status === EStatusRun.EmCorrida
+    );
+    return status;
+  };
   const fnStatement = async () => {
     try {
-      await postChangeStatusCourse(courseId, EStatusRun.EmCorrida.id);
+      const statusCorrida = getStatusCorrida();
+      if (!statusCorrida) return;
+      await postChangeStatusCourse(courseId, statusCorrida.id);
+
       setIsRunning(true);
     } catch (err) {
       Toast.show({
