@@ -118,11 +118,11 @@ export const CoursesScreen = ({
                   item={item}
                   onPress={() => {
                     navigation.navigate("CourseDetails", {
-                      routeId: `${item?.route?.id}`,
+                      routeId: `${item?.id_route}`,
                       courseId: `${item?.id}`,
                     });
                   }}
-                  key={item?.route.id}
+                  key={item?.id}
                 />
               )}
               ListEmptyComponent={() => (

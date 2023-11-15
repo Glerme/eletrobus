@@ -11,7 +11,7 @@ import { CourseProps } from "~/interfaces/Course.interface";
 import { FavoriteCourseProps } from "~/interfaces/FavoriteCourse.interface";
 
 interface ListCoursesProps extends TouchableNativeFeedbackProps {
-  item?: CourseProps | FavoriteCourseProps;
+  item?: CourseProps | FavoriteCourseProps | any;
   onPress?: () => void;
   isLoading?: boolean;
 }
@@ -57,7 +57,7 @@ export const ListCourses = memo(
           <HStack py="2" justifyContent={"space-between"}>
             <HStack space={4} alignItems={"center"}>
               <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
-                {item?.route.name}
+                {item.name ? item?.name : item?.route.name}
               </Text>
             </HStack>
           </HStack>

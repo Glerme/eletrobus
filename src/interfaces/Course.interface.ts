@@ -6,14 +6,11 @@ export interface CourseInterface {
 }
 
 export interface CourseProps {
-  driver: Driver;
-  final_hour: string;
-  initial_hour: string;
-  institution: Institution;
-  name: string;
-  route: Route;
-  vehicle: Vehicle;
   id: string;
+  initial_hour: string;
+  final_hour: string;
+  name: string;
+  id_route: string;
 }
 
 export interface CourseDataProps {
