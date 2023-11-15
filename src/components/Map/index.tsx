@@ -36,12 +36,11 @@ import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
 import { IStatus } from "~/interfaces/Status.interface";
-import { EStatusRun } from "~/enum/EStatusRun";
-
-interface Params {
-  routeId?: string;
-  pointId?: string;
-}
+import {
+  getCurrentPositionId,
+  ICurrentPosition,
+} from "~/services/CoursesServices/getCurrentPositionId";
+import { CustomMarkerBus } from "./components/CustomMarkerBus";
 
 export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
@@ -57,12 +56,16 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   const [visibleMarkers, setVisibleMarkers] = useState<any[]>([]);
 
   const [intervalRun, setIntervalRun] = useState<any>(null);
+
+  const [intervalBus, setIntervalBus] = useState<any>(null);
   const [region, setRegion] = useState<Region>({
     longitude: 0,
     latitude: 0,
     longitudeDelta: 0.005,
     latitudeDelta: 0.005,
   });
+
+  const [busMove, setBusMove] = useState<ICurrentPosition | null>(null);
 
   const [statusActive, setStatusActive] = useState<IStatus>();
 
@@ -259,7 +262,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
       setIntervalRun(
         setInterval(() => {
           getPositionAndIncrementInCourse();
-        }, 5000)
+        }, 1000)
       );
     } else {
       clearInterval(intervalRun);
@@ -269,13 +272,27 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   useEffect(() => {
     (async () => {
       if (!routeId) return;
+      clearInterval(intervalBus);
       setBusStops(await getRouteById(routeId));
 
       if (user?.user.driver) {
         incrementPositionInCourse();
+      } else {
+        setPositionBus();
+        setIntervalBus(
+          setInterval(() => {
+            setPositionBus();
+          }, 1000)
+        );
       }
     })();
   }, [routeId]);
+
+  const setPositionBus = async () => {
+    if (!routeId) return;
+    const { data } = await getCurrentPositionId(routeId);
+    setBusMove(data.current_position);
+  };
 
   useEffect(() => {
     if (pointId) {
@@ -389,6 +406,8 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                 zoomEnabled
                 zoomControlEnabled={false}
               >
+                {busMove && routeId && <CustomMarkerBus marker={busMove} />}
+
                 {visibleMarkers?.map((marker, i) => (
                   <CustomMarker
                     key={marker.id}
@@ -396,7 +415,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                     handleOpenModal={openModal}
                   />
                 ))}
-
                 {busStops &&
                   busStops.bus_stops.map((stop, index) => {
                     if (index < busStops.bus_stops.length - 1) {
@@ -415,7 +433,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                       );
                     }
                   })}
-
                 {/* {busStops &&
                   busStops?.bus_stops?.map((stop, index) => {
                     if (index < busStops?.bus_stops?.length - 1) {
