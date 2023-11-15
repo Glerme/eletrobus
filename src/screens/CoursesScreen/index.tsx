@@ -85,6 +85,8 @@ export const CoursesScreen = ({
 
   return (
     <>
+      <StatusBar />
+
       <Background>
         <Container>
           <Input

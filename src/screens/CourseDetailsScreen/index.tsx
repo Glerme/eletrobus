@@ -133,8 +133,6 @@ export const CourseDetailsScreen = ({
 
   return (
     <>
-      <StatusBar />
-
       <Background>
         <ScreenContent>
           <ScrollViewContainer
