@@ -9,20 +9,36 @@ import { Modal } from "~/components/Modal";
 import { Title } from "~/components/Layouts/Title";
 import { THEME } from "~/styles/theme";
 import { useModal } from "~/hooks/useModal";
+import { ModalStatement } from "~/components/ModalStatement";
+import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
+import { EStatusRun } from "~/enum/EStatusRun";
 
 interface finalizeInterface {
   setBusRoute: Dispatch<RoutesBusStopsInterface | null>;
   setIsRunning: Dispatch<boolean>;
   cleanParams: () => void;
+  courseId: string;
 }
 
+const statusFinalizado = {
+  id: "6553ad9d174ce2ff6999efc1",
+  status: EStatusRun.Finalizado,
+};
 export const FinalizeButton = ({
   setIsRunning,
   setBusRoute,
   cleanParams,
+  courseId,
 }: finalizeInterface) => {
   const [time, setTime] = useState<number>(0);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
+
+  const fnStatement = async () => {
+    await postChangeStatusCourse(courseId, statusFinalizado.id);
+    setIsRunning(false);
+    setBusRoute(null);
+    cleanParams();
+  };
   return (
     <>
       <Container>
@@ -30,11 +46,16 @@ export const FinalizeButton = ({
           <Text lineHeight={15} color="white">
             Finalizar percurso
           </Text>
-          {/* <Plus color="white" /> */}
         </TextFinalize>
       </Container>
-
-      <Modal
+      <ModalStatement
+        title="Finalizar percurso"
+        description="Deseja Finalizar o corrida?"
+        handleCloseModal={handleCloseModal}
+        modalRef={modalRef}
+        fnStatement={fnStatement}
+      />
+      {/* <Modal
         forwardedRef={modalRef}
         HeaderComponent={
           <VStack px={23} mt={6}>
@@ -80,7 +101,7 @@ export const FinalizeButton = ({
             </Button>
           </HStack>
         </VStack>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

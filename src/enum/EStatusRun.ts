@@ -3,4 +3,5 @@ export enum EStatusRun {
   Parado = "PARADO",
 
   Incapacitado = "INCAPACITADO",
+  Finalizado = "FINALIZADO",
 }

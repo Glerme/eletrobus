@@ -18,6 +18,7 @@ import { Title } from "~/components/Layouts/Title";
 import { Modal } from "~/components/Modal";
 import { THEME } from "~/styles/theme";
 import { formatTemp } from "~/utils/format";
+import { ModalStatement } from "~/components/ModalStatement";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
@@ -32,6 +33,10 @@ export const StartRunButton = ({
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
   const [intervalRef, setIntervalRef] = useState<any>(null);
   const [time, setTime] = useState<number>(0);
+
+  const fnStatement = () => {
+    setIsRunning(true);
+  };
 
   useEffect(() => {
     clearInterval(intervalRef);
@@ -72,52 +77,13 @@ export const StartRunButton = ({
           </TextStart>
         </HStack>
       </Container>
-
-      <Modal
-        forwardedRef={modalRef}
-        HeaderComponent={
-          <VStack px={23} mt={6}>
-            <Title size="md" textAlign={"left"}>
-              Confirmação de percurso
-            </Title>
-          </VStack>
-        }
-      >
-        <VStack px={23} mt={6} mb={6}>
-          <Text fontSize="md" color="black">
-            Deseja começar o percurso? nome percurso
-          </Text>
-
-          <HStack space={2} mt={2}>
-            <Button
-              flex={1}
-              h={12}
-              colorScheme="primary"
-              bg="red.600"
-              onPress={handleCloseModal}
-            >
-              <Text fontSize={"sm"} fontWeight={"500"} color={"white"}>
-                Não
-              </Text>
-            </Button>
-            <Button
-              flex={1}
-              h={12}
-              colorScheme="primary"
-              bg={THEME.colors.primary["500"]}
-              onPress={() => {
-                setIsRunning(true);
-              }}
-            >
-              <HStack space={1} alignItems={"center"}>
-                <Text fontSize={"sm"} fontWeight={"500"} color={"white"}>
-                  Sim
-                </Text>
-              </HStack>
-            </Button>
-          </HStack>
-        </VStack>
-      </Modal>
+      <ModalStatement
+        title="Confirmação de percurso"
+        description="Deseja começar o percurso? nome percurso"
+        modalRef={modalRef}
+        handleCloseModal={handleCloseModal}
+        fnStatement={fnStatement}
+      />
     </>
   );
 };

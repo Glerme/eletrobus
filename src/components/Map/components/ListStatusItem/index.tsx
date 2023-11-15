@@ -19,7 +19,6 @@ interface IListStatusItem extends TouchableNativeFeedbackProps {
 
 export const ListStatusItem = memo(
   ({ item, onPress, isLoading, ...rest }: IListStatusItem) => {
-    console.log("item", item);
     return isLoading ? (
       <TouchableNativeFeedback disabled {...rest}>
         <Box
