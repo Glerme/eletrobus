@@ -31,11 +31,16 @@ import { CustomMarker } from "./components/CustomMarker";
 import { StartRunButton } from "./components/StartRunButton";
 import { FinalizeButton } from "./components/FinalizeButton";
 import { MyLocationButton } from "./components/MyLocationButton";
-import { ModalDescription } from "./components/ModalDescription";
+import { ModalDescriptionPoint } from "./components/ModalDescriptionPoint";
 import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
 import { IStatus } from "~/interfaces/Status.interface";
+import {
+  getCurrentPositionId,
+  ICurrentPosition,
+} from "~/services/CoursesServices/getCurrentPositionId";
+import { CustomMarkerBus } from "./components/CustomMarkerBus";
 
 export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   const mapRef = useRef<MapView>(null);
@@ -51,6 +56,8 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   const [visibleMarkers, setVisibleMarkers] = useState<any[]>([]);
 
   const [intervalRun, setIntervalRun] = useState<any>(null);
+
+  const [intervalBus, setIntervalBus] = useState<any>(null);
   const [region, setRegion] = useState<Region>({
     longitude: 0,
     latitude: 0,
@@ -235,10 +242,10 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   };
 
   const getPositionAndIncrementInCourse = async () => {
-    if (!routeId) return;
+    if (!courseId) return;
     // await getCurrentPosition();
     await postCurrentPositionId({
-      id: routeId,
+      id: courseId,
 
       latitude: location?.coords?.latitude ?? 0,
       longitude: location?.coords?.longitude ?? 0,
@@ -248,7 +255,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   };
 
   useEffect(() => {
-    if (isRunning) {
+    if (isRunning && user?.user.driver) {
       getPositionAndIncrementInCourse();
       setIntervalRun(
         setInterval(() => {
@@ -263,10 +270,18 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   useEffect(() => {
     (async () => {
       if (!routeId) return;
+      clearInterval(intervalBus);
       setBusStops(await getRouteById(routeId));
 
       if (user?.user.driver) {
         incrementPositionInCourse();
+      } else {
+        setBusStops(await getRouteById(routeId));
+        setIntervalBus(
+          setInterval(async () => {
+            setBusStops(await getRouteById(routeId));
+          }, 5000)
+        );
       }
     })();
   }, [routeId]);
@@ -382,6 +397,15 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                 zoomEnabled
                 zoomControlEnabled={false}
               >
+                {routeId &&
+                  busStops?.courses &&
+                  busStops?.courses?.map((course) => (
+                    <CustomMarkerBus
+                      key={course?.id}
+                      marker={course?.current_positions}
+                    />
+                  ))}
+
                 {visibleMarkers?.map((marker, i) => (
                   <CustomMarker
                     key={marker.id}
@@ -389,7 +413,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                     handleOpenModal={openModal}
                   />
                 ))}
-
                 {busStops &&
                   busStops.bus_stops.map((stop, index) => {
                     if (index < busStops.bus_stops.length - 1) {
@@ -408,7 +431,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                       );
                     }
                   })}
-
                 {/* {busStops &&
                   busStops?.bus_stops?.map((stop, index) => {
                     if (index < busStops?.bus_stops?.length - 1) {
@@ -436,7 +458,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
       </Box>
 
       {dataPoint && (
-        <ModalDescription
+        <ModalDescriptionPoint
           point={dataPoint}
           forwardedRef={modalRef}
           onClose={() => setDataPoint(null)}

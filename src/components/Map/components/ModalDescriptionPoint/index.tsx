@@ -48,7 +48,7 @@ interface ModalDescriptionProps {
   handleOpenRoute: (route: RoutesProps) => void;
 }
 
-export const ModalDescription = ({
+export const ModalDescriptionPoint = ({
   point,
   forwardedRef,
   onClose,
