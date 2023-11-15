@@ -129,27 +129,15 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
     }
   }, []);
 
-  const handleOpenBus = useCallback(
-    async (route_id: string, location?: any) => {
-      const { data } = await api.get<RoutesBusStopsInterface>(
-        `/route/${route_id}`
-      );
+  const handleOpenBus = useCallback(async (route_id: string) => {
+    clearInterval(intervalBus);
 
-      if (location) {
-        const busStop = data;
-        busStop.bus_stops?.push({
-          bus_stop_id: "0",
-          latitude: location.latitude,
-          longitude: location.longitude,
-        });
-        setBusStops(busStop);
-        return;
-      }
-
-      setBusStops(data);
-    },
-    []
-  );
+    setIntervalBus(
+      setInterval(async () => {
+        setBusStops(await getRouteById(route_id));
+      }, 5000)
+    );
+  }, []);
 
   const handleRegionChange = useCallback(
     (region: Region) => {
@@ -196,6 +184,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   );
 
   const cleanParams = useCallback(() => {
+    setBusStops(null);
     navigation.dispatch((state) => {
       const newRoutes = state.routes.map((route) => {
         if (route.name === "Map") {
@@ -269,8 +258,9 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
 
   useEffect(() => {
     (async () => {
-      if (!routeId) return;
       clearInterval(intervalBus);
+      if (!routeId) return;
+      // clearInterval(intervalBus);
       setBusStops(await getRouteById(routeId));
 
       if (user?.user.driver) {
@@ -397,8 +387,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                 zoomEnabled
                 zoomControlEnabled={false}
               >
-                {routeId &&
-                  busStops?.courses &&
+                {busStops?.courses &&
                   busStops?.courses?.map((course) => (
                     <CustomMarkerBus
                       key={course?.id}
