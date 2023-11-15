@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ActivityIndicator, RefreshControl } from "react-native";
 
-import { Info, Path } from "phosphor-react-native";
+import { Bus, Info, Path } from "phosphor-react-native";
 import { useQuery } from "@tanstack/react-query";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   Text,
   VStack,
 } from "native-base";
+import Toast from "react-native-toast-message";
 
 import { useAuth } from "~/contexts/AuthContext";
 
@@ -24,19 +25,14 @@ import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 import { NavigationProps } from "~/routes";
 
 import { Alert } from "~/components/Alert";
-import { HourCard } from "~/components/HourCard";
 import { Button } from "~/components/Form/Button";
-import { TypeRoute } from "~/components/TypeRoute";
-import { StatusBar } from "~/components/StatusBar";
 import { Background } from "~/components/Layouts/Background";
-import { StatusInfo } from "~/components/BusStatus/StatusInfo";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { EStatusType } from "~/components/BusStatus/StatusInfo/EStatusType";
 import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
-import Toast from "react-native-toast-message";
+import { getColorFromState } from "~/utils/getColorFromState";
 
 export const CourseDetailsScreen = ({
   navigation,
@@ -165,37 +161,48 @@ export const CourseDetailsScreen = ({
                 </Text>
               </HStack>
               {data?.bus_stops?.map((busStop, index) => (
-                <Text fontSize={"sm"} color={"gray.700"} key={index}>
-                  {busStop?.bus_stop?.name} -
+                <Text
+                  fontSize={"md"}
+                  fontWeight={"bold"}
+                  color={"gray.800"}
+                  key={index}
+                >
+                  - {busStop?.bus_stop?.name}
                 </Text>
               ))}
             </VStack>
 
-            <Divider mt={4} mb={4} bg={"gray.300"} />
-
-            {/* <Box>
-              <HStack alignItems={"flex-start"} mb={2}>
-                <VStack space={1}>
-                  <Text fontWeight={500} fontSize="sm">
-                    Saida: 10h
-                  </Text>
-                  <Text fontWeight={500} fontSize="sm">
-                    Chegada: 23h
-                  </Text>
-                </VStack>
-                <Spacer />
-                <VStack space={1} alignItems="flex-end">
-                  <StatusInfo statusCorrida={EStatusType.EM_MOVIMENTO} />
-                </VStack>
+            <VStack mt={2}>
+              <HStack alignItems={"center"} mt={2} space={2}>
+                <Bus size={18} color="#4d34dd" weight="duotone" />
+                <Text fontSize={"sm"} fontWeight={"600"}>
+                  Ônibus em rota
+                </Text>
               </HStack>
+              {data?.courses?.map((course, index) => (
+                <VStack
+                  key={index}
+                  borderBottomColor={"primary.500"}
+                  borderBottomWidth={"1px"}
+                  p={2}
+                >
+                  <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
+                    Placa:{" "}
+                    <Text color={"primary.500"}>
+                      {course?.vehicle?.plate ?? "-"}
+                    </Text>
+                  </Text>
+                  <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
+                    Status:{" "}
+                    <Text color={getColorFromState(course?.status)}>
+                      {course?.status ?? "-"}
+                    </Text>
+                  </Text>
+                </VStack>
+              ))}
+            </VStack>
 
-              <FlatList
-                data={mockedData}
-                horizontal
-                keyExtractor={(item) => `${item.id}`}
-                renderItem={({ item }) => <HourCard isToday={item.isToday} />}
-              />
-            </Box> */}
+            <Divider mt={4} mb={4} bg={"gray.300"} />
 
             <Box mt={2}>
               <Button

@@ -1,3 +1,5 @@
+import { EStatusRun } from "~/enum/EStatusRun";
+
 export interface CourseInterface {
   data: CourseProps[];
   totalPages: number;
@@ -29,6 +31,15 @@ export interface CourseDataProps {
       longitude: number;
     }
   ];
+  courses: {
+    id: string;
+    current_positions: {
+      latitude: string;
+      longitude: string;
+    };
+    vehicle?: Vehicle;
+    status: EStatusRun;
+  }[];
 }
 
 export interface Driver {
@@ -47,5 +58,8 @@ export interface Route {
 }
 
 export interface Vehicle {
+  id: string;
+  institution_id: string;
   plate: string;
+  broken: boolean;
 }

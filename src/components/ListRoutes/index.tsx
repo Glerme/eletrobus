@@ -1,8 +1,9 @@
 import { TouchableNativeFeedback } from "react-native";
 
-import { Box, HStack, Text } from "native-base";
+import { Box, HStack, Text, VStack } from "native-base";
 
 import { RoutesProps } from "~/interfaces/Routes.interface";
+import { formatDatetime } from "~/utils/format";
 
 interface ListRoutesProps {
   route: RoutesProps;
@@ -34,11 +35,38 @@ export const ListRoutes = ({
         px="2"
       >
         <HStack py="2" justifyContent={"space-between"}>
-          <HStack space={4} alignItems={"center"}>
-            <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>
+          <VStack>
+            <Text color="primary.500" fontSize={"lg"} fontWeight={"bold"}>
               {route?.name ?? "Rota não encontrada"}
             </Text>
-          </HStack>
+
+            <VStack mt={1}>
+              <Text color="coolGray.600" fontSize={"sm"} fontWeight={"bold"}>
+                Horários
+              </Text>
+
+              {route?.course?.map((course, i) => (
+                <VStack key={i}>
+                  <Text
+                    color="coolGray.600"
+                    fontSize={"sm"}
+                    fontWeight={"bold"}
+                  >
+                    Hora inicial:{" "}
+                    {formatDatetime(new Date(course?.initial_hour))}
+                  </Text>
+
+                  <Text
+                    color="coolGray.600"
+                    fontSize={"sm"}
+                    fontWeight={"bold"}
+                  >
+                    Hora final: {formatDatetime(new Date(course?.final_hour))}
+                  </Text>
+                </VStack>
+              ))}
+            </VStack>
+          </VStack>
         </HStack>
       </Box>
     </TouchableNativeFeedback>
