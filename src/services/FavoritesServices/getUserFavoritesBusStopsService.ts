@@ -15,7 +15,11 @@ export const getUserFavoritesBusStopsService = async ({
 
   setSignOutFunction(getRefreshToken);
 
-  return api.get<FavoriteBusStopInterface>(
-    `/user/favorite/bus-stop?page=${pageParam}&pageSize=${pageSize}&orderAsc=desc`
-  );
+  return api.get<FavoriteBusStopInterface>(`/user/favorite/bus-stop`, {
+    params: {
+      page: pageParam,
+      pageSize: pageSize,
+      orderAsc: "desc",
+    },
+  });
 };

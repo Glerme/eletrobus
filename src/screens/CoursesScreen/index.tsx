@@ -52,6 +52,7 @@ export const CoursesScreen = ({
 
         return nextPage;
       },
+      retry: 3,
       keepPreviousData: true,
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,
@@ -116,7 +117,7 @@ export const CoursesScreen = ({
                 <ListCourses
                   item={item}
                   onPress={() => {
-                    navigation.navigate("CouseDetails", {
+                    navigation.navigate("CourseDetails", {
                       routeId: `${item?.route.id}`,
                       courseId: `${item?.id}`,
                     });

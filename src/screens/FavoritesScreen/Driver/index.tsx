@@ -82,8 +82,9 @@ export const FavoritesScreenDriver = ({
                 <ListFavorites
                   item={item}
                   onPress={() => {
-                    navigation.navigate("CouseDetails", {
-                      id: `${item?.bus_stop_id}`,
+                    navigation.navigate("CourseDetails", {
+                      routeId: `${item?.bus_stop_id}`,
+                      courseId: `${item?.id}`,
                     });
                   }}
                   key={item.id}

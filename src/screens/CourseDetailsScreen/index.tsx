@@ -54,10 +54,12 @@ interface CourseDataProps {
 export const CourseDetailsScreen = ({
   navigation,
   route,
-}: NavigationProps<"CouseDetails">) => {
+}: NavigationProps<"CourseDetails">) => {
   const { user } = useAuth();
 
   const [favorite, setFavorite] = useState<boolean>(false);
+
+  console.log(route.params.routeId);
 
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useQuery<CourseDataProps>({
@@ -134,9 +136,9 @@ export const CourseDetailsScreen = ({
                   Pontos de parada
                 </Text>
               </HStack>
-              {data?.bus_stops?.map((busStop) => (
-                <Text fontSize={"sm"} color={"gray.700"}>
-                  {busStop?.bus_stop?.name}
+              {data?.bus_stops?.map((busStop, index) => (
+                <Text fontSize={"sm"} color={"gray.700"} key={index}>
+                  {busStop?.bus_stop?.name} -
                 </Text>
               ))}
             </VStack>
