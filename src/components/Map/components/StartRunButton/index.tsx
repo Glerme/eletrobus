@@ -21,6 +21,7 @@ import { formatTemp } from "~/utils/format";
 import { ModalStatement } from "~/components/ModalStatement";
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 import { EStatusRun } from "~/enum/EStatusRun";
+import Toast from "react-native-toast-message";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
@@ -39,8 +40,16 @@ export const StartRunButton = ({
   const [time, setTime] = useState<number>(0);
 
   const fnStatement = async () => {
-    await postChangeStatusCourse(courseId, EStatusRun.EmCorrida.id);
-    setIsRunning(true);
+    try {
+      await postChangeStatusCourse(courseId, EStatusRun.EmCorrida.id);
+      setIsRunning(true);
+    } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: "Erro ao iniciar corrida",
+        text2: "Tente novamente mais tarde",
+      });
+    }
   };
 
   useEffect(() => {
