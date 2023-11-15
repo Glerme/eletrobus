@@ -31,7 +31,7 @@ import { CustomMarker } from "./components/CustomMarker";
 import { StartRunButton } from "./components/StartRunButton";
 import { FinalizeButton } from "./components/FinalizeButton";
 import { MyLocationButton } from "./components/MyLocationButton";
-import { ModalDescription } from "./components/ModalDescription";
+import { ModalDescriptionPoint } from "./components/ModalDescriptionPoint";
 import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
@@ -64,8 +64,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
     longitudeDelta: 0.005,
     latitudeDelta: 0.005,
   });
-
-  const [busMove, setBusMove] = useState<ICurrentPosition | null>(null);
 
   const [statusActive, setStatusActive] = useState<IStatus>();
 
@@ -244,10 +242,10 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   };
 
   const getPositionAndIncrementInCourse = async () => {
-    if (!routeId) return;
+    if (!courseId) return;
     // await getCurrentPosition();
     await postCurrentPositionId({
-      id: routeId,
+      id: courseId,
 
       latitude: location?.coords?.latitude ?? 0,
       longitude: location?.coords?.longitude ?? 0,
@@ -257,12 +255,12 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
   };
 
   useEffect(() => {
-    if (isRunning) {
+    if (isRunning && user?.user.driver) {
       getPositionAndIncrementInCourse();
       setIntervalRun(
         setInterval(() => {
           getPositionAndIncrementInCourse();
-        }, 1000)
+        }, 5000)
       );
     } else {
       clearInterval(intervalRun);
@@ -278,21 +276,15 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
       if (user?.user.driver) {
         incrementPositionInCourse();
       } else {
-        setPositionBus();
+        setBusStops(await getRouteById(routeId));
         setIntervalBus(
-          setInterval(() => {
-            setPositionBus();
-          }, 1000)
+          setInterval(async () => {
+            setBusStops(await getRouteById(routeId));
+          }, 5000)
         );
       }
     })();
   }, [routeId]);
-
-  const setPositionBus = async () => {
-    if (!routeId) return;
-    const { data } = await getCurrentPositionId(routeId);
-    setBusMove(data.current_position);
-  };
 
   useEffect(() => {
     if (pointId) {
@@ -406,7 +398,14 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                 zoomEnabled
                 zoomControlEnabled={false}
               >
-                {busMove && routeId && <CustomMarkerBus marker={busMove} />}
+                {routeId &&
+                  busStops?.courses &&
+                  busStops?.courses?.map((course) => (
+                    <CustomMarkerBus
+                      key={course?.id}
+                      marker={course?.current_positions}
+                    />
+                  ))}
 
                 {visibleMarkers?.map((marker, i) => (
                   <CustomMarker
@@ -461,7 +460,7 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
       </Box>
 
       {dataPoint && (
-        <ModalDescription
+        <ModalDescriptionPoint
           point={dataPoint}
           forwardedRef={modalRef}
           onClose={() => setDataPoint(null)}
