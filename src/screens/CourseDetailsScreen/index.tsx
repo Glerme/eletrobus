@@ -73,8 +73,6 @@ export const CourseDetailsScreen = ({
       },
     });
 
-  console.log({ data });
-
   if (isLoading) {
     return (
       <Background>
