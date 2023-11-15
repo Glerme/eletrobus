@@ -1,7 +1,4 @@
-import { IStatus } from "~/interfaces/Status.interface";
-import api, { setSignOutFunction } from "../axios";
-
-import { CourseInterface } from "~/interfaces/Course.interface";
+import api from "../axios";
 
 export const postChangeStatusCourse = async (id: string, id_status: string) => {
   console.log("id", id, "id_status", id_status);

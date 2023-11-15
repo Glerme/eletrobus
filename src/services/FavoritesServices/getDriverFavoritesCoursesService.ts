@@ -1,6 +1,5 @@
+import { FavoriteCourseInterface } from "~/interfaces/FavoriteCourse.interface";
 import api, { setSignOutFunction } from "../axios";
-
-import { FavoriteBusStopInterface } from "~/interfaces/FavoriteBusStop.interface";
 
 interface ParamsProps {
   pageParam: number;
@@ -15,7 +14,7 @@ export const getDriverFavoritesCoursesService = async ({
 
   setSignOutFunction(getRefreshToken);
 
-  return api.get<FavoriteBusStopInterface>(`/user/favorite/courses`, {
+  return api.get<FavoriteCourseInterface>(`/user/favorite/route`, {
     params: {
       page: pageParam,
       pageSize: pageSize,

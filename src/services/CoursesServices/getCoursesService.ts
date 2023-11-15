@@ -17,7 +17,7 @@ export const getCoursesService = async ({
 
   setSignOutFunction(getRefreshToken);
 
-  return api.get<CourseInterface>(`/course`, {
+  return api.get<CourseInterface>(`/course/my`, {
     params: {
       page: pageParam,
       pageSize: pageSize,

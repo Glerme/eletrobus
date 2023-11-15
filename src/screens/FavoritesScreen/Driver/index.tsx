@@ -8,13 +8,13 @@ import { useAuth } from "~/contexts/AuthContext";
 
 import { NavigationProps } from "~/routes";
 
-import { FavoriteBusStopProps } from "~/interfaces/FavoriteBusStop.interface";
+import { FavoriteCourseProps } from "~/interfaces/FavoriteCourse.interface";
 
 import { getDriverFavoritesCoursesService } from "~/services/FavoritesServices/getDriverFavoritesCoursesService";
 
 import { Alert } from "~/components/Alert";
 import { StatusBar } from "~/components/StatusBar";
-import { ListFavorites } from "~/components/ListFavorites";
+import { ListCourses } from "~/components/ListCourses";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 
@@ -78,12 +78,12 @@ export const FavoritesScreenDriver = ({
               refreshControl={
                 <RefreshControl onRefresh={refetch} refreshing={isFetching} />
               }
-              renderItem={({ item }: { item: FavoriteBusStopProps }) => (
-                <ListFavorites
+              renderItem={({ item }: { item: FavoriteCourseProps }) => (
+                <ListCourses
                   item={item}
                   onPress={() => {
                     navigation.navigate("CourseDetails", {
-                      routeId: `${item?.bus_stop_id}`,
+                      routeId: `${item?.route_id}`,
                       courseId: `${item?.id}`,
                     });
                   }}
@@ -106,7 +106,7 @@ export const FavoritesScreenDriver = ({
                 return (
                   <>
                     {[...Array(5).keys()].map((_, index) => (
-                      <ListFavorites isLoading key={index} />
+                      <ListCourses isLoading key={index} />
                     ))}
                   </>
                 );

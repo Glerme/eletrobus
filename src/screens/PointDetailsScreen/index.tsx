@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  RefreshControl,
-  Alert as RNAlert,
-} from "react-native";
+import { ActivityIndicator, RefreshControl } from "react-native";
 
 import {
   Box,
@@ -15,6 +11,7 @@ import {
   Text,
   VStack,
 } from "native-base";
+import Toast from "react-native-toast-message";
 import { Info, Path, MapPin } from "phosphor-react-native";
 import { useQuery } from "@tanstack/react-query";
 
@@ -47,6 +44,7 @@ export const PointDetailsScreen = ({
   const { user } = useAuth();
 
   const [favorite, setFavorite] = useState<boolean>(false);
+  const [favoriteLoading, setFavoriteLoading] = useState<boolean>(false);
 
   const { data, isLoading, isError, error, refetch, isRefetching } =
     useQuery<BusStopProps>({
@@ -61,10 +59,9 @@ export const PointDetailsScreen = ({
     placeholderData: [],
   });
 
-  console.log(data?.routes);
-
   const handleFavorite = async (fav: boolean) => {
     try {
+      setFavoriteLoading(true);
       if (!fav) {
         const { status } = await api.post(
           `/bus-stop/${route.params.id}/favorite`
@@ -85,7 +82,13 @@ export const PointDetailsScreen = ({
     } catch (err) {
       const axiosError = axiosErrorHandler(err);
 
-      RNAlert.alert("Erro ao favoritar", axiosError.message);
+      Toast.show({
+        type: "error",
+        text1: "Erro",
+        text2: `Ocorreu um erro: ${axiosError.message}`,
+      });
+    } finally {
+      setFavoriteLoading(false);
     }
   };
 
@@ -150,6 +153,7 @@ export const PointDetailsScreen = ({
               <FavoriteButton
                 favorite={favorite}
                 handlePress={() => handleFavorite(favorite)}
+                isLoading={favoriteLoading}
               />
             )}
           </HStack>

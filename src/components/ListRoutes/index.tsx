@@ -6,14 +6,21 @@ import { RoutesProps } from "~/interfaces/Routes.interface";
 
 interface ListRoutesProps {
   route: RoutesProps;
+  disabled?: boolean;
   onPress: () => void;
 }
 
-export const ListRoutes = ({ route, onPress, ...rest }: ListRoutesProps) => {
+export const ListRoutes = ({
+  route,
+  onPress,
+  disabled,
+  ...rest
+}: ListRoutesProps) => {
   return (
     <TouchableNativeFeedback
       background={TouchableNativeFeedback.Ripple("#d4d4d4", false)}
       onPress={onPress}
+      disabled={disabled}
       {...rest}
     >
       <Box

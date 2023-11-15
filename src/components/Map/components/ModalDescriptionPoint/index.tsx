@@ -18,7 +18,6 @@ import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 import { Modal } from "~/components/Modal";
 import { Alert } from "~/components/Alert";
-import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
 import { ListRoutes } from "~/components/ListRoutes";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
@@ -56,7 +55,9 @@ export const ModalDescriptionPoint = ({
   handleOpenRoute,
 }: ModalDescriptionProps) => {
   const { user, updateUser, getRefreshToken } = useAuth();
+
   const [favorite, setFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState<boolean>(false);
 
   const { data: favorites } = useQuery({
     queryKey: ["favorites", user?.user?.id, point],
@@ -67,6 +68,7 @@ export const ModalDescriptionPoint = ({
 
   const handleFavorite = async (fav: boolean) => {
     try {
+      setFavoriteLoading(true);
       if (!fav) {
         const { status } = await api.post(`/bus-stop/${point?.id}/favorite`);
 
@@ -95,6 +97,8 @@ export const ModalDescriptionPoint = ({
         text1: "Erro",
         text2: `Ocorreu um erro: ${axiosError.message}`,
       });
+    } finally {
+      setFavoriteLoading(false);
     }
   };
 
@@ -120,10 +124,12 @@ export const ModalDescriptionPoint = ({
           </Title>
 
           <Spacer />
-          {user?.user && (
+
+          {user?.user && !user?.user?.driver && (
             <FavoriteButton
               favorite={favorite}
               handlePress={() => handleFavorite(favorite)}
+              isLoading={favoriteLoading}
             />
           )}
         </HStack>
@@ -153,33 +159,19 @@ export const ModalDescriptionPoint = ({
         </VStack>
 
         <VStack mt={1} space={1}>
-          {user?.user?.driver ? (
-            <>
-              <Button
-                title="Iniciar Corrida"
-                onPress={() => console.log("iniciar corrida")}
-                fontColor="white"
+          {point?.routes?.length > 0 ? (
+            point?.routes?.map((route, i) => (
+              <ListRoutes
+                key={i}
+                route={route}
+                onPress={() => handleOpenRoute(route)}
+                disabled={!!user?.user?.driver}
               />
-            </>
+            ))
           ) : (
-            <>
-              {point?.routes?.length > 0 ? (
-                point?.routes?.map((route, i) => (
-                  <ListRoutes
-                    key={i}
-                    route={route}
-                    onPress={() => handleOpenRoute(route)}
-                  />
-                ))
-              ) : (
-                <Box>
-                  <Alert
-                    status="warning"
-                    text="Ainda não há rotas cadastradas!"
-                  />
-                </Box>
-              )}
-            </>
+            <Box>
+              <Alert status="warning" text="Ainda não há rotas cadastradas!" />
+            </Box>
           )}
         </VStack>
       </VStack>

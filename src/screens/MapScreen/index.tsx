@@ -13,7 +13,6 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
   const routeId = route.params?.routeId ?? "";
   const courseId = route.params?.courseId ?? "";
-  // console.log(route.params, "route");
 
   const { requestLocationPermissions } = useLocation();
 

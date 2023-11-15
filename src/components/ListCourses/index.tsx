@@ -8,9 +8,10 @@ import {
 import { Box, HStack, Skeleton, Text } from "native-base";
 
 import { CourseProps } from "~/interfaces/Course.interface";
+import { FavoriteCourseProps } from "~/interfaces/FavoriteCourse.interface";
 
 interface ListCoursesProps extends TouchableNativeFeedbackProps {
-  item?: CourseProps;
+  item?: CourseProps | FavoriteCourseProps;
   onPress?: () => void;
   isLoading?: boolean;
 }
@@ -32,7 +33,6 @@ export const ListCourses = memo(
           <HStack py="2" justifyContent={"space-between"}>
             <HStack space={4} alignItems={"center"}>
               <Skeleton endColor="primary.50" size="50px" rounded="full" />
-
               <Skeleton endColor="primary.50" h={5} />
             </HStack>
           </HStack>

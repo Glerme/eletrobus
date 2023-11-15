@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Linking, ActivityIndicator } from "react-native";
 
-import { Box, Flex, ScrollView } from "native-base";
+import { Box, Flex } from "native-base";
 import { useQuery } from "@tanstack/react-query";
 import MapView, { PROVIDER_GOOGLE, Region, Polyline } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
@@ -292,7 +292,6 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
       if (point) {
         mapRef.current?.animateCamera({
           center: { latitude: point.latitude, longitude: point.longitude },
-          // zoom: 20,
         });
       }
     }
@@ -439,17 +438,16 @@ export const Map = memo(({ pointId, routeId, courseId }: MapInterface) => {
                       const destination = busStops?.bus_stops[index + 1];
 
                       return (
-                        <></>
-                        // <MapViewDirections
-                        //   origin={origin}
-                        //   destination={destination}
-                        //   apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
-                        //   strokeWidth={5}
-                        //   strokeColor="blue"
-                        //   optimizeWaypoints={true}
-                        //   key={index}
-                        //   mode="TRANSIT"
-                        // />
+                        <MapViewDirections
+                          origin={origin}
+                          destination={destination}
+                          apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
+                          strokeWidth={5}
+                          strokeColor="blue"
+                          optimizeWaypoints={true}
+                          key={index}
+                          mode="TRANSIT"
+                        />
                       );
                     }
                   })} */}
