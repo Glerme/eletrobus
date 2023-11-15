@@ -61,6 +61,8 @@ export const PointDetailsScreen = ({
     placeholderData: [],
   });
 
+  console.log(data?.routes);
+
   const handleFavorite = async (fav: boolean) => {
     try {
       if (!fav) {

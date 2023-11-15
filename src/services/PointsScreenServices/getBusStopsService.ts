@@ -13,7 +13,11 @@ export const getBusStopsService = async ({
 }: ParamsProps) => {
   const pageSize = 10;
 
-  return api.get<BusStopInterface>(
-    `/bus-stop?page=${pageParam}&pageSize=${pageSize}&search=${queryString}`
-  );
+  return api.get<BusStopInterface>(`/bus-stop`, {
+    params: {
+      page: pageParam,
+      pageSize: pageSize,
+      search: queryString,
+    },
+  });
 };

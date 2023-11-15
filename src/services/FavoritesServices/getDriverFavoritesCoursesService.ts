@@ -15,7 +15,11 @@ export const getDriverFavoritesCoursesService = async ({
 
   setSignOutFunction(getRefreshToken);
 
-  return api.get<FavoriteBusStopInterface>(
-    `/user/favorite/courses?page=${pageParam}&pageSize=${pageSize}&orderAsc=desc`
-  );
+  return api.get<FavoriteBusStopInterface>(`/user/favorite/courses`, {
+    params: {
+      page: pageParam,
+      pageSize: pageSize,
+      orderAsc: "desc",
+    },
+  });
 };

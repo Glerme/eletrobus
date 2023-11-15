@@ -26,7 +26,7 @@ export type RootStackParamList = {
   Courses: undefined;
   Settings: undefined;
   Map: { pointId?: string; routeId?: string; courseId?: string };
-  CouseDetails: { routeId: string; courseId: string };
+  CourseDetails: { routeId: string; courseId: string };
   Login: undefined;
 };
 
@@ -68,9 +68,9 @@ const stacks: {
     label: "Perfil",
   },
   {
-    name: "CouseDetails",
+    name: "CourseDetails",
     component: CourseDetailsScreen,
-    label: "Rotas",
+    label: "Detalhes do percurso",
   },
 ];
 

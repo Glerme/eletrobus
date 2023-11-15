@@ -17,7 +17,11 @@ export const getCoursesService = async ({
 
   setSignOutFunction(getRefreshToken);
 
-  return api.get<CourseInterface>(
-    `/course/my?page=${pageParam}&pageSize=${pageSize}&search=${queryString}`
-  );
+  return api.get<CourseInterface>(`/course`, {
+    params: {
+      page: pageParam,
+      pageSize: pageSize,
+      search: queryString,
+    },
+  });
 };
