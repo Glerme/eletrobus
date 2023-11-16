@@ -1,28 +1,22 @@
-import { Platform, TouchableNativeFeedback } from "react-native";
-
-import { Plus, Minus, X } from "phosphor-react-native";
-import { Container, TextStart } from "./styles";
-import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
-import {
-  Box,
-  Button,
-  HStack,
-  Pressable,
-  ScrollView,
-  Text,
-  VStack,
-} from "native-base";
 import { Dispatch, useEffect, useState } from "react";
-import { useModal } from "~/hooks/useModal";
-import { Title } from "~/components/Layouts/Title";
-import { Modal } from "~/components/Modal";
-import { THEME } from "~/styles/theme";
-import { formatTemp } from "~/utils/format";
-import { ModalStatement } from "~/components/ModalStatement";
-import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
-import { EStatusRun } from "~/enum/EStatusRun";
+
+import { HStack, Text } from "native-base";
 import Toast from "react-native-toast-message";
+
+import { EStatusRun } from "~/enum/EStatusRun";
+
 import { IStatus } from "~/interfaces/Status.interface";
+import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
+
+import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
+
+import { useModal } from "~/hooks/useModal";
+
+import { formatTemp } from "~/utils/format";
+
+import { ModalStatement } from "~/components/ModalStatement";
+
+import { Container, TextStart } from "./styles";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
@@ -99,13 +93,12 @@ export const StartRunButton = ({
             <Text lineHeight={15} color="white">
               Começar Percurso
             </Text>
-            {/* <Plus color="white" /> */}
           </TextStart>
         </HStack>
       </Container>
       <ModalStatement
         title="Confirmação de percurso"
-        description="Deseja começar o percurso? nome percurso"
+        description={`Deseja começar o percurso? ${busRoute?.name}`}
         modalRef={modalRef}
         handleCloseModal={handleCloseModal}
         fnStatement={fnStatement}
