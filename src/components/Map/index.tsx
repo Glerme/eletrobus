@@ -273,10 +273,11 @@ export const Map = memo(
         if (point) {
           mapRef.current?.animateCamera({
             center: { latitude: point.latitude, longitude: point.longitude },
+            zoom,
           });
         }
       }
-    }, [pointId, markers]);
+    }, [pointId]);
 
     useEffect(() => {
       getActualCurrentPosition();
