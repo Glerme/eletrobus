@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from "react";
 
 import { Box } from "native-base";
 import { Modalize } from "react-native-modalize";
+import { useQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
 import { useLocation } from "~/contexts/LocationContext";
 
+import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
+
+import { IStatus } from "~/interfaces/Status.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
 import { ICourse } from "~/interfaces/RoutesBusStops.interface";
 
-import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
-
-import { useAllStatus } from "~/hooks/useStatusAll";
 import { useBusStopInfo } from "~/hooks/useBusStopInfo";
 import { useBusCourseInfo } from "~/hooks/useBusCourseInfo";
 
@@ -31,7 +32,6 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const { dataPoint, setDataPoint } = useBusStopInfo();
   const { dataCourse, setDataCourse } = useBusCourseInfo();
   const [routeActive, setRouteActive] = useState(null);
-  const { setAllStatus } = useAllStatus();
 
   const modalRefPoint = useRef<Modalize>(null);
   const modalRefCourse = useRef<Modalize>(null);
@@ -44,11 +44,12 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     modalRefCourse.current?.open();
   };
 
-  useEffect(() => {
-    (async () => {
-      setAllStatus(await getAllStatusService());
-    })();
-  }, []);
+  const { data: allStatus } = useQuery<IStatus[]>({
+    queryKey: ["all-status"],
+    queryFn: async () => getAllStatusService(),
+    initialData: [],
+    placeholderData: [],
+  });
 
   useEffect(() => {
     (async () => await requestLocationPermissions())();
@@ -69,6 +70,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             openModalCourse={openModalCourse}
             openModalPoint={openModalPoint}
             setRouteActive={setRouteActive}
+            allStatus={allStatus}
           />
 
           <ModalDescriptionPoint

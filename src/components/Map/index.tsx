@@ -34,25 +34,18 @@ import { CustomMarker } from "./components/CustomMarker";
 import { StartRunButton } from "./components/StartRunButton";
 import { FinalizeButton } from "./components/FinalizeButton";
 import { MyLocationButton } from "./components/MyLocationButton";
-import { ModalDescriptionPoint } from "./components/ModalDescriptionPoint";
-import { BusRouteSelected } from "./components/BusRouteSelected";
 import { ListRoutesButton } from "./components/ListRoutesButton";
 import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
 import { IStatus } from "~/interfaces/Status.interface";
-import {
-  getCurrentPositionId,
-  ICurrentPosition,
-} from "~/services/CoursesServices/getCurrentPositionId";
+
 import { CustomMarkerBus } from "./components/CustomMarkerBus";
-import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
-import { ModalDescriptionBus } from "./components/ModalDescriptionBus";
-import { Modalize } from "react-native-modalize";
 
 export const Map = memo(
   ({
     pointId,
     routeId,
     courseId,
+    allStatus,
     openModalCourse,
     openModalPoint,
     setRouteActive,
@@ -329,6 +322,7 @@ export const Map = memo(
                       setIsRunning={setIsRunning}
                       isRunning={isRunning}
                       busRoute={busStops}
+                      allStatus={allStatus}
                     />
 
                     {isRunning && (
@@ -341,12 +335,14 @@ export const Map = memo(
                           setStatusActive={setStatusActive}
                           busRoute={busStops}
                           setBusRoute={setBusStops}
+                          allStatus={allStatus}
                         />
                         <FinalizeButton
                           courseId={courseId}
                           cleanParams={cleanParams}
                           setBusRoute={setBusStops}
                           setIsRunning={setIsRunning}
+                          allStatus={allStatus}
                         />
                       </>
                     )}

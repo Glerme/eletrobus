@@ -5,12 +5,12 @@ import Toast from "react-native-toast-message";
 
 import { EStatusRun } from "~/enum/EStatusRun";
 
+import { IStatus } from "~/interfaces/Status.interface";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 
 import { useModal } from "~/hooks/useModal";
-import { useAllStatus } from "~/hooks/useStatusAll";
 
 import { formatTemp } from "~/utils/format";
 
@@ -23,25 +23,26 @@ interface runningInterface {
   isRunning: boolean;
   busRoute: RoutesBusStopsInterface | null;
   courseId: string;
+  allStatus: IStatus[] | null;
 }
+
 export const StartRunButton = ({
   setIsRunning,
   isRunning,
   busRoute,
   courseId,
+  allStatus,
 }: runningInterface) => {
-  const { allStatus } = useAllStatus();
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
   const [intervalRef, setIntervalRef] = useState<any>(null);
   const [time, setTime] = useState<number>(0);
+
   const getStatusCorrida = () => {
     const status = allStatus?.find(
       (status) => status.status === EStatusRun.EmCorrida
     );
     return status;
   };
-
-  console.log("allStatus", allStatus);
 
   const startCourse = async () => {
     try {
@@ -74,8 +75,6 @@ export const StartRunButton = ({
       );
     }
   }, [isRunning]);
-
-  console.log(courseId);
 
   if (isRunning)
     return (
