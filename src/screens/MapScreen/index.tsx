@@ -80,11 +80,14 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             handleOpenRoute={({ id }) => setRouteId(id)}
           />
 
-          <ModalDescriptionBus
-            forwardedRef={modalRefCourse}
-            course={dataCourse}
-            onClose={() => setDataCourse(null)}
-          />
+          {dataCourse && (
+            <ModalDescriptionBus
+              routeActive={routeActive}
+              forwardedRef={modalRefCourse}
+              course={dataCourse}
+              onClose={() => setDataCourse(null)}
+            />
+          )}
         </Box>
       </SafeAreaView>
     </>
