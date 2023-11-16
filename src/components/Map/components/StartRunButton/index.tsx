@@ -10,13 +10,13 @@ import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 
 import { useModal } from "~/hooks/useModal";
+import { useAllStatus } from "~/hooks/useStatusAll";
 
 import { formatTemp } from "~/utils/format";
 
 import { ModalStatement } from "~/components/ModalStatement";
 
 import { Container, TextStart } from "./styles";
-import { useAllStatus } from "~/hooks/useStatusAll";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
@@ -74,6 +74,8 @@ export const StartRunButton = ({
       );
     }
   }, [isRunning]);
+
+  console.log(courseId);
 
   if (isRunning)
     return (
