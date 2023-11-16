@@ -29,15 +29,15 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const { dataCourse, setDataCourse } = useBusCourseInfo();
   const { routeActive } = useRouteActive();
   const modalRefPoint = useRef<Modalize>(null);
+
   const openModalPoint = (data: BusStopProps) => {
-    console.log("data-ponto", data);
     setDataPoint(data);
     modalRefPoint.current?.open();
   };
+
   const modalRefCourse = useRef<Modalize>(null);
   const openModalCourse = (data: ICourse) => {
     setDataCourse(data);
-    console.log("data", data);
     modalRefCourse.current?.open();
   };
 
@@ -64,14 +64,12 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             handleOpenRoute={({ id }) => setRouteId(id)}
           />
 
-          {dataCourse && routeActive && (
-            <ModalDescriptionBus
-              routeActive={routeActive}
-              forwardedRef={modalRefCourse}
-              course={dataCourse}
-              onClose={() => setDataCourse(null)}
-            />
-          )}
+          <ModalDescriptionBus
+            routeActive={routeActive}
+            forwardedRef={modalRefCourse}
+            course={dataCourse}
+            onClose={() => setDataCourse(null)}
+          />
         </Box>
       </SafeAreaView>
     </>

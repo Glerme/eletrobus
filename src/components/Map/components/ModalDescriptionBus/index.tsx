@@ -50,7 +50,7 @@ interface ModalDescriptionProps {
   onClose: () => void;
   course: any;
 
-  routeActive: RoutesBusStopsInterface;
+  routeActive: RoutesBusStopsInterface | null;
 }
 
 export const ModalDescriptionBus = ({
