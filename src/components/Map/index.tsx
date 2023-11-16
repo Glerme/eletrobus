@@ -98,6 +98,8 @@ export const Map = memo(
       placeholderData: [],
     });
 
+    console.log("MARKERS", markers);
+
     const getCurrentPosition = useCallback(async () => {
       if (!location) return;
       await getActualCurrentPosition();
@@ -187,9 +189,9 @@ export const Map = memo(
             return {
               ...route,
               params: {
-                routeId: undefined,
-                pointId: undefined,
-                courseId: undefined,
+                routeId: null,
+                pointId: null,
+                courseId: null,
               },
             };
           }

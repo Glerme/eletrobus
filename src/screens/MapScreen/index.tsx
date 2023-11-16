@@ -55,6 +55,10 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     (async () => await requestLocationPermissions())();
   }, []);
 
+  useEffect(() => {
+    setRouteId(route.params?.routeId ?? "");
+  }, [route.params]);
+
   return (
     <>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#0DAC86" }}>
