@@ -29,16 +29,17 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const { dataCourse, setDataCourse } = useBusCourseInfo();
   const { routeActive } = useRouteActive();
   const modalRefPoint = useRef<Modalize>(null);
+  const modalRefCourse = useRef<Modalize>(null);
   const openModalPoint = (data: BusStopProps) => {
     console.log("data-ponto", data);
+
     setDataPoint(data);
     modalRefPoint.current?.open();
   };
-  const modalRefCourse = useRef<Modalize>(null);
   const openModalCourse = (data: ICourse) => {
     setDataCourse(data);
-    console.log("data", data);
-    modalRefPoint.current?.open();
+    console.log("data-course", data);
+    modalRefCourse.current?.open();
   };
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             />
           )}
 
-          {dataCourse && routeActive && (
+          {dataCourse && (
             <ModalDescriptionBus
               // routeActive={routeActive}
               forwardedRef={modalRefCourse}
