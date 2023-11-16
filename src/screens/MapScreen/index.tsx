@@ -16,6 +16,8 @@ import { ModalDescriptionBus } from "~/components/Map/components/ModalDescriptio
 import { Modalize } from "react-native-modalize";
 import { ICourse } from "~/interfaces/RoutesBusStops.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
+import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
+import { useAllStatus } from "~/hooks/useStatusAll";
 
 export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
@@ -28,6 +30,8 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const { dataPoint, setDataPoint } = useBusStopInfo();
   const { dataCourse, setDataCourse } = useBusCourseInfo();
   const { routeActive } = useRouteActive();
+  const { setAllStatus } = useAllStatus();
+
   const modalRefPoint = useRef<Modalize>(null);
   const modalRefCourse = useRef<Modalize>(null);
   const openModalPoint = (data: BusStopProps) => {
@@ -41,6 +45,12 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     console.log("data-course", data);
     modalRefCourse.current?.open();
   };
+
+  useEffect(() => {
+    (async () => {
+      setAllStatus(await getAllStatusService());
+    })();
+  });
 
   useEffect(() => {
     (async () => await requestLocationPermissions())();

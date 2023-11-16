@@ -13,13 +13,13 @@ import { ModalStatement } from "~/components/ModalStatement";
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 import { EStatusRun } from "~/enum/EStatusRun";
 import { IStatus } from "~/interfaces/Status.interface";
+import { useAllStatus } from "~/hooks/useStatusAll";
 
 interface finalizeInterface {
   setBusRoute: Dispatch<RoutesBusStopsInterface | null>;
   setIsRunning: Dispatch<boolean>;
   cleanParams: () => void;
   courseId: string;
-  allStatus: IStatus[] | null;
 }
 
 export const FinalizeButton = ({
@@ -27,11 +27,10 @@ export const FinalizeButton = ({
   setBusRoute,
   cleanParams,
   courseId,
-  allStatus,
 }: finalizeInterface) => {
   const [time, setTime] = useState<number>(0);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
-
+  const { allStatus } = useAllStatus();
   const fnStatement = async () => {
     try {
       if (!allStatus) return;

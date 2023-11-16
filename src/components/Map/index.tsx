@@ -62,7 +62,6 @@ export const Map = memo(
     const { setRouteActive } = useRouteActive();
     const [zoom, setZoom] = useState<number>(17);
 
-    const [allStatus, setAllStatus] = useState<IStatus[] | null>(null);
     const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
       null
     );
@@ -240,11 +239,6 @@ export const Map = memo(
     };
 
     useEffect(() => {
-      (async () => {
-        setAllStatus(await getAllStatusService());
-      })();
-    });
-    useEffect(() => {
       if (isRunning && user?.user.driver) {
         getPositionAndIncrementInCourse();
         setIntervalRun(
@@ -269,11 +263,6 @@ export const Map = memo(
           incrementPositionInCourse();
         } else {
           setBusStops(await getRouteById(routeId));
-          setIntervalBus(
-            setInterval(async () => {
-              setBusStops(await getRouteById(routeId));
-            }, 5000)
-          );
         }
       })();
     }, [routeId]);
@@ -334,7 +323,6 @@ export const Map = memo(
                 {user?.user.driver && busStops && courseId ? (
                   <>
                     <StartRunButton
-                      allStatus={allStatus}
                       courseId={courseId}
                       setIsRunning={setIsRunning}
                       isRunning={isRunning}
@@ -343,7 +331,6 @@ export const Map = memo(
                     {isRunning && (
                       <>
                         <StatusButton
-                          allStatus={allStatus}
                           setIsRunning={setIsRunning}
                           courseId={courseId}
                           statusActive={statusActive}
@@ -353,7 +340,6 @@ export const Map = memo(
                           setBusRoute={setBusStops}
                         />
                         <FinalizeButton
-                          allStatus={allStatus}
                           courseId={courseId}
                           cleanParams={cleanParams}
                           setBusRoute={setBusStops}
