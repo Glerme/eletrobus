@@ -48,8 +48,6 @@ export const PointsScreen = ({
     ({ pageParam = 0 }) => getBusStopsService({ pageParam, queryString }),
     {
       getNextPageParam: (lastPage, allPages) => {
-        console.log("=>", lastPage?.data);
-
         const nextPage = lastPage?.data?.hasNextPage
           ? allPages.length + 1
           : undefined;

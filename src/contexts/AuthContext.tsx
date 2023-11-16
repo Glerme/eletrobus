@@ -306,8 +306,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         favorites = data?.data;
       }
 
-      console.log({ favorites });
-
       const parsedData: UserProps = {
         token: user?.token ?? "",
         user: {

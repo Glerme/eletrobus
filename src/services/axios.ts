@@ -18,9 +18,7 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      return refreshFunction().then(() => {
-        console.log("REFRESHED");
-      });
+      return refreshFunction().then(() => {});
     } else {
       return Promise.reject(error);
     }

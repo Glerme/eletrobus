@@ -35,14 +35,11 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const modalRefPoint = useRef<Modalize>(null);
   const modalRefCourse = useRef<Modalize>(null);
   const openModalPoint = (data: BusStopProps) => {
-    console.log("data-ponto", data);
-
     setDataPoint(data);
     modalRefPoint.current?.open();
   };
   const openModalCourse = (data: ICourse) => {
     setDataCourse(data);
-    console.log("data-course", data);
     modalRefCourse.current?.open();
   };
 
