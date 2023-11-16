@@ -137,12 +137,12 @@ export const ModalDescriptionBus = ({
         >
           <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
             Placa:{" "}
-            <Text color={"primary.500"}>{course?.vehicle?.plate ?? "-"}</Text>
+            <Text color={"secondary.500"}>{course?.vehicle?.plate ?? "-"}</Text>
           </Text>
           <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
             Status:{" "}
             <Text color={getColorFromState(course?.status)}>
-              {course?.status ?? "-"}
+              {course?.status ?? "Sem Status"}
             </Text>
           </Text>
         </VStack>

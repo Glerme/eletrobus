@@ -188,7 +188,7 @@ export const CourseDetailsScreen = ({
                 >
                   <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
                     Placa:{" "}
-                    <Text color={"primary.500"}>
+                    <Text color={"secondary.500"}>
                       {course?.vehicle?.plate ?? "-"}
                     </Text>
                   </Text>
