@@ -58,18 +58,15 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             openModalPoint={openModalPoint}
           />
 
-          {dataPoint?.id && (
-            <ModalDescriptionPoint
-              point={dataPoint}
-              forwardedRef={modalRefPoint}
-              onClose={() => setDataPoint(null)}
-              handleOpenRoute={({ id }) => setRouteId(id)}
-            />
-          )}
+          <ModalDescriptionPoint
+            point={dataPoint}
+            forwardedRef={modalRefPoint}
+            onClose={() => setDataPoint(null)}
+            handleOpenRoute={({ id }) => setRouteId(id)}
+          />
 
           {dataCourse && (
             <ModalDescriptionBus
-              // routeActive={routeActive}
               forwardedRef={modalRefCourse}
               course={dataCourse}
               onClose={() => setDataCourse(null)}
