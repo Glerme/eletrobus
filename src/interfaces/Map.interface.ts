@@ -1,6 +1,7 @@
 import { LocationObject } from "expo-location";
 import { BusStopProps } from "./BusStop.interface";
 import { ICourse } from "./RoutesBusStops.interface";
+import { Dispatch } from "react";
 
 export interface MapInterface {
   // location: LocationObject | null;
@@ -12,4 +13,5 @@ export interface MapInterface {
   routeId?: string;
   openModalCourse: (data: ICourse) => void;
   openModalPoint: (data: BusStopProps) => void;
+  setRouteActive: Dispatch<any | null>;
 }

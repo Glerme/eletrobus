@@ -47,7 +47,6 @@ import { CustomMarkerBus } from "./components/CustomMarkerBus";
 import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
 import { ModalDescriptionBus } from "./components/ModalDescriptionBus";
 import { Modalize } from "react-native-modalize";
-import { useRouteActive } from "~/hooks/useRouteActive";
 
 export const Map = memo(
   ({
@@ -56,10 +55,11 @@ export const Map = memo(
     courseId,
     openModalCourse,
     openModalPoint,
+    setRouteActive,
   }: MapInterface) => {
     const mapRef = useRef<MapView>(null);
     const { location, locationError, getActualCurrentPosition } = useLocation();
-    const { setRouteActive } = useRouteActive();
+
     const [zoom, setZoom] = useState<number>(17);
 
     const [busStops, setBusStops] = useState<RoutesBusStopsInterface | null>(
@@ -127,6 +127,7 @@ export const Map = memo(
         const { data } = await api.get<RoutesBusStopsInterface>(
           `/route/${route_id}`
         );
+        setRouteActive(data);
         return data;
       } catch (e) {
         console.error(e);
@@ -257,7 +258,6 @@ export const Map = memo(
         if (!routeId) return;
         // clearInterval(intervalBus);
         setBusStops(await getRouteById(routeId));
-        setRouteActive(busStops);
 
         if (user?.user.driver) {
           incrementPositionInCourse();

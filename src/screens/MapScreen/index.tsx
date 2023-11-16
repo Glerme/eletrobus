@@ -14,7 +14,7 @@ import { getAllStatusService } from "~/services/StatusServices/getAllStatusServi
 
 import { useAllStatus } from "~/hooks/useStatusAll";
 import { useBusStopInfo } from "~/hooks/useBusStopInfo";
-import { useRouteActive } from "~/hooks/useRouteActive";
+
 import { useBusCourseInfo } from "~/hooks/useBusCourseInfo";
 
 import { Map } from "~/components/Map";
@@ -32,7 +32,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const { requestLocationPermissions } = useLocation();
   const { dataPoint, setDataPoint } = useBusStopInfo();
   const { dataCourse, setDataCourse } = useBusCourseInfo();
-  const { routeActive } = useRouteActive();
+  const [routeActive, setRouteActive] = useState(null);
   const { setAllStatus } = useAllStatus();
 
   const modalRefPoint = useRef<Modalize>(null);
@@ -66,6 +66,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             courseId={courseId}
             openModalCourse={openModalCourse}
             openModalPoint={openModalPoint}
+            setRouteActive={setRouteActive}
           />
 
           <ModalDescriptionPoint
@@ -76,6 +77,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
           />
 
           <ModalDescriptionBus
+            routeActive={routeActive}
             forwardedRef={modalRefCourse}
             course={dataCourse}
             onClose={() => setDataCourse(null)}
