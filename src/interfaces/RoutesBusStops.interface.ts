@@ -1,3 +1,4 @@
+import { EStatusRun } from "~/enum/EStatusRun";
 import { ICurrentPosition } from "~/services/CoursesServices/getCurrentPositionId";
 
 export interface IPosition {
@@ -12,9 +13,13 @@ export interface RoutesBusStopsInterface {
     longitude: number;
   }[];
   id: string;
-  courses: {
-    id: string;
-    current_positions: IPosition;
-  }[];
+  courses: ICourse[];
   name: string | null;
+}
+
+export interface ICourse {
+  id: string;
+  vehicle: any;
+  current_positions: IPosition;
+  status: EStatusRun;
 }

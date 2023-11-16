@@ -42,7 +42,7 @@ interface FavoriteBusStopProps {
 }
 
 interface ModalDescriptionProps {
-  point: BusStopProps;
+  point: BusStopProps | null;
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
   handleOpenRoute: (route: RoutesProps) => void;
@@ -147,7 +147,7 @@ export const ModalDescriptionPoint = ({
                 ? { uri: point?.images[0] ?? point?.images[1] }
                 : require("~/assets/img/not-found.png")
             }
-            alt={point?.name}
+            alt={point?.name ?? ""}
             w={"full"}
             h={"150"}
             resizeMode={"contain"}
@@ -159,7 +159,7 @@ export const ModalDescriptionPoint = ({
         </VStack>
 
         <VStack mt={1} space={1}>
-          {point?.routes?.length > 0 ? (
+          {point && point?.routes?.length > 0 ? (
             point?.routes?.map((route, i) => (
               <ListRoutes
                 key={i}

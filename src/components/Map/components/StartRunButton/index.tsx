@@ -17,22 +17,21 @@ import { formatTemp } from "~/utils/format";
 import { ModalStatement } from "~/components/ModalStatement";
 
 import { Container, TextStart } from "./styles";
+import { useAllStatus } from "~/hooks/useStatusAll";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
   isRunning: boolean;
   busRoute: RoutesBusStopsInterface | null;
   courseId: string;
-
-  allStatus: IStatus[] | null;
 }
 export const StartRunButton = ({
   setIsRunning,
   isRunning,
   busRoute,
   courseId,
-  allStatus,
 }: runningInterface) => {
+  const { allStatus } = useAllStatus();
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
   const [intervalRef, setIntervalRef] = useState<any>(null);
   const [time, setTime] = useState<number>(0);

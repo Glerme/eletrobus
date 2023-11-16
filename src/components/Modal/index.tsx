@@ -34,6 +34,7 @@ export const Modal = forwardRef<Modalize, ModalProps>(
     return (
       <Portal>
         <Modalize
+          closeOnOverlayTap={true}
           ref={forwardedRef}
           adjustToContentHeight={adjustToContentHeight}
           scrollViewProps={{ showsVerticalScrollIndicator: false }}

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 import { Modalize } from "react-native-modalize";
 import { useQuery } from "@tanstack/react-query";
-import { Box, HStack, Image, Spacer, VStack } from "native-base";
+import { Box, HStack, Image, Spacer, Text, VStack } from "native-base";
 
 import { RoutesProps } from "~/interfaces/Routes.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
@@ -22,6 +22,8 @@ import { Button } from "~/components/Form/Button";
 import { Title } from "~/components/Layouts/Title";
 import { ListRoutes } from "~/components/ListRoutes";
 import { FavoriteButton } from "~/components/Form/FavoriteButton";
+import { Info, Path } from "phosphor-react-native";
+import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 interface FavoriteBusStopProps {
   id: string;
@@ -46,14 +48,23 @@ interface ModalDescriptionProps {
   // point: any;
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
+  course: any;
+
+  routeActive?: RoutesBusStopsInterface | null;
 }
 
 export const ModalDescriptionBus = ({
   forwardedRef,
+  routeActive,
   onClose,
+  course,
 }: ModalDescriptionProps) => {
   const { user, updateUser, getRefreshToken } = useAuth();
   const [favorite, setFavorite] = useState(false);
+  console.log("routeActive", {
+    routeActive,
+    course,
+  });
 
   // const { data: favorites } = useQuery({
   //   queryKey: ["favorites", user?.user?.id, point],
@@ -110,23 +121,86 @@ export const ModalDescriptionBus = ({
       adjustToContentHeight={false}
       onClose={onClose}
     >
-      <VStack px={23} mt={6} space={2}>
-        <HStack alignItems={"center"}>
-          <Title size="md" textAlign={"left"}>
-            {/* {point?.name} */}
-            Testeee
-          </Title>
-
-          <Spacer />
-          {user?.user && (
-            <FavoriteButton favorite={favorite} handlePress={() => {}} />
-          )}
+      {/* <HStack alignItems={"center"} space={2}>
+        <HStack space={2} alignItems="center">
+          <Path color="#46B99E" weight="duotone" />
+          <Text fontSize="lg" fontWeight={"600"}>
+            {data?.name}
+          </Text>
         </HStack>
 
-        <VStack mt={6}>
-          <Title size="md">Rotas</Title>
-        </VStack>
+        <Spacer />
+
+        <FavoriteButton
+          favorite={favorite}
+          handlePress={() => handleFavorite(favorite)}
+          isLoading={favoriteLoading}
+        />
+      </HStack>
+      <VStack mt={2}>
+        <HStack alignItems={"center"} mt={2} space={2}>
+          <Info size={18} color="#4d34dd" weight="duotone" />
+          <Text fontSize={"sm"} fontWeight={"600"}>
+            Pontos de parada
+          </Text>
+        </HStack>
+        {data?.bus_stops?.map((busStop, index) => (
+          <Text
+            fontSize={"md"}
+            fontWeight={"bold"}
+            color={"gray.800"}
+            key={index}
+          >
+            - {busStop?.bus_stop?.name}
+          </Text>
+        ))}
       </VStack>
+
+      <VStack mt={2}>
+        <HStack alignItems={"center"} mt={2} space={2}>
+          <Bus size={18} color="#4d34dd" weight="duotone" />
+          <Text fontSize={"sm"} fontWeight={"600"}>
+            Ônibus em rota
+          </Text>
+        </HStack>
+        {data?.courses?.map((course, index) => (
+          <VStack
+            key={index}
+            borderBottomColor={"primary.500"}
+            borderBottomWidth={"1px"}
+            p={2}
+          >
+            <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
+              Placa:{" "}
+              <Text color={"primary.500"}>{course?.vehicle?.plate ?? "-"}</Text>
+            </Text>
+            <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
+              Status:{" "}
+              <Text color={getColorFromState(course?.status)}>
+                {course?.status ?? "-"}
+              </Text>
+            </Text>
+          </VStack>
+        ))}
+      </VStack> */}
     </Modal>
   );
 };
+
+// <VStack px={23} mt={6} space={2}>
+//   <HStack alignItems={"center"}>
+//     <Title size="md" textAlign={"left"}>
+//       {/* {point?.name} */}
+//       Testeee
+//     </Title>
+
+//     <Spacer />
+//     {user?.user && (
+//       <FavoriteButton favorite={favorite} handlePress={() => {}} />
+//     )}
+//   </HStack>
+
+//   <VStack mt={6}>
+//     <Title size="md">Rotas</Title>
+//   </VStack>
+// </VStack>;

@@ -14,6 +14,7 @@ import { IStatus } from "~/interfaces/Status.interface";
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 import { useModal } from "~/hooks/useModal";
 import { ModalStatement } from "~/components/ModalStatement";
+import { useAllStatus } from "~/hooks/useStatusAll";
 
 interface StatusButtonProps {
   setStatusActive: Dispatch<IStatus | undefined>;
@@ -25,7 +26,6 @@ interface StatusButtonProps {
   setIsRunning: Dispatch<boolean>;
   courseId: string;
   cleanParams: () => void;
-  allStatus: IStatus[] | null;
 }
 
 export const StatusButton = ({
@@ -36,11 +36,11 @@ export const StatusButton = ({
   cleanParams,
   setBusRoute,
   busRoute,
-  allStatus,
-}: StatusButtonProps) => {
+}: // allStatus,
+StatusButtonProps) => {
   const [showModal, setShowModal] = useState(false);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
-
+  const { allStatus } = useAllStatus();
   const getStatusCorrida = () => {
     const status = allStatus?.find(
       (status) => status.status === EStatusRun.EmCorrida
