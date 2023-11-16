@@ -5,19 +5,18 @@ import Toast from "react-native-toast-message";
 
 import { EStatusRun } from "~/enum/EStatusRun";
 
-import { IStatus } from "~/interfaces/Status.interface";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 
 import { useModal } from "~/hooks/useModal";
+import { useAllStatus } from "~/hooks/useStatusAll";
 
 import { formatTemp } from "~/utils/format";
 
 import { ModalStatement } from "~/components/ModalStatement";
 
 import { Container, TextStart } from "./styles";
-import { useAllStatus } from "~/hooks/useStatusAll";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
@@ -41,10 +40,17 @@ export const StartRunButton = ({
     );
     return status;
   };
-  const fnStatement = async () => {
+
+  console.log("allStatus", allStatus);
+
+  const startCourse = async () => {
     try {
       const statusCorrida = getStatusCorrida();
+      console.log("statusCorrida", statusCorrida);
+
       if (!statusCorrida) return;
+
+      console.log("statusCorrida", statusCorrida);
       await postChangeStatusCourse(courseId, statusCorrida.id);
 
       setIsRunning(true);
@@ -68,6 +74,9 @@ export const StartRunButton = ({
       );
     }
   }, [isRunning]);
+
+  console.log(courseId);
+
   if (isRunning)
     return (
       <Container>
@@ -84,6 +93,7 @@ export const StartRunButton = ({
         </HStack>
       </Container>
     );
+
   return (
     <>
       <Container>
@@ -95,12 +105,13 @@ export const StartRunButton = ({
           </TextStart>
         </HStack>
       </Container>
+
       <ModalStatement
         title="Confirmação de percurso"
         description={`Deseja começar o percurso? ${busRoute?.name}`}
         modalRef={modalRef}
         handleCloseModal={handleCloseModal}
-        fnStatement={fnStatement}
+        fnStatement={startCourse}
       />
     </>
   );

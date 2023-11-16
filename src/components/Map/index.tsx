@@ -241,7 +241,6 @@ export const Map = memo(
 
     useEffect(() => {
       if (isRunning && user?.user.driver) {
-        getPositionAndIncrementInCourse();
         setIntervalRun(
           setInterval(() => {
             getPositionAndIncrementInCourse();
@@ -273,10 +272,11 @@ export const Map = memo(
         if (point) {
           mapRef.current?.animateCamera({
             center: { latitude: point.latitude, longitude: point.longitude },
+            zoom,
           });
         }
       }
-    }, [pointId, markers]);
+    }, [pointId]);
 
     useEffect(() => {
       getActualCurrentPosition();
@@ -328,6 +328,7 @@ export const Map = memo(
                       isRunning={isRunning}
                       busRoute={busStops}
                     />
+
                     {isRunning && (
                       <>
                         <StatusButton
