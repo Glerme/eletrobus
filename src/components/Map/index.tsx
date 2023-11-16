@@ -226,7 +226,6 @@ export const Map = memo(
       // await getCurrentPosition();
       await postCurrentPositionId({
         id: courseId,
-
         latitude: location?.coords?.latitude ?? 0,
         longitude: location?.coords?.longitude ?? 0,
       });
@@ -257,6 +256,11 @@ export const Map = memo(
           incrementPositionInCourse();
         } else {
           setBusStops(await getRouteById(routeId));
+          setIntervalBus(
+            setInterval(async () => {
+              setBusStops(await getRouteById(routeId));
+            }, 5000)
+          );
         }
       })();
     }, [routeId]);
