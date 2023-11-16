@@ -38,7 +38,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const openModalCourse = (data: ICourse) => {
     setDataCourse(data);
     console.log("data", data);
-    modalRefPoint.current?.open();
+    modalRefCourse.current?.open();
   };
 
   useEffect(() => {
@@ -57,18 +57,16 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             openModalPoint={openModalPoint}
           />
 
-          {dataPoint?.id && (
-            <ModalDescriptionPoint
-              point={dataPoint}
-              forwardedRef={modalRefPoint}
-              onClose={() => setDataPoint(null)}
-              handleOpenRoute={({ id }) => setRouteId(id)}
-            />
-          )}
+          <ModalDescriptionPoint
+            point={dataPoint}
+            forwardedRef={modalRefPoint}
+            onClose={() => setDataPoint(null)}
+            handleOpenRoute={({ id }) => setRouteId(id)}
+          />
 
           {dataCourse && routeActive && (
             <ModalDescriptionBus
-              // routeActive={routeActive}
+              routeActive={routeActive}
               forwardedRef={modalRefCourse}
               course={dataCourse}
               onClose={() => setDataCourse(null)}

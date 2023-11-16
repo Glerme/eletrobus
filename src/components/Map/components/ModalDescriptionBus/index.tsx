@@ -50,18 +50,21 @@ interface ModalDescriptionProps {
   onClose: () => void;
   course: any;
 
-  // routeActive: RoutesBusStopsInterface;
+  routeActive: RoutesBusStopsInterface;
 }
 
 export const ModalDescriptionBus = ({
   forwardedRef,
-  // routeActive,
+  routeActive,
   onClose,
   course,
 }: ModalDescriptionProps) => {
   const { user, updateUser, getRefreshToken } = useAuth();
   const [favorite, setFavorite] = useState(false);
-  console.log("course", course);
+  console.log("routeActive", {
+    routeActive,
+    course,
+  });
 
   // const { data: favorites } = useQuery({
   //   queryKey: ["favorites", user?.user?.id, point],
