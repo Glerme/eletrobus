@@ -212,7 +212,7 @@ export const CourseDetailsScreen = ({
                     courseId: route.params.courseId,
                   })
                 }
-                title="Ver rota de Ônibus"
+                title="Ver rota do ônibus"
                 fontColor={"white"}
                 disabled={isRefetching || isLoading}
               />
