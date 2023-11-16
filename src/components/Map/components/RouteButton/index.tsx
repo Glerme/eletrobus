@@ -43,37 +43,39 @@ export const RouteButton = ({
   return (
     <Container>
       <HStack>
-        <TextItem
-          onPress={() => {
-            navigationToCourses();
-          }}
-          isRounded={busRoute ? false : true}
-        >
-          <Text lineHeight={15} color="white">
-            Rotas
-          </Text>
-          {/* <Plus color="white" /> */}
-        </TextItem>
         {busRoute?.name && (
-          <HStack
-            space={2}
-            alignItems={"center"}
-            backgroundColor="white"
-            borderBottomRightRadius={4}
-            borderTopRightRadius={4}
-            padding={2}
-          >
-            <Text lineHeight={15}>{busRoute.name}</Text>
-            <Pressable
-              disabled={isRunning}
+          <>
+            <TextItem
               onPress={() => {
-                setBusRoute(null);
-                cleanParams();
+                navigationToCourses();
               }}
+              isRounded={busRoute ? false : true}
             >
-              {!isRunning && <X size={14} color="#080808" />}
-            </Pressable>
-          </HStack>
+              <Text lineHeight={15} color="white">
+                Rotas
+              </Text>
+            </TextItem>
+
+            <HStack
+              space={2}
+              alignItems={"center"}
+              backgroundColor="white"
+              borderBottomRightRadius={4}
+              borderTopRightRadius={4}
+              padding={2}
+            >
+              <Text lineHeight={15}>{busRoute.name}</Text>
+              <Pressable
+                disabled={isRunning}
+                onPress={() => {
+                  setBusRoute(null);
+                  cleanParams();
+                }}
+              >
+                {!isRunning && <X size={14} color="#080808" />}
+              </Pressable>
+            </HStack>
+          </>
         )}
       </HStack>
     </Container>
