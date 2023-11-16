@@ -164,7 +164,7 @@ export const HomeScreen = ({ navigation, route }: NavigationProps<"Home">) => {
                       bg={THEME.colors.secondary["500"]}
                       onPress={() => navigation.navigate("Favorites")}
                       leftIcon={<Icon as={<Star size={20} color="white" />} />}
-                      title="Buscar rotas"
+                      title="Favoritos"
                       fontColor="white"
                     />
                   )}
