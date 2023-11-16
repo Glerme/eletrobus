@@ -31,7 +31,6 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const { dataPoint, setDataPoint } = useBusStopInfo();
   const { dataCourse, setDataCourse } = useBusCourseInfo();
   const [routeActive, setRouteActive] = useState(null);
-
   const { setAllStatus } = useAllStatus();
 
   const modalRefPoint = useRef<Modalize>(null);

@@ -25,6 +25,12 @@ export const ModalDescriptionBus = ({
       onClose={onClose}
     >
       <VStack px={23} mt={6} space={2}>
+        {/* <HStack space={2} alignItems="center">
+          <Path color="#46B99E" weight="duotone" />
+          <Text fontSize="md" fontWeight={"600"}>
+            {routeActive?.name}
+          </Text>
+        </HStack> */}
         <HStack space={2} alignItems="center">
           <Bus color={getColorFromState(course?.status)} weight="duotone" />
           <Text fontSize="lg" fontWeight={"600"}>
