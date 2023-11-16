@@ -47,11 +47,9 @@ export const StartRunButton = ({
   const startCourse = async () => {
     try {
       const statusCorrida = getStatusCorrida();
-      console.log("statusCorrida", statusCorrida);
 
       if (!statusCorrida) return;
 
-      console.log("statusCorrida", statusCorrida);
       await postChangeStatusCourse(courseId, statusCorrida.id);
 
       setIsRunning(true);

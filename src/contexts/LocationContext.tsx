@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   LocationAccuracy,
   LocationObject,
@@ -53,17 +53,23 @@ export const LocationContextProvider = ({
   };
 
   const getActualCurrentPosition = async () => {
-    watchPositionAsync(
-      {
-        accuracy: LocationAccuracy.BestForNavigation,
-        timeInterval: 10000,
-        distanceInterval: 200,
-      },
-      (response) => {
-        setLocation(response);
-      }
-    );
+    try {
+      await watchPositionAsync(
+        { accuracy: LocationAccuracy.BestForNavigation, timeInterval: 1000 },
+        (newLocation) => {
+          setLocation(newLocation);
+
+          return newLocation;
+        }
+      );
+    } catch (error) {
+      console.error("Erro ao obter localização:", error);
+    }
   };
+
+  useEffect(() => {
+    getActualCurrentPosition();
+  }, []);
 
   return (
     <LocationContext.Provider

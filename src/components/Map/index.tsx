@@ -39,6 +39,9 @@ import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPos
 import { IStatus } from "~/interfaces/Status.interface";
 
 import { CustomMarkerBus } from "./components/CustomMarkerBus";
+import { LocationObject } from "expo-location";
+
+import * as Location from "expo-location";
 
 export const Map = memo(
   ({
@@ -51,7 +54,10 @@ export const Map = memo(
     setRouteActive,
   }: MapInterface) => {
     const mapRef = useRef<MapView>(null);
-    const { location, locationError, getActualCurrentPosition } = useLocation();
+    // const { locationError, location, getActualCurrentPosition } = useLocation();
+
+    const [location, setLocation] = useState<LocationObject | null>(null);
+    const [locationError, setLocationError] = useState<string | null>(null);
 
     const [zoom, setZoom] = useState<number>(17);
 
@@ -90,8 +96,6 @@ export const Map = memo(
       initialData: [],
       placeholderData: [],
     });
-
-    console.log("MARKERS", markers);
 
     const getCurrentPosition = useCallback(async () => {
       if (!location) return;
@@ -203,7 +207,7 @@ export const Map = memo(
       else navigation.navigate("Points");
     }, [user, navigation]);
 
-    const incrementPositionInCourse = () => {
+    const incrementPositionInCourse = async () => {
       setBusStops((busStops) => {
         if (!busStops) return null;
 
@@ -223,7 +227,7 @@ export const Map = memo(
 
     const getPositionAndIncrementInCourse = async () => {
       if (!courseId) return;
-      // await getCurrentPosition();
+
       await postCurrentPositionId({
         id: courseId,
         latitude: location?.coords?.latitude ?? 0,
@@ -249,7 +253,6 @@ export const Map = memo(
       (async () => {
         clearInterval(intervalBus);
         if (!routeId) return;
-        // clearInterval(intervalBus);
         setBusStops(await getRouteById(routeId));
 
         if (user?.user.driver) {
@@ -277,9 +280,10 @@ export const Map = memo(
       }
     }, [pointId]);
 
-    useEffect(() => {
-      getActualCurrentPosition();
-    }, []);
+    console.log("location", {
+      location,
+      locationError,
+    });
 
     return (
       <>
@@ -288,7 +292,7 @@ export const Map = memo(
             <Box flex={1} justifyContent={"center"}>
               <ActivityIndicator color={"white"} size={100} />
             </Box>
-          ) : locationError && !location?.coords && isError ? (
+          ) : locationError && !location?.coords ? (
             <Flex
               flex={1}
               justifyContent={"center"}
