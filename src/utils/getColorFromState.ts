@@ -9,6 +9,8 @@ export function getColorFromState(state: EStatusRun) {
       return "#AFAFAF";
     case EStatusRun.Incapacitado:
       return "#FE454B";
+    case EStatusRun.Finalizado:
+      return "#4d34dd";
     default:
       return "#000000";
   }
