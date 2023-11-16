@@ -14,7 +14,6 @@ import { getAllStatusService } from "~/services/StatusServices/getAllStatusServi
 
 import { useAllStatus } from "~/hooks/useStatusAll";
 import { useBusStopInfo } from "~/hooks/useBusStopInfo";
-
 import { useBusCourseInfo } from "~/hooks/useBusCourseInfo";
 
 import { Map } from "~/components/Map";
@@ -24,7 +23,6 @@ import { ModalDescriptionBus } from "~/components/Map/components/ModalDescriptio
 
 export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
-
   const courseId = route.params?.courseId ?? "";
 
   const [routeId, setRouteId] = useState<string>(route.params?.routeId ?? "");
@@ -77,7 +75,6 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
           />
 
           <ModalDescriptionBus
-            routeActive={routeActive}
             forwardedRef={modalRefCourse}
             course={dataCourse}
             onClose={() => setDataCourse(null)}
