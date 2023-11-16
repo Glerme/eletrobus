@@ -50,7 +50,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     (async () => {
       setAllStatus(await getAllStatusService());
     })();
-  });
+  }, []);
 
   useEffect(() => {
     (async () => await requestLocationPermissions())();
