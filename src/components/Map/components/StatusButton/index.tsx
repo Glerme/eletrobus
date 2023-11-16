@@ -1,20 +1,25 @@
-import { Platform, TouchableNativeFeedback } from "react-native";
+import { Dispatch, useState } from "react";
+import { Box, HStack, Modal, Text } from "native-base";
 
-import { Plus, Minus, X } from "phosphor-react-native";
-import { Container, TextItem } from "./styles";
-import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
-import { Box, FlatList, HStack, Modal, Pressable, Text } from "native-base";
-import { Dispatch, useEffect, useState } from "react";
-import { EStatusRun } from "~/enum/EStatusRun";
-import { getColorFromState } from "~/utils/getColorFromState";
-import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
 import { useQuery } from "@tanstack/react-query";
-import { ListStatusItem } from "../ListStatusItem";
+
+import { getColorFromState } from "~/utils/getColorFromState";
+
+import { EStatusRun } from "~/enum/EStatusRun";
+
 import { IStatus } from "~/interfaces/Status.interface";
+import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
+
+import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
+
 import { useModal } from "~/hooks/useModal";
-import { ModalStatement } from "~/components/ModalStatement";
 import { useAllStatus } from "~/hooks/useStatusAll";
+
+import { ListStatusItem } from "../ListStatusItem";
+import { ModalStatement } from "~/components/ModalStatement";
+
+import { Container, TextItem } from "./styles";
 
 interface StatusButtonProps {
   setStatusActive: Dispatch<IStatus | undefined>;
@@ -41,12 +46,14 @@ StatusButtonProps) => {
   const [showModal, setShowModal] = useState(false);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
   const { allStatus } = useAllStatus();
+
   const getStatusCorrida = () => {
     const status = allStatus?.find(
       (status) => status.status === EStatusRun.EmCorrida
     );
     return status;
   };
+
   const { data, isLoading } = useQuery({
     queryKey: ["status"],
     queryFn: async () => {
@@ -58,9 +65,7 @@ StatusButtonProps) => {
     placeholderData: [],
   });
 
-  useEffect(() => {});
-
-  const fnStatement = () => {
+  const finishCourse = () => {
     setIsRunning(false);
     if (getStatusCorrida()) setStatusActive(getStatusCorrida());
     setBusRoute(null);
@@ -142,12 +147,13 @@ StatusButtonProps) => {
           <Modal.Footer></Modal.Footer>
         </Modal.Content>
       </Modal>
+
       <ModalStatement
         title="Finalizar percurso"
         description="A corrida será finalizada, deseja continuar?"
         modalRef={modalRef}
         handleCloseModal={handleCloseModal}
-        fnStatement={fnStatement}
+        fnStatement={finishCourse}
       />
     </>
   );
