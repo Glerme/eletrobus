@@ -10,15 +10,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { MapInterface } from "~/interfaces/Map.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
-import {
-  ICourse,
-  RoutesBusStopsInterface,
-} from "~/interfaces/RoutesBusStops.interface";
+import { IStatus } from "~/interfaces/Status.interface";
+import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 import api from "~/services/axios";
 import { getAllBusStopsService } from "~/services/MapServices/getAllBusStopsService";
-
-import { useModal } from "~/hooks/useModal";
+import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
 
 import { useAuth } from "~/contexts/AuthContext";
 import { useLocation } from "~/contexts/LocationContext";
@@ -33,15 +30,9 @@ import { StatusButton } from "./components/StatusButton";
 import { CustomMarker } from "./components/CustomMarker";
 import { StartRunButton } from "./components/StartRunButton";
 import { FinalizeButton } from "./components/FinalizeButton";
+import { CustomMarkerBus } from "./components/CustomMarkerBus";
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
-import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
-import { IStatus } from "~/interfaces/Status.interface";
-
-import { CustomMarkerBus } from "./components/CustomMarkerBus";
-import { LocationObject } from "expo-location";
-
-import * as Location from "expo-location";
 
 export const Map = memo(
   ({
@@ -54,10 +45,7 @@ export const Map = memo(
     setRouteActive,
   }: MapInterface) => {
     const mapRef = useRef<MapView>(null);
-    // const { locationError, location, getActualCurrentPosition } = useLocation();
-
-    const [location, setLocation] = useState<LocationObject | null>(null);
-    const [locationError, setLocationError] = useState<string | null>(null);
+    const { locationError, location, getActualCurrentPosition } = useLocation();
 
     const [zoom, setZoom] = useState<number>(17);
 
@@ -225,8 +213,14 @@ export const Map = memo(
       });
     };
 
-    const getPositionAndIncrementInCourse = async () => {
+    const getPositionAndIncrementInCourse = useCallback(async () => {
       if (!courseId) return;
+
+      console.log(
+        "GET POSITION",
+        location?.coords?.latitude,
+        location?.coords?.longitude
+      );
 
       await postCurrentPositionId({
         id: courseId,
@@ -235,7 +229,7 @@ export const Map = memo(
       });
 
       incrementPositionInCourse();
-    };
+    }, [location]);
 
     useEffect(() => {
       if (isRunning && user?.user.driver) {
@@ -258,6 +252,7 @@ export const Map = memo(
         if (user?.user.driver) {
           incrementPositionInCourse();
         } else {
+          console.log("ELSE");
           setBusStops(await getRouteById(routeId));
           setIntervalBus(
             setInterval(async () => {
@@ -266,7 +261,7 @@ export const Map = memo(
           );
         }
       })();
-    }, [routeId]);
+    }, [routeId, location]);
 
     useEffect(() => {
       if (pointId) {
@@ -279,11 +274,6 @@ export const Map = memo(
         }
       }
     }, [pointId]);
-
-    console.log("location", {
-      location,
-      locationError,
-    });
 
     return (
       <>

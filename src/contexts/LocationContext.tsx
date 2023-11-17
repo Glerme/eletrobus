@@ -5,6 +5,7 @@ import {
   getCurrentPositionAsync,
   watchPositionAsync,
   requestForegroundPermissionsAsync,
+  getLastKnownPositionAsync,
 } from "expo-location";
 
 interface LocationContextProps {
@@ -41,6 +42,7 @@ export const LocationContextProvider = ({
           timeInterval: 5000,
         });
 
+        console.log("REQUEST");
         setLocation(currentPosition);
       } catch (error) {
         setLocationError("Falha ao buscar a localização.");
@@ -55,8 +57,9 @@ export const LocationContextProvider = ({
   const getActualCurrentPosition = async () => {
     try {
       await watchPositionAsync(
-        { accuracy: LocationAccuracy.BestForNavigation, timeInterval: 1000 },
+        { accuracy: LocationAccuracy.Highest, timeInterval: 5000 },
         (newLocation) => {
+          console.log("newLocation", newLocation);
           setLocation(newLocation);
 
           return newLocation;
@@ -68,7 +71,7 @@ export const LocationContextProvider = ({
   };
 
   useEffect(() => {
-    getActualCurrentPosition();
+    (async () => await requestLocationPermissions())();
   }, []);
 
   return (
