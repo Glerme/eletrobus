@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from "react";
 
 import { Box } from "native-base";
 import { Modalize } from "react-native-modalize";
+import { useQuery } from "@tanstack/react-query";
 
 import { NavigationProps } from "~/routes";
 
 import { useLocation } from "~/contexts/LocationContext";
 
+import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
+
+import { IStatus } from "~/interfaces/Status.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
 import { ICourse } from "~/interfaces/RoutesBusStops.interface";
 
-import { getAllStatusService } from "~/services/StatusServices/getAllStatusService";
-
-import { useAllStatus } from "~/hooks/useStatusAll";
 import { useBusStopInfo } from "~/hooks/useBusStopInfo";
 import { useBusCourseInfo } from "~/hooks/useBusCourseInfo";
 
@@ -30,7 +31,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const { requestLocationPermissions } = useLocation();
   const { dataPoint, setDataPoint } = useBusStopInfo();
   const { dataCourse, setDataCourse } = useBusCourseInfo();
-  const { setAllStatus } = useAllStatus();
+  const [routeActive, setRouteActive] = useState(null);
 
   const modalRefPoint = useRef<Modalize>(null);
   const modalRefCourse = useRef<Modalize>(null);
@@ -43,15 +44,20 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     modalRefCourse.current?.open();
   };
 
-  useEffect(() => {
-    (async () => {
-      setAllStatus(await getAllStatusService());
-    })();
-  }, []);
+  const { data: allStatus } = useQuery<IStatus[]>({
+    queryKey: ["all-status"],
+    queryFn: async () => getAllStatusService(),
+    initialData: [],
+    placeholderData: [],
+  });
 
   useEffect(() => {
     (async () => await requestLocationPermissions())();
   }, []);
+
+  useEffect(() => {
+    setRouteId(route.params?.routeId ?? "");
+  }, [route.params]);
 
   return (
     <>
@@ -63,6 +69,8 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             courseId={courseId}
             openModalCourse={openModalCourse}
             openModalPoint={openModalPoint}
+            setRouteActive={setRouteActive}
+            allStatus={allStatus}
           />
 
           <ModalDescriptionPoint
@@ -72,11 +80,14 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             handleOpenRoute={({ id }) => setRouteId(id)}
           />
 
-          <ModalDescriptionBus
-            forwardedRef={modalRefCourse}
-            course={dataCourse}
-            onClose={() => setDataCourse(null)}
-          />
+          {dataCourse && (
+            <ModalDescriptionBus
+              routeActive={routeActive}
+              forwardedRef={modalRefCourse}
+              course={dataCourse}
+              onClose={() => setDataCourse(null)}
+            />
+          )}
         </Box>
       </SafeAreaView>
     </>

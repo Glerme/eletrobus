@@ -14,7 +14,6 @@ import { getAllStatusService } from "~/services/StatusServices/getAllStatusServi
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
 
 import { useModal } from "~/hooks/useModal";
-import { useAllStatus } from "~/hooks/useStatusAll";
 
 import { ListStatusItem } from "../ListStatusItem";
 import { ModalStatement } from "~/components/ModalStatement";
@@ -31,21 +30,22 @@ interface StatusButtonProps {
   setIsRunning: Dispatch<boolean>;
   courseId: string;
   cleanParams: () => void;
+
+  allStatus: IStatus[] | null;
 }
 
 export const StatusButton = ({
   courseId,
   statusActive,
+  busRoute,
+  allStatus,
   setStatusActive,
   setIsRunning,
   cleanParams,
   setBusRoute,
-  busRoute,
-}: // allStatus,
-StatusButtonProps) => {
+}: StatusButtonProps) => {
   const [showModal, setShowModal] = useState(false);
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
-  const { allStatus } = useAllStatus();
 
   const getStatusCorrida = () => {
     const status = allStatus?.find(
@@ -100,7 +100,6 @@ StatusButtonProps) => {
             <Text lineHeight={15} color="white">
               Estado
             </Text>
-            {/* <Plus color="white" /> */}
           </TextItem>
 
           <HStack

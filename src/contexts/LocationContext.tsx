@@ -1,10 +1,11 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   LocationAccuracy,
   LocationObject,
   getCurrentPositionAsync,
   watchPositionAsync,
   requestForegroundPermissionsAsync,
+  getLastKnownPositionAsync,
 } from "expo-location";
 
 interface LocationContextProps {
@@ -33,6 +34,7 @@ export const LocationContextProvider = ({
 
   const requestLocationPermissions = async () => {
     const { granted } = await requestForegroundPermissionsAsync();
+    setLocationError(null);
 
     if (granted) {
       try {
@@ -53,17 +55,36 @@ export const LocationContextProvider = ({
   };
 
   const getActualCurrentPosition = async () => {
+    try {
+      await watchPositionAsync(
+        { accuracy: LocationAccuracy.Highest, timeInterval: 5000 },
+        (newLocation) => {
+          setLocation(newLocation);
+
+          return newLocation;
+        }
+      );
+    } catch (error) {
+      console.error("Erro ao obter localização:", error);
+    }
+  };
+
+  useEffect(() => {
+    (async () => await requestLocationPermissions())();
+  }, []);
+
+  useEffect(() => {
     watchPositionAsync(
       {
-        accuracy: LocationAccuracy.BestForNavigation,
-        timeInterval: 10000,
-        distanceInterval: 200,
+        accuracy: LocationAccuracy.Highest,
+        timeInterval: 1000,
+        distanceInterval: 1,
       },
       (response) => {
         setLocation(response);
       }
     );
-  };
+  }, []);
 
   return (
     <LocationContext.Provider

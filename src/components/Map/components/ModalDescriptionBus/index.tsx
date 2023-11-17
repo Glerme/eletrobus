@@ -1,20 +1,24 @@
 import { Modalize } from "react-native-modalize";
 import { HStack, Text, VStack } from "native-base";
-import { Bus } from "phosphor-react-native";
+import { Bus, Path } from "phosphor-react-native";
 
 import { getColorFromState } from "~/utils/getColorFromState";
 
 import { Modal } from "~/components/Modal";
+import { ICourse } from "~/interfaces/RoutesBusStops.interface";
 
 interface ModalDescriptionProps {
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
-  course: any;
+  course: ICourse;
+
+  routeActive: any;
 }
 
 export const ModalDescriptionBus = ({
   forwardedRef,
   onClose,
+  routeActive,
   course,
 }: ModalDescriptionProps) => {
   return (
@@ -25,6 +29,12 @@ export const ModalDescriptionBus = ({
       onClose={onClose}
     >
       <VStack px={23} mt={6} space={2}>
+        <HStack space={2} alignItems="center">
+          <Path color="#46B99E" weight="duotone" />
+          <Text fontSize="md" fontWeight={"600"}>
+            {routeActive?.name}
+          </Text>
+        </HStack>
         <HStack space={2} alignItems="center">
           <Bus color={getColorFromState(course?.status)} weight="duotone" />
           <Text fontSize="lg" fontWeight={"600"}>

@@ -5,6 +5,7 @@ import Toast from "react-native-toast-message";
 
 import { EStatusRun } from "~/enum/EStatusRun";
 
+import { IStatus } from "~/interfaces/Status.interface";
 import { RoutesBusStopsInterface } from "~/interfaces/RoutesBusStops.interface";
 
 import { postChangeStatusCourse } from "~/services/StatusServices/postChangeStatusCourse";
@@ -16,24 +17,26 @@ import { formatTemp } from "~/utils/format";
 import { ModalStatement } from "~/components/ModalStatement";
 
 import { Container, TextStart } from "./styles";
-import { useAllStatus } from "~/hooks/useStatusAll";
 
 interface runningInterface {
   setIsRunning: Dispatch<boolean>;
   isRunning: boolean;
   busRoute: RoutesBusStopsInterface | null;
   courseId: string;
+  allStatus: IStatus[] | null;
 }
+
 export const StartRunButton = ({
   setIsRunning,
   isRunning,
   busRoute,
   courseId,
+  allStatus,
 }: runningInterface) => {
-  const { allStatus } = useAllStatus();
   const { handleOpenModal, handleCloseModal, modalRef } = useModal();
   const [intervalRef, setIntervalRef] = useState<any>(null);
   const [time, setTime] = useState<number>(0);
+
   const getStatusCorrida = () => {
     const status = allStatus?.find(
       (status) => status.status === EStatusRun.EmCorrida
@@ -41,16 +44,12 @@ export const StartRunButton = ({
     return status;
   };
 
-  console.log("allStatus", allStatus);
-
   const startCourse = async () => {
     try {
       const statusCorrida = getStatusCorrida();
-      console.log("statusCorrida", statusCorrida);
 
       if (!statusCorrida) return;
 
-      console.log("statusCorrida", statusCorrida);
       await postChangeStatusCourse(courseId, statusCorrida.id);
 
       setIsRunning(true);

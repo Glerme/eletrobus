@@ -8,9 +8,7 @@ interface ContextsProps {
 export const Contexts = ({ children }: ContextsProps) => {
   return (
     <>
-      <AuthContextProvider>
-        <LocationContextProvider>{children}</LocationContextProvider>
-      </AuthContextProvider>
+      <AuthContextProvider>{children}</AuthContextProvider>
     </>
   );
 };

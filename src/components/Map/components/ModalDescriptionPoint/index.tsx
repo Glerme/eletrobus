@@ -54,61 +54,7 @@ export const ModalDescriptionPoint = ({
   onClose,
   handleOpenRoute,
 }: ModalDescriptionProps) => {
-  const { user, updateUser, getRefreshToken } = useAuth();
-
-  const [favorite, setFavorite] = useState(false);
-  const [favoriteLoading, setFavoriteLoading] = useState<boolean>(false);
-
-  const { data: favorites } = useQuery({
-    queryKey: ["favorites", user?.user?.id, point],
-    queryFn: () => getFavoritesModalService(user, getRefreshToken),
-    initialData: [],
-    placeholderData: [],
-  });
-
-  const handleFavorite = async (fav: boolean) => {
-    try {
-      setFavoriteLoading(true);
-      if (!fav) {
-        const { status } = await api.post(`/bus-stop/${point?.id}/favorite`);
-
-        if (status === 200) {
-          const { data } = await api.get<MyQueryInterface>("/user/my");
-          await updateUser(data);
-
-          setFavorite(true);
-        }
-      } else {
-        const { status } = await api.delete(`/bus-stop/${point?.id}/favorite`);
-
-        if (status) {
-          const { data } = await api.get<MyQueryInterface>("/user/my");
-          await updateUser(data);
-
-          setFavorite(false);
-        }
-      }
-    } catch (err) {
-      const axiosError = axiosErrorHandler(err);
-      console.error(axiosError);
-
-      Toast.show({
-        type: "error",
-        text1: "Erro",
-        text2: `Ocorreu um erro: ${axiosError.message}`,
-      });
-    } finally {
-      setFavoriteLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const favoritePoint = favorites?.find(
-      (favorite: FavoriteBusStopProps) => favorite?.bus_stop_id === point?.id
-    );
-
-    setFavorite(favoritePoint ? true : false);
-  }, [user?.user?.id, point?.id, favorites]);
+  const { user } = useAuth();
 
   return (
     <Modal
@@ -124,14 +70,6 @@ export const ModalDescriptionPoint = ({
           </Title>
 
           <Spacer />
-
-          {user?.user && !user?.user?.driver && (
-            <FavoriteButton
-              favorite={favorite}
-              handlePress={() => handleFavorite(favorite)}
-              isLoading={favoriteLoading}
-            />
-          )}
         </HStack>
 
         <Box
