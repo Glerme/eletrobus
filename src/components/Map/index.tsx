@@ -307,7 +307,7 @@ export const Map = memo(
     return (
       <>
         <Box flex={1}>
-          {isLoading || !location ? (
+          {isLoading ? (
             <Box flex={1} justifyContent={"center"}>
               <ActivityIndicator color={"white"} size={100} />
             </Box>
@@ -332,108 +332,107 @@ export const Map = memo(
                 }}
               />
             </Flex>
-          ) : (
-            location && (
-              <>
-                <RouteButton
-                  isRunning={isRunning}
-                  cleanParams={cleanParams}
-                  busRoute={busStops}
-                  setBusRoute={setBusStops}
-                  user={user}
-                />
-                {user?.user.driver && busStops && courseId ? (
-                  <>
-                    <StartRunButton
-                      courseId={courseId}
-                      setIsRunning={setIsRunning}
-                      isRunning={isRunning}
-                      busRoute={busStops}
-                      allStatus={allStatus}
-                    />
+          ) : location ? (
+            <>
+              <RouteButton
+                isRunning={isRunning}
+                cleanParams={cleanParams}
+                busRoute={busStops}
+                setBusRoute={setBusStops}
+                user={user}
+              />
+              {user?.user.driver && busStops && courseId ? (
+                <>
+                  <StartRunButton
+                    courseId={courseId}
+                    setIsRunning={setIsRunning}
+                    isRunning={isRunning}
+                    busRoute={busStops}
+                    allStatus={allStatus}
+                  />
 
-                    {isRunning && (
-                      <>
-                        <StatusButton
-                          setIsRunning={setIsRunning}
-                          courseId={courseId}
-                          statusActive={statusActive}
-                          cleanParams={cleanParams}
-                          setStatusActive={setStatusActive}
-                          busRoute={busStops}
-                          setBusRoute={setBusStops}
-                          allStatus={allStatus}
+                  {isRunning && (
+                    <>
+                      <StatusButton
+                        setIsRunning={setIsRunning}
+                        courseId={courseId}
+                        statusActive={statusActive}
+                        cleanParams={cleanParams}
+                        setStatusActive={setStatusActive}
+                        busRoute={busStops}
+                        setBusRoute={setBusStops}
+                        allStatus={allStatus}
+                      />
+                      <FinalizeButton
+                        courseId={courseId}
+                        cleanParams={cleanParams}
+                        setBusRoute={setBusStops}
+                        setIsRunning={setIsRunning}
+                        allStatus={allStatus}
+                      />
+                    </>
+                  )}
+                </>
+              ) : (
+                <></>
+              )}
+
+              <ZoomButtons onZoomPress={onZoomPress} />
+              <ListRoutesButton onPressRoute={navigationToCourses} />
+              <MyLocationButton getCurrentPosition={getCurrentPosition} />
+
+              <MapView
+                ref={mapRef}
+                provider={PROVIDER_GOOGLE}
+                style={{
+                  ...StyleSheet.absoluteFillObject,
+                  width: "120%",
+                  height: "120%",
+                }}
+                onRegionChangeComplete={handleRegionChange}
+                initialRegion={region}
+                showsUserLocation={
+                  isRunning && user?.user.driver ? false : true
+                }
+                showsMyLocationButton={false}
+                scrollEnabled
+                zoomEnabled
+                zoomControlEnabled={false}
+              >
+                {busStops?.courses?.map((course) => (
+                  <CustomMarkerBus
+                    key={course?.id}
+                    course={course}
+                    handleOpenModal={openModalCourse}
+                  />
+                ))}
+
+                {visibleMarkers?.map((marker, i) => (
+                  <CustomMarker
+                    key={marker.id}
+                    handleOpenModal={openModalPoint}
+                    marker={marker}
+                  />
+                ))}
+                {busStops &&
+                  busStops.bus_stops.map((stop, index) => {
+                    if (index < busStops.bus_stops.length - 1) {
+                      const origin = stop;
+                      const destination = busStops.bus_stops[index + 1];
+
+                      const routeCoordinates = [origin, destination];
+
+                      return (
+                        <Polyline
+                          coordinates={routeCoordinates}
+                          strokeWidth={3}
+                          strokeColor="blue"
+                          key={index}
                         />
-                        <FinalizeButton
-                          courseId={courseId}
-                          cleanParams={cleanParams}
-                          setBusRoute={setBusStops}
-                          setIsRunning={setIsRunning}
-                          allStatus={allStatus}
-                        />
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-
-                <ZoomButtons onZoomPress={onZoomPress} />
-                <ListRoutesButton onPressRoute={navigationToCourses} />
-                <MyLocationButton getCurrentPosition={getCurrentPosition} />
-
-                <MapView
-                  ref={mapRef}
-                  provider={PROVIDER_GOOGLE}
-                  style={{
-                    ...StyleSheet.absoluteFillObject,
-                    width: "120%",
-                    height: "120%",
-                  }}
-                  onRegionChangeComplete={handleRegionChange}
-                  initialRegion={region}
-                  showsUserLocation={
-                    isRunning && user?.user.driver ? false : true
-                  }
-                  showsMyLocationButton={false}
-                  scrollEnabled
-                  zoomEnabled
-                  zoomControlEnabled={false}
-                >
-                  {busStops?.courses?.map((course) => (
-                    <CustomMarkerBus
-                      key={course?.id}
-                      course={course}
-                      handleOpenModal={openModalCourse}
-                    />
-                  ))}
-
-                  {visibleMarkers?.map((marker, i) => (
-                    <CustomMarker
-                      key={marker.id}
-                      handleOpenModal={openModalPoint}
-                      marker={marker}
-                    />
-                  ))}
-                  {busStops &&
-                    busStops.bus_stops.map((stop, index) => {
-                      if (index < busStops.bus_stops.length - 1) {
-                        const origin = stop;
-                        const destination = busStops.bus_stops[index + 1];
-
-                        const routeCoordinates = [origin, destination];
-
-                        return (
-                          <Polyline
-                            coordinates={routeCoordinates}
-                            strokeWidth={3}
-                            strokeColor="blue"
-                            key={index}
-                          />
-                        );
-                      }
-                    })}
-                  {/* {busStops &&
+                      );
+                    }
+                  })}
+                {/* {busStops &&
                   busStops?.bus_stops?.map((stop, index) => {
                     if (index < busStops?.bus_stops?.length - 1) {
                       const origin = stop;
@@ -453,9 +452,25 @@ export const Map = memo(
                       );
                     }
                   })} */}
-                </MapView>
-              </>
-            )
+              </MapView>
+            </>
+          ) : (
+            <Flex
+              flex={1}
+              justifyContent={"center"}
+              alignItems={"center"}
+              flexDir={"column"}
+              p={2}
+            >
+              <Alert status="info" text="Buscando sua localização..." />
+              <ActivityIndicator
+                color={"white"}
+                size={100}
+                style={{
+                  marginTop: 10,
+                }}
+              />
+            </Flex>
           )}
         </Box>
       </>
