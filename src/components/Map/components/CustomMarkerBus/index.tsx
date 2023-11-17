@@ -25,7 +25,6 @@ export const CustomMarkerBus = memo(
             longitude: +course.current_positions?.longitude,
           }}
           onPress={() => handleOpenModal(course)}
-          tracksViewChanges
         >
           <Bus width={scale(40)} height={scale(40)} />
           <Box

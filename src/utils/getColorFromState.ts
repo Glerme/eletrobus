@@ -1,7 +1,10 @@
 import { EStatusRun } from "~/enum/EStatusRun";
-import { IStatus } from "~/interfaces/Status.interface";
 
-export function getColorFromState(state: EStatusRun) {
+type ICurrentPosition = EStatusRun | null;
+
+export function getColorFromState(state: ICurrentPosition) {
+  if (!state) return "#000000";
+
   switch (state) {
     case EStatusRun.EmCorrida:
       return "#06CB56";

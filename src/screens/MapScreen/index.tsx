@@ -12,15 +12,18 @@ import { getAllStatusService } from "~/services/StatusServices/getAllStatusServi
 
 import { IStatus } from "~/interfaces/Status.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
-import { ICourse } from "~/interfaces/RoutesBusStops.interface";
+import {
+  ICourse,
+  RoutesBusStopsInterface,
+} from "~/interfaces/RoutesBusStops.interface";
 
 import { useBusStopInfo } from "~/hooks/useBusStopInfo";
 import { useBusCourseInfo } from "~/hooks/useBusCourseInfo";
 
 import { Map } from "~/components/Map";
 import { SafeAreaView } from "~/components/Layouts/SafeAreaView";
-import { ModalDescriptionPoint } from "~/components/Map/components/ModalDescriptionPoint";
 import { ModalDescriptionBus } from "~/components/Map/components/ModalDescriptionBus";
+import { ModalDescriptionPoint } from "~/components/Map/components/ModalDescriptionPoint";
 
 export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
@@ -31,7 +34,8 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const { requestLocationPermissions } = useLocation();
   const { dataPoint, setDataPoint } = useBusStopInfo();
   const { dataCourse, setDataCourse } = useBusCourseInfo();
-  const [routeActive, setRouteActive] = useState(null);
+  const [routeActive, setRouteActive] =
+    useState<RoutesBusStopsInterface | null>(null);
 
   const modalRefPoint = useRef<Modalize>(null);
   const modalRefCourse = useRef<Modalize>(null);
@@ -80,14 +84,12 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
             handleOpenRoute={({ id }) => setRouteId(id)}
           />
 
-          {dataCourse && (
-            <ModalDescriptionBus
-              routeActive={routeActive}
-              forwardedRef={modalRefCourse}
-              course={dataCourse}
-              onClose={() => setDataCourse(null)}
-            />
-          )}
+          <ModalDescriptionBus
+            routeActive={routeActive}
+            forwardedRef={modalRefCourse}
+            course={dataCourse}
+            onClose={() => setDataCourse(null)}
+          />
         </Box>
       </SafeAreaView>
     </>

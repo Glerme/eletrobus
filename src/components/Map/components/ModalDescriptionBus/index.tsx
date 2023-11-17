@@ -3,16 +3,19 @@ import { HStack, Text, VStack } from "native-base";
 import { Bus, Path } from "phosphor-react-native";
 
 import { getColorFromState } from "~/utils/getColorFromState";
+import {
+  ICourse,
+  RoutesBusStopsInterface,
+} from "~/interfaces/RoutesBusStops.interface";
 
 import { Modal } from "~/components/Modal";
-import { ICourse } from "~/interfaces/RoutesBusStops.interface";
 
 interface ModalDescriptionProps {
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
-  course: ICourse;
+  course: ICourse | null;
 
-  routeActive: any;
+  routeActive: RoutesBusStopsInterface | null;
 }
 
 export const ModalDescriptionBus = ({
@@ -31,13 +34,16 @@ export const ModalDescriptionBus = ({
       <VStack px={23} mt={6} space={2}>
         <HStack space={2} alignItems="center">
           <Path color="#46B99E" weight="duotone" />
-          <Text fontSize="md" fontWeight={"600"}>
+          <Text fontSize="lg" fontWeight={"600"}>
             {routeActive?.name}
           </Text>
         </HStack>
         <HStack space={2} alignItems="center">
-          <Bus color={getColorFromState(course?.status)} weight="duotone" />
-          <Text fontSize="lg" fontWeight={"600"}>
+          <Bus
+            color={getColorFromState(course?.status ?? null)}
+            weight="duotone"
+          />
+          <Text fontSize="md" fontWeight={"600"}>
             Veículo: {course?.vehicle?.plate ?? "-"}
           </Text>
         </HStack>
@@ -53,7 +59,7 @@ export const ModalDescriptionBus = ({
           </Text>
           <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
             Status:{" "}
-            <Text color={getColorFromState(course?.status)}>
+            <Text color={getColorFromState(course?.status ?? null)}>
               {course?.status ?? "Sem Status"}
             </Text>
           </Text>

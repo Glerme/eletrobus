@@ -1,5 +1,4 @@
 import { AuthContextProvider } from "~/contexts/AuthContext";
-import { LocationContextProvider } from "~/contexts/LocationContext";
 
 interface ContextsProps {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
 import { useQuery } from "@tanstack/react-query";
@@ -25,10 +25,13 @@ import { getAllBusStopsService } from "~/services/MapServices/getAllBusStopsServ
 import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPositionId";
 
 import { useAuth } from "~/contexts/AuthContext";
-import { useLocation } from "~/contexts/LocationContext";
 
 import { RootStackParamList } from "~/routes";
 
+import { logOnlyOniOS } from "~/functions/logOnlyIos";
+
+import { Alert } from "../Alert";
+import { Button } from "../Form/Button";
 import { ZoomButtons } from "./components/ZoomButtons";
 import { RouteButton } from "./components/RouteButton";
 import { StatusButton } from "./components/StatusButton";
@@ -38,9 +41,6 @@ import { FinalizeButton } from "./components/FinalizeButton";
 import { CustomMarkerBus } from "./components/CustomMarkerBus";
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
-import { Alert } from "../Alert";
-import { Button } from "../Form/Button";
-import { Linking } from "react-native";
 
 export const Map = memo(
   ({
@@ -63,6 +63,7 @@ export const Map = memo(
     const [visibleMarkers, setVisibleMarkers] = useState<any[]>([]);
     const [location, setLocation] = useState<LocationObject | null>(null);
     const [locationError, setLocationError] = useState<string | null>(null);
+    const [timeoutId, setTimeoutId] = useState<any>(null);
 
     const [region, setRegion] = useState<Region>({
       longitude: location?.coords?.longitude ?? 0,
@@ -81,7 +82,7 @@ export const Map = memo(
     const { user } = useAuth();
 
     const { data: markers, isLoading } = useQuery<BusStopProps[]>({
-      queryKey: ["bus-stop", location],
+      queryKey: ["bus-stop"],
       queryFn: async () => getAllBusStopsService(),
       initialData: [],
       placeholderData: [],
@@ -116,6 +117,7 @@ export const Map = memo(
           `/route/${route_id}`
         );
 
+        setBusStops(data);
         setRouteActive(data);
         return data;
       } catch (e) {
@@ -171,15 +173,16 @@ export const Map = memo(
     const cleanParams = useCallback(() => {
       setBusStops(null);
       setRouteActive(null);
+      setIsRunning(false);
       navigation.dispatch((state) => {
         const newRoutes = state.routes.map((route) => {
           if (route.name === "Map") {
             return {
               ...route,
               params: {
-                routeId: null,
-                pointId: null,
-                courseId: null,
+                routeId: undefined,
+                pointId: undefined,
+                courseId: undefined,
               },
             };
           }
@@ -239,26 +242,42 @@ export const Map = memo(
     };
 
     useEffect(() => {
+      requestLocationPermissions();
+    }, []);
+
+    useEffect(() => {
       const fetchCurrentPositionOfBus = async () => {
         if (!routeId) return;
+        if (user?.user.driver) return;
+
+        logOnlyOniOS(`fetchCurrentPositionOfBus => ${routeId}`);
 
         try {
           const route = await getRouteById(routeId);
-          setBusStops(route);
+
+          logOnlyOniOS(`fetchCurrentPositionOfBus DATA => ${route}`);
         } catch (error) {
           console.error("Error fetching route:", error);
         }
 
-        const timeout = setTimeout(async () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+
+        const newTimeoutId = setTimeout(() => {
           fetchCurrentPositionOfBus();
         }, 5000);
 
-        return () => {
-          clearTimeout(timeout);
-        };
+        setTimeoutId(newTimeoutId);
       };
 
       fetchCurrentPositionOfBus();
+
+      return () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+      };
     }, [routeId]);
 
     useEffect(() => {
@@ -274,24 +293,14 @@ export const Map = memo(
     }, [pointId]);
 
     useEffect(() => {
-      requestLocationPermissions();
-    }, []);
-
-    useEffect(() => {
       watchPositionAsync(
         {
-          accuracy: LocationAccuracy.Highest,
-          timeInterval: 1000,
-          distanceInterval: 1,
+          accuracy: LocationAccuracy.BestForNavigation,
+          timeInterval: 5000,
         },
         async (response) => {
+          logOnlyOniOS(`watchPositionAsync => ${JSON.stringify(response)}`);
           setLocation(response);
-          setRegion({
-            latitude: response.coords.latitude,
-            longitude: response.coords.longitude,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-          });
 
           if (isRunning && user?.user.driver && courseId) {
             await postCurrentPositionId({
@@ -302,7 +311,14 @@ export const Map = memo(
           }
         }
       );
-    }, [isRunning]);
+    }, [isRunning, courseId, routeId, user?.user?.driver]);
+
+    useEffect(() => {
+      if (routeId && user?.user?.driver) {
+        console.log("routeId", routeId);
+        getRouteById(routeId);
+      }
+    }, [routeId, user?.user?.driver]);
 
     return (
       <>
@@ -391,9 +407,7 @@ export const Map = memo(
                 }}
                 onRegionChangeComplete={handleRegionChange}
                 initialRegion={region}
-                showsUserLocation={
-                  isRunning && user?.user.driver ? false : true
-                }
+                showsUserLocation={true}
                 showsMyLocationButton={false}
                 scrollEnabled
                 zoomEnabled

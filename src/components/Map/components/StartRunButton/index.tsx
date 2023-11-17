@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useState } from "react";
+import { Dispatch, useEffect, useMemo, useState } from "react";
 
 import { HStack, Text } from "native-base";
 import Toast from "react-native-toast-message";
@@ -37,12 +37,14 @@ export const StartRunButton = ({
   const [intervalRef, setIntervalRef] = useState<any>(null);
   const [time, setTime] = useState<number>(0);
 
-  const getStatusCorrida = () => {
-    const status = allStatus?.find(
-      (status) => status.status === EStatusRun.EmCorrida
-    );
-    return status;
-  };
+  const getStatusCorrida = useMemo(() => {
+    return () => {
+      const status = allStatus?.find(
+        (status) => status.status === EStatusRun.EmCorrida
+      );
+      return status;
+    };
+  }, [allStatus]);
 
   const startCourse = async () => {
     try {
