@@ -34,6 +34,7 @@ export const LocationContextProvider = ({
 
   const requestLocationPermissions = async () => {
     const { granted } = await requestForegroundPermissionsAsync();
+    setLocationError(null);
 
     if (granted) {
       try {
@@ -42,7 +43,6 @@ export const LocationContextProvider = ({
           timeInterval: 5000,
         });
 
-        console.log("REQUEST");
         setLocation(currentPosition);
       } catch (error) {
         setLocationError("Falha ao buscar a localização.");
@@ -59,7 +59,6 @@ export const LocationContextProvider = ({
       await watchPositionAsync(
         { accuracy: LocationAccuracy.Highest, timeInterval: 5000 },
         (newLocation) => {
-          console.log("newLocation", newLocation);
           setLocation(newLocation);
 
           return newLocation;
@@ -72,6 +71,19 @@ export const LocationContextProvider = ({
 
   useEffect(() => {
     (async () => await requestLocationPermissions())();
+  }, []);
+
+  useEffect(() => {
+    watchPositionAsync(
+      {
+        accuracy: LocationAccuracy.Highest,
+        timeInterval: 1000,
+        distanceInterval: 1,
+      },
+      (response) => {
+        setLocation(response);
+      }
+    );
   }, []);
 
   return (

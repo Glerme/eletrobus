@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, Linking, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator } from "react-native";
 
 import { Box, Flex } from "native-base";
 import { useQuery } from "@tanstack/react-query";
@@ -7,6 +7,13 @@ import MapView, { PROVIDER_GOOGLE, Region, Polyline } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import {
+  LocationAccuracy,
+  LocationObject,
+  getCurrentPositionAsync,
+  requestForegroundPermissionsAsync,
+  watchPositionAsync,
+} from "expo-location";
 
 import { MapInterface } from "~/interfaces/Map.interface";
 import { BusStopProps } from "~/interfaces/BusStop.interface";
@@ -22,8 +29,6 @@ import { useLocation } from "~/contexts/LocationContext";
 
 import { RootStackParamList } from "~/routes";
 
-import { Alert } from "../Alert";
-import { Button } from "../Form/Button";
 import { ZoomButtons } from "./components/ZoomButtons";
 import { RouteButton } from "./components/RouteButton";
 import { StatusButton } from "./components/StatusButton";
@@ -33,6 +38,9 @@ import { FinalizeButton } from "./components/FinalizeButton";
 import { CustomMarkerBus } from "./components/CustomMarkerBus";
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
+import { Alert } from "../Alert";
+import { Button } from "../Form/Button";
+import { Linking } from "react-native";
 
 export const Map = memo(
   ({
@@ -45,7 +53,6 @@ export const Map = memo(
     setRouteActive,
   }: MapInterface) => {
     const mapRef = useRef<MapView>(null);
-    const { locationError, location, getActualCurrentPosition } = useLocation();
 
     const [zoom, setZoom] = useState<number>(17);
 
@@ -54,13 +61,12 @@ export const Map = memo(
     );
     const [isRunning, setIsRunning] = useState(false);
     const [visibleMarkers, setVisibleMarkers] = useState<any[]>([]);
+    const [location, setLocation] = useState<LocationObject | null>(null);
+    const [locationError, setLocationError] = useState<string | null>(null);
 
-    const [intervalRun, setIntervalRun] = useState<any>(null);
-
-    const [intervalBus, setIntervalBus] = useState<any>(null);
     const [region, setRegion] = useState<Region>({
-      longitude: 0,
-      latitude: 0,
+      longitude: location?.coords?.longitude ?? 0,
+      latitude: location?.coords?.latitude ?? 0,
       longitudeDelta: 0.005,
       latitudeDelta: 0.005,
     });
@@ -74,11 +80,7 @@ export const Map = memo(
 
     const { user } = useAuth();
 
-    const {
-      data: markers,
-      isError,
-      isLoading,
-    } = useQuery<BusStopProps[]>({
+    const { data: markers, isLoading } = useQuery<BusStopProps[]>({
       queryKey: ["bus-stop", location],
       queryFn: async () => getAllBusStopsService(),
       initialData: [],
@@ -87,7 +89,6 @@ export const Map = memo(
 
     const getCurrentPosition = useCallback(async () => {
       if (!location) return;
-      await getActualCurrentPosition();
       mapRef.current?.animateCamera({
         center: {
           latitude: location.coords.latitude,
@@ -114,6 +115,7 @@ export const Map = memo(
         const { data } = await api.get<RoutesBusStopsInterface>(
           `/route/${route_id}`
         );
+
         setRouteActive(data);
         return data;
       } catch (e) {
@@ -168,6 +170,7 @@ export const Map = memo(
 
     const cleanParams = useCallback(() => {
       setBusStops(null);
+      setRouteActive(null);
       navigation.dispatch((state) => {
         const newRoutes = state.routes.map((route) => {
           if (route.name === "Map") {
@@ -195,73 +198,68 @@ export const Map = memo(
       else navigation.navigate("Points");
     }, [user, navigation]);
 
-    const incrementPositionInCourse = async () => {
-      setBusStops((busStops) => {
-        if (!busStops) return null;
+    // const incrementPositionInCourse = async () => {
+    //   setBusStops((busStops) => {
+    //     if (!busStops) return null;
 
-        const newBusStops = [...busStops.bus_stops];
+    //     const newBusStops = [...busStops.bus_stops];
 
-        const positionDriver = {
-          bus_stop_id: "0",
-          latitude: location?.coords?.latitude ?? 0,
-          longitude: location?.coords?.longitude ?? 0,
-        };
+    //     const positionDriver = {
+    //       bus_stop_id: "0",
+    //       latitude: location?.coords?.latitude ?? 0,
+    //       longitude: location?.coords?.longitude ?? 0,
+    //     };
 
-        newBusStops.unshift(positionDriver);
+    //     newBusStops.unshift(positionDriver);
 
-        return { ...busStops, bus_stops: newBusStops };
-      });
+    //     return { ...busStops, bus_stops: newBusStops };
+    //   });
+    // };
+
+    const requestLocationPermissions = async () => {
+      const { granted } = await requestForegroundPermissionsAsync();
+      setLocationError(null);
+
+      if (granted) {
+        try {
+          const currentPosition = await getCurrentPositionAsync();
+
+          setLocation(currentPosition);
+          setRegion({
+            latitude: currentPosition.coords.latitude,
+            longitude: currentPosition.coords.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          });
+        } catch (error) {
+          setLocationError("Falha ao buscar a localização.");
+        }
+        return;
+      }
     };
 
-    const getPositionAndIncrementInCourse = useCallback(async () => {
-      if (!courseId) return;
-
-      console.log(
-        "GET POSITION",
-        location?.coords?.latitude,
-        location?.coords?.longitude
-      );
-
-      await postCurrentPositionId({
-        id: courseId,
-        latitude: location?.coords?.latitude ?? 0,
-        longitude: location?.coords?.longitude ?? 0,
-      });
-
-      incrementPositionInCourse();
-    }, [location]);
-
     useEffect(() => {
-      if (isRunning && user?.user.driver) {
-        setIntervalRun(
-          setInterval(() => {
-            getPositionAndIncrementInCourse();
-          }, 5000)
-        );
-      } else {
-        clearInterval(intervalRun);
-      }
-    }, [isRunning]);
-
-    useEffect(() => {
-      (async () => {
-        clearInterval(intervalBus);
+      const fetchCurrentPositionOfBus = async () => {
         if (!routeId) return;
-        setBusStops(await getRouteById(routeId));
 
-        if (user?.user.driver) {
-          incrementPositionInCourse();
-        } else {
-          console.log("ELSE");
-          setBusStops(await getRouteById(routeId));
-          setIntervalBus(
-            setInterval(async () => {
-              setBusStops(await getRouteById(routeId));
-            }, 5000)
-          );
+        try {
+          const route = await getRouteById(routeId);
+          setBusStops(route);
+        } catch (error) {
+          console.error("Error fetching route:", error);
         }
-      })();
-    }, [routeId, location]);
+
+        const timeout = setTimeout(async () => {
+          fetchCurrentPositionOfBus();
+        }, 5000);
+
+        return () => {
+          clearTimeout(timeout);
+        };
+      };
+
+      fetchCurrentPositionOfBus();
+    }, [routeId]);
 
     useEffect(() => {
       if (pointId) {
@@ -275,10 +273,41 @@ export const Map = memo(
       }
     }, [pointId]);
 
+    useEffect(() => {
+      requestLocationPermissions();
+    }, []);
+
+    useEffect(() => {
+      watchPositionAsync(
+        {
+          accuracy: LocationAccuracy.Highest,
+          timeInterval: 1000,
+          distanceInterval: 1,
+        },
+        async (response) => {
+          setLocation(response);
+          setRegion({
+            latitude: response.coords.latitude,
+            longitude: response.coords.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          });
+
+          if (isRunning && user?.user.driver && courseId) {
+            await postCurrentPositionId({
+              id: courseId,
+              latitude: response?.coords?.latitude ?? 0,
+              longitude: response?.coords?.longitude ?? 0,
+            });
+          }
+        }
+      );
+    }, [isRunning]);
+
     return (
       <>
         <Box flex={1}>
-          {isLoading ? (
+          {isLoading || !location ? (
             <Box flex={1} justifyContent={"center"}>
               <ActivityIndicator color={"white"} size={100} />
             </Box>
@@ -361,28 +390,23 @@ export const Map = memo(
                     width: "120%",
                     height: "120%",
                   }}
-                  region={{
-                    longitudeDelta: 0.005,
-                    latitudeDelta: 0.005,
-                    latitude: location?.coords?.latitude,
-                    longitude: location?.coords?.longitude,
-                  }}
                   onRegionChangeComplete={handleRegionChange}
                   initialRegion={region}
-                  showsUserLocation={true}
+                  showsUserLocation={
+                    isRunning && user?.user.driver ? false : true
+                  }
                   showsMyLocationButton={false}
                   scrollEnabled
                   zoomEnabled
                   zoomControlEnabled={false}
                 >
-                  {busStops?.courses &&
-                    busStops?.courses?.map((course) => (
-                      <CustomMarkerBus
-                        key={course?.id}
-                        course={course}
-                        handleOpenModal={openModalCourse}
-                      />
-                    ))}
+                  {busStops?.courses?.map((course) => (
+                    <CustomMarkerBus
+                      key={course?.id}
+                      course={course}
+                      handleOpenModal={openModalCourse}
+                    />
+                  ))}
 
                   {visibleMarkers?.map((marker, i) => (
                     <CustomMarker

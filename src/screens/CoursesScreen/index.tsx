@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RefreshControl, Alert as RNAlert } from "react-native";
+import { RefreshControl } from "react-native";
 
 import { MagnifyingGlass } from "phosphor-react-native";
 import { Box, FlatList, Icon, Text } from "native-base";
@@ -52,7 +52,6 @@ export const CoursesScreen = ({
 
         return nextPage;
       },
-      retry: 3,
       keepPreviousData: true,
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,

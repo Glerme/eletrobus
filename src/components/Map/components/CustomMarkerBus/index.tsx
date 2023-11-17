@@ -1,14 +1,13 @@
 import { memo } from "react";
+import { Box } from "native-base";
+
 import { Marker } from "react-native-maps";
 import { scale } from "react-native-size-matters";
 
-import { BusStopProps } from "~/interfaces/BusStop.interface";
 import Bus from "~/assets/svg/bus.svg";
-import { ICurrentPosition } from "~/services/CoursesServices/getCurrentPositionId";
-import { ModalDescriptionBus } from "../ModalDescriptionBus";
-import { useModal } from "~/hooks/useModal";
+
 import { ICourse } from "~/interfaces/RoutesBusStops.interface";
-import { Box, Text } from "native-base";
+
 import { getColorFromState } from "~/utils/getColorFromState";
 
 type CustomMarkerProps = {
@@ -18,7 +17,6 @@ type CustomMarkerProps = {
 
 export const CustomMarkerBus = memo(
   ({ course, handleOpenModal }: CustomMarkerProps) => {
-    // const { modalRef, handleOpenModal } = useModal();
     return (
       <>
         <Marker
@@ -43,18 +41,6 @@ export const CustomMarkerBus = memo(
             left={0}
           ></Box>
         </Marker>
-
-        {/* <Box
-        position={"absolute"}
-        top={0}
-        right={0}
-        bg={"white"}
-        borderRadius={2}
-        p={2}
-      >
-       
-      </Box> */}
-        {/* <ModalDescriptionBus forwardedRef={modalRef} onClose={() => {}} /> */}
       </>
     );
   }

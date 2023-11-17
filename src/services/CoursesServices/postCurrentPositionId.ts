@@ -2,7 +2,6 @@ import api from "../axios";
 
 interface ParamsProps {
   id: string;
-
   latitude: number;
   longitude: number;
 }
