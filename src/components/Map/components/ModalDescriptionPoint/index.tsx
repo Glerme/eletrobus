@@ -45,6 +45,7 @@ interface ModalDescriptionProps {
   point: BusStopProps | null;
   forwardedRef: React.RefObject<Modalize>;
   onClose: () => void;
+  closeModalPoint: () => void;
   handleOpenRoute: (route: RoutesProps) => void;
 }
 
@@ -52,6 +53,7 @@ export const ModalDescriptionPoint = ({
   point,
   forwardedRef,
   onClose,
+  closeModalPoint,
   handleOpenRoute,
 }: ModalDescriptionProps) => {
   const { user } = useAuth();
@@ -102,7 +104,10 @@ export const ModalDescriptionPoint = ({
               <ListRoutes
                 key={i}
                 route={route}
-                onPress={() => handleOpenRoute(route)}
+                onPress={() => {
+                  handleOpenRoute(route);
+                  closeModalPoint();
+                }}
                 disabled={!!user?.user?.driver}
               />
             ))

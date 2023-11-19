@@ -29,7 +29,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
   const pointId = route.params?.pointId ?? "";
   const courseId = route.params?.courseId ?? "";
 
-  const [routeId, setRouteId] = useState<string>(route.params?.routeId ?? "");
+  const [routeId, setRouteId] = useState<string>("");
 
   const { requestLocationPermissions } = useLocation();
   const { dataPoint, setDataPoint } = useBusStopInfo();
@@ -43,6 +43,11 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
     setDataPoint(data);
     modalRefPoint.current?.open();
   };
+
+  const closeModalPoint = () => {
+    modalRefPoint.current?.close();
+  };
+
   const openModalCourse = (data: ICourse) => {
     setDataCourse(data);
     modalRefCourse.current?.open();
@@ -79,6 +84,7 @@ export const MapScreen = ({ navigation, route }: NavigationProps<"Map">) => {
 
           <ModalDescriptionPoint
             point={dataPoint}
+            closeModalPoint={closeModalPoint}
             forwardedRef={modalRefPoint}
             onClose={() => setDataPoint(null)}
             handleOpenRoute={({ id }) => setRouteId(id)}

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const api = axios.create({
   // baseURL: process.env.EXPO_PUBLIC_API_URL,
-  baseURL: "https://endlessly-genuine-loon.ngrok-free.app/",
+  baseURL: "https://endlessly-genuine-loon.ngrok-free.app/back/",
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
