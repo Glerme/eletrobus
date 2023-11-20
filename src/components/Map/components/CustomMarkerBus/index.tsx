@@ -19,27 +19,29 @@ export const CustomMarkerBus = memo(
   ({ course, handleOpenModal }: CustomMarkerProps) => {
     return (
       <>
-        <Marker
-          coordinate={{
-            latitude: +course.current_positions?.latitude,
-            longitude: +course.current_positions?.longitude,
-          }}
-          onPress={() => handleOpenModal(course)}
-        >
-          <Bus width={scale(40)} height={scale(40)} />
-          <Box
-            position={"absolute"}
-            width={3}
-            height={3}
-            borderColor={"white"}
-            borderWidth={"1px"}
-            borderStyle={"solid"}
-            background={getColorFromState(course.status)}
-            borderRadius={100}
-            top={0}
-            left={0}
-          ></Box>
-        </Marker>
+        {course?.current_positions && (
+          <Marker
+            coordinate={{
+              latitude: +course.current_positions?.latitude,
+              longitude: +course.current_positions?.longitude,
+            }}
+            onPress={() => handleOpenModal(course)}
+          >
+            <Bus width={scale(40)} height={scale(40)} />
+            <Box
+              position={"absolute"}
+              width={3}
+              height={3}
+              borderColor={"white"}
+              borderWidth={"1px"}
+              borderStyle={"solid"}
+              background={getColorFromState(course.status)}
+              borderRadius={100}
+              top={0}
+              left={0}
+            ></Box>
+          </Marker>
+        )}
       </>
     );
   }

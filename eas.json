@@ -11,7 +11,7 @@
         "EXPO_PUBLIC_REDIRECT_URI": "https://auth.expo.io/@glerme/EletroBus",
         "EXPO_PUBLIC_SCOPE": "profile email",
         "EXPO_PUBLIC_RESPONSE_TYPE": "token",
-        "EXPO_PUBLIC_API_URL": "https://endlessly-genuine-loon.ngrok-free.app/"
+        "EXPO_PUBLIC_API_URL": "https://endlessly-genuine-loon.ngrok-free.app/back"
       }
     },
     "preview2": {
