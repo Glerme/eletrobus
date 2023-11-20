@@ -144,7 +144,6 @@ export const Map = memo(
           let minLat = 90;
           let maxLng = -180;
           let minLng = 180;
-
           markersInVisibleArea.forEach((marker) => {
             maxLat = Math.max(maxLat, marker.latitude);
             minLat = Math.min(minLat, marker.latitude);
@@ -201,24 +200,6 @@ export const Map = memo(
       else navigation.navigate("Points");
     }, [user, navigation]);
 
-    // const incrementPositionInCourse = async () => {
-    //   setBusStops((busStops) => {
-    //     if (!busStops) return null;
-
-    //     const newBusStops = [...busStops.bus_stops];
-
-    //     const positionDriver = {
-    //       bus_stop_id: "0",
-    //       latitude: location?.coords?.latitude ?? 0,
-    //       longitude: location?.coords?.longitude ?? 0,
-    //     };
-
-    //     newBusStops.unshift(positionDriver);
-
-    //     return { ...busStops, bus_stops: newBusStops };
-    //   });
-    // };
-
     const requestLocationPermissions = async () => {
       const { granted } = await requestForegroundPermissionsAsync();
       setLocationError(null);
@@ -250,12 +231,8 @@ export const Map = memo(
         if (!routeId) return;
         if (user?.user.driver) return;
 
-        logOnlyOniOS(`fetchCurrentPositionOfBus => ${routeId}`);
-
         try {
-          const route = await getRouteById(routeId);
-
-          logOnlyOniOS(`fetchCurrentPositionOfBus DATA => ${route}`);
+          await getRouteById(routeId);
         } catch (error) {
           console.error("Error fetching route:", error);
         }
@@ -423,7 +400,7 @@ export const Map = memo(
 
                 {visibleMarkers?.map((marker, i) => (
                   <CustomMarker
-                    key={marker.id}
+                    key={i}
                     handleOpenModal={openModalPoint}
                     marker={marker}
                   />

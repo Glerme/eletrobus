@@ -16,8 +16,8 @@ export const CustomMarker = memo(
     return (
       <Marker
         coordinate={{
-          latitude: marker.latitude,
-          longitude: marker.longitude,
+          latitude: marker.latitude ?? 0,
+          longitude: marker.longitude ?? 0,
         }}
         onPress={() => handleOpenModal(marker)}
         tracksViewChanges
