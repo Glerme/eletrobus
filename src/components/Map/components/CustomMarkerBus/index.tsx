@@ -9,6 +9,7 @@ import Bus from "~/assets/svg/bus.svg";
 import { ICourse } from "~/interfaces/RoutesBusStops.interface";
 
 import { getColorFromState } from "~/utils/getColorFromState";
+import { EStatusRun } from "~/enum/EStatusRun";
 
 type CustomMarkerProps = {
   course: ICourse;
@@ -17,6 +18,8 @@ type CustomMarkerProps = {
 
 export const CustomMarkerBus = memo(
   ({ course, handleOpenModal }: CustomMarkerProps) => {
+    if (course.status === EStatusRun.Finalizado) return <></>;
+
     return (
       <>
         {course?.current_positions && (
