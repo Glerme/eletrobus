@@ -116,7 +116,7 @@ export const Map = memo(
         const { data } = await api.get<RoutesBusStopsInterface>(
           `/route/${route_id}`
         );
-
+        console.log("teste");
         setBusStops(data);
         setRouteActive(data);
         return data;
@@ -228,6 +228,9 @@ export const Map = memo(
     }, []);
 
     useEffect(() => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
       const fetchCurrentPositionOfBus = async () => {
         if (!routeId) return;
         if (user?.user.driver) return;
@@ -293,7 +296,6 @@ export const Map = memo(
 
     useEffect(() => {
       if (routeId && user?.user?.driver) {
-        console.log("routeId", routeId);
         getRouteById(routeId);
       }
     }, [routeId, user?.user?.driver]);
