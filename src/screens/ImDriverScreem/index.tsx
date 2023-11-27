@@ -65,20 +65,22 @@ export const ImDriverScreen = ({
     cnh: "",
   });
 
-  // const [isLoading, setIsLoading] = useState(false);
-
   const { mutate, isLoading } = useMutation(postUserAsDriverService, {
     onMutate: async () => {
       setSignOutFunction(getRefreshToken);
     },
     onSuccess: async (updatedUser) => {
-      Toast.show({
-        type: "success",
-        text1: "Sucesso",
-        text2: "Novo motorista criado com sucesso",
-      });
+      if (updatedUser) {
+        const { data } = await api.get<MyQueryInterface>("/user/my");
+        await updateUser(data);
 
-      navigation.navigate("Home");
+        Toast.show({
+          type: "success",
+          text1: "Sucesso",
+          text2: "Novo motorista criado com sucesso",
+        });
+        navigation.navigate("Home");
+      }
     },
     onError: (error: any) => {
       if (error?.response?.status === 401) {
@@ -112,36 +114,6 @@ export const ImDriverScreen = ({
     }
     mutate({ ...fields, userId: user?.user.id });
   };
-
-  // const handleSubmit = async () => {
-  //   setIsLoading(true);
-  //   if (!user?.user.id) {
-  //     setIsLoading(false);
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Erro",
-  //       text2: `Ocorreu um erro: Usuário não encontrado`,
-  //     });
-  //     return;
-  //   }
-  //   if (!fields.cpf || !fields.cnh) {
-  //     setIsLoading(false);
-  //     Toast.show({
-  //       type: "error",
-  //       text1: "Erro",
-  //       text2: `Ocorreu um erro: Preencha todos os campos`,
-  //     });
-  //     return;
-  //   }
-  //   try {
-  //     const data = await postUserAsDriverService(user?.user.id, fields);
-  //     setSignOutFunction(getRefreshToken);
-  //   } catch (e) {
-  //     console.error(e);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   return (
     <>
