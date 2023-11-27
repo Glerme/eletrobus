@@ -3,7 +3,7 @@ import { TouchableHighlight } from "react-native";
 import LottieView from "lottie-react-native";
 import { Icon, VStack, Text, HStack, Divider } from "native-base";
 
-import { PencilSimple, SignOut } from "phosphor-react-native";
+import { Bus, PencilSimple, SignOut } from "phosphor-react-native";
 
 import { NavigationProps } from "~/routes";
 
@@ -76,6 +76,25 @@ export const SettingsScreen = ({
                   </HStack>
                 </TouchableHighlight>
               </VStack>
+
+              {!user.user.driver && (
+                <VStack space={2} alignItems={"baseline"} mt={4} w={"100%"}>
+                  <TouchableHighlight
+                    onPress={() => navigation.navigate("ImDriver")}
+                    underlayColor={THEME.colors.gray["200"]}
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    <HStack space={2} alignItems={"center"} p={2} w={"full"}>
+                      <Bus color={THEME.colors.gray["800"]} size={16} />
+                      <Text color={THEME.colors.gray["800"]}>
+                        Sou Motorista
+                      </Text>
+                    </HStack>
+                  </TouchableHighlight>
+                </VStack>
+              )}
 
               <Button
                 display={"flex"}

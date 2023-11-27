@@ -15,6 +15,7 @@ import { PointDetailsScreen } from "~/screens/PointDetailsScreen";
 import { CourseDetailsScreen } from "~/screens/CourseDetailsScreen";
 
 import { Contexts } from "./contexts.routes";
+import { ImDriverScreen } from "~/screens/ImDriverScreem";
 
 // Tipagem das telas e parâmetros
 export type RootStackParamList = {
@@ -28,6 +29,7 @@ export type RootStackParamList = {
   Map: { pointId?: string; routeId?: string; courseId?: string };
   CourseDetails: { routeId: string; courseId: string };
   Login: undefined;
+  ImDriver: undefined;
 };
 
 // Tipagem das props de navegação
@@ -66,6 +68,11 @@ const stacks: {
     name: "Profile",
     component: ProfileScreen,
     label: "Perfil",
+  },
+  {
+    name: "ImDriver",
+    component: ImDriverScreen,
+    label: "Sou Motorista",
   },
   {
     name: "CourseDetails",
