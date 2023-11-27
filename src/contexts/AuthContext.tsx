@@ -340,7 +340,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
   const getRefreshToken = async () => {
     try {
-      const { data } = await api.post("/user/session/refresh", {
+      const { data } = await api.post("user/session/refresh", {
         refresh_token: user?.refresh_token,
       });
 
