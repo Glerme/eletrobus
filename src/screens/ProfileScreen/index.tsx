@@ -4,7 +4,14 @@ import { Platform } from "react-native";
 import Toast from "react-native-toast-message";
 import { useMutation } from "@tanstack/react-query";
 import { Box, Icon, IconButton, View } from "native-base";
-import { Envelope, Eye, EyeSlash, Key, User } from "phosphor-react-native";
+import {
+  Envelope,
+  Eye,
+  EyeSlash,
+  IdentificationCard,
+  Key,
+  User,
+} from "phosphor-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useAuth } from "~/contexts/AuthContext";
@@ -22,12 +29,35 @@ import { Title } from "~/components/Layouts/Title";
 import { ImagePicker } from "~/components/Form/ImagePicker";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
+import { TextInputMask } from "react-native-masked-text";
 
 interface ProfileFields {
   name: string;
   email: string;
   password?: string;
+
+  cpf?: string;
+  cnh?: string;
 }
+
+export const InputCNH = ({ ...rest }) => (
+  <Input
+    mb={2}
+    isDisabled
+    placeholder="CNH"
+    InputLeftElement={<Icon as={<IdentificationCard />} ml={2} />}
+    {...rest}
+  />
+);
+export const InputCPF = ({ ...rest }) => (
+  <Input
+    mb={2}
+    isDisabled
+    placeholder="CPF"
+    InputLeftElement={<Icon as={<User />} ml={2} />}
+    {...rest}
+  />
+);
 
 export const ProfileScreen = ({
   navigation,
@@ -39,6 +69,8 @@ export const ProfileScreen = ({
     name: "",
     email: "",
     password: "",
+    cpf: "",
+    cnh: "",
   });
 
   const { mutate, isLoading } = useMutation(updateUserService, {
@@ -74,6 +106,8 @@ export const ProfileScreen = ({
     setFields({
       name: user?.user?.name ?? "",
       email: user?.user?.email ?? "",
+      cpf: user?.user?.driver?.cpf ?? "",
+      cnh: user?.user?.driver?.cnh ?? "",
       password: "",
     });
   }, [user]);
@@ -120,6 +154,34 @@ export const ProfileScreen = ({
                     }
                     value={fields.email}
                   />
+
+                  {user.user.driver && (
+                    <>
+                      <TextInputMask
+                        type="cpf"
+                        customTextInput={InputCPF}
+                        includeRawValueInChangeText={true}
+                        options={{
+                          format: "999.999.999-99",
+                        }}
+                        onChangeText={(text) =>
+                          setFields({ ...fields, cpf: text })
+                        }
+                        // InputLeftElement={<Icon as={<User />} ml={2} />}
+                        value={fields.cpf}
+                      />
+                      <TextInputMask
+                        type={"only-numbers"}
+                        maxLength={11}
+                        customTextInput={InputCNH}
+                        onChangeText={(text) =>
+                          setFields({ ...fields, cnh: text })
+                        }
+                        // InputLeftElement={<Icon as={<User />} ml={2} />}
+                        value={fields.cnh}
+                      />
+                    </>
+                  )}
 
                   <Input
                     placeholder="Senha"

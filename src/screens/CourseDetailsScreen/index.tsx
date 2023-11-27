@@ -180,25 +180,37 @@ export const CourseDetailsScreen = ({
                 </Text>
               </HStack>
               {data?.courses?.map((course, index) => (
-                <VStack
-                  key={index}
-                  borderBottomColor={"primary.500"}
-                  borderBottomWidth={"1px"}
-                  p={2}
-                >
-                  <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
-                    Placa:{" "}
-                    <Text color={"secondary.500"}>
-                      {course?.vehicle?.plate ?? "-"}
-                    </Text>
-                  </Text>
-                  <Text fontSize={"md"} fontWeight={"bold"} color={"gray.800"}>
-                    Status:{" "}
-                    <Text color={getColorFromState(course?.status)}>
-                      {course?.status ?? "-"}
-                    </Text>
-                  </Text>
-                </VStack>
+                <>
+                  {course.id === route.params.courseId && (
+                    <VStack
+                      key={index}
+                      borderBottomColor={"primary.500"}
+                      borderBottomWidth={"1px"}
+                      p={2}
+                    >
+                      <Text
+                        fontSize={"md"}
+                        fontWeight={"bold"}
+                        color={"gray.800"}
+                      >
+                        Placa:{" "}
+                        <Text color={"secondary.500"}>
+                          {course?.vehicle?.plate ?? "-"}
+                        </Text>
+                      </Text>
+                      <Text
+                        fontSize={"md"}
+                        fontWeight={"bold"}
+                        color={"gray.800"}
+                      >
+                        Status:{" "}
+                        <Text color={getColorFromState(course?.status)}>
+                          {course?.status ?? "-"}
+                        </Text>
+                      </Text>
+                    </VStack>
+                  )}
+                </>
               ))}
             </VStack>
 

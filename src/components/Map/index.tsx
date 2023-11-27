@@ -116,7 +116,7 @@ export const Map = memo(
         const { data } = await api.get<RoutesBusStopsInterface>(
           `/route/${route_id}`
         );
-        console.log("teste");
+
         setBusStops(data);
         setRouteActive(data);
         return data;
@@ -228,9 +228,22 @@ export const Map = memo(
     }, []);
 
     useEffect(() => {
+      if (busStops && !user?.user.driver) {
+        mapRef.current?.animateCamera({
+          center: {
+            latitude: busStops.bus_stops[0].latitude,
+            longitude: busStops.bus_stops[0].longitude,
+          },
+          zoom,
+        });
+      }
+    }, [busStops]);
+
+    useEffect(() => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
+
       const fetchCurrentPositionOfBus = async () => {
         if (!routeId) return;
         if (user?.user.driver) return;
