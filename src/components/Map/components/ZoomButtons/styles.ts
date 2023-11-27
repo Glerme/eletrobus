@@ -9,8 +9,5 @@ export const Container = styled(VStack)`
 `;
 
 export const IconItem = styled(IconButton)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #5a42e7;
 `;

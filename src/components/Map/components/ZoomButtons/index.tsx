@@ -2,6 +2,7 @@ import { Platform } from "react-native";
 
 import { Plus, Minus } from "phosphor-react-native";
 import { Container, IconItem } from "./styles";
+import { Center, IconButton, VStack } from "native-base";
 
 interface ZoomButtonsProps {
   onZoomPress: (type: "in" | "out") => void;
@@ -15,17 +16,23 @@ export const ZoomButtons = ({ onZoomPress }: ZoomButtonsProps) => {
         _pressed={{
           background: "white",
         }}
-      >
-        <Plus color="white" />
-      </IconItem>
+        variant={"solid"}
+        _icon={{
+          as: <Plus color="white" />,
+          name: "plus",
+        }}
+      />
       <IconItem
-        onPress={() => onZoomPress("out")}
+        onPress={() => onZoomPress("in")}
         _pressed={{
           background: "white",
         }}
-      >
-        <Minus color="white" />
-      </IconItem>
+        variant={"solid"}
+        _icon={{
+          as: <Minus color="white" />,
+          name: "plus",
+        }}
+      />
     </Container>
   ) : (
     <></>
