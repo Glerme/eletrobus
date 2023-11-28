@@ -74,21 +74,24 @@ export const ProfileScreen = ({
 
   const updateUserAndDriver = async (fields: ProfileFields) => {
     try {
-      await updateUserService({
-        email: fields.email,
-        name: fields.name,
-        password: fields.password,
-      });
-      console.log("passou");
-
-      if (user?.user.driver) {
-        console.log("driver");
+      if (user?.user?.driver) {
         await updateDriverService({
           cnh: fields.cnh,
           cpf: fields.cpf,
         });
+
+        await updateUserService({
+          email: fields.email,
+          name: fields.name,
+          password: fields.password,
+        });
+      } else {
+        await updateUserService({
+          email: fields.email,
+          name: fields.name,
+          password: fields.password,
+        });
       }
-      // return true;
     } catch (error) {
       return error;
     }
@@ -99,8 +102,6 @@ export const ProfileScreen = ({
       setSignOutFunction(getRefreshToken);
     },
     onSuccess: async () => {
-      // if (!updatedUser) return;
-
       const { data } = await api.get<MyQueryInterface>("/user/my");
 
       updateUser(data);

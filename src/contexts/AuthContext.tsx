@@ -98,10 +98,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             refresh_token: googleData?.data?.refresh_token,
           };
 
-          api.interceptors.request.use((config) => {
-            config.headers.Authorization = `Bearer ${parsedData?.token}`;
-            return config;
-          });
+          api.defaults.headers.common.Authorization = `Bearer ${parsedData?.token}`;
 
           api.interceptors.response.use(
             (response) => {
@@ -166,16 +163,13 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         password,
       });
 
-      api.interceptors.request.use((config) => {
-        config.headers.Authorization = `Bearer ${data?.data?.token}`;
-        return config;
-      });
-
       const parsedData: UserProps = {
         token: data?.data?.token,
         user: data?.data?.user,
         refresh_token: data?.data?.refresh_token,
       };
+
+      api.defaults.headers.common.Authorization = `Bearer ${parsedData?.token}`;
 
       await AsyncStorage.setItem("@user", JSON.stringify(parsedData?.user));
       await AsyncStorage.setItem("@token", JSON.stringify(parsedData.token));
@@ -217,10 +211,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       await AsyncStorage.removeItem("@user");
       await AsyncStorage.removeItem("@token");
       await AsyncStorage.removeItem("@refresh_Token");
-      // api.interceptors.request.use((config) => {
-      //   config.headers.Authorization = ``;
-      //   return config;
-      // });
+
+      api.interceptors.request.clear();
+      api.defaults.headers.common.Authorization = undefined;
 
       Toast.show({
         type: "success",
@@ -232,11 +225,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       await AsyncStorage.removeItem("@user");
       await AsyncStorage.removeItem("@token");
       await AsyncStorage.removeItem("@refresh_Token");
-      // api.interceptors.request.use((config) => {
-      //   config.headers.Authorization = ``;
-      //   return config;
-      // });
-      console.error(error);
+
+      const axiosError = axiosErrorHandler(error);
+
+      console.error(axiosError);
     }
   };
 
@@ -253,6 +245,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           token: JSON.parse(getToken),
           refresh_token: JSON.parse(getRefreshToken),
         };
+
+        api.defaults.headers.common.Authorization = `Bearer ${parsedUser?.token}`;
 
         setUser(parsedUser);
       }
@@ -276,6 +270,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         },
         refresh_token: user?.refresh_token ?? "",
       };
+
+      api.defaults.headers.common.Authorization = `Bearer ${parsedData?.token}`;
 
       await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
 
@@ -362,8 +358,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
         await AsyncStorage.setItem("@token", JSON.stringify(data.token));
         setUser((state) => state && { ...state, token: data?.token });
-
-        // Alert.alert("Token atualizado com sucesso");
       }
     } catch (error) {
       signOut();

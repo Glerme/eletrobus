@@ -6,14 +6,10 @@ interface IDriverFields {
 }
 
 export const updateDriverService = async (fields: IDriverFields) => {
-  try {
-    await api.put(`/driver`, {
-      cpf: fields?.cpf ?? undefined,
-      cnh: fields?.cnh ?? undefined,
-    });
+  const data = await api.put(`/driver`, {
+    cpf: fields?.cpf ?? undefined,
+    cnh: fields?.cnh ?? undefined,
+  });
 
-    return true;
-  } catch (error) {
-    return false;
-  }
+  return data;
 };

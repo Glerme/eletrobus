@@ -23,14 +23,14 @@ export const ZoomButtons = ({ onZoomPress }: ZoomButtonsProps) => {
         }}
       />
       <IconItem
-        onPress={() => onZoomPress("in")}
+        onPress={() => onZoomPress("out")}
         _pressed={{
           background: "white",
         }}
         variant={"solid"}
         _icon={{
           as: <Minus color="white" />,
-          name: "plus",
+          name: "minus",
         }}
       />
     </Container>
