@@ -30,20 +30,20 @@ import { ImagePicker } from "~/components/Form/ImagePicker";
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
 import { TextInputMask } from "react-native-masked-text";
+import { updateDriverService } from "~/services/ProfileServices/updateDriverService";
 
 interface ProfileFields {
   name: string;
   email: string;
   password?: string;
 
-  cpf?: string;
-  cnh?: string;
+  cpf: string;
+  cnh: string;
 }
 
 export const InputCNH = ({ ...rest }) => (
   <Input
     mb={2}
-    isDisabled
     placeholder="CNH"
     InputLeftElement={<Icon as={<IdentificationCard />} ml={2} />}
     {...rest}
@@ -52,7 +52,6 @@ export const InputCNH = ({ ...rest }) => (
 export const InputCPF = ({ ...rest }) => (
   <Input
     mb={2}
-    isDisabled
     placeholder="CPF"
     InputLeftElement={<Icon as={<User />} ml={2} />}
     {...rest}
@@ -73,21 +72,43 @@ export const ProfileScreen = ({
     cnh: "",
   });
 
-  const { mutate, isLoading } = useMutation(updateUserService, {
+  const updateUserAndDriver = async (fields: ProfileFields) => {
+    try {
+      await updateUserService({
+        email: fields.email,
+        name: fields.name,
+        password: fields.password,
+      });
+
+      if (user?.user.driver) {
+        await updateDriverService({
+          cnh: fields.cnh,
+          cpf: fields.cpf,
+        });
+        return "driver";
+      } else {
+        return "user";
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const { mutate, isLoading } = useMutation(updateUserAndDriver, {
     onMutate: async () => {
       setSignOutFunction(getRefreshToken);
     },
     onSuccess: async (updatedUser) => {
-      if (updatedUser) {
-        const { data } = await api.get<MyQueryInterface>("/user/my");
-        updateUser(data);
+      if (!updatedUser) return;
+      const { data } = await api.get<MyQueryInterface>("/user/my");
+      console.log(data);
+      updateUser(data);
 
-        Toast.show({
-          type: "success",
-          text1: "Sucesso",
-          text2: "Usuário atualizado com sucesso",
-        });
-      }
+      Toast.show({
+        type: "success",
+        text1: "Sucesso",
+        text2: `Informações atualizadas com sucesso!`,
+      });
     },
     onError: (error: any) => {
       if (error?.response?.status === 401) {
@@ -103,6 +124,8 @@ export const ProfileScreen = ({
   });
 
   useEffect(() => {
+    if (user?.user.driver) {
+    }
     setFields({
       name: user?.user?.name ?? "",
       email: user?.user?.email ?? "",

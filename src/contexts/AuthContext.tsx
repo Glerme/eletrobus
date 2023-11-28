@@ -271,7 +271,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       Toast.show({
         type: "success",
         text1: "Sucesso",
-        text2: "Usuário atualizado com sucesso",
+        text2: "Informações atualizadas com sucesso!",
       });
     } catch (error) {
       setUser(null);
@@ -280,7 +280,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       Toast.show({
         type: "success",
         text1: "Sucesso",
-        text2: "Usuário atualizado com sucesso",
+        text2: "Informações atualizadas com sucesso!",
       });
     } finally {
       setLoading(false);
