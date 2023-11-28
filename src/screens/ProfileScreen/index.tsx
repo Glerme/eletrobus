@@ -79,16 +79,16 @@ export const ProfileScreen = ({
         name: fields.name,
         password: fields.password,
       });
+      console.log("passou");
 
       if (user?.user.driver) {
+        console.log("driver");
         await updateDriverService({
           cnh: fields.cnh,
           cpf: fields.cpf,
         });
-        return "driver";
-      } else {
-        return "user";
       }
+      // return true;
     } catch (error) {
       return error;
     }
@@ -98,10 +98,11 @@ export const ProfileScreen = ({
     onMutate: async () => {
       setSignOutFunction(getRefreshToken);
     },
-    onSuccess: async (updatedUser) => {
-      if (!updatedUser) return;
+    onSuccess: async () => {
+      // if (!updatedUser) return;
+
       const { data } = await api.get<MyQueryInterface>("/user/my");
-      console.log(data);
+
       updateUser(data);
 
       Toast.show({
@@ -124,8 +125,6 @@ export const ProfileScreen = ({
   });
 
   useEffect(() => {
-    if (user?.user.driver) {
-    }
     setFields({
       name: user?.user?.name ?? "",
       email: user?.user?.email ?? "",

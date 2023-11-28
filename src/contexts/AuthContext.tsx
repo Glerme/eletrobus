@@ -213,9 +213,14 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const signOut = async () => {
     try {
       setUser(null);
+
       await AsyncStorage.removeItem("@user");
       await AsyncStorage.removeItem("@token");
-      await AsyncStorage.removeItem("@refreshToken");
+      await AsyncStorage.removeItem("@refresh_Token");
+      // api.interceptors.request.use((config) => {
+      //   config.headers.Authorization = ``;
+      //   return config;
+      // });
 
       Toast.show({
         type: "success",
@@ -223,6 +228,14 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       });
     } catch (error) {
       setUser(null);
+
+      await AsyncStorage.removeItem("@user");
+      await AsyncStorage.removeItem("@token");
+      await AsyncStorage.removeItem("@refresh_Token");
+      // api.interceptors.request.use((config) => {
+      //   config.headers.Authorization = ``;
+      //   return config;
+      // });
       console.error(error);
     }
   };

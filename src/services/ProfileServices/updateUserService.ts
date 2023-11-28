@@ -7,7 +7,7 @@ interface ProfileFields {
 }
 
 export const updateUserService = async (fields: ProfileFields) => {
-  const { data } = await api.put(`/user`, {
+  const data = await api.put(`/user`, {
     name: fields?.name ?? undefined,
     email: fields?.email ?? undefined,
     password: fields?.password ? fields?.password : undefined,
