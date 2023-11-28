@@ -441,7 +441,7 @@ export const Map = memo(
                       marker={marker}
                     />
                   ))}
-                  {busStops &&
+                  {/* {busStops &&
                     busStops.bus_stops.map((stop, index) => {
                       if (index < busStops.bus_stops.length - 1) {
                         const origin = stop;
@@ -458,27 +458,27 @@ export const Map = memo(
                           />
                         );
                       }
-                    })}
-                  {/* {busStops &&
-                  busStops?.bus_stops?.map((stop, index) => {
-                    if (index < busStops?.bus_stops?.length - 1) {
-                      const origin = stop;
-                      const destination = busStops?.bus_stops[index + 1];
+                    })} */}
+                  {busStops &&
+                    busStops?.bus_stops?.map((stop, index) => {
+                      if (index < busStops?.bus_stops?.length - 1) {
+                        const origin = stop;
+                        const destination = busStops?.bus_stops[index + 1];
 
-                      return (
-                        <MapViewDirections
-                          origin={origin}
-                          destination={destination}
-                          apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
-                          strokeWidth={5}
-                          strokeColor="blue"
-                          optimizeWaypoints={true}
-                          key={index}
-                          mode="TRANSIT"
-                        />
-                      );
-                    }
-                  })} */}
+                        return (
+                          <MapViewDirections
+                            origin={origin}
+                            destination={destination}
+                            apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
+                            strokeWidth={5}
+                            strokeColor="blue"
+                            optimizeWaypoints={true}
+                            key={index}
+                            mode="TRANSIT"
+                          />
+                        );
+                      }
+                    })}
                 </MapView>
               </>
             )

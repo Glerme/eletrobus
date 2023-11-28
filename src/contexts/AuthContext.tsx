@@ -98,10 +98,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
             refresh_token: googleData?.data?.refresh_token,
           };
 
-          api.interceptors.request.use((config) => {
-            config.headers.Authorization = `Bearer ${parsedData?.token}`;
-            return config;
-          });
+          api.defaults.headers.common.Authorization = `Bearer ${parsedData?.token}`;
 
           api.interceptors.response.use(
             (response) => {
@@ -166,16 +163,13 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         password,
       });
 
-      api.interceptors.request.use((config) => {
-        config.headers.Authorization = `Bearer ${data?.data?.token}`;
-        return config;
-      });
-
       const parsedData: UserProps = {
         token: data?.data?.token,
         user: data?.data?.user,
         refresh_token: data?.data?.refresh_token,
       };
+
+      api.defaults.headers.common.Authorization = `Bearer ${parsedData?.token}`;
 
       await AsyncStorage.setItem("@user", JSON.stringify(parsedData?.user));
       await AsyncStorage.setItem("@token", JSON.stringify(parsedData.token));
@@ -213,9 +207,13 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const signOut = async () => {
     try {
       setUser(null);
+
       await AsyncStorage.removeItem("@user");
       await AsyncStorage.removeItem("@token");
-      await AsyncStorage.removeItem("@refreshToken");
+      await AsyncStorage.removeItem("@refresh_Token");
+
+      api.interceptors.request.clear();
+      api.defaults.headers.common.Authorization = undefined;
 
       Toast.show({
         type: "success",
@@ -223,7 +221,14 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       });
     } catch (error) {
       setUser(null);
-      console.error(error);
+
+      await AsyncStorage.removeItem("@user");
+      await AsyncStorage.removeItem("@token");
+      await AsyncStorage.removeItem("@refresh_Token");
+
+      const axiosError = axiosErrorHandler(error);
+
+      console.error(axiosError);
     }
   };
 
@@ -240,6 +245,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           token: JSON.parse(getToken),
           refresh_token: JSON.parse(getRefreshToken),
         };
+
+        api.defaults.headers.common.Authorization = `Bearer ${parsedUser?.token}`;
 
         setUser(parsedUser);
       }
@@ -264,6 +271,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         refresh_token: user?.refresh_token ?? "",
       };
 
+      api.defaults.headers.common.Authorization = `Bearer ${parsedData?.token}`;
+
       await AsyncStorage.setItem("@user", JSON.stringify(parsedData));
 
       setUser(parsedData);
@@ -271,16 +280,15 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       Toast.show({
         type: "success",
         text1: "Sucesso",
-        text2: "Usuário atualizado com sucesso",
+        text2: "Informações atualizadas com sucesso!",
       });
     } catch (error) {
       setUser(null);
-      console.error(error);
 
       Toast.show({
         type: "success",
         text1: "Sucesso",
-        text2: "Usuário atualizado com sucesso",
+        text2: "Informações atualizadas com sucesso!",
       });
     } finally {
       setLoading(false);
@@ -349,8 +357,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
         await AsyncStorage.setItem("@token", JSON.stringify(data.token));
         setUser((state) => state && { ...state, token: data?.token });
-
-        // Alert.alert("Token atualizado com sucesso");
       }
     } catch (error) {
       signOut();
