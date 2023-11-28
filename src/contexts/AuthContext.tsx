@@ -284,7 +284,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       });
     } catch (error) {
       setUser(null);
-      console.error(error);
 
       Toast.show({
         type: "success",
