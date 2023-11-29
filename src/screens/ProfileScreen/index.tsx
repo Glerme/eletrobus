@@ -9,6 +9,7 @@ import {
   Eye,
   EyeSlash,
   Fingerprint,
+  IdentificationBadge,
   IdentificationCard,
   Key,
   User,
@@ -54,7 +55,7 @@ export const InputCPF = ({ ...rest }) => (
   <Input
     mb={2}
     placeholder="CPF"
-    InputLeftElement={<Icon as={<Fingerprint />} ml={2} />}
+    InputLeftElement={<Icon as={<IdentificationBadge />} ml={2} />}
     {...rest}
   />
 );
