@@ -475,7 +475,7 @@ export const Map = memo(
                             strokeColor="blue"
                             optimizeWaypoints={false}
                             key={index}
-                            mode="TRANSIT"
+                            mode="DRIVING"
                           />
                         );
                       }
