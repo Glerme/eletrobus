@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 import Toast from "react-native-toast-message";
 import { useMutation } from "@tanstack/react-query";
 import { Box, Icon, View } from "native-base";
-import { IdentificationCard, User } from "phosphor-react-native";
+import { Fingerprint, IdentificationCard, User } from "phosphor-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import LottieView from "lottie-react-native";
 
@@ -41,7 +41,7 @@ export const InputCPF = ({ ...rest }) => (
   <Input
     mb={2}
     placeholder="CPF"
-    InputLeftElement={<Icon as={<User />} ml={2} />}
+    InputLeftElement={<Icon as={<Fingerprint />} ml={2} />}
     {...rest}
   />
 );
