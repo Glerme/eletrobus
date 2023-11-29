@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Platform } from "react-native";
 
+import LottieView from "lottie-react-native";
+import { Box, Icon, View } from "native-base";
 import Toast from "react-native-toast-message";
 import { useMutation } from "@tanstack/react-query";
-import { Box, Icon, View } from "native-base";
-import { IdentificationCard, User } from "phosphor-react-native";
+import { TextInputMask } from "react-native-masked-text";
+import { IdentificationBadge, IdentificationCard } from "phosphor-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import LottieView from "lottie-react-native";
 
 import { useAuth } from "~/contexts/AuthContext";
 
 import api, { setSignOutFunction } from "~/services/axios";
-import { updateUserService } from "~/services/ProfileServices/updateUserService";
+import { postUserAsDriverService } from "~/services/ProfileServices/postUserAsDriverService";
 
 import { MyQueryInterface } from "~/interfaces/User.interface";
 
@@ -19,29 +20,19 @@ import { NavigationProps } from "~/routes";
 
 import { Input } from "~/components/Form/Input";
 import { Button } from "~/components/Form/Button";
-import { Title } from "~/components/Layouts/Title";
-import { ImagePicker } from "~/components/Form/ImagePicker";
-
 import { Background } from "~/components/Layouts/Background";
 import { ScreenContent } from "~/components/Layouts/ScreenContent";
-import { TextInputMask } from "react-native-masked-text";
-import { postUserAsDriverService } from "~/services/ProfileServices/postUserAsDriverService";
 
 interface IDriverFields {
   cpf: string;
   cnh: string;
 }
 
-// const Textfield = MKTextField.textfield()
-//   .withPlaceholder("Text...")
-//   .withStyle(styles.textfield)
-//   .build();
-
 export const InputCPF = ({ ...rest }) => (
   <Input
     mb={2}
     placeholder="CPF"
-    InputLeftElement={<Icon as={<User />} ml={2} />}
+    InputLeftElement={<Icon as={<IdentificationBadge />} ml={2} />}
     {...rest}
   />
 );

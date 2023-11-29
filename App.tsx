@@ -3,6 +3,7 @@ import "react-native-gesture-handler";
 import { NativeBaseProvider } from "native-base";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { LogBox } from "react-native";
 
 import { useFonts } from "expo-font";
 
@@ -36,6 +37,9 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 export default function App() {
   const [fontsLoaded] = useFonts({
