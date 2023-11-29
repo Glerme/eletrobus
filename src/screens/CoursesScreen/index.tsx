@@ -47,7 +47,7 @@ export const CoursesScreen = ({
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = lastPage?.data?.hasNextPage
-          ? allPages.length + 1
+          ? allPages.length
           : undefined;
 
         return nextPage;
@@ -133,7 +133,7 @@ export const CoursesScreen = ({
                 />
               )}
               onEndReached={handleLoadMore}
-              onEndReachedThreshold={0.1}
+              onEndReachedThreshold={0.5}
               ListFooterComponent={() => {
                 if (!hasNextPage) {
                   return <></>;

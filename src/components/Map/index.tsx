@@ -3,7 +3,7 @@ import { StyleSheet, ActivityIndicator, Linking } from "react-native";
 
 import { Box, Flex } from "native-base";
 import { useQuery } from "@tanstack/react-query";
-import MapView, { PROVIDER_GOOGLE, Region, Polyline } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Region } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -27,8 +27,6 @@ import { postCurrentPositionId } from "~/services/CoursesServices/postCurrentPos
 import { useAuth } from "~/contexts/AuthContext";
 
 import { RootStackParamList } from "~/routes";
-
-import { logOnlyOniOS } from "~/functions/logOnlyIos";
 
 import { Alert } from "../Alert";
 import { Button } from "../Form/Button";
@@ -298,11 +296,17 @@ export const Map = memo(
           setLocation(response);
 
           if (isRunning && user?.user.driver && courseId) {
-            await postCurrentPositionId({
-              id: courseId,
-              latitude: response?.coords?.latitude ?? 0,
-              longitude: response?.coords?.longitude ?? 0,
-            });
+            try {
+              await postCurrentPositionId({
+                id: courseId,
+                latitude: response?.coords?.latitude ?? 0,
+                longitude: response?.coords?.longitude ?? 0,
+              });
+            } catch (error) {
+              const axiosError = axiosErrorHandler(error);
+
+              return axiosError;
+            }
           }
         }
       );

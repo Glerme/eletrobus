@@ -33,6 +33,7 @@ import { ScrollViewContainer } from "~/components/Layouts/ScrollViewContainer";
 
 import { THEME } from "~/styles/theme";
 import { getColorFromState } from "~/utils/getColorFromState";
+import { EStatusRun } from "~/enum/EStatusRun";
 
 export const CourseDetailsScreen = ({
   navigation,
@@ -216,19 +217,23 @@ export const CourseDetailsScreen = ({
 
             <Divider mt={4} mb={4} bg={"gray.300"} />
 
-            <Box mt={2}>
-              <Button
-                onPress={() =>
-                  navigation.navigate("Map", {
-                    routeId: data.id,
-                    courseId: route.params.courseId,
-                  })
-                }
-                title="Ver rota do ônibus"
-                fontColor={"white"}
-                disabled={isRefetching || isLoading}
-              />
-            </Box>
+            {data?.courses?.filter(
+              (course) => course.id === route.params.courseId
+            )[0]?.status === EStatusRun.NaoInicializado && (
+              <Box mt={2}>
+                <Button
+                  onPress={() =>
+                    navigation.navigate("Map", {
+                      routeId: data.id,
+                      courseId: route.params.courseId,
+                    })
+                  }
+                  title="Ver rota do ônibus"
+                  fontColor={"white"}
+                  disabled={isRefetching || isLoading}
+                />
+              </Box>
+            )}
           </ScrollViewContainer>
         </ScreenContent>
       </Background>

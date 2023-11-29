@@ -11,7 +11,7 @@ export const getBusStopsService = async ({
   pageParam,
   queryString,
 }: ParamsProps) => {
-  const pageSize = 10;
+  const pageSize = 30;
 
   return api.get<BusStopInterface>(`/bus-stop`, {
     params: {

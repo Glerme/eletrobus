@@ -57,9 +57,11 @@ export const ListBusStops = memo(
           <HStack py="2" justifyContent={"space-between"}>
             <HStack space={4} alignItems={"center"}>
               <Avatar
-                source={{
-                  uri: item?.images[0] ?? "",
-                }}
+                source={
+                  item && item?.images?.length > 0
+                    ? { uri: item?.images[0] ?? item.images[1] }
+                    : require("~/assets/img/not-found.png")
+                }
                 size={"md"}
               />
 

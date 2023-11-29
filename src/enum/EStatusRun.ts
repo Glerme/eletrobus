@@ -5,6 +5,7 @@ export interface IStatusRun {
   Parado: IStatus;
   Incapacitado: IStatus;
   Finalizado: IStatus;
+  NaoInicializado: IStatus;
 }
 
 export enum EStatusRun {
@@ -12,4 +13,5 @@ export enum EStatusRun {
   Parado = "PARADO",
   Incapacitado = "INCAPACITADO",
   Finalizado = "FINALIZADO",
+  NaoInicializado = "NÃO INICIALIZADO",
 }

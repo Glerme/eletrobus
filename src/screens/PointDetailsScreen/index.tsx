@@ -161,7 +161,7 @@ export const PointDetailsScreen = ({
           <Box w={"full"}>
             <Image
               source={
-                data?.images
+                data?.images?.length > 0
                   ? { uri: data?.images[0] ?? data.images[1] }
                   : require("~/assets/img/not-found.png")
               }

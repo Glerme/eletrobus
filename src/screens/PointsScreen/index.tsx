@@ -49,7 +49,7 @@ export const PointsScreen = ({
     {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = lastPage?.data?.hasNextPage
-          ? allPages.length + 1
+          ? allPages.length
           : undefined;
 
         return nextPage;
@@ -134,7 +134,7 @@ export const PointsScreen = ({
                 />
               )}
               onEndReached={handleLoadMore}
-              onEndReachedThreshold={0.1}
+              onEndReachedThreshold={0.5}
               ListFooterComponent={() => {
                 if (!hasNextPage) {
                   return <></>;
