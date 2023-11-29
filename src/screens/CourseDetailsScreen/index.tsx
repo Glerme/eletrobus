@@ -95,6 +95,8 @@ export const CourseDetailsScreen = ({
         (fav) => fav?.route_id === route.params.routeId
       );
 
+      console.log(favorites);
+
       if (favoritePoint?.length > 0) {
         setFavorite(true);
       }

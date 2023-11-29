@@ -10,7 +10,7 @@ export const getDriverFavoritesCoursesService = async ({
   pageParam,
   getRefreshToken,
 }: ParamsProps) => {
-  const pageSize = 10;
+  const pageSize = 30;
 
   setSignOutFunction(getRefreshToken);
 
