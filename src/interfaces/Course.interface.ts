@@ -20,12 +20,8 @@ export interface CourseDataProps {
   name: string;
   bus_stops: [
     {
-      bus_stop: {
-        id: string;
-        latitude: number;
-        longitude: number;
-        name: string;
-      };
+      name: string;
+      index: number;
       bus_stop_id: string;
       latitude: number;
       longitude: number;

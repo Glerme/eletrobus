@@ -167,7 +167,7 @@ export const CourseDetailsScreen = ({
                   color={"gray.800"}
                   key={index}
                 >
-                  - {busStop?.bus_stop?.name}
+                  - {busStop?.name}
                 </Text>
               ))}
             </VStack>
