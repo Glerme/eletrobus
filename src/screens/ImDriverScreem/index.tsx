@@ -7,6 +7,7 @@ import Toast from "react-native-toast-message";
 import { useMutation } from "@tanstack/react-query";
 import { TextInputMask } from "react-native-masked-text";
 import { IdentificationBadge, IdentificationCard } from "phosphor-react-native";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { useAuth } from "~/contexts/AuthContext";
