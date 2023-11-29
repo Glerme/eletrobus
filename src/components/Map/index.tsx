@@ -41,6 +41,7 @@ import { FinalizeButton } from "./components/FinalizeButton";
 import { CustomMarkerBus } from "./components/CustomMarkerBus";
 import { MyLocationButton } from "./components/MyLocationButton";
 import { ListRoutesButton } from "./components/ListRoutesButton";
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 
 export const Map = memo(
   ({
@@ -121,7 +122,8 @@ export const Map = memo(
         setRouteActive(data);
         return data;
       } catch (e) {
-        console.error(e);
+        const axiosError = axiosErrorHandler(e);
+        console.error(axiosError);
         return null;
       }
     }, []);
@@ -169,7 +171,6 @@ export const Map = memo(
       [markers]
     );
 
-    // console.log(busStops);
     const cleanParams = useCallback(() => {
       setBusStops(null);
       setRouteActive(null);
@@ -251,7 +252,8 @@ export const Map = memo(
         try {
           await getRouteById(routeId);
         } catch (error) {
-          console.error("Error fetching route:", error);
+          const axiosError = axiosErrorHandler(error);
+          console.error(axiosError);
         }
 
         if (timeoutId) {
@@ -260,7 +262,7 @@ export const Map = memo(
 
         const newTimeoutId = setTimeout(() => {
           fetchCurrentPositionOfBus();
-        }, 5000);
+        }, 10000);
 
         setTimeoutId(newTimeoutId);
       };
@@ -290,10 +292,9 @@ export const Map = memo(
       watchPositionAsync(
         {
           accuracy: LocationAccuracy.BestForNavigation,
-          timeInterval: 5000,
+          timeInterval: 10000,
         },
         async (response) => {
-          logOnlyOniOS(`watchPositionAsync => ${JSON.stringify(response)}`);
           setLocation(response);
 
           if (isRunning && user?.user.driver && courseId) {
@@ -441,7 +442,7 @@ export const Map = memo(
                       marker={marker}
                     />
                   ))}
-                  {busStops &&
+                  {/* {busStops &&
                     busStops.bus_stops.map((stop, index) => {
                       if (index < busStops.bus_stops.length - 1) {
                         const origin = stop;
@@ -458,8 +459,8 @@ export const Map = memo(
                           />
                         );
                       }
-                    })}
-                  {/* {busStops &&
+                    })} */}
+                  {busStops &&
                     busStops?.bus_stops?.map((stop, index) => {
                       if (index < busStops?.bus_stops?.length - 1) {
                         const origin = stop;
@@ -472,13 +473,13 @@ export const Map = memo(
                             apikey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
                             strokeWidth={5}
                             strokeColor="blue"
-                            optimizeWaypoints={true}
+                            optimizeWaypoints={false}
                             key={index}
                             mode="TRANSIT"
                           />
                         );
                       }
-                    })} */}
+                    })}
                 </MapView>
               </>
             )

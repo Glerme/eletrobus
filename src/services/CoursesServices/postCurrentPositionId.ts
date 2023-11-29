@@ -1,3 +1,4 @@
+import { axiosErrorHandler } from "~/functions/axiosErrorHandler";
 import api from "../axios";
 
 interface ParamsProps {
@@ -11,8 +12,13 @@ export const postCurrentPositionId = async ({
   latitude,
   longitude,
 }: ParamsProps) => {
-  return api.post(`course/current-position/${id}`, {
-    latitude: `${latitude}`,
-    longitude: `${longitude}`,
-  });
+  try {
+    return api.post(`course/current-position/${id}`, {
+      latitude: `${latitude}`,
+      longitude: `${longitude}`,
+    });
+  } catch (error) {
+    const axiosError = axiosErrorHandler(error);
+    console.error(axiosError);
+  }
 };

@@ -11,6 +11,7 @@ export interface RoutesBusStopsInterface {
     bus_stop_id: string;
     latitude: number;
     longitude: number;
+    index: number;
   }[];
   id: string;
   courses: ICourse[];
