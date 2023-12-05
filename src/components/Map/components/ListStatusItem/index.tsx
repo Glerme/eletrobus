@@ -7,7 +7,6 @@ import {
 
 import { Box, HStack, Skeleton, Text } from "native-base";
 
-import { CourseProps } from "~/interfaces/Course.interface";
 import { getColorFromState } from "~/utils/getColorFromState";
 import { IStatus } from "~/interfaces/Status.interface";
 
@@ -60,8 +59,9 @@ export const ListStatusItem = memo(
             <HStack py="2" justifyContent={"space-between"}>
               <HStack space={4} alignItems={"center"}>
                 <Box
-                  height={2}
+                  height={4}
                   width={4}
+                  borderRadius={100}
                   backgroundColor={`${getColorFromState(item.status)}`}
                 ></Box>
                 <Text color="coolGray.600" fontSize={"sm"} fontWeight={"500"}>

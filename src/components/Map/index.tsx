@@ -226,18 +226,6 @@ export const Map = memo(
       requestLocationPermissions();
     }, []);
 
-    // useEffect(() => {
-    //   if (busStops && !user?.user.driver) {
-    //     mapRef.current?.animateCamera({
-    //       center: {
-    //         latitude: busStops.bus_stops[0].latitude,
-    //         longitude: busStops.bus_stops[0].longitude,
-    //       },
-    //       zoom,
-    //     });
-    //   }
-    // }, [busStops]);
-
     useEffect(() => {
       if (timeoutId) {
         clearTimeout(timeoutId);

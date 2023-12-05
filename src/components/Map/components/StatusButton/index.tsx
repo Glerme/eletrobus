@@ -111,8 +111,9 @@ export const StatusButton = ({
             padding={2}
           >
             <Box
-              height={2}
+              height={4}
               width={4}
+              borderRadius={100}
               backgroundColor={
                 statusActive && `${getColorFromState(statusActive.status)}`
               }
@@ -131,7 +132,7 @@ export const StatusButton = ({
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
-          <Modal.Header>Selecione o estado da corrida</Modal.Header>
+          <Modal.Header>Selecione o status da corrida</Modal.Header>
           <Modal.Body height={400}>
             {data?.map((item) => (
               <ListStatusItem
