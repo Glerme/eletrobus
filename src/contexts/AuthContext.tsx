@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Alert } from "react-native";
 
 import axios from "axios";
 import Toast from "react-native-toast-message";

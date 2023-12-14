@@ -426,7 +426,6 @@ export const Map = memo(
                       handleOpenModal={openModalCourse}
                     />
                   ))}
-
                   {visibleMarkers?.map((marker, i) => (
                     <CustomMarker
                       key={i}
@@ -434,6 +433,7 @@ export const Map = memo(
                       marker={marker}
                     />
                   ))}
+                  //! Esse código não utiliza a API do Google Maps, sem custo
                   {/* {busStops &&
                     busStops.bus_stops.map((stop, index) => {
                       if (index < busStops.bus_stops.length - 1) {
@@ -452,6 +452,8 @@ export const Map = memo(
                         );
                       }
                     })} */}
+                  //!Para utilizar esse código é necessário habilitar a API do
+                  //!Google Maps, portanto com custo
                   {busStops &&
                     busStops?.bus_stops?.map((stop, index) => {
                       if (index < busStops?.bus_stops?.length - 1) {
