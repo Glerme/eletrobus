@@ -35,15 +35,9 @@ Criar uma key no google console para poder utilizar o login social e visualizaç
 
 ## Vídeos
 
-<video controls width="500">
-    <source src="https://youtu.be/e-8WdOgICQ0" type="video/mp4">
-    Seu navegador não suporta a reprodução do vídeo.
-</video>
+https://youtu.be/e-8WdOgICQ0?si=N9VVgLm4rVuYTSXk
 
-<video controls width="500">
-    <source src="https://youtu.be/2msAS-tgDRY" type="video/mp4">
-    Seu navegador não suporta a reprodução do vídeo.
-</video>
+https://youtu.be/2msAS-tgDRY?si=39BERpvE_hJZ4yLz
 
 ## Tecnologias utilizadas
 
