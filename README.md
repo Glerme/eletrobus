@@ -37,9 +37,11 @@ Criar uma key no google console para poder utilizar o login social e visualizaç
 
 
 
+https://github.com/Glerme/eletrobus/assets/62507710/6cdb5c58-6411-4431-9af5-ad5d468d234f
+
+https://github.com/Glerme/eletrobus/assets/62507710/5b933186-ce7a-44a8-b4d8-037a9931fbc2
 
 
-https://youtu.be/2msAS-tgDRY?si=39BERpvE_hJZ4yLz
 
 ## Tecnologias utilizadas
 
