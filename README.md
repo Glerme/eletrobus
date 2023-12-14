@@ -35,7 +35,9 @@ Criar uma key no google console para poder utilizar o login social e visualizaç
 
 ## Vídeos
 
-https://youtu.be/e-8WdOgICQ0?si=N9VVgLm4rVuYTSXk
+
+
+
 
 https://youtu.be/2msAS-tgDRY?si=39BERpvE_hJZ4yLz
 
